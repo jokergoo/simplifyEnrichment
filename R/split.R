@@ -76,10 +76,10 @@ cluster_mat = function(mat) {
 
 
 make_rule = function(dend, plot = FALSE) {
-	size = get_nodes_attr(dend, "member")
+	size = dendextend::get_nodes_attr(dend, "member")
 	tb = table(size)
 
-	score = get_nodes_attr(dend, "score")
+	score = dendextend::get_nodes_attr(dend, "score")
 	plot(size, score, log = "x")
 
 	find_midpoint = function(x) {
@@ -190,7 +190,5 @@ plot_dend = function(dend, mat) {
 	draw(ht)
 }
 
-
-dend = cluster_mat(go_sim)
 
 

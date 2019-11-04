@@ -1,0 +1,13 @@
+Package: simplifyGO
+Type: Package
+Title: Simplify GO Enrichment results
+Version: 0.0.1
+Date: 2019-10-03
+Author: Zuguang Gu
+Maintainer: Zuguang Gu <z.gu@dkfz.de>
+Depends: R (>= 3.0.0)
+Imports: GOSemSim, ComplexHeatmap, circlize, GetoptLong, digest, dendextend
+Suggests: knitr
+Description: Simplify GO Enrichment results
+VignetteBuilder: knitr
+License: MIT + file LICENSE
