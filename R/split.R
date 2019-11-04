@@ -1,11 +1,28 @@
 
 library(GOSemSim)
-	
-simplify_GO = function(go_id) {
-	hsGO = godata('org.Hs.eg.db', ont = "BP")
-	go_sim = mgoSim(all_go_id, all_go_id, measure = "Rel", semData = hsGO, combine = NULL)
+
+env = new.env()
+env$semData_hash = ""
+
+get_GO_sim_mat = function(go_id, ont, db = 'org.Hs.eg.db') {
+	hash = digest::digest(list(ont = ont, db = db))
+	if(hash == env$semData_hash) {
+		semData = env$semData
+	} else {
+		semData = godata(db, ont = ont)
+		env$semData_hash = hash
+		env$semData = semData
+	}
+	go_removed = setdiff(go_id, Lkeys(GOSemSim:::getAncestors(semData@ont)))
+	if(length(go_removed)) {
+		qqcat("@{length(go_removed)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed:\n")
+		print(go_removed)
+	}
+	go_id = setdiff(go_id, go_removed)
+	go_sim = mgoSim(go_id, go_id, measure = "Rel", semData = semData, combine = NULL)
 	go_sim[is.na(go_sim)] = 0
 	diag(go_sim) = 1
+	go_sim
 }
 
 .cluster_mat = function(mat, dist_mat = dist(mat), .env, index = seq_len(nrow(mat)), 
@@ -19,6 +36,7 @@ simplify_GO = function(go_id) {
 			leaf = TRUE,
 			height = depth,
 			score = 1,
+			index = dend_index,
 			class = "dendrogram"
 		)
 		return(NULL)
@@ -41,6 +59,7 @@ simplify_GO = function(go_id) {
 			members = nrow(mat),
 			height = depth,
 			score = s,
+			index = NULL,
 			class = "dendrogram"
 		)
 	} else {
@@ -49,6 +68,7 @@ simplify_GO = function(go_id) {
 			members = nrow(mat),
 			height = depth,
 			score = s,
+			index = dend_index,
 			class = "dendrogram"
 		)
 	}
@@ -80,7 +100,6 @@ make_rule = function(dend, plot = FALSE) {
 	tb = table(size)
 
 	score = get_nodes_attr(dend, "score")
-	plot(size, score, log = "x")
 
 	find_midpoint = function(x) {
 		x = sort(x)
@@ -157,6 +176,66 @@ make_rule = function(dend, plot = FALSE) {
 }
 
 
+make_rule = function(dend, plot = FALSE) {
+	size = get_nodes_attr(dend, "member")
+	tb = table(size)
+
+	score = get_nodes_attr(dend, "score")
+
+	find_midpoint = function(x) {
+		x = sort(x)
+		i = which.max(diff(x))
+		(x[i + 1] + x[i])/2
+	}
+
+	cluster = rep(NA, length(score))
+	if("1" %in% names(tb)) {
+		tb2 = tb[names(tb) != "1"]
+	}
+	i = 1
+	n = length(tb)
+	while(i <= length(tb)) {
+		if(i == 1) {
+			i_size = 1
+		} else if(i > 1) {
+			i_size = c(i-1, i, i+1)
+		}
+
+		if(sum(tb[seq(i, n)]))
+
+
+		l = size %in% as.numeric(names(tb)[i_size])
+		midpoint = find_midpoint(score[l])
+		cl = rep(1, sum(l))
+		cl[score[l] > midpoint] = 2
+		cluster[l] = cl
+	}
+
+	cluster[size == 1] = 2
+
+	if(plot) plot(size, score, col = cluster, log = "x")
+
+	tapply(seq_along(size), size, function(index)  {
+		cl = cluster[index]
+		s = score[index]
+		f = local({
+			if(all(cl == 1)) {
+				function(x) 1
+			} else if(all(cl == 2)) {
+				function(x) 2
+			} else {
+				x1 = max(s[cl == 1])
+				x2 = min(s[cl == 2])
+				mid = (x1+x2)/2
+				function(x) {
+					ifelse(x > mid, 2, 1)
+				}
+			}
+		})
+		return(f)
+	})
+}
+
 split_dend = function(dend) {
 	
 	rule = make_rule(dend)
@@ -191,6 +270,100 @@ plot_dend = function(dend, mat) {
 }
 
 
-dend = cluster_mat(go_sim)
+
+next_k = local({
+	k = 0
+	function(reset = FALSE) {
+		if(reset) {
+			k <<- 0
+		} else {
+			k <<- k + 1
+		}
+		k
+	}
+})
+
+dend_node_apply = function(dend, fun) {
+
+	next_k(reset = TRUE)
+
+	assign_to = function(env, k, v) {
+		n = length(env$var)
+		if(n == 0) {
+			if(is.atomic(v)) {
+				env$var[k] = v
+			} else {
+				env$var = list()
+				env$var[[k]] = v
+			}
+		} else {
+			if(is.list(env$var)) {
+				env$var[[k]] = v
+			} else {
+				if(is.atomic(v)) {
+					env$var[k] = v
+				} else {
+					env$var = lapply(1:n, function(i) env$var[i])
+					env$var[[k]] = v
+				}
+			}
+		}
+		
+	}
+
+	env = new.env()
+	.do = function(dend, fun, index) {
+
+		if(is.null(index)) {
+			if(is.leaf(dend)) {
+				assign_to(env, next_k(), fun(dend))
+				return(NULL)
+			} else {
+				assign_to(env, next_k(), fun(dend))
+			}
+		} else {
+			assign_to(env, next_k(), fun(dend[[index]]))
+
+			if(is.leaf(dend[[index]])) {
+				return(NULL)
+			}
+		}
+
+		n = length(dend)
+		for(i in seq_len(n)) {
+			.do(dend, fun, c(index, i))
+		}
+	}
+
+	.do(dend, fun, NULL)
+
+	return(env$var)
+}
+
+
+mat = get_GO_sim_mat(go_id)
+dend = cluster_mat(mat)
+make_rule(dend, T)
+plot_dend(dend, mat)
+
+size = dend_node_apply(dend, function(x) attr(x, "member"))
+score = dend_node_apply(dend, function(x) attr(x, "score"))
+
+env = new.env()
+env$dend = dend
+parent_score = dend_node_apply(dend, function(x) {
+	index = attr(x, "index")
+	if(is.null(index)) {
+		return(NA)
+	} else if(length(index) == 1) {
+		return(attr(env$dend, "score") - attr(dend, "score"))
+	} else {
+		return(attr(env$dend[[ index[-length(index)] ]], "score") - attr(dend, "score"))
+	}
+})
+
+
+
+
 
 
