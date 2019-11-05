@@ -96,10 +96,10 @@ cluster_mat = function(mat) {
 
 
 make_rule = function(dend, plot = FALSE) {
-	size = get_nodes_attr(dend, "member")
+	size = dendextend::get_nodes_attr(dend, "member")
 	tb = table(size)
 
-	score = get_nodes_attr(dend, "score")
+	score = dendextend::get_nodes_attr(dend, "score")
 
 	find_midpoint = function(x) {
 		x = sort(x)
@@ -270,7 +270,6 @@ plot_dend = function(dend, mat) {
 }
 
 
-
 next_k = local({
 	k = 0
 	function(reset = FALSE) {
@@ -339,31 +338,4 @@ dend_node_apply = function(dend, fun) {
 
 	return(env$var)
 }
-
-
-mat = get_GO_sim_mat(go_id)
-dend = cluster_mat(mat)
-make_rule(dend, T)
-plot_dend(dend, mat)
-
-size = dend_node_apply(dend, function(x) attr(x, "member"))
-score = dend_node_apply(dend, function(x) attr(x, "score"))
-
-env = new.env()
-env$dend = dend
-parent_score = dend_node_apply(dend, function(x) {
-	index = attr(x, "index")
-	if(is.null(index)) {
-		return(NA)
-	} else if(length(index) == 1) {
-		return(attr(env$dend, "score") - attr(dend, "score"))
-	} else {
-		return(attr(env$dend[[ index[-length(index)] ]], "score") - attr(dend, "score"))
-	}
-})
-
-
-
-
-
 
