@@ -3,11 +3,15 @@ all_go_id = hsGO@geneAnno$GO
 
 go_id = sample(all_go_id, 500)
 
-mat = get_GO_sim_mat(go_id)
+mat = GO_similarity(go_id)
 
 dend = cluster_mat(mat)
+
+
 make_rule(dend, T)
 plot_dend(dend, mat)
+
+## test the cutoff for different rules
 
 size = dend_node_apply(dend, function(x) attr(x, "member"))
 score = dend_node_apply(dend, function(x) attr(x, "score"))
