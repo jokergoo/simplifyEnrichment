@@ -106,7 +106,7 @@ plot_heatmap = function(mat, cl, min = 5) {
 	cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
 
 	keywords = tapply(rownames(mat), cl, function(go_id) {
-		df = count_word(go_id)
+		suppressMessages(suppressWarnings(df <- count_word(go_id)))
 		df = df[df$freq > 1, , drop = FALSE]
 		if(nrow(df) > 10) {
 			df = df[order(df$freq, decreasing = TRUE)[1:10], ]
@@ -130,12 +130,11 @@ plot_heatmap = function(mat, cl, min = 5) {
 		kw = rev(keywords[[nm]][, 1])
 		freq = rev(keywords[[nm]][, 2])
 		fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)))
-		txt = qq("<span style='font-size:@{fontsize}px;line-height:10px;'>@{kw}</span> ")
-		textbox_grob(txt, width = unit(8, "cm"))
+		simple_word_cloud_grob(kw, fontsize, max_width = 60)
 	})
 	names(gbl) = names(align_to)
 
-	gbl_h = lapply(gbl, function(x) convertHeight(grobHeight(x), "cm") + unit(2, "mm"))
+	gbl_h = lapply(gbl, function(x) convertHeight(grobHeight(x), "cm"))
 	gbl_h = do.call(unit.c, gbl_h)
 
 	gbl_w = lapply(gbl, function(x) convertWidth(grobWidth(x), "cm"))
@@ -144,22 +143,24 @@ plot_heatmap = function(mat, cl, min = 5) {
 
 	panel_fun = function(index, nm) {
 		pushViewport(viewport())
-	    grid.rect()
+	    grid.rect(gp = gpar(col = NA, fill = "#EFEFEF"))
 	    grid.draw(gbl[[nm]])
 	    popViewport()
 	}
 
 	ht = ht + rowAnnotation(keywords = anno_zoom(align_to = align_to, which = "row", panel_fun = panel_fun, 
-    	size = gbl_h, gap = unit(2, "mm"), width = gbl_w + unit(1, "cm")))
-	draw(ht)
+    	size = gbl_h, gap = unit(2, "mm"), width = gbl_w,
+    	link_gp = gpar(col = NA, fill = "#EFEFEF")))
+	draw(ht, gap = unit(1, "mm"))
 }
 
 
-scale_fontsize = function(x, rg = c(1, 30), fs = c(4, 20)) {
+scale_fontsize = function(x, rg = c(1, 30), fs = c(4, 16)) {
 	k = (fs[2] - fs[1])/(rg[2] - rg[1]) 
 	b = fs[2] - k*rg[2]
 	y = k*x + b
 	y[y < fs[1]] = fs[1]
 	y[y > fs[2]] = fs[2]
-	round(y)
+	y
 }
+

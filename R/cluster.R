@@ -132,7 +132,3 @@ render_dend = function(dend, field = "score2", cutoff = 0.8) {
 	box()
 }
 
-
-	
-
-
