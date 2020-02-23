@@ -1,4 +1,3 @@
-library(tm)
 
 count_word = function(go_id, term = NULL) {
 	
@@ -25,7 +24,7 @@ count_word = function(go_id, term = NULL) {
 	tdm <- TermDocumentMatrix(docs)
 
 	v <- sort(slam::row_sums(tdm),decreasing = TRUE)
-	d <- data.frame(word = names(v), freq = v)
+	d <- data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
 	d
 }
 
@@ -52,3 +51,47 @@ count_word = function(go_id, term = NULL) {
 # 	df = df[df$freq > 1, ]
 # })
 
+
+simple_word_cloud_grob = function(text, fontsize, max_width = 40) { # width in mm
+	
+	od = order(fontsize, decreasing = TRUE)
+	text = text[od]
+	fontsize = fontsize[od]
+
+	n = length(text)
+	text_gb_lt = lapply(seq_len(n), function(i) textGrob(text[i], gp = gpar(fontsize = fontsize[i])))
+	text_width = sapply(text_gb_lt, function(gb) convertWidth(grobWidth(gb), "mm", valueOnly = TRUE))
+	text_height = sapply(text_gb_lt, function(gb) convertHeight(grobHeight(gb), "mm", valueOnly = TRUE))
+
+	margin = c(0.5, 0.5)
+
+	x = numeric(n)
+	y = numeric(n)
+	current_line_height = 0
+	current_line_width = 0
+
+	# the first text
+	current_line_height = text_height[1]
+	current_line_width = text_width[1]
+	x[1] = 0
+	y[1] = 0
+
+	for(i in seq_len(n)[-1]) {
+		# the next text can be put on the same line
+		if(current_line_width + text_width[i] <= max_width) {
+			x[i] = current_line_width + margin[1]
+			y[i] = y[i-1] # same as previous one
+			current_line_width = x[i] + text_width[i]
+		} else { # the next text need to be put on the next line
+			x[i] = 0
+			y[i] = current_line_height + margin[2]
+			current_line_width = text_width[i]
+			current_line_height = y[i] + text_height[i]
+		}
+	}
+
+	textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize), 
+		default.units = "mm", just = c(0, 0))
+}
+
+	

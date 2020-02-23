@@ -1,0 +1,21 @@
+export("GO_similarity")
+export("simplify")
+
+         "dendrapply", "dist", "hclust", "is.leaf", "median")
+import(AnnotationDbi)
+import(ComplexHeatmap)
+import(GO.db)
+import(GO.db)
+import(GOSemSim)
+import(GetoptLong)
+import(dendextend)
+import(digest)
+import(grid)
+import(org.Hs.eg.db)
+import(slam)
+import(tm)
+importFrom("graphics", "box", "plot")
+importFrom("stats", "as.dendrogram", "as.dist", "as.hclust",
+importFrom("utils", "getFromNamespace")
+importFrom(circlize, colorRamp2)
+

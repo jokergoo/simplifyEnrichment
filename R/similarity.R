@@ -1,9 +1,16 @@
 
-library(GOSemSim)
-
 env = new.env()
 env$semData_hash = ""
 
+# == title
+# Calculate GO similarity matrix
+#
+# == param
+# -go_id A vector of GO ids
+# -ont Ontology
+# -db database
+# -measure Measurement for the GO similarity
+#
 GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 
 	if(missing(ont)) {
@@ -25,7 +32,7 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 		env$semData_hash = hash
 		env$semData = semData
 	}
-	go_removed = setdiff(go_id, Lkeys(GOSemSim:::getAncestors(semData@ont)))
+	go_removed = setdiff(go_id, Lkeys(getFromNamespace("getAncestors", "GOSemSim")(semData@ont)))
 
 	if(length(go_removed)) {
 		message(qq("@{length(go_removed)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed:"))
@@ -49,4 +56,19 @@ guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 	} else {
 		return(guess_ont)
 	}
+}
+
+random_GO = function(n, ont = "BP", db = 'org.Hs.eg.db') {
+	hash = digest::digest(list(ont = ont, db = db))
+	if(hash == env$semData_hash) {
+		semData = env$semData
+	} else {
+		suppressMessages(semData <- godata(db, ont = ont))
+		env$semData_hash = hash
+		env$semData = semData
+	}
+
+	all_go_id = semData@geneAnno$GO
+
+	sample(all_go_id, min(n, length(all_go_id)))
 }

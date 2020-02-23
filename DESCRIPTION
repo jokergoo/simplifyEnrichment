@@ -1,12 +1,12 @@
 Package: simplifyGO
 Type: Package
-Title: Simplify GO Enrichment results
-Version: 0.0.1
-Date: 2019-10-03
+Title: Simplify Gene Ontology Enrichment results
+Version: 0.99.0
+Date: 2020-02-23
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
-Imports: GOSemSim, ComplexHeatmap, circlize, GetoptLong, digest, dendextend
+Imports: GOSemSim, ComplexHeatmap, circlize, GetoptLong, digest, dendextend, tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam
 Suggests: knitr
 Description: Simplify GO Enrichment results
 VignetteBuilder: knitr
