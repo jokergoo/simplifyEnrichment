@@ -6,10 +6,14 @@ env$semData_hash = ""
 # Calculate GO similarity matrix
 #
 # == param
-# -go_id A vector of GO ids
-# -ont Ontology
-# -db database
-# -measure Measurement for the GO similarity
+# -go_id A vector of GO IDs.
+# -ont GO ontology, value should be one of "BP", "CC" or "MF". If it is not specified,
+#      the function automatically identifies it by random sampling 10 IDs from ``go_id``.
+# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
+# -measure Measurement for the GO similarity, pass to `GOSemSim::mgoSim`.
+#
+# == details
+# This function is basically a wrapper on `GOSemSim::mgoSim`.
 #
 GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 
@@ -35,8 +39,7 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 	go_removed = setdiff(go_id, Lkeys(getFromNamespace("getAncestors", "GOSemSim")(semData@ont)))
 
 	if(length(go_removed)) {
-		message(qq("@{length(go_removed)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed:"))
-		print(go_removed)
+		message(qq("@{length(go_removed)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
 	}
 	go_id = setdiff(go_id, go_removed)
 	go_sim = mgoSim(go_id, go_id, measure = measure, semData = semData, combine = NULL)
@@ -58,6 +61,17 @@ guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 	}
 }
 
+# == title
+# Random GO IDs
+#
+# == param
+# -n Number of IDs.
+# -ont GO ontology, value should be one of "BP", "CC" or "MF".
+# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
+#
+# == value
+# A vector of GO IDs.
+#
 random_GO = function(n, ont = "BP", db = 'org.Hs.eg.db') {
 	hash = digest::digest(list(ont = ont, db = db))
 	if(hash == env$semData_hash) {

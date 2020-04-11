@@ -1,56 +1,49 @@
 
-count_word = function(go_id, term = NULL) {
+count_word = function(go_id, term = NULL, exclude_words = NULL) {
 	
 	if(is.null(term)) term = select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
 	
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
 	# Load the text as a corpus
-	docs <- Corpus(VectorSource(term))
+	docs = Corpus(VectorSource(term))
 	# Convert the text to lower case
-	docs <- tm_map(docs, content_transformer(tolower))
+	docs = tm_map(docs, content_transformer(tolower))
 	# Remove numbers
-	docs <- tm_map(docs, removeNumbers)
+	docs = tm_map(docs, removeNumbers)
 	# Remove stopwords for the language 
-	docs <- tm_map(docs, removeWords, stopwords())
+	docs = tm_map(docs, removeWords, stopwords())
 	# Remove punctuations
-	docs <- tm_map(docs, removePunctuation)
+	docs = tm_map(docs, removePunctuation)
 	# Eliminate extra white spaces
-	docs <- tm_map(docs, stripWhitespace)
+	docs = tm_map(docs, stripWhitespace)
 	# Remove your own stopwords
-	# docs <- tm_map(docs, removeWords, .excludeWords) 
+	docs = tm_map(docs, removeWords, c(exclude_words, EXCLUDE_WORDS))
 	
 	# Create term-document matrix
-	tdm <- TermDocumentMatrix(docs)
+	tdm = TermDocumentMatrix(docs)
 
-	v <- sort(slam::row_sums(tdm),decreasing = TRUE)
-	d <- data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
+	v = sort(slam::row_sums(tdm), decreasing = TRUE)
+	d = data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
 	d
 }
 
-# k <- 30
-# SEED <- 2010
-# jss_TM <- list(
-# VEM = LDA(tdm, k = k, control = list(seed = SEED)),
-# VEM_fixed = LDA(tdm, k = k, control = list(estimate.alpha = FALSE,
-#   seed = SEED)),
-# Gibbs = LDA(tdm, k = k, method = "Gibbs", control = list(
-#   seed = SEED, burnin = 1000, thin = 100, iter = 1000)),
-# CTM = CTM(tdm, k = k, control = list(seed = SEED,
-#   var = list(tol = 10^-4), em = list(tol = 10^-3))))
 
+# generate excluded words that are too general
+all_word_count = function() {
+	all_go = as.list(GO.db::GOTERM)
 
-# # generate excluded words that are too general
-# all_go = as.list(GO.db::GOTERM)
+	ontology = sapply(all_go, slot, "Ontology")
+	term = sapply(all_go, slot, "Term")
 
-# ontology = sapply(all_go, slot, "Ontology")
-# term = sapply(all_go, slot, "Term")
+	lt = tapply(term, ontology, function(x) {
+		df = count_word(term = x)
+		df = df[order(df$freq, decreasing = TRUE)[1:min(50, nrow(df))], ]
+	})
+	lt[c("BP", "CC", "MF")]
+}
 
-# lt = tapply(term, ontology, function(x) {
-# 	df = count_word(term = x)
-# 	df = df[df$freq > 1, ]
-# })
-
+EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 
 simple_word_cloud_grob = function(text, fontsize, max_width = 40) { # width in mm
 	
@@ -76,22 +69,43 @@ simple_word_cloud_grob = function(text, fontsize, max_width = 40) { # width in m
 	x[1] = 0
 	y[1] = 0
 
+	w = text_width[1]
+	h = text_height[1]
+
 	for(i in seq_len(n)[-1]) {
 		# the next text can be put on the same line
 		if(current_line_width + text_width[i] <= max_width) {
 			x[i] = current_line_width + margin[1]
 			y[i] = y[i-1] # same as previous one
 			current_line_width = x[i] + text_width[i]
+			w = max(w, current_line_width)
+			h = max(h, y[i] + text_height[i])
 		} else { # the next text need to be put on the next line
 			x[i] = 0
 			y[i] = current_line_height + margin[2]
 			current_line_width = text_width[i]
 			current_line_height = y[i] + text_height[i]
+			w = max(w, current_line_width)
+			h = max(h, current_line_height)
 		}
 	}
 
-	textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize), 
-		default.units = "mm", just = c(0, 0))
+	gl = gList(
+		textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = rand_color(n, luminosity = "dark")), 
+			default.units = "mm", just = c(0, 0))
+		# rectGrob(x = x, y = y, width = text_width, height = text_height, default.units = "mm", just = c(0, 0))
+	)
+	gb = gTree(children = gl, cl = "simple_word_cloud")
+	attr(gb, "size") = c(w, h)
+	return(gb)
+}
+
+widthDetails.simple_word_cloud = function(x) {
+	unit(attr(x, "size")[1], "mm")
+}
+
+heightDetails.simple_word_cloud = function(x) {
+	unit(attr(x, "size")[2], "mm")
 }
 
 	

@@ -1,7 +1,7 @@
 export("GO_similarity")
+export("random_GO")
 export("simplify")
 
-         "dendrapply", "dist", "hclust", "is.leaf", "median")
 import(AnnotationDbi)
 import(ComplexHeatmap)
 import(GO.db)
@@ -15,7 +15,9 @@ import(org.Hs.eg.db)
 import(slam)
 import(tm)
 importFrom("graphics", "box", "plot")
-importFrom("stats", "as.dendrogram", "as.dist", "as.hclust",
+importFrom("methods", "slot")
+importFrom("stats", "as.dendrogram", "as.dist", "as.hclust", "dendrapply", "dist", "hclust", "is.leaf", "median")
+importFrom("stats", "kmeans")
 importFrom("utils", "getFromNamespace")
-importFrom(circlize, colorRamp2)
+importFrom(circlize, "colorRamp2", "rand_color")
 
