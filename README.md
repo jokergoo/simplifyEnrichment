@@ -1,4 +1,14 @@
-# simplifyGO
-Simplify GO enrichment results
+# Simplify GO enrichment Results
 
-<img width="1024" alt="Screenshot 2020-02-22 at 22 18 45" src="https://user-images.githubusercontent.com/449218/75099546-37b7d680-55c3-11ea-9405-6d156256b0e7.png">
+
+### Usage
+
+```r
+set.seed(88)
+go_id = random_GO(500)
+mat = GO_similarity(go_id)
+simplify(mat)
+```
+
+![image](https://user-images.githubusercontent.com/449218/79051702-027a4d00-7c32-11ea-887e-ed3e171a03a0.png)
+
