@@ -1,6 +1,6 @@
 
 plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
-	exclude_words = character(0)) {
+	exclude_words = character(0), max_words = 10) {
 
 	cl = as.character(cl)
 	cl_tb = table(cl)
@@ -10,11 +10,12 @@ plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
 	keywords = tapply(rownames(mat), cl, function(go_id) {
 		suppressMessages(suppressWarnings(df <- count_word(go_id, exclude_words = exclude_words)))
 		df = df[df$freq > 1, , drop = FALSE]
-		if(nrow(df) > 10) {
-			df = df[order(df$freq, decreasing = TRUE)[1:10], ]
+		if(nrow(df) > max_words) {
+			df = df[order(df$freq, decreasing = TRUE)[1:max_words], ]
 		}
 		df
 	})
+	keywords = keywords[sapply(keywords, nrow) > 0]
 
 	ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
 		name = "Similarity", column_title = "GO Similarity",
@@ -27,6 +28,7 @@ plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
 
 	align_to = split(1:nrow(mat), cl)
 	align_to = align_to[names(align_to) != "0"]
+	align_to = align_to[names(align_to) %in% names(keywords)]
 
 	gbl = lapply(names(align_to), function(nm) {
 		kw = rev(keywords[[nm]][, 1])
