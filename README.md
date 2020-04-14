@@ -1,5 +1,7 @@
 # Simplify GO enrichment Results
 
+[![Build Status](https://travis-ci.org/jokergoo/simplifyGO.svg)](https://travis-ci.org/jokergoo/simplifyGO)
+
 
 ### Usage
 

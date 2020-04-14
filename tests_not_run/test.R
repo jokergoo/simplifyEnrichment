@@ -1,6 +1,6 @@
 
 
-set.seed(88)
+set.seed(123)
 go_id = random_GO(500)
 mat = GO_similarity(go_id)
 simplify(mat)

@@ -8,17 +8,18 @@ Simplify GO enrichment results
 }
 \usage{
 simplify(mat, value_fun = median, cutoff = 0.8, plot = TRUE, min_term = 5,
-    order_by_size = TRUE, exclude_words = character(0))
+    order_by_size = TRUE, exclude_words = character(0), max_words = 10)
 }
 \arguments{
 
-  \item{mat}{A GO similarity matrix}
+  \item{mat}{A GO similarity matrix.}
   \item{vavlue_fun}{-vavlue_fun}
   \item{cutoff}{cutoff}
-  \item{plot}{Whether to make the plot}
-  \item{min_term}{-min_term}
-  \item{order_by_sizez}{-order_by_sizez}
-  \item{exclude_words}{-exclude_words}
+  \item{plot}{Whether to make the heatmap.}
+  \item{min_term}{Minimal number of GO terms in a cluster.}
+  \item{order_by_size}{Whether to reorder GO clusters by their sizes.}
+  \item{exclude_words}{Words that are excluded in the word cloud.}
+  \item{max_words}{Maximal number of words in the word cloud.}
 
 }
 \examples{
