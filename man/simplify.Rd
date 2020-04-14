@@ -13,8 +13,8 @@ simplify(mat, value_fun = median, cutoff = 0.8, plot = TRUE, min_term = 5,
 \arguments{
 
   \item{mat}{A GO similarity matrix.}
-  \item{vavlue_fun}{-vavlue_fun}
-  \item{cutoff}{cutoff}
+  \item{value_fun}{Value function.}
+  \item{cutoff}{Cutoff.}
   \item{plot}{Whether to make the heatmap.}
   \item{min_term}{Minimal number of GO terms in a cluster.}
   \item{order_by_size}{Whether to reorder GO clusters by their sizes.}
