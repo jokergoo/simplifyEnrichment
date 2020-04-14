@@ -56,7 +56,7 @@ plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
 	    popViewport()
 	}
 
-	ht = ht + rowAnnotation(keywords = anno_zoom(align_to = align_to, which = "row", panel_fun = panel_fun, 
+	ht = ht + rowAnnotation(keywords = anno_link(align_to = align_to, which = "row", panel_fun = panel_fun, 
     	size = gbl_h, gap = unit(2, "mm"), width = gbl_w + unit(5, "mm"),
     	link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE))
 	draw(ht, gap = unit(2, "pt"))
