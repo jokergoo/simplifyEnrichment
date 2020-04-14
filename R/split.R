@@ -1,7 +1,29 @@
 
 cut_dend = function(dend, cutoff = 0.8, field = "score2", plot = FALSE) {
 
-	if(attr(dend, field) < cutoff) {
+	children_score = function(dend, field) {
+		if(is.leaf(dend)) {
+			-Inf
+		} else {
+			d1 = dend[[1]]
+			d2 = dend[[2]]
+			c(attr(d1, field), attr(d2, field))
+		}
+	}
+
+	dont_split = function(dend, field, cutoff) {
+		s = attr(dend, field)
+
+		if(s >= cutoff) {
+			return(FALSE)
+		} else {
+			s_children = children_score(dend, field)
+			all(s_children < cutoff)
+		}
+	}
+	
+	# if the top node
+	if(dont_split(dend, field, cutoff)) {
 		dend2 = dendrapply(dend, function(d) {
 			attr(d, "height") = 0
 			d
@@ -14,8 +36,7 @@ cut_dend = function(dend, cutoff = 0.8, field = "score2", plot = FALSE) {
 	}
 
 	dend2 = edit_node(dend, function(d, index) {
-		s = attr(d, field)
-		if(s < cutoff) {
+		if(dont_split(d, field, cutoff)) {
 			attr(d, "height") = 0
 		}
 		d
