@@ -1,38 +1,4 @@
 
-# make_rule = function(dend, cutoff = 0.8) {
-# 	size = dendextend::get_nodes_attr(dend, "member")
-	
-# 	score = dendextend::get_nodes_attr(dend, "score2")
-
-# 	tapply(seq_along(size), size, function(index)  {
-# 		s = score[index]
-# 		f = local({
-# 			cutoff = cutoff
-# 			function(x) {
-# 				ifelse(x > cutoff, 2, 1)
-# 			}
-			
-# 		})
-# 		return(f)
-# 	})
-# }
-
-# split_dend = function(dend, cutoff = 0.8) {
-	
-# 	rule = make_rule(dend, cutoff = cutoff)
-
-# 	dend2 = dendrapply(dend, function(d) {
-# 		size = attr(d, "member")
-# 		score = attr(d, "score")
-# 		if(rule[[ as.character(size) ]](score) == 1) {
-# 			attr(d, "height") = 0
-# 		}
-# 		d
-# 	})
-
-# 	as.character(cutree(dend2, h = 0.1))
-# }
-
 cut_dend = function(dend, cutoff = 0.8, field = "score2", plot = FALSE) {
 
 	if(attr(dend, field) < cutoff) {
