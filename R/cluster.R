@@ -1,3 +1,10 @@
+
+dend_max_depth = function(dend) {
+	max(unlist(dend_node_apply(dend, function(d, index) {
+		length(index) + 1
+	})))
+}
+
 # cluster the similarity matrix and assign scores to nodes
 cluster_mat = function(mat, value_fun = median) {
 
@@ -6,7 +13,7 @@ cluster_mat = function(mat, value_fun = median) {
 	.cluster_mat(mat, dist_mat = dist(mat), .env = env)
 
 	dend = env$dend
-	max_d = dendextend::max_depth(dend)
+	max_d = dend_max_depth(dend)
 	dend = dendrapply(dend, function(d) {
 		attr(d, "height") = max_d - attr(d, "height")
 		d

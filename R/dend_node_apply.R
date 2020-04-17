@@ -39,18 +39,22 @@ dend_node_apply = function(dend, fun) {
 		
 	}
 
+	if(length(as.list(formals(fun))) == 1) {
+		formals(fun) = alist(dend = , index = NULL)
+	}
+
 	env = new.env()
 	.do = function(dend, fun, index) {
 
 		if(is.null(index)) {
 			if(is.leaf(dend)) {
-				assign_to(env, next_k(), fun(dend))
+				assign_to(env, next_k(), fun(dend, index))
 				return(NULL)
 			} else {
-				assign_to(env, next_k(), fun(dend))
+				assign_to(env, next_k(), fun(dend, index))
 			}
 		} else {
-			assign_to(env, next_k(), fun(dend[[index]]))
+			assign_to(env, next_k(), fun(dend[[index]], index))
 
 			if(is.leaf(dend[[index]])) {
 				return(NULL)
@@ -73,6 +77,10 @@ edit_node = function(dend, fun = function(dend, index) dend) {
 
 	env = new.env()
 	env$dend = dend
+
+	if(length(as.list(formals(fun))) == 1) {
+		formals(fun) = alist(dend = , index = NULL)
+	}
 
 	traversal_dend = function(env, index = NULL) {
 		# index is null means it is the top node

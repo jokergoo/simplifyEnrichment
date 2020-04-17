@@ -21,7 +21,7 @@ cut_dend = function(dend, cutoff = 0.8, field = "score2", plot = FALSE) {
 			all(s_children < cutoff)
 		}
 	}
-	
+
 	# if the top node
 	if(dont_split(dend, field, cutoff)) {
 		dend2 = dendrapply(dend, function(d) {
@@ -82,5 +82,5 @@ cut_dend = function(dend, cutoff = 0.8, field = "score2", plot = FALSE) {
 		box()
 	}
 
-	as.character(cutree(dend2, h = 0.1))
+	as.character(cutree(as.hclust(dend2), h = 0.1))
 }

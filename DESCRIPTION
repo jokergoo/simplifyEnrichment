@@ -7,8 +7,7 @@ Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.0.0)
 Imports: GOSemSim, ComplexHeatmap (>= 2.3.4), circlize, GetoptLong, digest, 
-         dendextend, tm, GO.db, org.Hs.eg.db, AnnotationDbi, 
-         grid, slam, methods
+         tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods
 Suggests: knitr
 Description: It clusters GO terms by their similarities and uses word cloud
     to summarize the common functions in each GO cluster.
