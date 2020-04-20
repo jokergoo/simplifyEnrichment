@@ -19,7 +19,7 @@ Then generate the GO similarity matrix and split GO terms into clusters.
 
 ```r
 mat = GO_similarity(go_id)
-simplify(mat)
+simplifyGO(mat)
 ```
 
 ![image](https://user-images.githubusercontent.com/449218/79051702-027a4d00-7c32-11ea-887e-ed3e171a03a0.png)
