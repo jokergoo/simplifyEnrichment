@@ -45,6 +45,26 @@ all_word_count = function() {
 
 EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 
+# == title
+# A simple grob for word cloud
+#
+# == param
+# -text A vector of words.
+# -fontsize The corresponding font size.
+# -max_width The maximal width of the viewport to put the word cloud. The value should be numeric, and it is measured in mm.
+#
+# == example
+# if(!exists("strrep")) {
+# 	strrep = function(x, i) paste(rep(x, i), collapse = "")
+# }
+# words = sapply(1:30, function(x) strrep(sample(letters, 1), sample(3:10, 1)))
+# require(grid)
+# gb = simple_word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), max_width = 80)
+# grid.newpage()
+# pushViewport(viewport(width = grobWidth(gb), height = grobHeight(gb)))
+# grid.draw(gb)
+# grid.rect()
+# popViewport()
 simple_word_cloud_grob = function(text, fontsize, max_width = 40) { # width in mm
 	
 	od = order(fontsize, decreasing = TRUE)

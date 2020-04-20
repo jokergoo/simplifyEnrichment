@@ -1,6 +1,18 @@
 
-plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
-	exclude_words = character(0), max_words = 10) {
+# == title
+# Simplify GO enrichment results
+#
+# == param
+# -mat A GO similarity matrix.
+# -cl Cluster labels.
+# -min_term Minimal number of GO terms in a cluster.
+# -order_by_size Whether to reorder GO clusters by their sizes.
+# -exclude_words Words that are excluded in the word cloud.
+# -max_words Maximal number of words in the word cloud.
+# -... Other arguments
+#
+ht_GO_clusters = function(mat, cl, min_term = 5, order_by_size = TRUE,
+	exclude_words = character(0), max_words = 10, ...) {
 
 	cl = as.character(cl)
 	cl_tb = table(cl)
@@ -59,7 +71,7 @@ plot_heatmap = function(mat, cl, min_term = 5, order_by_size = TRUE,
 	ht = ht + rowAnnotation(keywords = anno_link(align_to = align_to, which = "row", panel_fun = panel_fun, 
     	size = gbl_h, gap = unit(2, "mm"), width = gbl_w + unit(5, "mm"),
     	link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE))
-	draw(ht, gap = unit(2, "pt"))
+	draw(ht, gap = unit(2, "pt"), ...)
 }
 
 
