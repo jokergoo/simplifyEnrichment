@@ -1,10 +1,10 @@
 \name{random_GO}
 \alias{random_GO}
 \title{
-Random GO IDs
+Generate random GO IDs
 }
 \description{
-Random GO IDs
+Generate random GO IDs
 }
 \usage{
 random_GO(n, ont = "BP", db = 'org.Hs.eg.db')
