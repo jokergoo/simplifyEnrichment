@@ -15,6 +15,9 @@ env$semData_hash = ""
 # == details
 # This function is basically a wrapper on `GOSemSim::mgoSim`.
 #
+# == value
+# A symmetric matrix.
+#
 GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 
 	if(missing(ont)) {
@@ -44,7 +47,10 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 	go_id = setdiff(go_id, go_removed)
 	go_sim = mgoSim(go_id, go_id, measure = measure, semData = semData, combine = NULL)
 	go_sim[is.na(go_sim)] = 0
+
+	go_sim[lower.tri(go_sim)]  = t(go_sim)[lower.tri(go_sim)]
 	diag(go_sim) = 1
+
 	attr(go_sim, "measure") = measure
 	return(go_sim)
 }
@@ -96,7 +102,7 @@ random_GO = function(n, ont = "BP", db = 'org.Hs.eg.db') {
 		env$semData = semData
 	}
 
-	all_go_id = semData@geneAnno$GO
+	all_go_id = unique(semData@geneAnno$GO)
 
 	sample(all_go_id, min(n, length(all_go_id)))
 }

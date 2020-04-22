@@ -7,13 +7,17 @@ Cluster GO similarity matrix by dynamicTreeCut
 Cluster GO similarity matrix by dynamicTreeCut
 }
 \usage{
-cluster_by_dynamicTreeCut(mat, ...)
+cluster_by_dynamicTreeCut(mat, minClusterSize = 5, ...)
 }
 \arguments{
 
-  \item{mat}{The Go similarity matrix.}
+  \item{mat}{The GO similarity matrix.}
+  \item{minClusterSize}{Minimal number of elements in a cluster. Pass to \code{\link[dynamicTreeCut]{cutreeDynamic}}.}
   \item{...}{Other arguments passed to \code{\link[dynamicTreeCut]{cutreeDynamic}}.}
 
+}
+\value{
+A vector of cluster labels (in numeric).
 }
 \examples{
 # There is no example

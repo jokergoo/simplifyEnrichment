@@ -1,4 +1,15 @@
 
+# == title
+# Calculate word cloud
+#
+# == param
+# -go_id A vector of GO IDs.
+# -term The corresponding GO terms.
+# -exclude_words The words that should be excluded.
+#
+# == value
+# A data frame with words and frequencies.
+#
 count_word = function(go_id, term = NULL, exclude_words = NULL) {
 	
 	if(is.null(term)) term = select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
@@ -51,7 +62,11 @@ EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 # == param
 # -text A vector of words.
 # -fontsize The corresponding font size.
-# -max_width The maximal width of the viewport to put the word cloud. The value should be numeric, and it is measured in mm.
+# -max_width The maximal width of the viewport to put the word cloud. 
+#            The value should be numeric. It is measured in mm.
+#
+# == value
+# A `grid::grob` object. The width and height of the grob can be get by `grid::grobWidth` and `grid::grobHeight`.
 #
 # == example
 # if(!exists("strrep")) {
@@ -61,7 +76,9 @@ EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 # require(grid)
 # gb = simple_word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), max_width = 80)
 # grid.newpage()
-# pushViewport(viewport(width = grobWidth(gb), height = grobHeight(gb)))
+# w = grobWidth(gb)
+# h = grobHeight(gb)
+# pushViewport(viewport(width = w, height = grobHeight(gb)))
 # grid.draw(gb)
 # grid.rect()
 # popViewport()
@@ -120,10 +137,22 @@ simple_word_cloud_grob = function(text, fontsize, max_width = 40) { # width in m
 	return(gb)
 }
 
+# == title
+# Width for simple_word_cloud Grob
+#
+# == param
+# -x The ``simple_word_cloud`` grob returned by `simple_word_cloud_grob`.
+#
 widthDetails.simple_word_cloud = function(x) {
 	unit(attr(x, "size")[1], "mm")
 }
 
+# == title
+# Height for simple_word_cloud Grob
+#
+# == param
+# -x The ``simple_word_cloud`` grob returned by `simple_word_cloud_grob`.
+#
 heightDetails.simple_word_cloud = function(x) {
 	unit(attr(x, "size")[2], "mm")
 }

@@ -57,7 +57,9 @@ cluster_mat = function(mat, value_fun = median) {
 .cluster_mat = function(mat, dist_mat = dist(mat), .env, index = seq_len(nrow(mat)), 
 	depth = 0, dend_index = NULL) {
 
-	if(nrow(mat) == 1) {
+	nr = nrow(mat)
+
+	if(nr == 1) {
 		.env$dend[[dend_index]] = index
 		attributes(.env$dend[[dend_index]]) = list(
 			members = 1,
@@ -74,8 +76,11 @@ cluster_mat = function(mat, value_fun = median) {
 	if(nrow(mat) == 2) {
 		cl = c(1, 2)
 	} else {
-		# cl = cutree(hclust(dist_mat), k = 2)
-		suppressWarnings(cl <- kmeans(mat, centers = 2)$cluster)
+		oe = try(suppressWarnings(cl <- kmeans(mat, centers = 2)$cluster), silent = TRUE)
+		if(inherits(oe, "try-error")) {
+			cl = rep(2, nr)
+			cl[seq_len(ceiling(nr/2))] = 1
+		}
 	}
 	l1 = cl == 1
 	l2 = cl == 2
@@ -130,7 +135,7 @@ cluster_mat = function(mat, value_fun = median) {
 		.env, index = index[l2], depth = depth + 1, dend_index = c(dend_index, 2))
 }
 
-cut_dend = function(dend, cutoff = 0.8, field = "score2") {
+cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 
 	children_score = function(dend, field) {
 		if(is.leaf(dend)) {
@@ -188,24 +193,32 @@ cut_dend = function(dend, cutoff = 0.8, field = "score2") {
 		d
 	})
 
-	cutree(as.hclust(dend2), h = 0.1)
+	if(return == "dend") {
+		dend2
+	} else {
+		cutree(as.hclust(dend2), h = 0.1)
+	}
 }
 
-plot_dend = function(dend, field = "score2", cutoff = 0.8) {
+plot_dend = function(dend, field = "score2", cutoff = 0.85) {
+	dend2 = cut_dend(dend, cutoff, return = "dend")
 	col_fun = colorRamp2(c(0.5, 0.75, 1), c("blue", "yellow", "red"))
 	dend = edit_node(dend, function(d, index) {
 		if(is.null(index)) {
 			if(!is.leaf(d)) {
-				if(attr(dend, "height") > 0) {
-					s = attr(d, field)
-					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))
+				s = attr(d, field)
+				attr(d, "edgePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))
+				
+				if(attr(dend2, "height") > 0) {
+					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, NA), cex = 0.5)
 				}
 			}
 		} else {
 			if(!is.leaf(d)) {
-				if(attr(dend[[index]], "height") > 0) {
-					s = attr(d, field)
-					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))
+				s = attr(d, field)
+				attr(d, "edgePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))	
+				if(attr(dend2[[index]], "height") > 0) {
+					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, NA), cex = 0.5)
 				}
 			}
 		}
@@ -216,7 +229,19 @@ plot_dend = function(dend, field = "score2", cutoff = 0.8) {
 	box()
 }
 
-binary_cut = function(mat, value_fun = median, cutoff = 0.8, n_run = 1) {
+# == title
+# Cluster GO terms by binary cutting the similarity matrix
+#
+# == param
+# -mat A GO similarity matrix.
+# -value_fun Value function to calculate the score for each node in the dendrogram.
+# -cutoff The cutoff for splitting the dendrogram.
+# -n_run If the value is larger than one, `binary_cut` is executed multiple times
+#      and generates a consensus clustering.
+#
+# == value
+# A vector of cluster labels (in numeric). 
+binary_cut = function(mat, value_fun = median, cutoff = 0.85, n_run = 1) {
 	if(n_run == 1) {
 		dend = cluster_mat(mat, value_fun = value_fun)
 		cl = cut_dend(dend, cutoff)
