@@ -20,6 +20,9 @@ GO_similarity(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel")
 \details{
 This function is basically a wrapper on \code{\link[GOSemSim]{mgoSim}}.
 }
+\value{
+A symmetric matrix.
+}
 \examples{
 # There is no example
 NULL

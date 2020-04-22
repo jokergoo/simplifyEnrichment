@@ -11,6 +11,35 @@ next_k = local({
 	}
 })
 
+# == title
+# Apply on every node in a dendrogram
+#
+# == param
+# -dend A dendrogram.
+# -fun A self-defined function.
+#
+# == details
+# The function return a vector or a list with the same length as the number of nodes in the denrogram.
+#
+# The self-defined function can have one single argument which is the sub-dendrogram at a certain node,
+# e.g. to get the number of members at each node:
+#
+#     dend_node_apply(dend, function(d) attr(d, "members"))
+#
+# The self-defined function can have a second argument, which is the index of current sub-dendrogram in 
+# the complete dendrogram. E.g. ``dend[[1]]`` is the first child node of the complete dendrogram and
+# ``dend[[c(1, 2)]]`` is the second child node of ``dend[[1]]``, et al. This makes that at a certain node,
+# it is possible to get informatino of its children nodes and parent nodes. 
+#
+#     dend_node_apply(dend, function(d, index) {
+#         d[[c(index, 1)]] # is the first child node of d
+#         d[[index[-length(index)]]] # is the parent node of d
+#         ...
+#     })
+#
+# == value
+# A vector or a list, depends on whether ``fun`` returns a scalar or more complex values.
+#
 dend_node_apply = function(dend, fun) {
 
 	next_k(reset = TRUE)
@@ -65,8 +94,23 @@ dend_node_apply = function(dend, fun) {
 	return(var)
 }
 
-# breadth first
-edit_node = function(dend, fun = function(dend, index) dend) {
+
+# == title
+# Modify every node in a dendrogram
+#
+# == param
+# -dend A dendrogram.
+# -fun A self-defined function.
+#
+# == details
+# if ``fun`` only has one argument, it is basically the same as `stats::dendrapply`,
+# but it can have a second argument which is the index of the node in the dendrogram,
+# which makes it possible to get information of children nodes and parent nodes for
+# a specified node.
+#
+edit_node = function(dend, fun = function(d, index) d) {
+
+	# breadth first
 
 	env = new.env()
 	env$dend = dend
