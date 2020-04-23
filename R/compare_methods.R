@@ -1,18 +1,18 @@
 
-
+ALL_CLUSTERING_METHODS = c("kmeans", 
+			               "dynamicTreeCut", 
+			               "mclust", 
+			               "apcluster", 
+			               "fast_greedy", 
+			               "leading_eigen", 
+			               "louvain", 
+			               "walktrap",
+			               "binary_cut")
 compare_methods_make_clusters = function(mat, method = "all") {
 
 	clt = list()
 	if(method == "all") {
-		method = c("kmeans", 
-			       "dynamicTreeCut", 
-			       # "mclust", 
-			       "apcluster", 
-			       "fast_greedy", 
-			       "leading_eigen", 
-			       "louvain", 
-			       "walktrap", 
-			       "binary_cut")
+		method = ALLALL_CLUSTERING_METHODS_METHODS
 	}
 
 	clt = lapply(method, function(me) as.character(cluster_GO(mat, me)))
