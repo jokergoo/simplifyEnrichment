@@ -85,3 +85,6 @@ for(i in seq_along(cutoff)) {
 	d[i] = difference_score(mat, cl)
 }
 plot(cutoff, d)
+
+
+

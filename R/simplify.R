@@ -64,6 +64,16 @@ simplifyGO = function(mat, method = "binary_cut", ...,
 	return(data.frame(id = go_id, name = term, cluster = cl, stringsAsFactors = FALSE))
 }
 
+# == title
+# Cluster GO terms
+#
+# == param
+# -mat A GO similarity matrix.
+# -method Method for clustering the matrix.
+# -... Other arguments passed to the clustering function.
+#
+# == value
+# A numeric vector of cluster labels.
 cluster_GO = function(mat, method = "binary_cut", ...) {
 	
 	qqcat("cluster @{nrow(mat)} GO terms by @{method}...")

@@ -24,7 +24,10 @@ knitr::opts_chunk$set(
     fig.align = "center")
 ```
 
-Gene Ontology enrichment analysis is very frequently used in bioinformatics field.
+Gene Ontology enrichment analysis is very frequently used in bioinformatics field. In many cases,
+the results contain a very long list of significantly enriched GO terms.
+
+To solve this problem, there are two ways. 1. use methods that cluster a matrix. 2. 
 
 ```{r, fig.width = 4, fig.height = 4}
 library(simplifyGO)
