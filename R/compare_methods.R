@@ -12,7 +12,7 @@ compare_methods_make_clusters = function(mat, method = "all") {
 
 	clt = list()
 	if(method == "all") {
-		method = ALLALL_CLUSTERING_METHODS_METHODS
+		method = ALL_CLUSTERING_METHODS
 	}
 
 	clt = lapply(method, function(me) as.character(cluster_GO(mat, me)))
