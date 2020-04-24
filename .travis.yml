@@ -4,3 +4,6 @@ repos:
   BioCsoft: https://bioconductor.org/packages/devel/bioc
   BioCann: https://bioconductor.org/packages/devel/data/annotation
   BioCexp: https://bioconductor.org/packages/devel/data/experiment
+r_github_packages:
+  - jokergoo/ComplexHeatmap
+  
