@@ -13,3 +13,5 @@
 .DS_Store
 
 revdep/
+
+.rds
