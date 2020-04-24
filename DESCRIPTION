@@ -9,7 +9,7 @@ Depends: R (>= 3.0.0)
 Imports: GOSemSim, ComplexHeatmap (>= 2.3.4), circlize, GetoptLong, digest, 
          tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods, clue
 Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph, 
-          dynamicTreeCut, testthat
+          dynamicTreeCut, testthat, gridtext
 Description: It clusters GO terms by their similarities and uses word cloud
     to summarize the common functions in each GO cluster.
 VignetteBuilder: knitr
