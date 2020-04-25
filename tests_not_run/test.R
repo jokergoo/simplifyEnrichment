@@ -40,7 +40,7 @@ ggplot(df, aes(x=method, y=value)) +
   geom_violin(trim = TRUE) + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
-bp_list = readRDS("tests_not_run/bp_list.rds")
+bp_list = readRDS("../simplifyGO_figures/bp_list.rds")
 
 go_list = lapply(bp_list, function(x) {
 	names(x)[p.adjust(x, "BH") < 0.05]

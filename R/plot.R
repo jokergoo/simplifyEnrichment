@@ -88,6 +88,12 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 			ht = ht + rowAnnotation(keywords = anno_link(align_to = align_to, which = "row", panel_fun = panel_fun, 
 		    	size = gbl_h, gap = unit(2, "mm"), width = gbl_w + unit(5, "mm"),
 		    	link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE))
+		} else {
+			if(any(cl == "0")) {
+				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "red", ">= 5" = "white"), width = unit(2, "mm"),
+					heatmap_legend_param = list(title = "Cluster size", at = "< 5"),
+					show_column_names = FALSE)
+			}
 		}
 	}
 	draw(ht, gap = unit(2, "pt"), ...)
