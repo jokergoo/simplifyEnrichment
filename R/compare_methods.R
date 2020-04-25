@@ -24,12 +24,15 @@ compare_methods_make_clusters = function(mat, method = "all") {
 
 compare_methods_make_plot = function(mat, clt) {
 
+	clt = lapply(clt, as.character)
+	clt = as.data.frame(clt)
+
 	ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
 		name = "Similarity", column_title = "GO Similarity",
 		show_row_names = FALSE, show_column_names = FALSE, 
 		# cluster_rows = dend, cluster_columns = dend,
 		show_row_dend = FALSE, show_column_dend = FALSE,
-		right_annotation = rowAnnotation(df = clt, show_legend = FALSE))
+		right_annotation = rowAnnotation(cluster = clt, show_legend = FALSE))
 	p1 = grid.grabExpr(draw(ht))
 
 	x = sapply(clt, function(x) difference_score(mat, x))

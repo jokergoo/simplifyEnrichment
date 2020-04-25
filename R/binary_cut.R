@@ -245,7 +245,7 @@ binary_cut = function(mat, value_fun = median, cutoff = 0.85, n_run = 1) {
 	if(n_run == 1) {
 		dend = cluster_mat(mat, value_fun = value_fun)
 		cl = cut_dend(dend, cutoff)
-		return(cl)
+		return(unname(cl))
 	} else {
 		partition_list = lapply(seq_len(n_run), function(i) {
 			dend = cluster_mat(mat, value_fun = value_fun)
