@@ -70,37 +70,51 @@ simplifyGO = function(mat, method = "binary_cut", ...,
 # == param
 # -mat A GO similarity matrix.
 # -method Method for clustering the matrix.
+# -catch_error Internally used.
+# -verbose Whether print messages.
 # -... Other arguments passed to the clustering function.
 #
 # == value
 # A numeric vector of cluster labels.
-cluster_GO = function(mat, method = "binary_cut", ...) {
+#
+# If ``catch_error`` is set to ``TRUE`` and if the clustering produces an error,
+# the function returns a ``try-error`` object.
+cluster_GO = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
 	
-	qqcat("cluster @{nrow(mat)} GO terms by @{method}...")
+	if(verbose) qqcat("cluster @{nrow(mat)} GO terms by @{method}...")
 
 	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
-		cl = cluster_by_kmeans(mat, ...)
+		oe = try(cl <- cluster_by_kmeans(mat, ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_by_dynamicTreeCut", "dynamicTreeCut"))) {
-		cl = cluster_by_dynamicTreeCut(mat, ...)
+		oe  = try(cl <- cluster_by_dynamicTreeCut(mat, ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_by_mclust", "mclust"))) {
-		cl = cluster_by_mclust(mat, ...)
+		oe = try(cl <- cluster_by_mclust(mat, ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_by_apcluster", "apcluster"))) {
-		cl = cluster_by_apcluster(mat, ...)
+		oe = try(cl <- cluster_by_apcluster(mat, ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_fast_greedy", "fast_greedy"))) {
-		cl = cluster_by_igraph(mat, method = "cluster_fast_greedy", ...)
+		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_fast_greedy", ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_leading_eigen", "leading_eigen"))) {
-		cl = cluster_by_igraph(mat, method = "cluster_leading_eigen", ...)
+		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_leading_eigen", ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_louvain", "louvain"))) {
-		cl = cluster_by_igraph(mat, method = "cluster_louvain", ...)
+		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_louvain", ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_walktrap", "walktrap"))) {
-		cl = cluster_by_igraph(mat, method = "cluster_walktrap", ...)
+		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_walktrap", ...), silent = TRUE)
 	} else if(any(method %in% c("cluster_by_binarycut", "binary_cut"))) {
-		cl = binary_cut(mat, ...)
+		oe = try(cl <- binary_cut(mat, ...), silent = TRUE)
 	} else {
 		stop_wrap(qq("method '@{method}' is not supported."))
 	}
 
-	qqcat(" @{length(unique(cl))} clusters.\n")
+	if(inherits(oe, "try-error")) {
+		if(catch_error) {
+			return(oe)
+		} else {
+			cat("\n")
+			stop(oe)
+		}
+	}
+
+	if(verbose) qqcat(" @{length(unique(cl))} clusters.\n")
 
 	return(cl)
 }
@@ -139,24 +153,24 @@ cluster_by_kmeans = function(mat, ...) {
 # https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve
 elbow_finder <- function(x_values, y_values) {
   # Max values to create line
-  max_x_x <- max(x_values)
-  max_x_y <- y_values[which.max(x_values)]
-  max_y_y <- max(y_values)
-  max_y_x <- x_values[which.max(y_values)]
-  max_df <- data.frame(x = c(max_y_x, max_x_x), y = c(max_y_y, max_x_y))
+  max_x_x = max(x_values)
+  max_x_y = y_values[which.max(x_values)]
+  max_y_y = max(y_values)
+  max_y_x = x_values[which.max(y_values)]
+  max_df = data.frame(x = c(max_y_x, max_x_x), y = c(max_y_y, max_x_y))
 
   # Creating straight line between the max values
-  fit <- lm(max_df$y ~ max_df$x)
+  fit = lm(max_df$y ~ max_df$x)
 
   # Distance from point to line
-  distances <- c()
+  distances = c()
   for(i in 1:length(x_values)) {
-    distances <- c(distances, abs(coef(fit)[2]*x_values[i] - y_values[i] + coef(fit)[1]) / sqrt(coef(fit)[2]^2 + 1^2))
+    distances = c(distances, abs(coef(fit)[2]*x_values[i] - y_values[i] + coef(fit)[1]) / sqrt(coef(fit)[2]^2 + 1^2))
   }
 
   # Max distance point
-  x_max_dist <- x_values[which.max(distances)]
-  y_max_dist <- y_values[which.max(distances)]
+  x_max_dist = x_values[which.max(distances)]
+  y_max_dist = y_values[which.max(distances)]
 
   return(c(x_max_dist, y_max_dist))
 }

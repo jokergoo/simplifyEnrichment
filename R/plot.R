@@ -19,6 +19,14 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 	draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
 	exclude_words = character(0), max_words = 10, word_cloud_width = 60, ...) {
 
+	if(inherits(cl, "try-error")) {
+		grid.newpage()
+		pushViewport(viewport())
+		grid.text("Clustering has an error.")
+		popViewport()
+		return(invisible(NULL))
+	}
+
 	cl = as.character(cl)
 	cl_tb = table(cl)
 	cl[cl %in% names(cl_tb[cl_tb < min_term])] = "0"
@@ -26,7 +34,7 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 
 	if(!is.null(dend)) {
 		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-			name = "Similarity", column_title = "GO Similarity",
+			name = "Similarity", column_title = NULL,
 			show_row_names = FALSE, show_column_names = FALSE,
 			cluster_rows = dend, cluster_columns = dend, 
 			show_row_dend = TRUE, show_column_dend = FALSE,
@@ -34,7 +42,7 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 			border = "#404040", row_title = NULL)
 	} else {
 		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-			name = "Similarity", column_title = "GO Similarity",
+			name = "Similarity", column_title = NULL,
 			show_row_names = FALSE, show_column_names = FALSE,
 			show_row_dend = FALSE, show_column_dend = FALSE,
 			cluster_row_slices = !order_by_size, 
@@ -90,8 +98,8 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 		    	link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE))
 		} else {
 			if(any(cl == "0")) {
-				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "red", ">= 5" = "white"), width = unit(2, "mm"),
-					heatmap_legend_param = list(title = "Cluster size", at = "< 5"),
+				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "darkgreen", ">= 5" = "white"), width = unit(2, "mm"),
+					heatmap_legend_param = list(title = "", at = "< 5", lable = "Clusters with\nsize < 5"),
 					show_column_names = FALSE)
 			}
 		}

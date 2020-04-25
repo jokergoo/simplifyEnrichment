@@ -84,6 +84,11 @@ cluster_mat = function(mat, value_fun = median) {
 	}
 	l1 = cl == 1
 	l2 = cl == 2
+	if(sum(mat[l1, l1]) > sum(mat[l2, l2])) {
+		l3 = l1
+		l1 = l2
+		l2 = l3
+	}
 	x11 = .env$value_fun(mat[l1, l1])
 	x12 = .env$value_fun(mat[l1, l2])
 	x21 = .env$value_fun(mat[l2, l1])

@@ -1,8 +1,8 @@
 ---
-title: "Cluster and Simplify GO Enrichment Results"
-output: rmarkdown::html_vignette
+title: "Simplify Gene Ontology Enrichment Results"
+output: html_document
 vignette: >
-  %\VignetteIndexEntry{Cluster and Simplify GO Enrichment Results}
+  %\VignetteIndexEntry{Simplify Gene Ontology Enrichment Results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -24,16 +24,22 @@ knitr::opts_chunk$set(
     fig.align = "center")
 ```
 
-Gene Ontology enrichment analysis is very frequently used in bioinformatics field. In many cases,
-the results contain a very long list of significantly enriched GO terms.
+Gene Ontology enrichment analysis is very frequently used in bioinformatics
+field. In many cases, the results contain a very long list of significantly
+enriched GO terms which has highly redundant information and difficult to
+summarize. The GO enrichment results can be reduced by clustering GO terms
+into groups where in the same group the GO terms are more similar. The
+measurement on the similarities between GO terms is called **the semantic
+similarity** and can be calculated by many softwares such as [**GOSemSim**
+package](https://bioconductor.org/packages/release/bioc/html/GOSemSim.html).
+The following figure is an example of the semantic similarity matrix from 500
+randomly generated GO terms.
 
-To solve this problem, there are two ways. 1. use methods that cluster a matrix. 2. 
-
-```{r, fig.width = 4, fig.height = 4}
+```{r, fig.width = 4, fig.height = 4, echo = FALSE}
 library(simplifyGO)
 library(circlize)
 library(ComplexHeatmap)
-set.seed(123)
+set.seed(12345)
 go_id = random_GO(500)
 mat = GO_similarity(go_id)
 col_fun = colorRamp2(c(0, 1), c("white", "red"))
@@ -43,7 +49,20 @@ Heatmap(mat, name = "Similarity", col = col_fun,
 	border = "#404040", column_title = "GO similarity matrix")
 ```
 
+The GO similarity heatmap has a very specific pattern that there are blocks
+located on the diagonal. This is due to the structure of Directed Acyclic Graph (DAG)
+for the Gene Ontologies.
 
+Classifying GO terms into groups basically is to apply clustering on the GO simialrity matrix.
+To solve this problem, there are two type of methods. 1. use methods that cluster a matrix. 2. treat
+the similarity matrix as adjacency matrix and convert the matrix to a weighted network. Then 
+apply network module/community methods.
+
+There is one major problem for the clustering...
+
+We proposed a method named "binary cut"... In the following similarity matrix which corresponds
+to a subset of GO terms. Both are split by k-kmeans clustering with two groups. Mark the four 
+partitions of the matrix as $s_{11}$, $s_{12}$, $s_{21}$ and $s_{22}$. 
 
 ```{r, fig.width = 6, fig.height = 3, echo = FALSE}
 cl = binary_cut(mat)
@@ -87,10 +106,95 @@ grid.draw(plot2)
 popViewport()
 ```
 
+The score $s$ is calcualted as:
 
-```{r, fig.width = 8, fig.height = 5}
-set.seed(123)
+$$s = \frac{s_{11} + s_{22}}{s_{11} + s_{12} + s_{21}, s_{22}}$$
+
+Naturally, if $s$ is close to 0.5 (e.g. the left heatmap), all the terms are highly similar
+and they should not be split any more, while if $s$ is close to 1, it means the group of GO terms
+can still be split into two groups.
+
+The algorithm is applied as:
+
+1. for a similarity matrix, apply k-kmeans with two groups, calcualte $s$
+2. for the two submatrix, apply step 1 recursively
+
+If the process are formatted as a dendrogram, the splitting can
+
+1. split if the score of the node is larger than the cutoff
+2. because the node more on the top have ... smaller scores, thus, if...
+
+An example of splitting previous heatmap by binary cut is:
+
+```{r, fig.width = 4, fig.height = 3, echo = FALSE}
+cl = binary_cut(mat)
+ht_GO_clusters(mat, cl, draw_word_cloud = FALSE)
+```
+
+Following plot compares ...
+
+
+<p><img src='GO_heatmap_random_BP_1.jpg' /></p>
+
+Once the GO terms are clustered, the ... can be summarized by word cloud.
+
+```{r, fig.width = 8, fig.height = 5, echo = FALSE}
+df = simplifyGO(mat, word_cloud_width = 80, verbose = FALSE)
+```
+
+## Usage
+
+**simplifyGO** starts from the GO similarity matrix. There is a `GO_similarity()` function
+which is basically a wrapper on `GOSemSim::mgoSim`. The function accepts a vector of GO IDs.
+Note the GO should only belong to one same ontology (e.g. BP, CC or MF).
+
+In following example, we ... 500 random GO ids in BP ontology.
+
+```{r}
+set.seed(12345)
 go_id = random_GO(500)
 mat = GO_similarity(go_id)
+```
+
+With `mat`, directlly use `simplifyGO()` generates the heatmap and returns a data frame with cluster classifications.
+The plot is the same as the previous one, here we won't generate it again in the vignette.
+
+```{r, fig.width = 8, fig.height = 5, eval = FALSE}
 df = simplifyGO(mat, word_cloud_width = 80)
+```
+
+The returned variable `df` is a data frame with GO IDs, term names and the classifications:
+
+```{r}
+head(df)
+```
+
+The size of clusters:
+
+```{r}
+sort(table(df$cluster))
+```
+
+
+## Benchmark
+
+### On random data
+
+
+The heatmap https://jokergoo.github.io/simplifyGO_figures/random_BP.html
+
+<p><img src='random_BP_boxplot.svg' width='300' /></p>
+<p><img src='random_BP_similarity.svg' width='500' /></p>
+
+### On real datasets
+
+https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html
+
+<p><img src='EBI_Expression_Atlas_boxplot.svg' width='300' /></p>
+<p><img src='EBI_Expression_Atlas_similarity.svg' width='500' /></p>
+
+## Session Info
+
+```{r}
+sessionInfo()
 ```

@@ -2,6 +2,17 @@
 
 [![Build Status](https://travis-ci.org/jokergoo/simplifyGO.svg)](https://travis-ci.org/jokergoo/simplifyGO)
 
+### Features
+
+- A new method (binary cut) is proposed to effectively cluster GO terms into groups from the semantic similarity matrix.
+- Summaries of GO terms in each cluster are visualized by word clouds.
+
+
+### Install
+
+```r
+devtools::install_github("jokergoo/simplifyGO")
+```
 
 ### Usage
 
@@ -15,7 +26,7 @@ head(go_id)
 # [6] "GO:0046101"
 ```
 
-Then generate the GO similarity matrix and split GO terms into clusters.
+Then generate the GO similarity matrix, split GO terms into clusters and visualize it.
 
 ```r
 mat = GO_similarity(go_id)
@@ -24,3 +35,11 @@ simplifyGO(mat)
 
 ![image](https://user-images.githubusercontent.com/449218/79051702-027a4d00-7c32-11ea-887e-ed3e171a03a0.png)
 
+### Examples
+
+- [Randomly generated GO terms](https://jokergoo.github.io/simplifyGO_figures/random_BP.html)
+- [Enriched GO terms from EBI Expression Atlas datasets](https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html)
+
+### License
+
+MIT @ Zuguang Gu
