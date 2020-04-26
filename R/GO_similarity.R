@@ -7,7 +7,7 @@ env$semData_hash = ""
 #
 # == param
 # -go_id A vector of GO IDs.
-# -ont GO ontology, value should be one of "BP", "CC" or "MF". If it is not specified,
+# -ont GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified,
 #      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
 # -measure Measurement for the GO similarity, pass to `GOSemSim::mgoSim`.
@@ -63,7 +63,7 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
 #
 # == details
-# 10 GO IDs are randomly sampled and tested.
+# 10 GO IDs are randomly sampled and checked.
 #
 # == value
 # A single character scalar of "BP", "CC" or "MF".
@@ -85,8 +85,8 @@ guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 # Generate random GO IDs
 #
 # == param
-# -n Number of IDs.
-# -ont GO ontology, value should be one of "BP", "CC" or "MF".
+# -n Number of GO IDs.
+# -ont GO ontology. Value should be one of "BP", "CC" or "MF".
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
 #
 # == value

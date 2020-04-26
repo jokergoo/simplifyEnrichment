@@ -8,6 +8,7 @@ ALL_CLUSTERING_METHODS = c("kmeans",
 			               "louvain", 
 			               "walktrap",
 			               "binary_cut")
+
 compare_methods_make_clusters = function(mat, method = "all") {
 
 	clt = list()
@@ -15,7 +16,7 @@ compare_methods_make_clusters = function(mat, method = "all") {
 		method = ALL_CLUSTERING_METHODS
 	}
 
-	clt = lapply(method, function(me) as.character(cluster_GO(mat, me)))
+	clt = lapply(method, function(me) cluster_GO(mat, me))
 	names(clt) = method
 	clt = as.data.frame(clt)
 
@@ -27,13 +28,13 @@ compare_methods_make_plot = function(mat, clt) {
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
 
-	ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
+	ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
 		name = "Similarity", column_title = "GO Similarity",
 		show_row_names = FALSE, show_column_names = FALSE, 
 		# cluster_rows = dend, cluster_columns = dend,
 		show_row_dend = FALSE, show_column_dend = FALSE,
 		right_annotation = rowAnnotation(cluster = clt, show_legend = FALSE))
-	p1 = grid.grabExpr(draw(ht))
+	p1 = grid.grabExpr(draw(ht1))
 
 	x = sapply(clt, function(x) difference_score(mat, x))
 
@@ -65,6 +66,10 @@ compare_methods_make_plot = function(mat, clt) {
 # that belong to the same clusters and in different clusters. The difference score
 # is the Kolmogorov-Smirnov statistic between the two distributions.
 #
+# == examples
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# cl = binary_cut(mat)
+# difference_score(mat, cl)
 difference_score = function(mat, cl) {
 	n = nrow(mat)
 	l_block = matrix(FALSE, nrow = nrow(mat), ncol = ncol(mat))
@@ -119,6 +124,9 @@ other_mean = function(mat, cl) {
 
 compare_methods_calc_concordance = function(clt) {
 
+	clt = lapply(clt, as.character)
+	clt = as.data.frame(clt)
+
 	concordance = function(cl1, cl2) {
 		cl1 = as.vector(cl1)
 		cl2 = as.vector(cl2)
@@ -167,7 +175,11 @@ compare_methods_calc_concordance = function(clt) {
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 #
-# The function produces a plot with four panels.
+# The function produces a plot with three panels.
+#
+# - A heatmap of the similarity matrix with different classifications as row annotations.
+# - A barplot of the difference scores for each method, calculated by `difference_score`.
+# - A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
 #
 compare_methods = function(mat) {
 	clt = compare_methods_make_clusters(mat, "all")

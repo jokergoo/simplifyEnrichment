@@ -21,7 +21,6 @@ binary_cut(mat, value_fun = median, cutoff = 0.85, n_run = 1)
 A vector of cluster labels (in numeric).
 }
 \examples{
-# There is no example
-NULL
-
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+binary_cut(mat)
 }

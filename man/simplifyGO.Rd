@@ -7,52 +7,37 @@ Simplify GO enrichment results
 Simplify GO enrichment results
 }
 \usage{
-simplifyGO(mat, method = "binary_cut", ...,
-    
-    # parameters for plotting the heatmap
-    plot = TRUE, draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
-    exclude_words = character(0), max_words = 10,
-    word_cloud_width = 60)
+simplifyGO(mat, method = "binary_cut", control = list(),
+    plot = TRUE, verbose = TRUE, ...)
 }
 \arguments{
 
   \item{mat}{A GO similarity matrix.}
-  \item{method}{Method for clustering the matrix.}
-  \item{...}{Other arguments passed to the clustering function, see details.}
+  \item{method}{Method for clustering the matrix. See \code{\link{cluster_GO}}.}
+  \item{control}{A list of parameters passed to \code{\link{cluster_GO}}.}
   \item{plot}{Whether to make the heatmap.}
-  \item{draw_word_cloud}{Whether draw the word clouds.}
-  \item{min_term}{Minimal number of GO terms in a cluster.}
-  \item{order_by_size}{Whether to reorder GO clusters by their sizes.}
-  \item{exclude_words}{Words that are excluded in the word cloud.}
-  \item{max_words}{Maximal number of words in the word cloud.}
-  \item{word_cloud_width}{The maximal width of the viewport to put the word cloud.  The value should be numeric. It is measured in mm.}
+  \item{verbose}{Whether to print messages.}
+  \item{...}{Arguments passed to \code{\link{ht_GO_clusters}}.}
 
 }
 \details{
-The following methods are supported:
+This is basically a wrapper function that it first runs \code{\link{cluster_GO}} to cluster
+GO terms and then runs \code{\link{ht_GO_clusters}} to visualize the clustering.
+
+The arguments passed to \code{\link{ht_GO_clusters}} are:
 
 \describe{
-  \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
-  \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
-  \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
-  \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}.}
-  \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}
-  \item{\code{fast_greedy}}{see \code{\link{cluster_by_igraph}}.}
-  \item{\code{leading_eigen}}{see \code{\link{cluster_by_igraph}}.}
-  \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
-  \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
+  \item{\code{draw_word_cloud}}{Whether to draw the word clouds.}
+  \item{\code{min_term}}{Minimal number of GO terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one single cluster in the heatmap.}
+  \item{\code{order_by_size}}{Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.}
+  \item{\code{exclude_words}}{Words that are excluded in the word cloud.}
+  \item{\code{max_words}}{Maximal number of words visualized in the word cloud.}
+  \item{\code{word_cloud_grob_param}}{A list of parameters passed to \code{\link{word_cloud_grob}}.}
+  \item{\code{fontsize_range}}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
 }
-
-Note the parametes for each clustering method are passes by \code{...} from \code{\link{simplifyGO}}.
 }
 \value{
-A data frame with three columns:
-
-\itemize{
-  \item GO ID
-  \item GO term name
-  \item Cluster label
-}
+A data frame with three columns: GO IDs, GO term names and cluster labels.
 }
 \examples{
 \dontrun{
