@@ -21,7 +21,7 @@ that belong to the same clusters and in different clusters. The difference score
 is the Kolmogorov-Smirnov statistic between the two distributions.
 }
 \examples{
-# There is no example
-NULL
-
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+cl = binary_cut(mat)
+difference_score(mat, cl)
 }

@@ -12,7 +12,7 @@ cluster_by_dynamicTreeCut(mat, minClusterSize = 5, ...)
 \arguments{
 
   \item{mat}{The GO similarity matrix.}
-  \item{minClusterSize}{Minimal number of elements in a cluster. Pass to \code{\link[dynamicTreeCut]{cutreeDynamic}}.}
+  \item{minClusterSize}{Minimal number of objects in a cluster. Pass to \code{\link[dynamicTreeCut]{cutreeDynamic}}.}
   \item{...}{Other arguments passed to \code{\link[dynamicTreeCut]{cutreeDynamic}}.}
 
 }

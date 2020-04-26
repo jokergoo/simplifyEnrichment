@@ -1,23 +1,32 @@
 
 # == title
-# Simplify GO enrichment results
+# Visualize the GO similarity matrix and the classifications
 #
 # == param
 # -mat A GO similarity matrix.
-# -cl Cluster labels.
+# -cl Cluster labels inferred from the similarity matrix, e.g. from `cluster_GO` or `binary_cut`.
 # -dend Used internally.
-# -draw_word_cloud Whether draw the word clouds.
-# -min_term Minimal number of GO terms in a cluster.
-# -order_by_size Whether to reorder GO clusters by their sizes.
+# -draw_word_cloud Whether to draw the word clouds.
+# -min_term Minimal number of GO terms in a cluster. All the clusters
+#     with size less than ``min_term`` are all merged into one single cluster in the heatmap.
+# -order_by_size Whether to reorder GO clusters by their sizes. The cluster
+#      that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.
 # -exclude_words Words that are excluded in the word cloud.
-# -max_words Maximal number of words in the word cloud.
-# -word_cloud_width The maximal width of the viewport to put the word cloud. 
-#            The value should be numeric. It is measured in mm.
-# -... Other arguments
+# -max_words Maximal number of words visualized in the word cloud.
+# -word_cloud_grob_param A list of parameters passed to `word_cloud_grob`.
+# -fontsize_range The range of the font size. The value should be a numeric vector with length two.
+#       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
+#       to the maximal word frequency. The font size interlopation is linear.
+# -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
+# == example
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# cl = binary_cut(mat)
+# ht_GO_clusters(mat, cl)
 ht_GO_clusters = function(mat, cl, dend = NULL, 
 	draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
-	exclude_words = character(0), max_words = 10, word_cloud_width = 60, ...) {
+	exclude_words = character(0), max_words = 10,
+	word_cloud_grob_param = list(), fontsize_range = c(4, 16), ...) {
 
 	if(inherits(cl, "try-error")) {
 		grid.newpage()
@@ -67,11 +76,14 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 			align_to = align_to[names(align_to) != "0"]
 			align_to = align_to[names(align_to) %in% names(keywords)]
 
+			word_cloud_grob_param = word_cloud_grob_param[setdiff(names(word_cloud_grob_param), c("text", "fontsize"))]
 			gbl = lapply(names(align_to), function(nm) {
 				kw = rev(keywords[[nm]][, 1])
 				freq = rev(keywords[[nm]][, 2])
-				fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)))
-				simple_word_cloud_grob(kw, fontsize, max_width = word_cloud_width)
+				fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
+
+				lt = c(list(text = kw, fontsize = fontsize), word_cloud_grob_param)
+				do.call(word_cloud_grob, lt)
 			})
 			names(gbl) = names(align_to)
 
@@ -88,7 +100,10 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 				grid.rect(gp = gpar(fill = "#DDDDDD", col = NA))
 				grid.lines(c(0, 1, 1, 0), c(0, 0, 1, 1), gp = gpar(col = "#AAAAAA"), default.units = "npc")
 			    pushViewport(viewport(width = unit(1, "npc") - margin, height = unit(1, "npc") - margin))
-			    grid.draw(gbl[[nm]])
+			    gb = gbl[[nm]]
+			    gb$vp$x = gb$vp$width*0.5
+			    gb$vp$y = gb$vp$height*0.5
+			    grid.draw(gb)
 			    popViewport()
 			    popViewport()
 			}
@@ -98,7 +113,7 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 		    	link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE))
 		} else {
 			if(any(cl == "0")) {
-				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "darkgreen", ">= 5" = "white"), width = unit(2, "mm"),
+				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "darkgreen", ">= 5" = "white"), width = unit(1, "mm"),
 					heatmap_legend_param = list(title = "", at = "< 5", lable = "Clusters with\nsize < 5"),
 					show_column_names = FALSE)
 			}
@@ -107,13 +122,25 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 	draw(ht, gap = unit(2, "pt"), ...)
 }
 
-
+# == title
+# Scale font size
+#
+# == param
+# -x A numeric vector.
+# -rg The range.
+# -fs Range of th font size.
+#
+# == detaisl
+# It is a linear interpolation.
+#
+# == example
+# scale_fontsize(runif(10, min = 1, max = 20))
 scale_fontsize = function(x, rg = c(1, 30), fs = c(4, 16)) {
 	k = (fs[2] - fs[1])/(rg[2] - rg[1]) 
 	b = fs[2] - k*rg[2]
 	y = k*x + b
 	y[y < fs[1]] = fs[1]
 	y[y > fs[2]] = fs[2]
-	y
+	round(y)
 }
 

@@ -88,3 +88,9 @@ plot(cutoff, d)
 
 
 
+go_id = random_GO(500)
+mat = GO_similarity(go_id)
+clt = compare_methods_make_clusters(mat)
+g = graph_from_adjacency_matrix(mat, mode = "upper", weighted = TRUE)
+
+sapply(clt, function(x) modularity(g, x, weights = E(g)$weight))

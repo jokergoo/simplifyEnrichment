@@ -5,12 +5,13 @@ Version: 0.99.0
 Date: 2020-04-13
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
-Depends: R (>= 3.0.0)
+Depends: R (>= 3.5.0)
 Imports: GOSemSim, ComplexHeatmap (>= 2.3.5), circlize, GetoptLong, digest, 
          tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods, clue
 Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph, 
           dynamicTreeCut, testthat, gridtext
-Description: It clusters GO terms by their similarities and uses word cloud
-    to summarize the common functions in each GO cluster.
+Description: A new method (binary cut) is proposed to effectively cluster 
+         GO terms into groups from the semantic similarity matrix.
+         Summaries of GO terms in each cluster are visualized by word clouds.
 VignetteBuilder: knitr
 License: MIT + file LICENSE

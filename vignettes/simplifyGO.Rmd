@@ -139,7 +139,7 @@ Following plot compares ...
 Once the GO terms are clustered, the ... can be summarized by word cloud.
 
 ```{r, fig.width = 8, fig.height = 5, echo = FALSE}
-df = simplifyGO(mat, word_cloud_width = 80, verbose = FALSE)
+df = simplifyGO(mat, word_cloud_grob_param = list(max_width = 80), verbose = FALSE)
 ```
 
 ## Usage
@@ -160,7 +160,7 @@ With `mat`, directlly use `simplifyGO()` generates the heatmap and returns a dat
 The plot is the same as the previous one, here we won't generate it again in the vignette.
 
 ```{r, fig.width = 8, fig.height = 5, eval = FALSE}
-df = simplifyGO(mat, word_cloud_width = 80)
+df = simplifyGO(mat, word_cloud_grob_param = list(max_width = 80))
 ```
 
 The returned variable `df` is a data frame with GO IDs, term names and the classifications:

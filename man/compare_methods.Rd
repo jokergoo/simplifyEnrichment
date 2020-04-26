@@ -29,7 +29,13 @@ The function compares following clustering methods:
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
 }
 
-The function produces a plot with four panels.
+The function produces a plot with three panels.
+
+\itemize{
+  \item A heatmap of the similarity matrix with different classifications as row annotations.
+  \item A barplot of the difference scores for each method, calculated by \code{\link{difference_score}}.
+  \item A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
+}
 }
 \examples{
 # There is no example

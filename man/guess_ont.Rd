@@ -16,7 +16,7 @@ guess_ont(go_id, db = 'org.Hs.eg.db')
 
 }
 \details{
-10 GO IDs are randomly sampled and tested.
+10 GO IDs are randomly sampled and checked.
 }
 \value{
 A single character scalar of "BP", "CC" or "MF".

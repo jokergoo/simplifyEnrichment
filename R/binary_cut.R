@@ -246,6 +246,10 @@ plot_dend = function(dend, field = "score2", cutoff = 0.85) {
 #
 # == value
 # A vector of cluster labels (in numeric). 
+#
+# == example
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# binary_cut(mat)
 binary_cut = function(mat, value_fun = median, cutoff = 0.85, n_run = 1) {
 	if(n_run == 1) {
 		dend = cluster_mat(mat, value_fun = value_fun)
