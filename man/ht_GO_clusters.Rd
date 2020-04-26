@@ -30,5 +30,5 @@ ht_GO_clusters(mat, cl, dend = NULL,
 \examples{
 mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
 cl = binary_cut(mat)
-ht_GO_clusters(mat, cl)
+ht_GO_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 }

@@ -37,7 +37,8 @@
 # set.seed(123)
 # go_id = simplifyGO:::random_GO(500)
 # mat = GO_similarity(go_id)
-# df = simplifyGO(mat)
+# df = simplifyGO(mat, word_cloud_grob_param = list(max_width = 80))
+# head(df)
 # }
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
 	plot = TRUE, verbose = TRUE, ...) {
@@ -47,7 +48,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	if(plot) ht_GO_clusters(mat, cl, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
 
 	go_id = rownames(mat)
-	term = select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
+	suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	
 	return(data.frame(id = go_id, name = term, cluster = cl, stringsAsFactors = FALSE))
 }
