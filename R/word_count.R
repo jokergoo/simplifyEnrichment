@@ -15,7 +15,7 @@
 #
 count_word = function(go_id, term = NULL, exclude_words = NULL) {
 	
-	if(is.null(term)) term = select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
+	if(is.null(term)) suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
@@ -79,33 +79,33 @@ EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 #
 # == example
 # if(!exists("strrep")) {
-# 	strrep = function(x, i) paste(rep(x, i), collapse = "")
+#     strrep = function(x, i) paste(rep(x, i), collapse = "")
 # }
 # words = sapply(1:30, function(x) strrep(sample(letters, 1), sample(3:10, 1)))
 # require(grid)
 # gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-# 	max_width = 80)
+#     max_width = 100)
 # grid.newpage(); grid.draw(gb)
 #
 # # color as a single scalar
 # gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-# 	max_width = 80, col = 1)
+#     max_width = 100, col = 1)
 # grid.newpage(); grid.draw(gb)
 #
 # # color as a vector
 # gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-# 	max_width = 80, col = 1:30)
+#     max_width = 100, col = 1:30)
 # grid.newpage(); grid.draw(gb)
 #
 # # color as a function
 # require(circlize)
 # col_fun = colorRamp2(c(5, 17, 30), c("blue", "black", "red"))
 # gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-# 	max_width = 80, col = function(n, fs) col_fun(fs))
+#     max_width = 100, col = function(n, fs) col_fun(fs))
 # grid.newpage(); grid.draw(gb)
 #
 word_cloud_grob = function(text, fontsize, 
-	line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(40, "mm"), 
+	line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(80, "mm"), 
 	col = function(n, fs) circlize::rand_color(n, luminosity = "dark"),
 	test = FALSE) { # width in mm
 	
@@ -113,7 +113,7 @@ word_cloud_grob = function(text, fontsize,
 	text = text[od]
 	fontsize = fontsize[od]
 
-	if(Sys.info()["sysname"] == "Darwin") {
+	if(Sys.info()["sysname"] == "Darwin" && dev.interactive()) {
 		ComplexHeatmap:::dev.null()
 		on.exit(ComplexHeatmap:::dev.off2())
 	}

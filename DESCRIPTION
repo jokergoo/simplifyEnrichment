@@ -13,5 +13,7 @@ Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph,
 Description: A new method (binary cut) is proposed to effectively cluster 
          GO terms into groups from the semantic similarity matrix.
          Summaries of GO terms in each cluster are visualized by word clouds.
+biocViews: Software, Visualization, GO, Clustering, GeneSetEnrichment
+URL: https://github.com/jokergoo/simplifyGO, https://jokergoo.github.io/simplifyGO_figures
 VignetteBuilder: knitr
 License: MIT + file LICENSE

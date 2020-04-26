@@ -22,7 +22,7 @@
 # == example
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
 # cl = binary_cut(mat)
-# ht_GO_clusters(mat, cl)
+# ht_GO_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 ht_GO_clusters = function(mat, cl, dend = NULL, 
 	draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
 	exclude_words = character(0), max_words = 10,
@@ -114,7 +114,7 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 		} else {
 			if(any(cl == "0")) {
 				ht = ht + Heatmap(ifelse(cl == "0", "< 5", ">= 5"), col = c("< 5" = "darkgreen", ">= 5" = "white"), width = unit(1, "mm"),
-					heatmap_legend_param = list(title = "", at = "< 5", lable = "Clusters with\nsize < 5"),
+					heatmap_legend_param = list(title = "", at = "< 5", labels = "Small clusters"),
 					show_column_names = FALSE)
 			}
 		}
