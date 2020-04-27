@@ -1,18 +1,17 @@
 ---
 title: "Simplify Gene Ontology Enrichment Results"
-output: html_document
+author: "Zuguang Gu (z.gu@dkfz.de)"
+date: '`r Sys.Date()`'
+output: 
+  html_document:
+    fig_caption: true
 vignette: >
   %\VignetteIndexEntry{Simplify Gene Ontology Enrichment Results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-**Author**: Zuguang Gu ( z.gu@dkfz.de )
-
-**Date**: `r Sys.Date()`
-
---------
-
+----------------------------------------
 
 ```{r, echo = FALSE}
 library(knitr)
@@ -27,17 +26,17 @@ knitr::opts_chunk$set(
 ## Introduction
 
 Gene Ontology enrichment analysis is very frequently used in bioinformatics
-field. In many cases, the results contain a very long list of significantly
-enriched GO terms which has highly redundant information and difficult to
+field. In many cases, the results contain a long list of significantly
+enriched GO terms which has highly redundant information and is difficult to
 summarize. The GO enrichment results can be reduced by clustering GO terms
 into groups where in the same group the GO terms are similar. The similarity
 between GO terms is called **the semantic similarity** and can be calculated
-by many software such as [**GOSemSim**
+by many software such as [the **GOSemSim**
 package](https://bioconductor.org/packages/release/bioc/html/GOSemSim.html).
 The following figure is an example of the semantic similarity matrix from 500
 randomly generated GO terms.
 
-```{r, fig.width = 4, fig.height = 4, echo = FALSE}
+```{r, fig.width = 4, fig.height = 4, echo = FALSE, fig.cap = "Figure 1. A heatmap of the semantic similarity matrix from 500 random GO terms."}
 library(simplifyGO)
 library(circlize)
 library(ComplexHeatmap)
@@ -66,7 +65,7 @@ We proposed a method named "binary cut"... In the following similarity matrix wh
 to a subset of GO terms. Both are split by k-kmeans clustering with two groups. Mark the four 
 partitions of the matrix as $s_{11}$, $s_{12}$, $s_{21}$ and $s_{22}$. 
 
-```{r, fig.width = 6, fig.height = 3, echo = FALSE}
+```{r, fig.width = 6, fig.height = 3, echo = FALSE, out.width = "50%", fig.cap = "Figure 2. Two similarity matrices."}
 cl = binary_cut(mat)
 tb = sort(table(cl), decreasing = TRUE)
 ind1 = which(as.character(cl) %in% names(tb)[1])
@@ -78,7 +77,7 @@ plot1 = grid.grabExpr({
 	draw(Heatmap(mat1, name = "mat1", col = col_fun, show_row_dend = FALSE, show_column_dend = FALSE, 
 		row_split = km, column_split = km,
 		show_row_names = FALSE, show_column_names = FALSE,
-		border = "#404040", row_title = NULL, column_title = "Similarity matrix 1",
+		border = "#404040", row_title = NULL, column_title = "Similarity sub-matrix 1",
 		row_gap = unit(0, "mm"), column_gap = unit(0, "mm"), show_heatmap_legend = FALSE))
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>11</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 1)
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>12</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 2)
@@ -91,7 +90,7 @@ plot2 = grid.grabExpr({
 	draw(Heatmap(mat2, name = "mat1", col = col_fun, show_row_dend = FALSE, show_column_dend = FALSE, 
 		row_split = km, column_split = km,
 		show_row_names = FALSE, show_column_names = FALSE,
-		border = "#404040", row_title = NULL, column_title = "Similarity matrix 2",
+		border = "#404040", row_title = NULL, column_title = "Similarity sub-matrix 2",
 		row_gap = unit(0, "mm"), column_gap = unit(0, "mm"), show_heatmap_legend = FALSE))
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>11</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 1)
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>12</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 2)
@@ -110,7 +109,7 @@ popViewport()
 
 The score $s$ is calcualted as:
 
-$$s = \frac{s_{11} + s_{22}}{s_{11} + s_{12} + s_{21}, s_{22}}$$
+$$s = \frac{s_{11} + s_{22}}{s_{11} + s_{12} + s_{21} + s_{22}}$$
 
 Naturally, if $s$ is close to 0.5 (e.g. the left heatmap), all the terms are highly similar
 and they should not be split any more, while if $s$ is close to 1, it means the group of GO terms
@@ -133,19 +132,30 @@ If the process are formatted as a dendrogram, the splitting can
 
 An example of splitting previous heatmap by binary cut is:
 
-```{r, fig.width = 5, fig.height = 3, echo = FALSE}
-cl = binary_cut(mat)
+```{r, fig.width = 20, fig.height = 4, echo = FALSE, fig.cap = "Figure 3. Process of binary clustering the similarity matrix. In the plot only the first 4 iterations are shown."}
+dend = simplifyGO:::cluster_mat(mat)
+p1 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 1, show_heatmap_legend = FALSE))
+p2 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 2, show_heatmap_legend = FALSE))
+p3 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 3, show_heatmap_legend = FALSE))
+p4 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 4, show_heatmap_legend = FALSE))
+library(cowplot)
+plot_grid(p1, p2, p3, p4, nrow = 1)
+```
+
+```{r, fig.width = 6, fig.height = 4, echo = FALSE, fig.cap = "Figure 4. Splitting the dendrogram."}
+simplifyGO:::plot_binary_cut(mat)
+```
+
+A nicer way to ...
+
+```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. Visualize the ..."}
+cl = simplifyGO:::cut_dend(dend)
 ht_GO_clusters(mat, cl, draw_word_cloud = FALSE)
 ```
 
-Following plot compares ...
-
-
-<p><img src='GO_heatmap_random_BP_1.jpg' /></p>
-
 Once the GO terms are clustered, the ... can be summarized by word cloud.
 
-```{r, fig.width = 8, fig.height = 4, echo = FALSE}
+```{r, fig.width = 8, fig.height = 4, echo = FALSE, fig.cap = "Figure 7. ..."}
 df = simplifyGO(mat, verbose = FALSE)
 ```
 
@@ -265,6 +275,11 @@ binary_cut(mat)
 
 ### On random datasets
 
+Following plot compares ...
+
+```{r, echo = FALSE, fig.cap = "Figure 6. ..."}
+knitr::include_graphics("GO_heatmap_random_BP_1.jpg")
+```
 
 The heatmap https://jokergoo.github.io/simplifyGO_figures/random_BP.html
 

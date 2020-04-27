@@ -32,8 +32,8 @@ next_k = local({
 # it is possible to get information of its child nodes and parent nodes. 
 #
 #     dend_node_apply(dend, function(d, index) {
-#         d[[c(index, 1)]] # is the first child node of d
-#         d[[index[length(index)-1]]] # is the parent node of d
+#         dend[[c(index, 1)]] # is the first child node of d, or simply d[[1]]
+#         dend[[index[-length(index)]]] # is the parent node of d
 #         ...
 #     })
 #
@@ -134,10 +134,10 @@ dend_node_apply = function(dend, fun) {
 #             s_parent = NULL
 #         } else if(is.leaf(d)) { # d is the leaf
 #             s_children = NULL
-#             s_parent = attr(d[index[n-1]], "score")
+#             s_parent = attr(dend[[index[-n]]], "score")
 #         } else {
 #             s_children = sapply(d, function(x) attr(x, "score"))
-#             s_parent = attr(d[index[n-1]], "score")
+#             s_parent = attr(dend[[index[-n]]], "score")
 #         }
 #         abs_diff = max(abs(s - c(s_children, s_parent)))
 #         attr(d, "abs_diff") = abs_diff

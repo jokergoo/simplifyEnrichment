@@ -43,4 +43,5 @@ importFrom("stats", "kmeans")
 importFrom("utils", "getFromNamespace")
 importFrom(circlize, "colorRamp2", "rand_color")
 importFrom("grDevices", "dev.interactive")
-
+importFrom("graphics", "mtext", "par")
+importFrom("stats", "nobs", "order.dendrogram")
