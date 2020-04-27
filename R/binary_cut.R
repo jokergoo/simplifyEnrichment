@@ -205,33 +205,138 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 	}
 }
 
-plot_dend = function(dend, field = "score2", cutoff = 0.85) {
-	dend2 = cut_dend(dend, cutoff, return = "dend")
-	col_fun = colorRamp2(c(0.5, 0.75, 1), c("blue", "yellow", "red"))
+render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE, depth = NULL) {
+
+	if(!is.null(depth)) {
+		dend = edit_node(dend, function(d, index) {
+			if(length(index) + 1 > depth) {
+				d = dendrapply(d, function(d) {
+					attr(d, "height") = 0
+					d
+				})
+			}
+			return(d)
+		})
+		return(dend)
+	}
+
+	dend2 = cut_dend(dend, field = field, cutoff = cutoff, return = "dend")
+	col_fun = colorRamp2(c(0.5, cutoff, 1), c("blue", "yellow", "red"))
 	dend = edit_node(dend, function(d, index) {
 		if(is.null(index)) {
 			if(!is.leaf(d)) {
 				s = attr(d, field)
-				attr(d, "edgePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))
+				attr(d, "edgePar") = list(col = col_fun(s))
 				
-				if(attr(dend2, "height") > 0) {
-					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, NA), cex = 0.5)
+				if(attr(dend2, "height") > 0.5) {
+					attr(d, "nodePar") = list(pch = 4, cex = 0.5)
 				}
+			} else {
+				attr(d, "edgePar") = list(col = "#DDDDDD")
 			}
 		} else {
 			if(!is.leaf(d)) {
 				s = attr(d, field)
-				attr(d, "edgePar") = list(pch = ifelse(s > cutoff, 16, 4), cex = 0.5, col = col_fun(s))	
-				if(attr(dend2[[index]], "height") > 0) {
-					attr(d, "nodePar") = list(pch = ifelse(s > cutoff, 16, NA), cex = 0.5)
+				attr(d, "edgePar") = list(col = col_fun(s))	
+				if(attr(dend2[[index]], "height") > 0.5) {
+					if(length(index) > 1) {
+						if(attr(dend2[[index[-length(index)]]], "height") > 0.5) {
+							attr(d, "nodePar") = list(pch = 4, cex = 0.5)
+						}
+					} else {
+						if(attr(dend2, "height") > 0.5) {
+							attr(d, "nodePar") = list(pch = 4, cex = 0.5)
+						}
+					}
 				}
+			} else {
+				attr(d, "edgePar") = list(col = "#DDDDDD")
+			}
+		}
+
+		if(align_leaf) {
+			if(is.leaf(d)) {
+				attr(d, "height") = 0
 			}
 		}
 		return(d)
 	})
 	
-	plot(dend)
-	box()
+	attr(dend, "col_fun") = col_fun
+	dend
+}
+
+dend_env = new.env()
+plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL, 
+	border = "#404040", depth = NULL, show_heatmap_legend = TRUE, ...) {
+
+	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
+		stop_wrap("Package gridGraphics should be installed.")
+	}
+
+	hash = digest::digest(list(mat, value_fun))
+	if(is.null(dend)) {
+		if(identical(hash, dend_env$hash)) {
+			dend = dend_env$dend
+		} else {
+			dend_env$hash = NULL
+		}
+	} else {
+		dend_env$dend = NULL
+		dend_env$hash = NULL
+	}
+	if(is.null(dend)) {
+		dend = cluster_mat(mat, value_fun = value_fun)
+		dend_env$dend = dend
+		dend_env$hash = hash
+	}
+
+	dend2 = render_dend(dend, cutoff = cutoff, depth = depth, ...)
+	score_col_fun = attr(dend2, "col_fun")
+	
+	if(is.null(depth)) {
+		cl = cut_dend(dend, cutoff = cutoff)
+	} else {
+		cl = cutree(as.hclust(dend2), h = 0.1)
+	}
+	
+	dend2 = rev(dend2)
+	f = function() {
+		op =  par(c("mar","xpd"))
+		par(mar = c(0, 0, 0, 0), xpd = NA)
+		plot(rev(dend2), horiz = TRUE, axes = FALSE, ann = FALSE, ylim = c(0.5, nobs(dend2)+0.5), xaxs = "i", yaxs = "i")
+		if(is.null(score_col_fun)) {
+			text(0, nobs(dend2)+0.5, qq("depth = @{depth}"), adj = c(0, 1))
+		}
+		par(op)
+	}
+	od = order.dendrogram(dend2)
+	p2 = grid.grabExpr({
+		cl = factor(cl, levels = unique(cl[od]))
+		col_fun = colorRamp2(c(0, 1), c("white", "red"))
+		ht = Heatmap(mat, name = "Similarity", col = col_fun,
+			show_row_names = FALSE, show_column_names = FALSE,
+			row_order = od, column_order = od,
+			row_split = cl, column_split = cl,
+			row_title = NULL, column_title = NULL,
+			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
+			border = border, show_heatmap_legend = show_heatmap_legend) + NULL
+		if(is.null(score_col_fun)) {
+			draw(ht)
+		} else {
+			draw(ht, heatmap_legend_list = list(Legend(title = "Score", col_fun = score_col_fun)))
+		}
+	})
+
+	grid.newpage()
+	pushViewport(viewport(x = 0, width = 0.3, just = "left"))
+	pushViewport(viewport(height = unit(1, "npc") - unit(4, "mm"), x = unit(2, "mm"), width = unit(1, "npc") - unit(2, "mm"), just = "left"))
+	gridGraphics::grid.echo(f, newpage = FALSE)
+	popViewport(2)
+	pushViewport(viewport(x = 0.3, width = 0.7, just = "left"))
+	grid.draw(p2)
+	popViewport()
+
 }
 
 # == title
