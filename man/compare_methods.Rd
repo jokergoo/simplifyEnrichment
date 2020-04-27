@@ -11,7 +11,7 @@ compare_methods(mat)
 }
 \arguments{
 
-  \item{mat}{The GO similarity matrix.}
+  \item{mat}{The similarity matrix.}
 
 }
 \details{

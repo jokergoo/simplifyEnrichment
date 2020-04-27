@@ -5,17 +5,17 @@
 #
 # == param
 # -mat A GO similarity matrix.
-# -method Method for clustering the matrix. See `cluster_GO`.
-# -control A list of parameters passed to `cluster_GO`.
+# -method Method for clustering the matrix. See `cluster_terms`.
+# -control A list of parameters passed to `cluster_terms`.
 # -plot Whether to make the heatmap.
 # -verbose Whether to print messages.
-# -... Arguments passed to `ht_GO_clusters`.
+# -... Arguments passed to `ht_clusters`.
 #
 # == details
-# This is basically a wrapper function that it first runs `cluster_GO` to cluster
-# GO terms and then runs `ht_GO_clusters` to visualize the clustering.
+# This is basically a wrapper function that it first runs `cluster_terms` to cluster
+# GO terms and then runs `ht_clusters` to visualize the clustering.
 #
-# The arguments passed to `ht_GO_clusters` are:
+# The arguments passed to `ht_clusters` are:
 #
 # -``draw_word_cloud`` Whether to draw the word clouds.
 # -``min_term`` Minimal number of GO terms in a cluster. All the clusters
@@ -43,13 +43,13 @@
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
 	plot = TRUE, verbose = TRUE, ...) {
 	
-	cl = do.call(cluster_GO, c(list(mat = mat, method = method, verbose = verbose), control))
+	cl = do.call(cluster_terms, c(list(mat = mat, method = method, verbose = verbose), control))
 
-	if(plot) ht_GO_clusters(mat, cl, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
+	if(plot) ht_clusters(mat, cl, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
 
 	go_id = rownames(mat)
 	suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	
-	return(data.frame(id = go_id, name = term, cluster = cl, stringsAsFactors = FALSE))
+	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
 }
 

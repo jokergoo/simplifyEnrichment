@@ -1,6 +1,6 @@
-Package: simplifyGO
+Package: simplifyEnrichment
 Type: Package
-Title: Simplify Gene Ontology Enrichment Results
+Title: Simplify Functional Enrichment Results
 Version: 0.99.0
 Date: 2020-04-13
 Author: Zuguang Gu

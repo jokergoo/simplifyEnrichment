@@ -1,9 +1,9 @@
 
 # == title
-# Cluster GO terms
+# Cluster functional terms
 #
 # == param
-# -mat A GO similarity matrix.
+# -mat A similarity matrix.
 # -method Method for clustering the matrix.
 # -catch_error Internally used.
 # -verbose Whether to print messages.
@@ -22,16 +22,16 @@
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 #
-# Note the parametes for each clustering method are passes by ``...`` from `cluster_GO`.
+# Note the parametes for each clustering method are passes by ``...`` from `cluster_terms`.
 #
 # == value
 # A numeric vector of cluster labels (in numeric).
 #
 # If ``catch_error`` is set to ``TRUE`` and if the clustering produces an error,
 # the function returns a ``try-error`` object.
-cluster_GO = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
+cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
 	
-	if(verbose) qqcat("cluster @{nrow(mat)} GO terms by @{method}...")
+	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
 
 	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
 		oe = try(cl <- cluster_by_kmeans(mat, ...), silent = TRUE)
@@ -70,10 +70,10 @@ cluster_GO = function(mat, method = "binary_cut", catch_error = FALSE, verbose =
 }
 
 # == title
-# Cluster GO similarity matrix by k-means clustering
+# Cluster similarity matrix by k-means clustering
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 # -... Other arguments passed to `stats::kmeans`.
 #
 # == details
@@ -135,10 +135,10 @@ knee_finder = function(x, y) {
 }
 
 # == title
-# Cluster GO similarity matrix by dynamicTreeCut
+# Cluster similarity matrix by dynamicTreeCut
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 # -minClusterSize Minimal number of objects in a cluster. Pass to `dynamicTreeCut::cutreeDynamic`.
 # -... Other arguments passed to `dynamicTreeCut::cutreeDynamic`.
 #
@@ -154,16 +154,16 @@ cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 }
 
 # == title
-# Cluster GO similarity matrix by graph community detection methods
+# Cluster similarity matrix by graph community detection methods
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 # -method The community detection method.
 # -... Other arguments passed to the corresponding community detection function, see Details.
 #
 # == details
-# The symmetric GO similarity matrix can be treated as an adjacency matrix and to be constructed as a graph/network.
-# Thus, clustering the GO similarity matrix can be treated as detecting clusters/modules/communities from the graph.
+# The symmetric similarity matrix can be treated as an adjacency matrix and to be constructed as a graph/network.
+# Thus, clustering the similarity matrix can be treated as detecting clusters/modules/communities from the graph.
 #
 # Four methods implemented in igraph package can be used here:
 #
@@ -197,10 +197,10 @@ cluster_by_igraph = function(mat,
 }
 
 # == title
-# Cluster GO similarity matrix by mclust
+# Cluster similarity matrix by mclust
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 # -... Other arguments passed to `mclust::Mclust`.
 #
 # == details
@@ -219,10 +219,10 @@ cluster_by_mclust = function(mat, ...) {
 }
 
 # == title
-# Cluster GO similarity matrix by apcluster
+# Cluster similarity matrix by apcluster
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 # -... Other arguments passed to `apcluster::apcluster`.
 #
 # == value

@@ -1,17 +1,17 @@
-# Simplify GO enrichment Results
+# Simplify functional enrichment Results
 
-[![Build Status](https://travis-ci.org/jokergoo/simplifyGO.svg)](https://travis-ci.org/jokergoo/simplifyGO)
+[![Build Status](https://travis-ci.org/jokergoo/simplifyEnrichment.svg)](https://travis-ci.org/jokergoo/simplifyEnrichment)
 
 ### Features
 
-- A new method (binary cut) is proposed to effectively cluster GO terms into groups from the semantic similarity matrix.
+- A new method (binary cut) is proposed to effectively cluster functional terms (e.g. GO terms) into groups from the semantic similarity matrix.
 - Summaries of GO terms in each cluster are visualized by word clouds.
 
 
 ### Install
 
 ```r
-devtools::install_github("jokergoo/simplifyGO")
+devtools::install_github("jokergoo/simplifyEnrichment")
 ```
 
 ### Usage

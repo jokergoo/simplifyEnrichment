@@ -1,15 +1,15 @@
 
 # == title
-# Visualize the GO similarity matrix and the classifications
+# Visualize the similarity matrix and the classifications
 #
 # == param
-# -mat A GO similarity matrix.
-# -cl Cluster labels inferred from the similarity matrix, e.g. from `cluster_GO` or `binary_cut`.
+# -mat A similarity matrix.
+# -cl Cluster labels inferred from the similarity matrix, e.g. from `cluster_terms` or `binary_cut`.
 # -dend Used internally.
 # -draw_word_cloud Whether to draw the word clouds.
-# -min_term Minimal number of GO terms in a cluster. All the clusters
+# -min_term Minimal number of functional terms in a cluster. All the clusters
 #     with size less than ``min_term`` are all merged into one single cluster in the heatmap.
-# -order_by_size Whether to reorder GO clusters by their sizes. The cluster
+# -order_by_size Whether to reorder clusters by their sizes. The cluster
 #      that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.
 # -exclude_words Words that are excluded in the word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
@@ -20,10 +20,10 @@
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
 # == example
-# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # cl = binary_cut(mat)
-# ht_GO_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
-ht_GO_clusters = function(mat, cl, dend = NULL, 
+# ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
+ht_clusters = function(mat, cl, dend = NULL, 
 	draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
 	exclude_words = character(0), max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), ...) {
@@ -61,8 +61,8 @@ ht_GO_clusters = function(mat, cl, dend = NULL,
 			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"))
 
 		if(draw_word_cloud) {
-			keywords = tapply(rownames(mat), cl, function(go_id) {
-				suppressMessages(suppressWarnings(df <- count_word(go_id, exclude_words = exclude_words)))
+			keywords = tapply(rownames(mat), cl, function(term_id) {
+				suppressMessages(suppressWarnings(df <- count_word(term_id, exclude_words = exclude_words)))
 				df = df[df$freq > 1, , drop = FALSE]
 				if(nrow(df) > max_words) {
 					df = df[order(df$freq, decreasing = TRUE)[1:max_words], ]

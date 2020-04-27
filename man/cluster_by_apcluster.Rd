@@ -1,17 +1,17 @@
 \name{cluster_by_apcluster}
 \alias{cluster_by_apcluster}
 \title{
-Cluster GO similarity matrix by apcluster
+Cluster similarity matrix by apcluster
 }
 \description{
-Cluster GO similarity matrix by apcluster
+Cluster similarity matrix by apcluster
 }
 \usage{
 cluster_by_apcluster(mat, ...)
 }
 \arguments{
 
-  \item{mat}{The GO similarity matrix.}
+  \item{mat}{The similarity matrix.}
   \item{...}{Other arguments passed to \code{\link[apcluster:apcluster-methods]{apcluster}}.}
 
 }

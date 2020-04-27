@@ -306,7 +306,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 		par(mar = c(0, 0, 0, 0), xpd = NA)
 		plot(rev(dend2), horiz = TRUE, axes = FALSE, ann = FALSE, ylim = c(0.5, nobs(dend2)+0.5), xaxs = "i", yaxs = "i")
 		if(is.null(score_col_fun)) {
-			text(0, nobs(dend2)+0.5, qq("depth = @{depth}"), adj = c(0, 1))
+			text(-dend_max_depth(dend2), nobs(dend2)+0.5, qq("depth = @{depth}"), adj = c(0, 1))
 		}
 		par(op)
 	}
@@ -340,10 +340,10 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 }
 
 # == title
-# Cluster GO terms by binary cutting the similarity matrix
+# Cluster functional terms by binary cutting the similarity matrix
 #
 # == param
-# -mat A GO similarity matrix.
+# -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -cutoff The cutoff for splitting the dendrogram.
 # -n_run If the value is larger than one, `binary_cut` is executed multiple times
@@ -353,7 +353,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 # A vector of cluster labels (in numeric). 
 #
 # == example
-# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # binary_cut(mat)
 binary_cut = function(mat, value_fun = median, cutoff = 0.85, n_run = 1) {
 	if(n_run == 1) {

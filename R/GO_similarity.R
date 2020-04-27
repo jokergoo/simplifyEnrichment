@@ -52,6 +52,7 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 	diag(go_sim) = 1
 
 	attr(go_sim, "measure") = measure
+	attr(go_sim, "ontology") = "GO"
 	return(go_sim)
 }
 

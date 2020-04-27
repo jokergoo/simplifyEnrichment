@@ -13,18 +13,18 @@ simplifyGO(mat, method = "binary_cut", control = list(),
 \arguments{
 
   \item{mat}{A GO similarity matrix.}
-  \item{method}{Method for clustering the matrix. See \code{\link{cluster_GO}}.}
-  \item{control}{A list of parameters passed to \code{\link{cluster_GO}}.}
+  \item{method}{Method for clustering the matrix. See \code{\link{cluster_terms}}.}
+  \item{control}{A list of parameters passed to \code{\link{cluster_terms}}.}
   \item{plot}{Whether to make the heatmap.}
   \item{verbose}{Whether to print messages.}
-  \item{...}{Arguments passed to \code{\link{ht_GO_clusters}}.}
+  \item{...}{Arguments passed to \code{\link{ht_clusters}}.}
 
 }
 \details{
-This is basically a wrapper function that it first runs \code{\link{cluster_GO}} to cluster
-GO terms and then runs \code{\link{ht_GO_clusters}} to visualize the clustering.
+This is basically a wrapper function that it first runs \code{\link{cluster_terms}} to cluster
+GO terms and then runs \code{\link{ht_clusters}} to visualize the clustering.
 
-The arguments passed to \code{\link{ht_GO_clusters}} are:
+The arguments passed to \code{\link{ht_clusters}} are:
 
 \describe{
   \item{\code{draw_word_cloud}}{Whether to draw the word clouds.}

@@ -7,12 +7,12 @@ Calculate word cloud
 Calculate word cloud
 }
 \usage{
-count_word(go_id, term = NULL, exclude_words = NULL)
+count_word(id, term = NULL, exclude_words = NULL)
 }
 \arguments{
 
-  \item{go_id}{A vector of GO IDs.}
-  \item{term}{The corresponding GO terms. If provided, it will speed up this function.}
+  \item{id}{A vector of term IDs.}
+  \item{term}{The corresponding names or description of terms.}
   \item{exclude_words}{The words that should be excluded.}
 
 }

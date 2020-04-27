@@ -1,17 +1,17 @@
-\name{cluster_GO}
-\alias{cluster_GO}
+\name{cluster_terms}
+\alias{cluster_terms}
 \title{
-Cluster GO terms
+Cluster functional terms
 }
 \description{
-Cluster GO terms
+Cluster functional terms
 }
 \usage{
-cluster_GO(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...)
+cluster_terms(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...)
 }
 \arguments{
 
-  \item{mat}{A GO similarity matrix.}
+  \item{mat}{A similarity matrix.}
   \item{method}{Method for clustering the matrix.}
   \item{catch_error}{Internally used.}
   \item{verbose}{Whether to print messages.}
@@ -33,7 +33,7 @@ The following methods are supported:
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
 }
 
-Note the parametes for each clustering method are passes by \code{...} from \code{\link{cluster_GO}}.
+Note the parametes for each clustering method are passes by \code{...} from \code{\link{cluster_terms}}.
 }
 \value{
 A numeric vector of cluster labels (in numeric).
