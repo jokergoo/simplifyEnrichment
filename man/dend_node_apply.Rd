@@ -31,8 +31,8 @@ it is possible to get information of its child nodes and parent nodes.
 
   \preformatted{
     dend_node_apply(dend, function(d, index) \{
-        d[[c(index, 1)]] # is the first child node of d
-        d[[index[length(index)-1]]] # is the parent node of d
+        dend[[c(index, 1)]] # is the first child node of d, or simply d[[1]]
+        dend[[index[-length(index)]]] # is the parent node of d
         ...
     \})  }
 

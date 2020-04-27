@@ -33,11 +33,11 @@ into groups where in the same group the GO terms are similar. The similarity
 between GO terms is called **the semantic similarity** and can be calculated
 by many software such as [the **GOSemSim**
 package](https://bioconductor.org/packages/release/bioc/html/GOSemSim.html).
-The following figure is an example of the semantic similarity matrix from 500
+Figure 1 is an example of the semantic similarity matrix from 500
 randomly generated GO terms.
 
 ```{r, fig.width = 4, fig.height = 4, echo = FALSE, fig.cap = "Figure 1. A heatmap of the semantic similarity matrix from 500 random GO terms."}
-library(simplifyGO)
+library(simplifyEnrichment)
 library(circlize)
 library(ComplexHeatmap)
 set.seed(888)
@@ -51,19 +51,27 @@ Heatmap(mat, name = "Similarity", col = col_fun,
 ```
 
 The GO similarity heatmap has a very special pattern that there are blocks
-located on the diagonal. This is due to the structure of Directed Acyclic Graph (DAG)
-for the Gene Ontologies.
+located on the diagonal where GO terms in the same block have similar functions. 
+This is due to the structure of Directed Acyclic Graph (DAG) of GO. 
 
-Classifying GO terms into groups basically is to apply clustering on the GO simialrity matrix.
-To solve this problem, there are two type of methods. 1. use methods that cluster a matrix. 2. treat
-the similarity matrix as adjacency matrix and convert the matrix to a weighted network. Then 
-apply network module/community methods.
+Classifying GO terms into groups basically is to apply clustering on the GO
+simialrity matrix. To solve this problem, there are two type of methods. 1.
+applying clustering methods that directly apply to a matrix. 2. treat the
+similarity matrix as adjacency matrix and convert the matrix to a weighted
+network. Then apply network module/community methods.
 
-There is one major problem for the clustering...
+There are two major problems for the clustering of GO terms: 1. the size of the 
+clusters varies a lot, which means, there are very large clusters, while at the
+same time, there are also tiny clusters. An effective clustering should be able
+not to be affected by the cluster size. 2. For the big clusters, the density of 
+the similarity are not as dense as the small ones, thus big clusters should not
+be split into further small clusters and produce redendency.
 
-We proposed a method named "binary cut"... In the following similarity matrix which corresponds
-to a subset of GO terms. Both are split by k-kmeans clustering with two groups. Mark the four 
-partitions of the matrix as $s_{11}$, $s_{12}$, $s_{21}$ and $s_{22}$. 
+Here we proposed a new clustering method called "binary cut" to spit GO terms into groups.
+The idea behind is very intuitive to identify "blocks" in the similarity heatmap.
+As shown in Figure 2, the two heatmaps are both similarity matrices for two subsets
+of GO terms. 
+
 
 ```{r, fig.width = 6, fig.height = 3, echo = FALSE, out.width = "50%", fig.cap = "Figure 2. Two similarity matrices."}
 cl = binary_cut(mat)
@@ -107,7 +115,16 @@ grid.draw(plot2)
 popViewport()
 ```
 
-The score $s$ is calcualted as:
+Let denote them as $M_a$ (the left matrix) and $M_b$ (the right matrix).
+Intuitively, terms in $M_a$ all have high pairwise similarity and thus should not be
+further split, while terms in $M_b$ still show two-group patterns and should be further
+split into two groups. To measure whether a certain subset of GO terms need to be split, 
+we calculate a score $s$ as follows:
+
+For a similarity sub-matrix which corresponds to a subset of GO terms, e.g. $M_a$ or $M_b$,
+apply k-kmeans clustering with two groups on rows and partition the matrix into four parts,
+as shown in Figure 2. Denote the values for the four partitions as $s_{11}$, $s_{12}$, $s_{21}$ and $s_{22}$,
+where e.g. $s_{11}$ is the median value of the sub-matrix it corresponds to. The score $s$ is calcualted as:
 
 $$s = \frac{s_{11} + s_{22}}{s_{11} + s_{12} + s_{21} + s_{22}}$$
 
@@ -128,34 +145,40 @@ phase 2: cut the dendrogram:
 If the process are formatted as a dendrogram, the splitting can
 
 1. split if the score of the node is larger than the cutoff
-2. because the node more on the top have ... smaller scores, thus, if...
+2. because the node more on the top have ... smaller scores, thus, if the node does
+   not exceed the cutoff, but at least one of its child nodes exceed the cutoff,
+   the node is still split.
 
 An example of splitting previous heatmap by binary cut is:
 
 ```{r, fig.width = 20, fig.height = 4, echo = FALSE, fig.cap = "Figure 3. Process of binary clustering the similarity matrix. In the plot only the first 4 iterations are shown."}
-dend = simplifyGO:::cluster_mat(mat)
-p1 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 1, show_heatmap_legend = FALSE))
-p2 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 2, show_heatmap_legend = FALSE))
-p3 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 3, show_heatmap_legend = FALSE))
-p4 = grid.grabExpr(simplifyGO:::plot_binary_cut(mat, dend = dend, depth = 4, show_heatmap_legend = FALSE))
+dend = simplifyEnrichment:::cluster_mat(mat)
+p1 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 1, show_heatmap_legend = FALSE))
+p2 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 2, show_heatmap_legend = FALSE))
+p3 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 3, show_heatmap_legend = FALSE))
+p4 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 4, show_heatmap_legend = FALSE))
 library(cowplot)
 plot_grid(p1, p2, p3, p4, nrow = 1)
 ```
 
+And the splitting the dendrogram. The cross are on the nodes that need to be split.
+
 ```{r, fig.width = 6, fig.height = 4, echo = FALSE, fig.cap = "Figure 4. Splitting the dendrogram."}
-simplifyGO:::plot_binary_cut(mat)
+simplifyEnrichment:::plot_binary_cut(mat)
 ```
 
-A nicer way to ...
+As we can see there are a lot of tiny clusters. They can be put into a separated group.
+In the following plot, clusters with size less than 5 are put into a separated group marked
+by a green line, which makes the plot looks more clean.
 
 ```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. Visualize the ..."}
-cl = simplifyGO:::cut_dend(dend)
-ht_GO_clusters(mat, cl, draw_word_cloud = FALSE)
+cl = simplifyEnrichment:::cut_dend(dend)
+ht_clusters(mat, cl, draw_word_cloud = FALSE)
 ```
 
-Once the GO terms are clustered, the ... can be summarized by word cloud.
+Once the GO terms are clustered into groups, the ... can be summarized by word cloud and appended to the heatmap.
 
-```{r, fig.width = 8, fig.height = 4, echo = FALSE, fig.cap = "Figure 7. ..."}
+```{r, fig.width = 8, fig.height = 4, echo = FALSE, fig.cap = "Figure 6. ..."}
 df = simplifyGO(mat, verbose = FALSE)
 ```
 
@@ -215,6 +238,9 @@ can also use other clustering methods. The supported methods are:
 - `walktrap`: It is a graph community detection method. It uses
   `igraph::cluster_walktrap()`.
 
+**Please note, all other methods are mainly for comparing to our `binary_cut` method.
+They are not recommended to use.**
+
 On the right side of the heatmap are the word cloud annotations which summarize
 the functions with keywords in every GO cluster. Following parameters control the generation
 and graphic parameters of the word clouds:
@@ -226,7 +252,8 @@ and graphic parameters of the word clouds:
 - `order_by_size`: Whether to reorder GO clusters by their sizes. The cluster
   that is merged from small clusters (size < 5) is always put to the bottom of
   the heatmap.
-- `exclude_words`: Words that are excluded in the word cloud.
+- `exclude_words`: Words that are excluded in the word cloud. E.g. in previous example, the word
+  "regulation" and "process" can be excluded.
 - `max_words`: Maximal number of words visualized in the word cloud.
 - `word_cloud_grob_param`: This controls the graphic parameters for the word
   clouds. The value should be a list and is passed to `word_cloud_grob()`
@@ -273,25 +300,126 @@ binary_cut(mat)
 
 ## Benchmark
 
+We compared following clustering methods:
+
+- binary_cut
+- kmeans
+- dynamicTreeCut
+- mclust
+- apcluster 
+- fast_greedy
+- leading_eigen
+- louvain
+- walktrap     
+
 ### On random datasets
 
-Following plot compares ...
+500 random GO terms are generated from Biology Process ontology. One example
+of the clustering from different methods are in Figure 7. Basically we can see
+`kmeans`, `dynamicTreeCut`, `mclust` and `apcluster` generate too many small clusters
+and cannot split tiny cluster. `fast_greedy`, `leading_eigen`, `louvain` and `walktrap`
+can identify small and large cluster, however, some large clusters are too ... 
 
-```{r, echo = FALSE, fig.cap = "Figure 6. ..."}
+```{r, echo = FALSE, fig.cap = "Figure 7. ..."}
 knitr::include_graphics("GO_heatmap_random_BP_1.jpg")
 ```
 
-The heatmap https://jokergoo.github.io/simplifyGO_figures/random_BP.html
+The random GO terms were generated 100 times and we compared following metrics:
 
-<p><img src='random_BP_boxplot.svg' width='300' /></p>
-<p><img src='random_BP_similarity.svg' width='500' /></p>
+1. the different between the similarity values for the terms
+ that belong to the same clusters and in different clusters. The difference score
+ is the Kolmogorov-Smirnov statistic between the two distributions.
+2. Number of clusters. For each there are two numbers: the number of all clusters and
+  the number of clusters with size >= 5
+3. the mean of the blocks
+
+```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 8. ..."}
+lt = readRDS("random_BP_results.rds")
+diff_score_df = lt$diff_score_df
+cluster_number_df = lt$cluster_number_df
+cluster_number2_df = lt$cluster_number2_df
+block_mean_df = lt$block_mean_df
+arr = lt$arr
+
+library(ggplot2)
+library(grid)
+p1 = ggplot(diff_score_df, aes(x = method, y = value)) +
+	geom_boxplot() + ylab("Difference score") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_blank())
+
+cluster_number_df$type = "All sizes"
+cluster_number2_df$type = "size >= 5"
+p2 = ggplot(rbind(cluster_number_df, cluster_number2_df), aes(x = method, y = value, col = type)) +
+	geom_boxplot() + ylab("cluster number") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_blank())
+
+p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
+	geom_boxplot() + ylab("Block mean") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
+library(cowplot)
+plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.3))
+```
+
+In Figure 8, we can see
+
+Next we calculate the similarity between clustering methods. For the partitions
+from two methods, first adjust the labels...
+
+Then the concordance of the two partitions is calculated as:
+
+
+Figure 9 show the mean concordance ...
+
+```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 9. ..."}
+m_mean = apply(arr, 1:2, mean)
+Heatmap(m_mean, name = "concordance")
+```
+
+The heatmaps for the 100 runs of random GO terms can be found at https://jokergoo.github.io/simplifyGO_figures/random_BP.html.
+
 
 ### On real datasets
 
-https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html
+We downloaded the datasets from [EBI Expression Atlas](https://www.ebi.ac.uk/gxa/download).
+We applied [**clusterProfiler**](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html) 
+to the significantly expressed genes only with the GO Biological Process ontology. And we
+only took the datasets with significant GO terms in [100, 1000].
 
-<p><img src='EBI_Expression_Atlas_boxplot.svg' width='300' /></p>
-<p><img src='EBI_Expression_Atlas_similarity.svg' width='500' /></p>
+
+```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 10. ..."}
+lt = readRDS("EBI_Expression_Atlas_results.rds")
+diff_score_df = lt$diff_score_df
+cluster_number_df = lt$cluster_number_df
+cluster_number2_df = lt$cluster_number2_df
+block_mean_df = lt$block_mean_df
+arr = lt$arr
+
+library(ggplot2)
+library(grid)
+p1 = ggplot(diff_score_df, aes(x = method, y = value)) +
+	geom_boxplot() + ylab("Difference score") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_blank())
+
+cluster_number_df$type = "All sizes"
+cluster_number2_df$type = "size >= 5"
+p2 = ggplot(rbind(cluster_number_df, cluster_number2_df), aes(x = method, y = value, col = type)) +
+	geom_boxplot() + ylab("cluster number") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_blank())
+
+p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
+	geom_boxplot() + ylab("Block mean") +
+	theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
+
+plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.3))
+```
+
+```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 11. ..."}
+m_mean = apply(arr, 1:2, mean)
+Heatmap(m_mean, name = "concordance")
+```
+
+The heatmaps can be found at https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html.
+
 
 ## Session Info
 

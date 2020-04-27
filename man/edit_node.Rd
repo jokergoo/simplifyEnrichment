@@ -40,10 +40,10 @@ and parent node as the attribute \code{abs_diff}
             s_parent = NULL
         \} else if(is.leaf(d)) \{ # d is the leaf
             s_children = NULL
-            s_parent = attr(d[index[n-1]], "score")
+            s_parent = attr(dend[[index[-n]]], "score")
         \} else \{
             s_children = sapply(d, function(x) attr(x, "score"))
-            s_parent = attr(d[index[n-1]], "score")
+            s_parent = attr(dend[[index[-n]]], "score")
         \}
         abs_diff = max(abs(s - c(s_children, s_parent)))
         attr(d, "abs_diff") = abs_diff

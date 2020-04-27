@@ -1,4 +1,4 @@
 library(testthat)
-suppressWarnings(suppressPackageStartupMessages(library(simplifyGO)))
+suppressWarnings(suppressPackageStartupMessages(library(simplifyEnrichment)))
 
-test_check("simplifyGO")
+test_check("simplifyEnrichment")

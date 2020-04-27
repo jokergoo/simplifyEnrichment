@@ -16,7 +16,7 @@ compare_methods_make_clusters = function(mat, method = "all") {
 		method = ALL_CLUSTERING_METHODS
 	}
 
-	clt = lapply(method, function(me) cluster_GO(mat, me))
+	clt = lapply(method, function(me) cluster_terms(mat, me))
 	names(clt) = method
 	clt = as.data.frame(clt)
 
@@ -29,7 +29,7 @@ compare_methods_make_plot = function(mat, clt) {
 	clt = as.data.frame(clt)
 
 	ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-		name = "Similarity", column_title = "GO Similarity",
+		name = "Similarity",
 		show_row_names = FALSE, show_column_names = FALSE, 
 		# cluster_rows = dend, cluster_columns = dend,
 		show_row_dend = FALSE, show_column_dend = FALSE,
@@ -62,12 +62,12 @@ compare_methods_make_plot = function(mat, clt) {
 # -cl Cluster labels.
 #
 # == details
-# This function measures the different between the similarity values for the GO terms
+# This function measures the different between the similarity values for the terms
 # that belong to the same clusters and in different clusters. The difference score
 # is the Kolmogorov-Smirnov statistic between the two distributions.
 #
 # == examples
-# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # cl = binary_cut(mat)
 # difference_score(mat, cl)
 difference_score = function(mat, cl) {
@@ -160,7 +160,7 @@ compare_methods_calc_concordance = function(clt) {
 # Compare clustering methods
 #
 # == param
-# -mat The GO similarity matrix.
+# -mat The similarity matrix.
 #
 # == details
 # The function compares following clustering methods:

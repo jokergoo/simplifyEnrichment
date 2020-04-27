@@ -3,8 +3,8 @@
 # Calculate word cloud
 #
 # == param
-# -go_id A vector of GO IDs.
-# -term The corresponding GO terms. If provided, it will speed up this function.
+# -id A vector of term IDs.
+# -term The corresponding names or description of terms.
 # -exclude_words The words that should be excluded.
 #
 # == details
@@ -13,10 +13,16 @@
 # == value
 # A data frame with words and frequencies.
 #
-count_word = function(go_id, term = NULL, exclude_words = NULL) {
+count_word = function(id, term = NULL, exclude_words = NULL) {
 	
-	if(is.null(term)) suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
-	
+	if(is.null(term)) {
+		if(grepl("^GO:[0-9]+$", id[1])) {
+			suppressMessages(term <- select(GO.db::GO.db, keys = id, columns = "TERM")$TERM)
+		} else {
+			stop_wrap("Cannot automatically retrieve the term names by the input ID, please set values for `term` argument manually.")
+		}
+	}
+
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
 	# Load the text as a corpus
@@ -32,7 +38,7 @@ count_word = function(go_id, term = NULL, exclude_words = NULL) {
 	# Eliminate extra white spaces
 	docs = tm_map(docs, stripWhitespace)
 	# Remove your own stopwords
-	docs = tm_map(docs, removeWords, c(exclude_words, EXCLUDE_WORDS))
+	docs = tm_map(docs, removeWords, c(exclude_words, GO_EXCLUDE_WORDS))
 	
 	# Create term-document matrix
 	tdm = TermDocumentMatrix(docs)
@@ -44,7 +50,7 @@ count_word = function(go_id, term = NULL, exclude_words = NULL) {
 
 
 # generate excluded words that are too general
-all_word_count = function() {
+all_GO_word_count = function() {
 	all_go = as.list(GO.db::GOTERM)
 
 	ontology = sapply(all_go, slot, "Ontology")
@@ -57,7 +63,7 @@ all_word_count = function() {
 	lt[c("BP", "CC", "MF")]
 }
 
-EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
+GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 
 # == title
 # A simple grob for the word cloud

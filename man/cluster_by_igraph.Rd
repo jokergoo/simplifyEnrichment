@@ -1,10 +1,10 @@
 \name{cluster_by_igraph}
 \alias{cluster_by_igraph}
 \title{
-Cluster GO similarity matrix by graph community detection methods
+Cluster similarity matrix by graph community detection methods
 }
 \description{
-Cluster GO similarity matrix by graph community detection methods
+Cluster similarity matrix by graph community detection methods
 }
 \usage{
 cluster_by_igraph(mat,
@@ -16,14 +16,14 @@ cluster_by_igraph(mat,
 }
 \arguments{
 
-  \item{mat}{The GO similarity matrix.}
+  \item{mat}{The similarity matrix.}
   \item{method}{The community detection method.}
   \item{...}{Other arguments passed to the corresponding community detection function, see Details.}
 
 }
 \details{
-The symmetric GO similarity matrix can be treated as an adjacency matrix and to be constructed as a graph/network.
-Thus, clustering the GO similarity matrix can be treated as detecting clusters/modules/communities from the graph.
+The symmetric similarity matrix can be treated as an adjacency matrix and to be constructed as a graph/network.
+Thus, clustering the similarity matrix can be treated as detecting clusters/modules/communities from the graph.
 
 Four methods implemented in igraph package can be used here:
 

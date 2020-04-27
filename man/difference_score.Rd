@@ -16,12 +16,12 @@ difference_score(mat, cl)
 
 }
 \details{
-This function measures the different between the similarity values for the GO terms
+This function measures the different between the similarity values for the terms
 that belong to the same clusters and in different clusters. The difference score
 is the Kolmogorov-Smirnov statistic between the two distributions.
 }
 \examples{
-mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyGO"))
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 cl = binary_cut(mat)
 difference_score(mat, cl)
 }
