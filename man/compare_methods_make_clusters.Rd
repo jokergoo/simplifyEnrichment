@@ -1,20 +1,19 @@
-\name{compare_methods}
-\alias{compare_methods}
+\name{compare_methods_make_clusters}
+\alias{compare_methods_make_clusters}
 \title{
-Compare clustering methods
+Apply various clustering methods
 }
 \description{
-Compare clustering methods
+Apply various clustering methods
 }
 \usage{
-compare_methods(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
-    plot_type = c("mixed", "heatmap"), verbose = TRUE)
+compare_methods_make_clusters(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+    verbose = TRUE)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
   \item{method}{Which methods to compare. All available methods are in \code{simplifyEnrichment:::ALL_CLUSTERING_METHODS}. A value of \code{all} takes all available methods. By default \code{mclust} is excluded because its long runtime.}
-  \item{plot_type}{See explanation in \code{\link{compare_methods_make_plot}}.}
   \item{verbose}{Whether to print messages.}
 
 }
@@ -32,20 +31,11 @@ The function compares following clustering methods:
   \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
 }
-
-This functon is basically a wrapper function. It calls following two functions:
-
-\itemize{
-  \item \code{\link{compare_methods_make_clusters}}: applies clustering by different methods.
-  \item \code{\link{compare_methods_make_plot}}: makes the plots.
-}
 }
 \value{
-No value is returned.
+A list of cluster label vectors for different clustering methods.
 }
 \examples{
-\dontrun{
-mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
-compare_methods(mat)
-}
+# There is no example
+NULL
 }

@@ -8,6 +8,7 @@
 # -method Method for clustering the matrix. See `cluster_terms`.
 # -control A list of parameters passed to `cluster_terms`.
 # -plot Whether to make the heatmap.
+# -term The full name or the description of the corresponding GO IDs. 
 # -verbose Whether to print messages.
 # -... Arguments passed to `ht_clusters`.
 #
@@ -41,15 +42,16 @@
 # head(df)
 # }
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
-	plot = TRUE, verbose = TRUE, ...) {
+	plot = TRUE, term = NULL, verbose = TRUE, ...) {
 	
 	cl = do.call(cluster_terms, c(list(mat = mat, method = method, verbose = verbose), control))
-
-	if(plot) ht_clusters(mat, cl, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
-
 	go_id = rownames(mat)
-	suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
+	if(is.null(term)) {
+		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
+	}
 	
+	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
+
 	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
 }
 
