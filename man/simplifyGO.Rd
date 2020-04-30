@@ -8,7 +8,7 @@ Simplify GO enrichment results
 }
 \usage{
 simplifyGO(mat, method = "binary_cut", control = list(),
-    plot = TRUE, verbose = TRUE, ...)
+    plot = TRUE, term = NULL, verbose = TRUE, ...)
 }
 \arguments{
 
@@ -16,6 +16,7 @@ simplifyGO(mat, method = "binary_cut", control = list(),
   \item{method}{Method for clustering the matrix. See \code{\link{cluster_terms}}.}
   \item{control}{A list of parameters passed to \code{\link{cluster_terms}}.}
   \item{plot}{Whether to make the heatmap.}
+  \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{verbose}{Whether to print messages.}
   \item{...}{Arguments passed to \code{\link{ht_clusters}}.}
 

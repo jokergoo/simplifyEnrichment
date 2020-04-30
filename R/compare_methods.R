@@ -9,49 +9,139 @@ ALL_CLUSTERING_METHODS = c("kmeans",
 			               "walktrap",
 			               "binary_cut")
 
-compare_methods_make_clusters = function(mat, method = "all") {
+# == title
+# Apply various clustering methods
+#
+# == param
+# -mat The similarity matrix.
+# -method Which methods to compare. All available methods are in ``simplifyEnrichment:::ALL_CLUSTERING_METHODS``.
+#         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
+# -verbose Whether to print messages.
+#
+# == details
+# The function compares following clustering methods:
+#
+# -``binary_cut`` see `binary_cut`.
+# -``kmeans`` see `cluster_by_kmeans`.
+# -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
+# -``mclust`` see `cluster_by_mclust`. By default it is not included.
+# -``apcluster`` see `cluster_by_apcluster`.
+# -``fast_greedy`` see `cluster_by_igraph`.
+# -``leading_eigen`` see `cluster_by_igraph`.
+# -``louvain`` see `cluster_by_igraph`.
+# -``walktrap`` see `cluster_by_igraph`.
+#
+# == value
+# A list of cluster label vectors for different clustering methods.
+#
+compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+	verbose = TRUE) {
 
 	clt = list()
-	if(method == "all") {
+	if("all" %in% method) {
 		method = ALL_CLUSTERING_METHODS
 	}
 
-	clt = lapply(method, function(me) cluster_terms(mat, me))
+	clt = lapply(method, function(me) cluster_terms(mat, me, verbose = verbose))
 	names(clt) = method
 	clt = as.data.frame(clt)
 
 	clt
 }
 
-compare_methods_make_plot = function(mat, clt) {
+# == title
+# Calculate statistics for comparing clustering methods
+#
+# == param
+# -mat A similarity matrix.
+# -clt A list of clusterings from `compare_methods_make_clusters`.
+# -plot_type What type of plots to make. See Details.
+#
+# == details
+# If ``plot_type`` is the default ``mixed``, a figure with three panels generated:
+#
+# 1. A heatmap of the similarity matrix with different classifications as row annotations.
+# 2. A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
+# 3. Barplots of the difference scores for each method (calculated by `difference_score`), the number
+#    of clusters (all clusters and the clusters with size >= 5) and the mean similarity in the terms 
+#    that are in the same cluster.
+#
+# If ``plot_type`` is ``heatmap``. There are heatmaps for the similarity matrix under clusterings
+# from different methods. The last panel is a table with the number of clusters under different
+# clusterings.
+#
+# == value
+# No value is returned.
+compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
-
-	ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-		name = "Similarity",
-		show_row_names = FALSE, show_column_names = FALSE, 
-		# cluster_rows = dend, cluster_columns = dend,
-		show_row_dend = FALSE, show_column_dend = FALSE,
-		right_annotation = rowAnnotation(df = clt, show_legend = FALSE))
-	p1 = grid.grabExpr(draw(ht1))
-
-	x = sapply(clt, function(x) difference_score(mat, x))
-
-	if(!requireNamespace("ggplot2", quietly = TRUE)) {
-		stop_wrap("Package ggplot2 should be installed.")
-	}
-	p2 = ggplot2::ggplot(NULL, ggplot2::aes(x = names(x), y = x)) + ggplot2::geom_bar(stat = "identity") +
-		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
-
-	cm = compare_methods_calc_concordance(clt)
-	ht2 = Heatmap(cm, column_title = "concordance")
-	p3 = grid.grabExpr(draw(ht2))
+	methods = names(clt)
+	
+	plot_type = match.arg(plot_type)[1]
 
 	if(!requireNamespace("cowplot", quietly = TRUE)) {
 		stop_wrap("Package cowplot should be installed.")
 	}
-	print(cowplot::plot_grid(p1, cowplot::plot_grid(p2, p3, nrow = 1), nrow = 2))
+		
+	if(plot_type == "mixed") {
+
+		ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
+			name = "Similarity",
+			show_row_names = FALSE, show_column_names = FALSE, 
+			# cluster_rows = dend, cluster_columns = dend,
+			show_row_dend = FALSE, show_column_dend = FALSE,
+			right_annotation = rowAnnotation(df = clt, show_legend = FALSE))
+		p0 = grid.grabExpr(draw(ht1))
+
+		stats = compare_methods_calc_stats(mat, clt)
+		stats$method = rownames(stats)
+
+		if(!requireNamespace("ggplot2", quietly = TRUE)) {
+			stop_wrap("Package ggplot2 should be installed.")
+		}
+		p1 = ggplot2::ggplot(stats, ggplot2::aes(x = method, y = diff_s)) +
+			ggplot2::geom_bar(stat = "identity") + ggplot2::ylab("Difference score") +
+			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+
+		df1 = stats[, c("method", "n_all")]; colnames(df1) = c("method", "value")
+		df2 = stats[, c("method", "n_large")]; colnames(df2) = c("method", "value")
+		df1$type = "All sizes"
+		df2$type = "size >= 5"
+		p2 = ggplot2::ggplot(rbind(df1, df2), ggplot2::aes(x = method, y = value, col = type, fill = type)) +
+			ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + ggplot2::ylab("Cluster number") +
+			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+
+		p3 = ggplot2::ggplot(stats, ggplot2::aes(x = method, y = block_mean)) +
+			ggplot2::geom_bar(stat = "identity") + ggplot2::ylab("Block mean") +
+			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+
+		cm = compare_methods_calc_concordance(clt)
+		p4 = grid.grabExpr(draw(Heatmap(cm, name = "concordance")))
+
+		cowplot::plot_grid(
+			cowplot::plot_grid(p0, p4, ncol = 1), 
+			cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
+			nrow = 1
+		)
+
+} else {
+		pl = list()
+		for(i in seq_along(methods)) {
+			pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{methods[i]}'")))
+		}
+
+		stats = compare_methods_calc_stats(mat, clt)
+
+		tb = data.frame(method = methods, "#clusters" = stats["n_all"], "#cluster(size >= 5)" = stats["n_large"], check.names = FALSE)
+
+		if(!requireNamespace("gridExtra", quietly = TRUE)) {
+			stop_wrap("Package gridExtra should be installed.")
+		}
+		pl[[length(pl) + 1]] = gridExtra::tableGrob(tb, rows = NULL)
+
+		print(cowplot::plot_grid(plotlist = pl, nrow = 2))
+	}
 }
 
 # == title
@@ -159,13 +249,24 @@ compare_methods_calc_concordance = function(clt) {
 	mm
 }
 
+compare_methods_calc_stats = function(mat, clt) {
+	x = data.frame("diff_s" = sapply(clt, function(x) difference_score(mat, x)),
+		 "n_all" = sapply(clt, function(x) length(table(x))),
+	     "n_large" = sapply(clt, function(x) {tb = table(x); sum(tb >= 5)}),
+		 "block_mean" = sapply(clt, function(x) block_mean(mat, x)))
+	return(x)
+	
+}
+
 # == title
 # Compare clustering methods
 #
 # == param
 # -mat The similarity matrix.
 # -method Which methods to compare. All available methods are in ``simplifyEnrichment:::ALL_CLUSTERING_METHODS``.
-#         A value of ``all`` takes all available methods.
+#         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
+# -plot_type See explanation in `compare_methods_make_plot`.
+# -verbose Whether to print messages.
 #
 # == details
 # The function compares following clustering methods:
@@ -173,18 +274,17 @@ compare_methods_calc_concordance = function(clt) {
 # -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
-# -``mclust`` see `cluster_by_mclust`.
+# -``mclust`` see `cluster_by_mclust`. By default it is not included.
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 #
-# The function produces a plot with three panels.
+# This functon is basically a wrapper function. It calls following two functions:
 #
-# - A heatmap of the similarity matrix with different classifications as row annotations.
-# - A barplot of the difference scores for each method, calculated by `difference_score`.
-# - A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
+# - `compare_methods_make_clusters`: applies clustering by different methods.
+# - `compare_methods_make_plot`: makes the plots.
 #
 # == value
 # No value is returned.
@@ -192,11 +292,14 @@ compare_methods_calc_concordance = function(clt) {
 # == example
 # \dontrun{
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
-# # here 'mclust' is removed because it needs very long time to run
-# compare_methods(mat, method = setdiff(simplifyEnrichment:::ALL_CLUSTERING_METHODS, "mclust"))
+# compare_methods(mat)
 # }
-compare_methods = function(mat, method = "all") {
-	clt = compare_methods_make_clusters(mat, method)
-	compare_methods_make_plot(mat, clt)
+compare_methods = function(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
+
+	clt = compare_methods_make_clusters(mat, method, verbose = verbose)
+
+	plot_type = match.arg(plot_type)[1]
+	compare_methods_make_plot(mat, clt, plot_type = plot_type)
 }
 

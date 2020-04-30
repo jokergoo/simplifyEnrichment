@@ -21,6 +21,7 @@ knitr::opts_chunk$set(
     warning = FALSE,
     fig.align = "center"
 )
+options(width = 100)
 ```
 
 ## Introduction
@@ -205,7 +206,7 @@ simplifyEnrichment:::plot_binary_cut(mat, dend = dend)
 In Figure 4 we can see there are a lot of tiny clusters that they can actually
 be put into a separated group. Figure 5 is an improved visualization where
 clusters with size less than 5 are put into a separated group marked by a
-green line and moved to the right bottom of the heatmap. This makes the plot
+green line and moved to the bottom right of the heatmap. This makes the plot
 looks more clean.
 
 ```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. An improved visualization on the clustering of GO terms."}
@@ -227,9 +228,9 @@ df = simplifyGO(mat, verbose = FALSE)
 similarity matrices or use the `GO_similarity()` function to calculate one. The
 `GO_similarity()` function is simply a wrapper on `GOSemSim::mgoSim`. The
 function accepts a vector of GO IDs. Note the GO should only belong to one
-same ontology (i.e. `BP`, `CC` or `MF`).
+same ontology (_i.e._, `BP`, `CC` or `MF`).
 
-In the following example, we sample 500 random GO IDs from GO biological process
+In the following example, we sample 500 random GO IDs from GO Biological Process
 (BP) ontology.
 
 ```{r}
@@ -238,16 +239,17 @@ go_id = random_GO(500)
 mat = GO_similarity(go_id)
 ```
 
-By default, `GO_similarity()` uses `Rel` method. Other method to calculate GO
-similarities can be set by `measure` argument, e.g:
+By default, `GO_similarity()` uses `Rel` method in `GOSemSim::mgoSim`. Other
+methods to calculate GO similarities can be set by `measure` argument, _e.g._:
 
 ```{r, eval = FALSE}
 GO_similarity(go_id, measure = "Wang")
 ```
 
 With the similarity matrix `mat`, users can directly apply `simplifyGO()`
-function to perform the clustering and visualize the results. The plot is the
-same as Figure 6, thus here we won't generate it again in the vignette.
+function to perform the clustering as well as visualizing the results. The
+plot is the same as Figure 6, thus here we won't generate it again in the
+vignette.
 
 ```{r, fig.width = 8, fig.height = 5, eval = FALSE}
 df = simplifyGO(mat)
@@ -258,17 +260,17 @@ can also use other clustering methods. The supported methods are:
 
 - `binary_cut`: This is the default clustering method and it runs
   `binary_cut()`.
-- `kmeans`: It uses k-means clustering. The number of clusters are tried with
-  `2:min(round(nrow(mat)/5), 100)`. The best number of k for k-means
+- `kmeans`: It uses _k_-means clustering. The number of clusters are tried with
+  `2:min(round(nrow(mat)/5), 100)`. The best number of _k_ for _k_-means
   clustering is identified according to the "elbow" or "knee" method on the
-  distribution of within-cluster sum of squares at each k.
+  distribution of within-cluster sum of squares at each _k_.
 - `dynamicTreeCut` It uses `dynamicTreeCut::cutreeDynamic()`.
 - `mclust`: It uses `mclust::Mclust()`. The value of `G` in `mclust::Mclust()`
   is set to `1:min(round(nrow(mat)/5), 100)`.
 - `apcluster`: It uses `apcluster::apcluster()`.
 - `fast_greedy`: It treats the similarity matrix as an ajacency matrix and
-  converts it to a graph/network where the similarity values are the weight of
-  the edges of the graph, then the clustering on the similarity matrix is
+  converts it to a graph where the similarity values are the weight of
+  the edges in the graph. Then the clustering on the similarity matrix is
   converted to looking for communities in the graph. This method applies
   `igraph::cluster_fast_greedy()` to detect communities in the graph.
 - `leading_eigen`: It is a graph community detection method. It uses
@@ -290,11 +292,14 @@ parameters control the generation and graphic parameters of the word clouds:
   size less than `min_term` are all merged into one single cluster in the
   heatmap.
 - `order_by_size`: Whether to reorder GO clusters by their sizes. The cluster
-  that is merged from small clusters (size < 5) is always put to the bottom of
+  that is merged from small clusters (size < 5) is always put to the bottom right of
   the heatmap.
-- `exclude_words`: Words that are excluded in the word cloud. E.g. in previous
-  example, the word "regulation" and "process" can be excluded.
-- `max_words`: Maximal number of words visualized in the word cloud.
+- `exclude_words`: Words that are excluded in the word cloud. _E.g._, in
+  previous example, the word "regulation" and "process" can be excluded
+  because they have very high frequency in the word clouds but are not very
+  helpful for interpreting the results.
+- `max_words`: Maximal number of words visualized in the word cloud, _i.e._, 
+   the top words with the highest frequency.
 - `word_cloud_grob_param`: This controls the graphic parameters for the word
   clouds. The value should be a list and is passed to `word_cloud_grob()`
   function. There are following graphic parameters:
@@ -308,7 +313,7 @@ parameters control the generation and graphic parameters of the word clouds:
 	  returned grob object.
 	* `col`: Colors for the words. The value should be a self-defined function
 	  that takes the number of words and font size as the two arguments. The
-	  function should return a color vector.
+	  function should return a color vector. By default it uses random colors.
 - `fontsize_range`: The range of the font size. The value should be a numeric
   vector with length two. The minimal font size is mapped to word frequency
   value of 1 and the maximal font size is mapped to the maximal word
@@ -342,8 +347,8 @@ binary_cut(mat)
 
 ## Benchmark
 
-We compare following clustering methods: binary_cut, kmeans, dynamicTreeCut,
-mclust, apcluster, fast_greedy, leading_eigen, louvain and walktrap. The
+We compare following clustering methods to binary cut: `kmeans`, `dynamicTreeCut`,
+`mclust`, `apcluster`, `fast_greedy`, `leading_eigen`, `louvain` and `walktrap`. The
 actual R functions used to perform corresponding analysis can be found in text
 in previous sections in this vignette.
 
@@ -369,7 +374,7 @@ The random GO terms were generated 100 times and we compared following metrics:
    clusters and the number of clusters with size >= 5
 3. the mean of the blocks
 
-```{r, echo = FALSE, fig.width = 10, fig.height = 4.5, fig.cap = "Figure 8. ..."}
+```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. ..."}
 lt = readRDS("random_BP_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -423,7 +428,7 @@ to the significantly expressed genes only with the GO Biological Process ontolog
 only took the datasets with significant GO terms in [100, 1000].
 
 
-```{r, echo = FALSE, fig.width = 10, fig.height = 4.5, fig.cap = "Figure 9. ..."}
+```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 9. ..."}
 lt = readRDS("EBI_Expression_Atlas_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -455,6 +460,37 @@ plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights 
 ```
 
 The heatmaps can be found at https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html.
+
+### Utility functions to compare clustering methods
+
+Here we still use the variable `mat` which is the similarity matrix from the 500 random GO terms.
+
+```{r, fig.width = 10, fig.height = 6}
+compare_methods(mat)
+```
+
+```{r, fig.width = 10, fig.height = 5}
+compare_methods(mat, plot_type = "heatmap")
+```
+
+Please note, the clustering methods might have randomness:
+
+```{r, eval = FALSE}
+set.seed(123)
+compare_methods(mat)
+set.seed(123)
+compare_methods(mat, plot_type = "heatmap")
+```
+
+`compare_methods()` is simply a wrapper on `compare_methods_make_clusters()` and `compare_methods_make_plot()`
+where the former function performs clustering with different methods and the latter visualizes the results.
+They can ..
+
+```{r, eval = FALSE}
+clt = compare_methods_make_clusters(mat)
+compare_methods_make_plot(mat, clt)
+compare_methods_make_plot(mat, clt, plot_type = "heatmap")
+```
 
 
 ## Session Info

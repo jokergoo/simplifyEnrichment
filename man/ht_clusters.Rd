@@ -8,7 +8,7 @@ Visualize the similarity matrix and the classifications
 }
 \usage{
 ht_clusters(mat, cl, dend = NULL,
-    draw_word_cloud = TRUE, min_term = 5, order_by_size = FALSE,
+    draw_word_cloud = TRUE, term = NULL, min_term = 5, order_by_size = FALSE,
     exclude_words = character(0), max_words = 10,
     word_cloud_grob_param = list(), fontsize_range = c(4, 16), ...)
 }
@@ -18,6 +18,7 @@ ht_clusters(mat, cl, dend = NULL,
   \item{cl}{Cluster labels inferred from the similarity matrix, e.g. from \code{\link{cluster_terms}} or \code{\link{binary_cut}}.}
   \item{dend}{Used internally.}
   \item{draw_word_cloud}{Whether to draw the word clouds.}
+  \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{min_term}{Minimal number of functional terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one single cluster in the heatmap.}
   \item{order_by_size}{Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.}
   \item{exclude_words}{Words that are excluded in the word cloud.}
