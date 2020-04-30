@@ -33,7 +33,7 @@ compare_methods_make_plot = function(mat, clt) {
 		show_row_names = FALSE, show_column_names = FALSE, 
 		# cluster_rows = dend, cluster_columns = dend,
 		show_row_dend = FALSE, show_column_dend = FALSE,
-		right_annotation = rowAnnotation(cluster = clt, show_legend = FALSE))
+		right_annotation = rowAnnotation(df = clt, show_legend = FALSE))
 	p1 = grid.grabExpr(draw(ht1))
 
 	x = sapply(clt, function(x) difference_score(mat, x))
@@ -65,6 +65,9 @@ compare_methods_make_plot = function(mat, clt) {
 # This function measures the different between the similarity values for the terms
 # that belong to the same clusters and in different clusters. The difference score
 # is the Kolmogorov-Smirnov statistic between the two distributions.
+#
+# == value
+# A numeric scalar.
 #
 # == examples
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
@@ -146,8 +149,8 @@ compare_methods_calc_concordance = function(clt) {
 	mm = matrix(1, nrow = n, ncol = n)
 	rownames(mm) = names(clt)
 	colnames(mm) = names(clt)
-	for(i in 1:(n-1)) {
-		for(j in (i+1):n) {
+	for(i in seq(1, (n-1))) {
+		for(j in seq(i+1, n)) {
 			mm[i, j] = concordance(clt[[i]], clt[[j]])
 			mm[j, i] = mm[i, j]
 		}
@@ -161,6 +164,8 @@ compare_methods_calc_concordance = function(clt) {
 #
 # == param
 # -mat The similarity matrix.
+# -method Which methods to compare. All available methods are in ``simplifyEnrichment:::ALL_CLUSTERING_METHODS``.
+#         A value of ``all`` takes all available methods.
 #
 # == details
 # The function compares following clustering methods:
@@ -181,8 +186,17 @@ compare_methods_calc_concordance = function(clt) {
 # - A barplot of the difference scores for each method, calculated by `difference_score`.
 # - A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
 #
-compare_methods = function(mat) {
-	clt = compare_methods_make_clusters(mat, "all")
+# == value
+# No value is returned.
+#
+# == example
+# \dontrun{
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# # here 'mclust' is removed because it needs very long time to run
+# compare_methods(mat, method = setdiff(simplifyEnrichment:::ALL_CLUSTERING_METHODS, "mclust"))
+# }
+compare_methods = function(mat, method = "all") {
+	clt = compare_methods_make_clusters(mat, method)
 	compare_methods_make_plot(mat, clt)
 }
 

@@ -98,7 +98,7 @@ cluster_mat = function(mat, value_fun = median) {
 	if(is.na(s)) s = 1
 
 	sr = numeric(1)
-	for(i in 1:10) {
+	for(i in seq_len(10)) {
 		clr = sample(cl, length(cl))
 		l1r = clr == 1
 		l2r = clr == 2
@@ -186,7 +186,7 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 	## make sure all sub-nodes having height 0 if the node is 0 height
 	is_parent_zero_height = function(index) {
 		h = sapply(seq_along(index), function(i) {
-			attr(dend2[[ index[1:i] ]], "height")
+			attr(dend2[[ index[seq_len(i)] ]], "height")
 		})
 		any(h == 0)
 	}
@@ -306,7 +306,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 		par(mar = c(0, 0, 0, 0), xpd = NA)
 		plot(rev(dend2), horiz = TRUE, axes = FALSE, ann = FALSE, ylim = c(0.5, nobs(dend2)+0.5), xaxs = "i", yaxs = "i")
 		if(is.null(score_col_fun)) {
-			text(-dend_max_depth(dend2), nobs(dend2)+0.5, qq("depth = @{depth}"), adj = c(0, 1))
+			text(par("usr")[2], par("usr")[4], qq("depth = @{depth}"), adj = c(1.2, 1))
 		}
 		par(op)
 	}

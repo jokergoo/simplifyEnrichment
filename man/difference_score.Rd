@@ -20,6 +20,9 @@ This function measures the different between the similarity values for the terms
 that belong to the same clusters and in different clusters. The difference score
 is the Kolmogorov-Smirnov statistic between the two distributions.
 }
+\value{
+A numeric scalar.
+}
 \examples{
 mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 cl = binary_cut(mat)

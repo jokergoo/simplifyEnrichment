@@ -3,15 +3,14 @@ title: "Simplify Gene Ontology Enrichment Results"
 author: "Zuguang Gu (z.gu@dkfz.de)"
 date: '`r Sys.Date()`'
 output: 
-  html_document:
+  rmarkdown::html_vignette:
     fig_caption: true
+    css: main.css
 vignette: >
   %\VignetteIndexEntry{Simplify Gene Ontology Enrichment Results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
-----------------------------------------
 
 ```{r, echo = FALSE}
 library(knitr)
@@ -20,7 +19,8 @@ knitr::opts_chunk$set(
     tidy  = FALSE,
     message = FALSE,
     warning = FALSE,
-    fig.align = "center")
+    fig.align = "center"
+)
 ```
 
 ## Introduction
@@ -29,12 +29,12 @@ Gene Ontology enrichment analysis is very frequently used in bioinformatics
 field. In many cases, the results contain a long list of significantly
 enriched GO terms which has highly redundant information and is difficult to
 summarize. The GO enrichment results can be reduced by clustering GO terms
-into groups where in the same group the GO terms are similar. The similarity
-between GO terms is called **the semantic similarity** and can be calculated
-by many software such as [the **GOSemSim**
+into groups where in the same group the GO terms have similar information. The
+similarity between GO terms is called **the semantic similarity** and can be
+calculated by many software such as [the **GOSemSim**
 package](https://bioconductor.org/packages/release/bioc/html/GOSemSim.html).
-Figure 1 is an example of the semantic similarity matrix from 500
-randomly generated GO terms.
+Figure 1 is an example of the semantic similarity matrix from 500 randomly
+generated GO terms.
 
 ```{r, fig.width = 4, fig.height = 4, echo = FALSE, fig.cap = "Figure 1. A heatmap of the semantic similarity matrix from 500 random GO terms."}
 library(simplifyEnrichment)
@@ -51,29 +51,41 @@ Heatmap(mat, name = "Similarity", col = col_fun,
 ```
 
 The GO similarity heatmap has a very special pattern that there are blocks
-located on the diagonal where GO terms in the same block have similar functions. 
-This is due to the structure of Directed Acyclic Graph (DAG) of GO. 
+located in the diagonal where GO terms in the same block share similar
+functions. This is due to the structure of the GO relationship which is in a
+form of the Directed Acyclic Graph (DAG) where terms in a same branch of the
+graph tends to be more similar (More to the leaves of the graph, the similarity
+is stronger).
 
-Classifying GO terms into groups basically is to apply clustering on the GO
-simialrity matrix. To solve this problem, there are two type of methods. 1.
-applying clustering methods that directly apply to a matrix. 2. treat the
-similarity matrix as adjacency matrix and convert the matrix to a weighted
-network. Then apply network module/community methods.
+Classifying GO terms into groups basically is a task of clustering on the GO
+simialrity matrix. To solve this problem, there are two type of methods: 1.
+the clustering methods that directly apply to a matrix, _e.g._, _k_-means
+clustering, and 2. treating the similarity matrix as an adjacency matrix and
+converting the matrix to a weighted graph/network, then graph community/module
+detection methods are applied to partition the graph.
 
-There are two major problems for the clustering of GO terms: 1. the size of the 
-clusters varies a lot, which means, there are very large clusters, while at the
-same time, there are also tiny clusters. An effective clustering should be able
-not to be affected by the cluster size. 2. For the big clusters, the density of 
-the similarity are not as dense as the small ones, thus big clusters should not
-be split into further small clusters and produce redendency.
+There are two major problems for clustering GO terms which can also be
+observed from Figure 1. First, the sizes of the GO clusters vary a lot, which
+means, there are very large clusters, and at the same time, there are also
+many tiny clusters. Large clusters tend to have relative lower mean
+similarities across terms while small clusters have relative higher mean
+similarity values. Methods such as _k_-means will further split the large
+cluster into small clusters, which might produce redundancy information among
+these small clusters that are split from the large clusters. 2. GO terms in
+the large clusters are more likely to share similarities to the terms in other
+large clusters, which results in that, for some graph community detection
+methods, these large clusters sharing terms are merged into an even larger
+cluster. The two problems can be simplified as 1. large clusters are split
+into more small clusters and 2. large clusters are merged into larger
+clusters. Thus, we need to find a effective method to balance these two
+scenarios.
 
-Here we proposed a new clustering method called "binary cut" to spit GO terms into groups.
-The idea behind is very intuitive to identify "blocks" in the similarity heatmap.
-As shown in Figure 2, the two heatmaps are both similarity matrices for two subsets
-of GO terms. 
+Here we proposed a new clustering method called "**binary cut**" to spit GO
+terms into groups. The idea behind is very simple and staightforward which is
+to identify "the blocks" in the similarity heatmap. As shown in Figure 2, the
+two heatmaps are both similarity matrices for two subsets of GO terms.
 
-
-```{r, fig.width = 6, fig.height = 3, echo = FALSE, out.width = "50%", fig.cap = "Figure 2. Two similarity matrices."}
+```{r, fig.width = 6, fig.height = 3.5, echo = FALSE, out.width = "50%", fig.cap = "Figure 2. Two similarity matrices that correspond to two subsets of GO terms."}
 cl = binary_cut(mat)
 tb = sort(table(cl), decreasing = TRUE)
 ind1 = which(as.character(cl) %in% names(tb)[1])
@@ -85,7 +97,8 @@ plot1 = grid.grabExpr({
 	draw(Heatmap(mat1, name = "mat1", col = col_fun, show_row_dend = FALSE, show_column_dend = FALSE, 
 		row_split = km, column_split = km,
 		show_row_names = FALSE, show_column_names = FALSE,
-		border = "#404040", row_title = NULL, column_title = "Similarity sub-matrix 1",
+		border = "#404040", row_title = NULL, 
+		column_title = gt_render("Similarity sub-matrix *M*<sub>*a*</sub>"),
 		row_gap = unit(0, "mm"), column_gap = unit(0, "mm"), show_heatmap_legend = FALSE))
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>11</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 1)
 	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>12</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 2)
@@ -95,15 +108,16 @@ plot1 = grid.grabExpr({
 mat2 = mat[ind2, ind2]
 km = kmeans(mat2, centers = 2)$cluster
 plot2 = grid.grabExpr({
-	draw(Heatmap(mat2, name = "mat1", col = col_fun, show_row_dend = FALSE, show_column_dend = FALSE, 
+	draw(Heatmap(mat2, name = "mat2", col = col_fun, show_row_dend = FALSE, show_column_dend = FALSE, 
 		row_split = km, column_split = km,
 		show_row_names = FALSE, show_column_names = FALSE,
-		border = "#404040", row_title = NULL, column_title = "Similarity sub-matrix 2",
+		border = "#404040", row_title = NULL, 
+		column_title = gt_render("Similarity sub-matrix *M*<sub>*b*</sub>"),
 		row_gap = unit(0, "mm"), column_gap = unit(0, "mm"), show_heatmap_legend = FALSE))
-	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>11</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 1)
-	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>12</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 2)
-	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>21</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 2, column_slice = 1)
-	decorate_heatmap_body("mat1", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>22</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 2, column_slice = 2)
+	decorate_heatmap_body("mat2", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>11</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 1)
+	decorate_heatmap_body("mat2", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>12</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 1, column_slice = 2)
+	decorate_heatmap_body("mat2", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>21</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 2, column_slice = 1)
+	decorate_heatmap_body("mat2", { ComplexHeatmap:::grid.text(gt_render("*s*<sub>22</sub>"), x = 0.5, y = 0.5, gp = gpar(fontfamily = "Times", fontsize = 20)) }, row_slice = 2, column_slice = 2)
 })
 
 grid.newpage()
@@ -115,41 +129,58 @@ grid.draw(plot2)
 popViewport()
 ```
 
-Let denote them as $M_a$ (the left matrix) and $M_b$ (the right matrix).
-Intuitively, terms in $M_a$ all have high pairwise similarity and thus should not be
-further split, while terms in $M_b$ still show two-group patterns and should be further
-split into two groups. To measure whether a certain subset of GO terms need to be split, 
-we calculate a score $s$ as follows:
+Let's denote the two matrices as $M_a$ (the left matrix) and $M_b$ (the right
+matrix). Intuitively, terms in $M_a$ all have high pairwise similarity and
+thus should be treated as one single cluster and should not be split any more,
+while terms in $M_b$ still show two-block pattern and should be further split
+into two more groups. To measure whether a certain subset of GO terms need to
+be split, we calculate a score denoted as $s$ as follows:
 
-For a similarity sub-matrix which corresponds to a subset of GO terms, e.g. $M_a$ or $M_b$,
-apply k-kmeans clustering with two groups on rows and partition the matrix into four parts,
-as shown in Figure 2. Denote the values for the four partitions as $s_{11}$, $s_{12}$, $s_{21}$ and $s_{22}$,
-where e.g. $s_{11}$ is the median value of the sub-matrix it corresponds to. The score $s$ is calcualted as:
+For a similarity atrix which corresponds to a subset of GO terms, _e.g._,
+$M_a$ or $M_b$, _k_-means clustering with two groups is applied on rows and
+columns and partitions the matrix into four parts, as illustrated in Figure 2.
+Denote the score for the four partitions as $s_{11}$, $s_{12}$, $s_{21}$ and
+$s_{22}$, where _e.g._, $s_{11}$ is the median value of the corresponding
+sub-matrix, the score $s$ is calculated as:
 
 $$s = \frac{s_{11} + s_{22}}{s_{11} + s_{12} + s_{21} + s_{22}}$$
 
-Naturally, if $s$ is close to 0.5 (e.g. the left heatmap), all the terms are highly similar
-and they should not be split any more, while if $s$ is close to 1, it means the group of GO terms
-can still be split into two groups.
+Naturally, if $s$ is close to 0.5 (_e.g._, the left heatmap), all terms are
+highly similar and they should not be split any more, while if $s$ is close to
+1, it means the GO terms can still be split into more groups.
 
-The algorithm is composed of two phases:
+The "binary cut" algorithm is composed of two phases:
 
-phase 1: clustering
+**phase 1: applies divisive clustering (the top-down approach) and generates a
+dendrogram.**
 
-1. for a similarity matrix, apply k-kmeans with two groups, calcualte $s$
-2. for the two submatrix, apply step 1 recursively
+1. for a similarity matrix from a set of GO terms, apply _k_-means clustering
+   with two groups, calculate the score $s$ and store ot on the current
+   node in the dendrogram.
+2. for the two subsets of GO terms partitioned by the _k_-means clustering,
+   apply step 1 to the two corresponding similarity sub-matrices separatedly.
 
+The clustering in step 1 and 2 are executed recursively untile the number of
+GO terms in a group reaches 1 which are treated as the leaves of the
+dendrogram.
 
-phase 2: cut the dendrogram:
+**phase 2: cuts the dendrogram and generates partitions.** Since every node in
+the dendrogram has a score $s$ attached, we simply test $s$ to a cutoff (0.85
+as the default). If $s$ is larger than the cutoff, the two branches from the
+node is split, or else all the terms under the node are taken as one single
+cluster.
 
-If the process are formatted as a dendrogram, the splitting can
+Nodes with large number of terms tend to have relatively smaller $s$, thus, it
+is possible at a certain node, $s$ does not exceed the cutoff (very close to
+it), while its child nodes have $s$ larger than the cutoff. In this case, we
+don't want to close the clusters so early and we still split this node into
+two sub=groups so that its child nodes can be split further more. To overcome
+this, the rule in phase 2 are modified as: if a node does not exceed the
+cutoff, but if at least one of its child nodes exceed the cutoff, the node is
+still split.
 
-1. split if the score of the node is larger than the cutoff
-2. because the node more on the top have ... smaller scores, thus, if the node does
-   not exceed the cutoff, but at least one of its child nodes exceed the cutoff,
-   the node is still split.
-
-An example of splitting previous heatmap by binary cut is:
+Examples of the step-wise clustering are illustrated in Figure 3 (the first 4
+iterations):
 
 ```{r, fig.width = 20, fig.height = 4, echo = FALSE, fig.cap = "Figure 3. Process of binary clustering the similarity matrix. In the plot only the first 4 iterations are shown."}
 dend = simplifyEnrichment:::cluster_mat(mat)
@@ -161,24 +192,32 @@ library(cowplot)
 plot_grid(p1, p2, p3, p4, nrow = 1)
 ```
 
-And the splitting the dendrogram. The cross are on the nodes that need to be split.
+Figure 4 illustrates the complete dendrogram and the partitions in the
+heatmap. In the dendrogram, for each node, the score corresponds to the color
+of the edge connected to the top of the node. The edges in grey connect the
+leaves of the dendrogram. The nodes marked with cross lines are the nodes that
+need to be split under the default cutoff (0.85).
 
-```{r, fig.width = 6, fig.height = 4, echo = FALSE, fig.cap = "Figure 4. Splitting the dendrogram."}
-simplifyEnrichment:::plot_binary_cut(mat)
+```{r, fig.width = 6, fig.height = 4, echo = FALSE, fig.cap = "Figure 4. Partition GO terms by splitting the dendrogram."}
+simplifyEnrichment:::plot_binary_cut(mat, dend = dend)
 ```
 
-As we can see there are a lot of tiny clusters. They can be put into a separated group.
-In the following plot, clusters with size less than 5 are put into a separated group marked
-by a green line, which makes the plot looks more clean.
+In Figure 4 we can see there are a lot of tiny clusters that they can actually
+be put into a separated group. Figure 5 is an improved visualization where
+clusters with size less than 5 are put into a separated group marked by a
+green line and moved to the right bottom of the heatmap. This makes the plot
+looks more clean.
 
-```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. Visualize the ..."}
+```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. An improved visualization on the clustering of GO terms."}
 cl = simplifyEnrichment:::cut_dend(dend)
 ht_clusters(mat, cl, draw_word_cloud = FALSE)
 ```
 
-Once the GO terms are clustered into groups, the ... can be summarized by word cloud and appended to the heatmap.
+Once the GO terms are clustered into groups, the functions of the terms in
+each group can be summarized by word clouds of keywords, illustrated in Figure
+6.
 
-```{r, fig.width = 8, fig.height = 4, echo = FALSE, fig.cap = "Figure 6. ..."}
+```{r, fig.width = 8, fig.height = 5, echo = FALSE, fig.cap = "Figure 6. A clustering of GO terms with word clouds as the annotations."}
 df = simplifyGO(mat, verbose = FALSE)
 ```
 
@@ -208,7 +247,7 @@ GO_similarity(go_id, measure = "Wang")
 
 With the similarity matrix `mat`, users can directly apply `simplifyGO()`
 function to perform the clustering and visualize the results. The plot is the
-same as the previous one, thus here we won't generate it again in the vignette.
+same as Figure 6, thus here we won't generate it again in the vignette.
 
 ```{r, fig.width = 8, fig.height = 5, eval = FALSE}
 df = simplifyGO(mat)
@@ -217,7 +256,8 @@ df = simplifyGO(mat)
 In `simplifyGO()`, besides the default clustering method `binary_cut`, users
 can also use other clustering methods. The supported methods are:
 
-- `binary_cut`: This is the default clustering method and it runs `binary_cut()`.
+- `binary_cut`: This is the default clustering method and it runs
+  `binary_cut()`.
 - `kmeans`: It uses k-means clustering. The number of clusters are tried with
   `2:min(round(nrow(mat)/5), 100)`. The best number of k for k-means
   clustering is identified according to the "elbow" or "knee" method on the
@@ -228,9 +268,9 @@ can also use other clustering methods. The supported methods are:
 - `apcluster`: It uses `apcluster::apcluster()`.
 - `fast_greedy`: It treats the similarity matrix as an ajacency matrix and
   converts it to a graph/network where the similarity values are the weight of
-  the edges of the graph, then the clustering on the similarity matrix is converted
-  to looking for communities in the graph. This method applies `igraph::cluster_fast_greedy()` to detect
-  communities in the graph.
+  the edges of the graph, then the clustering on the similarity matrix is
+  converted to looking for communities in the graph. This method applies
+  `igraph::cluster_fast_greedy()` to detect communities in the graph.
 - `leading_eigen`: It is a graph community detection method. It uses
   `igraph::cluster_leading_eigen()`.
 - `louvain`: It is a graph community detection method. It uses
@@ -238,12 +278,12 @@ can also use other clustering methods. The supported methods are:
 - `walktrap`: It is a graph community detection method. It uses
   `igraph::cluster_walktrap()`.
 
-**Please note, all other methods are mainly for comparing to our `binary_cut` method.
-They are not recommended to use.**
+**Please note, all other methods are mainly for comparing to the `binary_cut`
+method. They are not recommended to use.**
 
-On the right side of the heatmap are the word cloud annotations which summarize
-the functions with keywords in every GO cluster. Following parameters control the generation
-and graphic parameters of the word clouds:
+On the right side of the heatmap are the word cloud annotations which
+summarize the functions with keywords in every GO cluster. Following
+parameters control the generation and graphic parameters of the word clouds:
 
 - `draw_word_cloud`: Whether to draw the word clouds.
 - `min_term`: Minimal number of GO terms in a cluster. All the clusters with
@@ -252,8 +292,8 @@ and graphic parameters of the word clouds:
 - `order_by_size`: Whether to reorder GO clusters by their sizes. The cluster
   that is merged from small clusters (size < 5) is always put to the bottom of
   the heatmap.
-- `exclude_words`: Words that are excluded in the word cloud. E.g. in previous example, the word
-  "regulation" and "process" can be excluded.
+- `exclude_words`: Words that are excluded in the word cloud. E.g. in previous
+  example, the word "regulation" and "process" can be excluded.
 - `max_words`: Maximal number of words visualized in the word cloud.
 - `word_cloud_grob_param`: This controls the graphic parameters for the word
   clouds. The value should be a list and is passed to `word_cloud_grob()`
@@ -274,7 +314,8 @@ and graphic parameters of the word clouds:
   value of 1 and the maximal font size is mapped to the maximal word
   frequency. The font size interlopation is linear.
 
-Note there is no word cloud for the cluster that is merged from small clusters (size < 5).
+Note there is no word cloud for the cluster that is merged from small clusters
+(size < 5).
 
 The returned variable `df` is a data frame with GO IDs, GO term names and the
 cluster labels:
@@ -289,10 +330,11 @@ The size of GO clusters can be retrieved by:
 sort(table(df$cluster))
 ```
 
-`plot` argument can be set to `FALSE` in `simplifyGO()`, so that no plot is generated and only
-the data frame is returned.
+`plot` argument can be set to `FALSE` in `simplifyGO()`, so that no plot is
+generated and only the data frame is returned.
 
-If the aim is only to cluster GO terms, `binary_cut()` function can be directly applied:
+If the aim is only to cluster GO terms, `binary_cut()` function can be
+directly applied:
 
 ```{r}
 binary_cut(mat)
@@ -300,25 +342,19 @@ binary_cut(mat)
 
 ## Benchmark
 
-We compared following clustering methods:
-
-- binary_cut
-- kmeans
-- dynamicTreeCut
-- mclust
-- apcluster 
-- fast_greedy
-- leading_eigen
-- louvain
-- walktrap     
+We compare following clustering methods: binary_cut, kmeans, dynamicTreeCut,
+mclust, apcluster, fast_greedy, leading_eigen, louvain and walktrap. The
+actual R functions used to perform corresponding analysis can be found in text
+in previous sections in this vignette.
 
 ### On random datasets
 
 500 random GO terms are generated from Biology Process ontology. One example
 of the clustering from different methods are in Figure 7. Basically we can see
-`kmeans`, `dynamicTreeCut`, `mclust` and `apcluster` generate too many small clusters
-and cannot split tiny cluster. `fast_greedy`, `leading_eigen`, `louvain` and `walktrap`
-can identify small and large cluster, however, some large clusters are too ... 
+`kmeans`, `dynamicTreeCut`, `mclust` and `apcluster` generate too many small
+clusters and cannot split tiny cluster. `fast_greedy`, `leading_eigen`,
+`louvain` and `walktrap` can identify small and large cluster, however, some
+large clusters are too ...
 
 ```{r, echo = FALSE, fig.cap = "Figure 7. ..."}
 knitr::include_graphics("GO_heatmap_random_BP_1.jpg")
@@ -326,14 +362,14 @@ knitr::include_graphics("GO_heatmap_random_BP_1.jpg")
 
 The random GO terms were generated 100 times and we compared following metrics:
 
-1. the different between the similarity values for the terms
- that belong to the same clusters and in different clusters. The difference score
- is the Kolmogorov-Smirnov statistic between the two distributions.
-2. Number of clusters. For each there are two numbers: the number of all clusters and
-  the number of clusters with size >= 5
+1. the different between the similarity values for the terms that belong to
+   the same clusters and in different clusters. The difference score is the
+   Kolmogorov-Smirnov statistic between the two distributions.
+2. Number of clusters. For each there are two numbers: the number of all
+   clusters and the number of clusters with size >= 5
 3. the mean of the blocks
 
-```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 8. ..."}
+```{r, echo = FALSE, fig.width = 10, fig.height = 4.5, fig.cap = "Figure 8. ..."}
 lt = readRDS("random_BP_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -356,8 +392,13 @@ p2 = ggplot(rbind(cluster_number_df, cluster_number2_df), aes(x = method, y = va
 p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
 	geom_boxplot() + ylab("Block mean") +
 	theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
+
 library(cowplot)
-plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.3))
+m_mean = apply(arr, 1:2, mean)
+p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance")))
+
+plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
+	p4, nrow = 1)
 ```
 
 In Figure 8, we can see
@@ -370,10 +411,6 @@ Then the concordance of the two partitions is calculated as:
 
 Figure 9 show the mean concordance ...
 
-```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 9. ..."}
-m_mean = apply(arr, 1:2, mean)
-Heatmap(m_mean, name = "concordance")
-```
 
 The heatmaps for the 100 runs of random GO terms can be found at https://jokergoo.github.io/simplifyGO_figures/random_BP.html.
 
@@ -386,7 +423,7 @@ to the significantly expressed genes only with the GO Biological Process ontolog
 only took the datasets with significant GO terms in [100, 1000].
 
 
-```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 10. ..."}
+```{r, echo = FALSE, fig.width = 10, fig.height = 4.5, fig.cap = "Figure 9. ..."}
 lt = readRDS("EBI_Expression_Atlas_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -410,12 +447,11 @@ p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
 	geom_boxplot() + ylab("Block mean") +
 	theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
 
-plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.3))
-```
-
-```{r, echo = FALSE, fig.width = 4, fig.cap = "Figure 11. ..."}
 m_mean = apply(arr, 1:2, mean)
-Heatmap(m_mean, name = "concordance")
+p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance")))
+
+plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
+	p4, nrow = 1)
 ```
 
 The heatmaps can be found at https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html.

@@ -114,7 +114,7 @@ elbow_finder = function(x_values, y_values) {
 
   # Distance from point to line
   distances = c()
-  for(i in 1:length(x_values)) {
+  for(i in seq_along(x_values)) {
     distances = c(distances, abs(coef(fit)[2]*x_values[i] - y_values[i] + coef(fit)[1]) / sqrt(coef(fit)[2]^2 + 1^2))
   }
 
