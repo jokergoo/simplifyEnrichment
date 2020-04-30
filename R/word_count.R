@@ -207,6 +207,8 @@ word_cloud_grob = function(text, fontsize,
 # == param
 # -x The ``word_cloud`` grob returned by `word_cloud_grob`.
 #
+# == value
+# A `grid::unit` object.
 widthDetails.word_cloud = function(x) {
 	x$vp$width
 }
@@ -217,6 +219,8 @@ widthDetails.word_cloud = function(x) {
 # == param
 # -x The ``word_cloud`` grob returned by `word_cloud_grob`.
 #
+# == value
+# A `grid::unit` object.
 heightDetails.word_cloud = function(x) {
 	x$vp$height
 }

@@ -14,6 +14,9 @@ Width for word_cloud Grob
   \item{x}{The \code{word_cloud} grob returned by \code{\link{word_cloud_grob}}.}
 
 }
+\value{
+A \code{\link[grid]{unit}} object.
+}
 \examples{
 # There is no example
 NULL

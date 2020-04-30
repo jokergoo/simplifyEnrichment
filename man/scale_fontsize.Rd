@@ -18,6 +18,9 @@ scale_fontsize(x, rg = c(1, 30), fs = c(4, 16))
 }
 \section{Detaisl}{
 It is a linear interpolation.}
+\value{
+A numeric vector.
+}
 \examples{
 scale_fontsize(runif(10, min = 1, max = 20))
 }

@@ -19,6 +19,9 @@
 #       to the maximal word frequency. The font size interlopation is linear.
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
+# == value
+# A `ComplexHeatmap::HeatmapList-class` object.
+#
 # == example
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # cl = binary_cut(mat)
@@ -132,6 +135,9 @@ ht_clusters = function(mat, cl, dend = NULL,
 #
 # == detaisl
 # It is a linear interpolation.
+#
+# == value
+# A numeric vector.
 #
 # == example
 # scale_fontsize(runif(10, min = 1, max = 20))

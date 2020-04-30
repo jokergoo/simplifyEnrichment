@@ -27,6 +27,9 @@ ht_clusters(mat, cl, dend = NULL,
   \item{...}{Other arguments passed to \code{\link[ComplexHeatmap:draw-HeatmapList-method]{draw,HeatmapList-method}}.}
 
 }
+\value{
+A \code{\link[ComplexHeatmap]{HeatmapList-class}} object.
+}
 \examples{
 mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 cl = binary_cut(mat)

@@ -7,11 +7,12 @@ Compare clustering methods
 Compare clustering methods
 }
 \usage{
-compare_methods(mat)
+compare_methods(mat, method = "all")
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
+  \item{method}{Which methods to compare. All available methods are in \code{simplifyEnrichment:::ALL_CLUSTERING_METHODS}. A value of \code{all} takes all available methods.}
 
 }
 \details{
@@ -37,8 +38,13 @@ The function produces a plot with three panels.
   \item A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
 }
 }
+\value{
+No value is returned.
+}
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# here 'mclust' is removed because it needs very long time to run
+compare_methods(mat, method = setdiff(simplifyEnrichment:::ALL_CLUSTERING_METHODS, "mclust"))
+}
 }
