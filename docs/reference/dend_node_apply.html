@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Apply functions on every node in a dendrogram — dend_node_apply • simplifyGO</title>
+<title>Apply functions on every node in a dendrogram — dend_node_apply • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -71,7 +71,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">simplifyGO</a>
+        <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
@@ -85,14 +85,28 @@
   </a>
 </li>
 <li>
-  <a href="../articles/simplifyGO.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jokergoo/simplifyEnrichment/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -132,7 +146,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function return a vector or a list as the same length as the number of nodes in the dendrogram.</p>
+    <p>The function returns a vector or a list as the same length as the number of nodes in the dendrogram.</p>
 <p>The self-defined function can have one single argument which is the sub-dendrogram at a certain node.
 E.g. to get the number of members at every node:</p>
 <p></p><pre>
@@ -144,12 +158,12 @@ the complete dendrogram. E.g. <code>dend[[1]]</code> is the first child node of 
 it is possible to get information of its child nodes and parent nodes.</p>
 <p></p><pre>
     <span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>index</span>) {
-        <span class='no'>d</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>index</span>, <span class='fl'>1</span>)]] <span class='co'># is the first child node of d</span>
-        <span class='no'>d</span><span class='kw'>[[</span><span class='no'>index</span>[<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>)-<span class='fl'>1</span>]]] <span class='co'># is the parent node of d</span>
+        <span class='no'>dend</span><span class='kw'>[[</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>index</span>, <span class='fl'>1</span>)]] <span class='co'># is the first child node of d, or simply d[[1]]</span>
+        <span class='no'>dend</span><span class='kw'>[[</span><span class='no'>index</span>[-<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>)]]] <span class='co'># is the parent node of d</span>
         <span class='no'>...</span>
     })</pre>
 
-<p>Node for the top node, the value of <code>index</code> is <code>NULL</code>.</p>
+<p>Note for the top node, the value of <code>index</code> is <code>NULL</code>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A vector or a list, depends on whether <code>fun</code> returns a scalar or more complex values.</p>
@@ -158,8 +172,8 @@ it is possible to get information of its child nodes and parent nodes.</p>
     <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>), <span class='fl'>10</span>)
 <span class='no'>dend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span>(<span class='no'>mat</span>)))
 <span class='co'># number of members on every node</span>
-<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>"members"</span>))</div><div class='output co'>#&gt;  [1] 10  2  1  1  8  5  3  1  2  1  1  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
-<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>index</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>))</div><div class='output co'>#&gt;  [1] 0 1 2 2 1 2 3 4 4 5 5 3 4 4 2 3 3 4 4</div></pre>
+<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>"members"</span>))</div><div class='output co'>#&gt;  [1] 10  3  1  2  1  1  7  1  6  3  1  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
+<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>index</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>))</div><div class='output co'>#&gt;  [1] 0 1 2 2 3 3 1 2 2 3 4 4 5 5 3 4 4 5 5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

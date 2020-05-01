@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • simplifyGO</title>
+<title>Function reference • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -70,7 +70,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">simplifyGO</a>
+        <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
@@ -84,14 +84,28 @@
   </a>
 </li>
 <li>
-  <a href="../articles/simplifyGO.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jokergoo/simplifyEnrichment/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -139,49 +153,61 @@
         <td>
           <p><code><a href="binary_cut.html">binary_cut()</a></code> </p>
         </td>
-        <td><p>Cluster GO terms by binary cutting the similarity matrix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="cluster_GO.html">cluster_GO()</a></code> </p>
-        </td>
-        <td><p>Cluster GO terms</p></td>
+        <td><p>Cluster functional terms by binary cutting the similarity matrix</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cluster_by_apcluster.html">cluster_by_apcluster()</a></code> </p>
         </td>
-        <td><p>Cluster GO similarity matrix by apcluster</p></td>
+        <td><p>Cluster similarity matrix by apcluster</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cluster_by_dynamicTreeCut.html">cluster_by_dynamicTreeCut()</a></code> </p>
         </td>
-        <td><p>Cluster GO similarity matrix by dynamicTreeCut</p></td>
+        <td><p>Cluster similarity matrix by dynamicTreeCut</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cluster_by_igraph.html">cluster_by_igraph()</a></code> </p>
         </td>
-        <td><p>Cluster GO similarity matrix by graph community detection methods</p></td>
+        <td><p>Cluster similarity matrix by graph community detection methods</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cluster_by_kmeans.html">cluster_by_kmeans()</a></code> </p>
         </td>
-        <td><p>Cluster GO similarity matrix by k-means clustering</p></td>
+        <td><p>Cluster similarity matrix by k-means clustering</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="cluster_by_mclust.html">cluster_by_mclust()</a></code> </p>
         </td>
-        <td><p>Cluster GO similarity matrix by mclust</p></td>
+        <td><p>Cluster similarity matrix by mclust</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cluster_terms.html">cluster_terms()</a></code> </p>
+        </td>
+        <td><p>Cluster functional terms</p></td>
       </tr><tr>
         
         <td>
           <p><code><a href="compare_methods.html">compare_methods()</a></code> </p>
         </td>
         <td><p>Compare clustering methods</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compare_methods_make_clusters.html">compare_methods_make_clusters()</a></code> </p>
+        </td>
+        <td><p>Apply various clustering methods</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compare_methods_make_plot.html">compare_methods_make_plot()</a></code> </p>
+        </td>
+        <td><p>make plots for comparing clustering methods</p></td>
       </tr><tr>
         
         <td>
@@ -221,9 +247,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="ht_GO_clusters.html">ht_GO_clusters()</a></code> </p>
+          <p><code><a href="ht_clusters.html">ht_clusters()</a></code> </p>
         </td>
-        <td><p>Visualize the GO similarity matrix and the classifications</p></td>
+        <td><p>Visualize the similarity matrix and the clustering</p></td>
       </tr><tr>
         
         <td>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cluster functional terms by binary cutting the similarity matrix — binary_cut • simplifyEnrichment</title>
+<title>Visualize the similarity matrix and the clustering — ht_clusters • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Cluster functional terms by binary cutting the similarity matrix — binary_cut" />
-<meta property="og:description" content="Cluster functional terms by binary cutting the similarity matrix" />
+<meta property="og:title" content="Visualize the similarity matrix and the clustering — ht_clusters" />
+<meta property="og:description" content="Visualize the similarity matrix and the clustering" />
 
 
 
@@ -120,16 +120,19 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Cluster functional terms by binary cutting the similarity matrix</h1>
+    <h1>Visualize the similarity matrix and the clustering</h1>
     
-    <div class="hidden name"><code>binary_cut.Rd</code></div>
+    <div class="hidden name"><code>ht_clusters.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Cluster functional terms by binary cutting the similarity matrix</p>
+    <p>Visualize the similarity matrix and the clustering</p>
     </div>
 
-    <pre class="usage"><span class='fu'>binary_cut</span>(<span class='no'>mat</span>, <span class='kw'>value_fun</span> <span class='kw'>=</span> <span class='no'>median</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>n_run</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>dend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <span class='kw'>draw_word_cloud</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min_term</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>order_by_size</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>max_words</span> <span class='kw'>=</span> <span class='fl'>10</span>,
+    <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>fontsize_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>16</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,45 +142,59 @@
       <td><p>A similarity matrix.</p></td>
     </tr>
     <tr>
-      <th>value_fun</th>
-      <td><p>Value function to calculate the score for each node in the dendrogram.</p></td>
+      <th>cl</th>
+      <td><p>Cluster labels inferred from the similarity matrix, e.g. from <code><a href='cluster_terms.html'>cluster_terms</a></code> or <code><a href='binary_cut.html'>binary_cut</a></code>.</p></td>
     </tr>
     <tr>
-      <th>cutoff</th>
-      <td><p>The cutoff for splitting the dendrogram.</p></td>
+      <th>dend</th>
+      <td><p>Used internally.</p></td>
     </tr>
     <tr>
-      <th>n_run</th>
-      <td><p>If the value is larger than one, <code>binary_cut</code> is executed multiple times and generates a consensus clustering.</p></td>
+      <th>draw_word_cloud</th>
+      <td><p>Whether to draw the word clouds.</p></td>
+    </tr>
+    <tr>
+      <th>term</th>
+      <td><p>The full name or the description of the corresponding GO IDs.</p></td>
+    </tr>
+    <tr>
+      <th>min_term</th>
+      <td><p>Minimal number of functional terms in a cluster. All the clusters with size less than <code>min_term</code> are all merged into one separated cluster in the heatmap.</p></td>
+    </tr>
+    <tr>
+      <th>order_by_size</th>
+      <td><p>Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size &lt; <code>min_term</code>) is always put to the bottom of the heatmap.</p></td>
+    </tr>
+    <tr>
+      <th>exclude_words</th>
+      <td><p>Words that are excluded in the word cloud.</p></td>
+    </tr>
+    <tr>
+      <th>max_words</th>
+      <td><p>Maximal number of words visualized in the word cloud.</p></td>
+    </tr>
+    <tr>
+      <th>word_cloud_grob_param</th>
+      <td><p>A list of graphic parameters passed to <code><a href='word_cloud_grob.html'>word_cloud_grob</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>fontsize_range</th>
+      <td><p>The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Other arguments passed to <code>draw,HeatmapList-method</code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of cluster labels (in numeric).</p>
+    <p>A <code><a href='https://rdrr.io/pkg/ComplexHeatmap/man/HeatmapList-class.html'>HeatmapList-class</a></code> object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"similarity_mat.rds"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
-<span class='fu'>binary_cut</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt;   [1]  1  2  3  4  3  2  2  4  4  1  1  5  5  6  7  8  4  1  3  9  2  1  3  2  3
-#&gt;  [26]  2  3  2  2  2  3  3  5  2  3  2  5  3  2  4  2  1  2  5  3  4  4  3  2  4
-#&gt;  [51]  2  2  2  3  5  2  1  5  3 10  2 11  4  2  3  2  3  5  3  3 12  4  4  3  4
-#&gt;  [76]  3  2  4  2 12  3  2  4  4  3  3  2  2  4  4  3  1  4  4  7  3  4  3  3  5
-#&gt; [101]  2  2  3 13  3  2  2  5  5  3  4 14  4  4  4  3  3  9  5  3  3  3  3  3  2
-#&gt; [126]  4  4  1  5  2  5  3  5  2  2  3  3  2  2  5  2  3  2  4  4  3 15  2  2  2
-#&gt; [151]  5  4  3  4  5  3  2  3  7  2  2  2  4 16  1  1  2  4  3 17  3  5  3  2  4
-#&gt; [176]  3  3  3  2  2  3  3  3  3  2  5  4  2  3  3  3  2  1  4  3  3  2  2  5 12
-#&gt; [201]  4  3  2  2  1  5  2  3  2 12  3  2  5  3 14 14  3  3 18  2  2  3  8  3  5
-#&gt; [226]  8  2 12  7  4  3 19  2  1  4  2  4  4  3 20 21  3 14  4  3  3  3  2  2  4
-#&gt; [251]  7  3  3  3  2  5  4  3  3  4  4  5 22  2  2  3  2  2  3  3  2  5 23 14  3
-#&gt; [276]  2  2  5 14  3  2  9  5  3  3  4  2  9  4  4 24  3  9  4  2  2  5  2  7  4
-#&gt; [301]  2  4  2  3 25  2  1  2  4  3  1  3  4 26  5  4  4  3  3  5  2 15  2  3  1
-#&gt; [326]  5  2  5  2  4  2  5  5  3  3  2  4  2  2  2  4  2  4  3  2  2  3  3  5  5
-#&gt; [351]  4  1  5  1  2  4  4  3  1  2  4  2  4  2 12  2  5  2  5  8  2  5 27  5  3
-#&gt; [376]  2  2  2  3  4  3  4  5  3 14  3  3  3  4  5  8  3  2  2  2  1  2  3  4 15
-#&gt; [401]  4 28  4  9  2  1  8  2  5  2  1  2  3  5  3  4  3  9 12  5  9  7  5  2  3
-#&gt; [426]  1  5  5  4  5  2  2 29  2  3  4  4 30  5  1  3  2  3  3  3  5  5  8  2  4
-#&gt; [451]  2  2  1  4  4  4  3  3  3  4  3  2  5  5  2  3 12  3  3  4  1  5  2  3  3
-#&gt; [476]  4  7  5  4  2  4  3  2  1  3  2  4  3  7  3  5  3  3  5  2  3  5  2  3  2</div></pre>
+<span class='no'>cl</span> <span class='kw'>=</span> <span class='fu'><a href='binary_cut.html'>binary_cut</a></span>(<span class='no'>mat</span>)
+<span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='img'><img src='ht_clusters-1.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

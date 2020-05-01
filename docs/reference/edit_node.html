@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Modify nodes in a dendrogram — edit_node • simplifyGO</title>
+<title>Modify nodes in a dendrogram — edit_node • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -71,7 +71,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">simplifyGO</a>
+        <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
@@ -85,14 +85,28 @@
   </a>
 </li>
 <li>
-  <a href="../articles/simplifyGO.html">Get started</a>
-</li>
-<li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jokergoo/simplifyEnrichment/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -135,7 +149,7 @@
     <p>if <code>fun</code> only has one argument, it is basically the same as <code><a href='https://rdrr.io/r/stats/dendrapply.html'>dendrapply</a></code>,
 but it can have a second argument which is the index of the node in the dendrogram,
 which makes it possible to get information of child nodes and parent nodes for
-a specified node.</p>
+a specific node.</p>
 <p>As an example, we first assign random values to every node in the dendrogram:</p>
 <p></p><pre>
     <span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>), <span class='fl'>10</span>)
@@ -153,10 +167,10 @@ and parent node as the attribute <code>abs_diff</code></p>
             <span class='no'>s_parent</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
         } <span class='kw'>else</span> <span class='kw'>if</span>(<span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>is.leaf</a></span>(<span class='no'>d</span>)) { <span class='co'># d is the leaf</span>
             <span class='no'>s_children</span> <span class='kw'>=</span> <span class='kw'>NULL</span>
-            <span class='no'>s_parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>[<span class='no'>index</span>[<span class='no'>n</span>-<span class='fl'>1</span>]], <span class='st'>"score"</span>)
+            <span class='no'>s_parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>dend</span><span class='kw'>[[</span><span class='no'>index</span>[-<span class='no'>n</span>]]], <span class='st'>"score"</span>)
         } <span class='kw'>else</span> {
             <span class='no'>s_children</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='no'>d</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>x</span>, <span class='st'>"score"</span>))
-            <span class='no'>s_parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>[<span class='no'>index</span>[<span class='no'>n</span>-<span class='fl'>1</span>]], <span class='st'>"score"</span>)
+            <span class='no'>s_parent</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>dend</span><span class='kw'>[[</span><span class='no'>index</span>[-<span class='no'>n</span>]]], <span class='st'>"score"</span>)
         }
         <span class='no'>abs_diff</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/MathFun.html'>abs</a></span>(<span class='no'>s</span> - <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='no'>s_children</span>, <span class='no'>s_parent</span>)))
         <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>"abs_diff"</span>) <span class='kw'>=</span> <span class='no'>abs_diff</span>

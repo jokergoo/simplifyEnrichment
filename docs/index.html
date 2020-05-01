@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simplify Gene Ontology Enrichment Results • simplifyGO</title>
+<title>Simplify Functional Enrichment Results • simplifyEnrichment</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="bootstrap-toc.css">
 <script src="bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Simplify Gene Ontology Enrichment Results">
+<script src="pkgdown.js"></script><meta property="og:title" content="Simplify Functional Enrichment Results">
 <meta property="og:description" content="A new method (binary cut) is proposed to effectively cluster 
          GO terms into groups from the semantic similarity matrix.
          Summaries of GO terms in each cluster are visualized by word clouds.">
@@ -32,7 +32,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">simplifyGO</a>
+        <a class="navbar-link" href="index.html">simplifyEnrichment</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
       </span>
     </div>
@@ -46,13 +46,29 @@
   </a>
 </li>
 <li>
-  <a href="articles/simplifyGO.html">Get started</a>
-</li>
-<li>
   <a href="reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
+    </li>
+  </ul>
+</li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/jokergoo/simplifyEnrichment/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -64,34 +80,33 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="simplify-go-enrichment-results" class="section level1">
+<div id="simplify-functional-enrichment-results" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
-<a href="#simplify-go-enrichment-results" class="anchor"></a>Simplify GO enrichment Results</h1></div>
+<a href="#simplify-functional-enrichment-results" class="anchor"></a>Simplify functional enrichment Results</h1></div>
 
 <div id="features" class="section level3">
 <h3 class="hasAnchor">
 <a href="#features" class="anchor"></a>Features</h3>
 <ul>
-<li>A new method (binary cut) is proposed to effectively cluster GO terms into groups from the semantic similarity matrix.</li>
+<li>A new method (binary cut) is proposed to effectively cluster functional terms (e.g. GO terms) into groups from the semantic similarity matrix.</li>
 <li>Summaries of GO terms in each cluster are visualized by word clouds.</li>
 </ul>
 </div>
 <div id="install" class="section level3">
 <h3 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h3>
-<div class="sourceCode"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/simplifyGO"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/simplifyEnrichment"</span>)</pre></div>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
 <p>As an example, we first generate a list of random GO IDs.</p>
-<div class="sourceCode"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">88</span>)
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">88</span>)
 <span class="no">go_id</span> <span class="kw">=</span> <span class="fu"><a href="reference/random_GO.html">random_GO</a></span>(<span class="fl">500</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">go_id</span>)
-<span class="co"># [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353"</span>
-<span class="co"># [6] "GO:0046101"</span></pre></div>
+<span class="co"># [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353" "GO:0046101"</span></pre></div>
 <p>Then generate the GO similarity matrix, split GO terms into clusters and visualize it.</p>
-<div class="sourceCode"><pre class="r"><span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="reference/GO_similarity.html">GO_similarity</a></span>(<span class="no">go_id</span>)
+<div class="sourceCode" id="cb3"><pre class="r"><span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="reference/GO_similarity.html">GO_similarity</a></span>(<span class="no">go_id</span>)
 <span class="fu"><a href="reference/simplifyGO.html">simplifyGO</a></span>(<span class="no">mat</span>)</pre></div>
 <p><img src="https://user-images.githubusercontent.com/449218/79051702-027a4d00-7c32-11ea-887e-ed3e171a03a0.png" alt="image"></p>
 </div>
@@ -112,7 +127,14 @@
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <div class="license">
+    <div class="links">
+<h2>Links</h2>
+<ul class="list-unstyled">
+<li>Browse source code at <br><a href="https://github.com/jokergoo/simplifyEnrichment/">https://​github.com/​jokergoo/​simplifyEnrichment/​</a>
+</li>
+</ul>
+</div>
+<div class="license">
 <h2>License</h2>
 <ul class="list-unstyled">
 <li>
