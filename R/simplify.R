@@ -22,10 +22,10 @@
 # -``min_term`` Minimal number of GO terms in a cluster. All the clusters
 #     with size less than ``min_term`` are all merged into one single cluster in the heatmap.
 # -``order_by_size`` Whether to reorder GO clusters by their sizes. The cluster
-#      that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.
+#      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
 # -``exclude_words`` Words that are excluded in the word cloud.
 # -``max_words`` Maximal number of words visualized in the word cloud.
-# -``word_cloud_grob_param`` A list of parameters passed to `word_cloud_grob`.
+# -``word_cloud_grob_param`` A list of graphic parameters passed to `word_cloud_grob`.
 # -``fontsize_range`` The range of the font size. The value should be a numeric vector with length two.
 #       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
 #       to the maximal word frequency. The font size interlopation is linear.
@@ -49,7 +49,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	if(is.null(term)) {
 		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	}
-	
+
 	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
 
 	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))

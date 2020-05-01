@@ -1,6 +1,6 @@
 
 # == title
-# Visualize the similarity matrix and the classifications
+# Visualize the similarity matrix and the clustering
 #
 # == param
 # -mat A similarity matrix.
@@ -9,12 +9,12 @@
 # -draw_word_cloud Whether to draw the word clouds.
 # -term The full name or the description of the corresponding GO IDs. 
 # -min_term Minimal number of functional terms in a cluster. All the clusters
-#     with size less than ``min_term`` are all merged into one single cluster in the heatmap.
+#     with size less than ``min_term`` are all merged into one separated cluster in the heatmap.
 # -order_by_size Whether to reorder clusters by their sizes. The cluster
-#      that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.
+#      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
 # -exclude_words Words that are excluded in the word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
-# -word_cloud_grob_param A list of parameters passed to `word_cloud_grob`.
+# -word_cloud_grob_param A list of graphic parameters passed to `word_cloud_grob`.
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
 #       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
 #       to the maximal word frequency. The font size interlopation is linear.

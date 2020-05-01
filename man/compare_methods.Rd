@@ -47,5 +47,6 @@ No value is returned.
 \dontrun{
 mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 compare_methods(mat)
+compare_methods(mat, plot_type = "heatmap")
 }
 }

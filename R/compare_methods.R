@@ -50,7 +50,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_ME
 }
 
 # == title
-# Calculate statistics for comparing clustering methods
+# make plots for comparing clustering methods
 #
 # == param
 # -mat A similarity matrix.
@@ -58,11 +58,11 @@ compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_ME
 # -plot_type What type of plots to make. See Details.
 #
 # == details
-# If ``plot_type`` is the default ``mixed``, a figure with three panels generated:
+# If ``plot_type`` is the default value ``mixed``, a figure with three panels generated:
 #
-# 1. A heatmap of the similarity matrix with different classifications as row annotations.
-# 2. A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
-# 3. Barplots of the difference scores for each method (calculated by `difference_score`), the number
+# - A heatmap of the similarity matrix with different classifications as row annotations.
+# - A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
+# - Barplots of the difference scores for each method (calculated by `difference_score`), the number
 #    of clusters (all clusters and the clusters with size >= 5) and the mean similarity in the terms 
 #    that are in the same cluster.
 #
