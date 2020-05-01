@@ -56,6 +56,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_ME
 # -mat A similarity matrix.
 # -clt A list of clusterings from `compare_methods_make_clusters`.
 # -plot_type What type of plots to make. See Details.
+# -nrow Number of rows of the layout when ``plot_type`` is set to ``heatmap``.
 #
 # == details
 # If ``plot_type`` is the default value ``mixed``, a figure with three panels generated:
@@ -63,8 +64,8 @@ compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_ME
 # - A heatmap of the similarity matrix with different classifications as row annotations.
 # - A heatmap of the pair-wise concordance of the classifications of every two clustering methods.
 # - Barplots of the difference scores for each method (calculated by `difference_score`), the number
-#    of clusters (all clusters and the clusters with size >= 5) and the mean similarity in the terms 
-#    that are in the same cluster.
+#    of clusters (all clusters and the clusters with size >= 5) and the mean similarity of the terms 
+#    that are in the same clusters.
 #
 # If ``plot_type`` is ``heatmap``. There are heatmaps for the similarity matrix under clusterings
 # from different methods. The last panel is a table with the number of clusters under different
@@ -72,7 +73,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_ME
 #
 # == value
 # No value is returned.
-compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")) {
+compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
@@ -133,7 +134,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 		)
 
 		cm = compare_methods_calc_concordance(clt)
-		p4 = grid.grabExpr(draw(Heatmap(cm, name = "concordance", column_names_rot = 45)))
+		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
 
 		cowplot::plot_grid(
 			cowplot::plot_grid(p0, p4, ncol = 1), 
@@ -144,7 +145,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 } else {
 		pl = list()
 		for(i in seq_along(methods)) {
-			pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{methods[i]}'")))
+			pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, column_title = qq("@{nrow(mat)} terms clustered by '@{methods[i]}'")))
 		}
 
 		stats = compare_methods_calc_stats(mat, clt)
@@ -156,7 +157,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 		}
 		pl[[length(pl) + 1]] = gridExtra::tableGrob(tb, rows = NULL)
 
-		print(cowplot::plot_grid(plotlist = pl, nrow = 2))
+		print(cowplot::plot_grid(plotlist = pl, nrow = nrow))
 	}
 }
 

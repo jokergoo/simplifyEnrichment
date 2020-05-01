@@ -50,7 +50,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	}
 
-	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms are clustered by '@{method}'"), ...)
+	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"), ...)
 
 	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
 }

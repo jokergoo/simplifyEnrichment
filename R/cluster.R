@@ -31,6 +31,10 @@
 # the function returns a ``try-error`` object.
 cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
 	
+	if(nrow(mat) != ncol(mat)) {
+		stop_wrap("The matrix should be square.")
+	}
+
 	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
 
 	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
@@ -91,7 +95,7 @@ cluster_by_kmeans = function(mat, ...) {
 	max_km = min(round(nrow(mat)/5), 100)
 
 	for (i in 2:max_km) {
-		km = kmeans(mat, centers = i, iter.max = 50)
+		suppressWarnings(km <- kmeans(mat, centers = i, iter.max = 50))
 		cl[[i - 1]] = km$cluster
 		wss[i - 1] = sum(km$withinss)
 	}
