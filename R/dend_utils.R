@@ -19,7 +19,7 @@ next_k = local({
 # -fun A self-defined function.
 #
 # == details
-# The function return a vector or a list as the same length as the number of nodes in the dendrogram.
+# The function returns a vector or a list as the same length as the number of nodes in the dendrogram.
 #
 # The self-defined function can have one single argument which is the sub-dendrogram at a certain node.
 # E.g. to get the number of members at every node:
@@ -37,7 +37,7 @@ next_k = local({
 #         ...
 #     })
 #
-# Node for the top node, the value of ``index`` is ``NULL``.
+# Note for the top node, the value of ``index`` is ``NULL``.
 #
 # == value
 # A vector or a list, depends on whether ``fun`` returns a scalar or more complex values.
@@ -115,7 +115,7 @@ dend_node_apply = function(dend, fun) {
 # if ``fun`` only has one argument, it is basically the same as `stats::dendrapply`,
 # but it can have a second argument which is the index of the node in the dendrogram,
 # which makes it possible to get information of child nodes and parent nodes for
-# a specified node.
+# a specific node.
 #
 # As an example, we first assign random values to every node in the dendrogram:
 #

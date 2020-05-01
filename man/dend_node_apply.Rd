@@ -16,7 +16,7 @@ dend_node_apply(dend, fun)
 
 }
 \details{
-The function return a vector or a list as the same length as the number of nodes in the dendrogram.
+The function returns a vector or a list as the same length as the number of nodes in the dendrogram.
 
 The self-defined function can have one single argument which is the sub-dendrogram at a certain node.
 E.g. to get the number of members at every node:
@@ -36,7 +36,7 @@ it is possible to get information of its child nodes and parent nodes.
         ...
     \})  }
 
-Node for the top node, the value of \code{index} is \code{NULL}.
+Note for the top node, the value of \code{index} is \code{NULL}.
 }
 \value{
 A vector or a list, depends on whether \code{fun} returns a scalar or more complex values.

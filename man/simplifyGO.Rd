@@ -30,10 +30,10 @@ The arguments passed to \code{\link{ht_clusters}} are:
 \describe{
   \item{\code{draw_word_cloud}}{Whether to draw the word clouds.}
   \item{\code{min_term}}{Minimal number of GO terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one single cluster in the heatmap.}
-  \item{\code{order_by_size}}{Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size < 5) is always put to the bottom of the heatmap.}
+  \item{\code{order_by_size}}{Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size < \code{min_term}) is always put to the bottom of the heatmap.}
   \item{\code{exclude_words}}{Words that are excluded in the word cloud.}
   \item{\code{max_words}}{Maximal number of words visualized in the word cloud.}
-  \item{\code{word_cloud_grob_param}}{A list of parameters passed to \code{\link{word_cloud_grob}}.}
+  \item{\code{word_cloud_grob_param}}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
   \item{\code{fontsize_range}}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
 }
 }

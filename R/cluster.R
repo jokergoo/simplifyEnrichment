@@ -162,7 +162,7 @@ cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 # -... Other arguments passed to the corresponding community detection function, see Details.
 #
 # == details
-# The symmetric similarity matrix can be treated as an adjacency matrix and to be constructed as a graph/network.
+# The symmetric similarity matrix can be treated as an adjacency matrix and constructed as a graph/network with the similarity values as the weight of hte edges.
 # Thus, clustering the similarity matrix can be treated as detecting clusters/modules/communities from the graph.
 #
 # Four methods implemented in igraph package can be used here:

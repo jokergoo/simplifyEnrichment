@@ -1,6 +1,6 @@
 # Simplify functional enrichment Results
 
-[![Build Status](https://travis-ci.org/jokergoo/simplifyEnrichment.svg)](https://travis-ci.org/jokergoo/simplifyEnrichment)
+[![Build Status](https://travis-ci.org/jokergoo/simplifyGO.svg)](https://travis-ci.org/jokergoo/simplifyGO)
 
 ### Features
 
@@ -22,8 +22,7 @@ As an example, we first generate a list of random GO IDs.
 set.seed(88)
 go_id = random_GO(500)
 head(go_id)
-# [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353"
-# [6] "GO:0046101"
+# [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353" "GO:0046101"
 ```
 
 Then generate the GO similarity matrix, split GO terms into clusters and visualize it.

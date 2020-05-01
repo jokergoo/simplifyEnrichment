@@ -292,7 +292,7 @@ parameters control the generation and graphic parameters of the word clouds:
   size less than `min_term` are all merged into one single cluster in the
   heatmap.
 - `order_by_size`: Whether to reorder GO clusters by their sizes. The cluster
-  that is merged from small clusters (size < 5) is always put to the bottom right of
+  that is merged from small clusters (size < `min_term`) is always put to the bottom right of
   the heatmap.
 - `exclude_words`: Words that are excluded in the word cloud. _E.g._, in
   previous example, the word "regulation" and "process" can be excluded
@@ -320,7 +320,7 @@ parameters control the generation and graphic parameters of the word clouds:
   frequency. The font size interlopation is linear.
 
 Note there is no word cloud for the cluster that is merged from small clusters
-(size < 5).
+(size < `min_term`).
 
 The returned variable `df` is a data frame with GO IDs, GO term names and the
 cluster labels:
