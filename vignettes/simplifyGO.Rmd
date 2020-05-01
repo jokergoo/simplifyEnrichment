@@ -435,7 +435,6 @@ Right plot in Figure 8 illustrates the heatmap for the mean concordance
 over 500 random runs. We see binary cut shows similar clusterings as the community
 detection methods.
 
-
 ```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. Compare metrics for different clustering methods, on randomly generated datasets."}
 lt = readRDS("random_BP_results.rds")
 diff_score_df = lt$diff_score_df
