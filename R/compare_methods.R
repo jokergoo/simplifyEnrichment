@@ -136,11 +136,11 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 		cm = compare_methods_calc_concordance(clt)
 		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
 
-		cowplot::plot_grid(
+		suppressWarnings(cowplot::plot_grid(
 			cowplot::plot_grid(p0, p4, ncol = 1), 
 			cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
 			nrow = 1
-		)
+		))
 
 } else {
 		pl = list()

@@ -43,7 +43,7 @@ A data frame with three columns: GO IDs, GO term names and cluster labels.
 \examples{
 \dontrun{
 set.seed(123)
-go_id = simplifyGO:::random_GO(500)
+go_id = random_GO(500)
 mat = GO_similarity(go_id)
 df = simplifyGO(mat, word_cloud_grob_param = list(max_width = 80))
 head(df)
