@@ -347,21 +347,21 @@ binary_cut(mat)
 
 ## Benchmark
 
-We compare following clustering methods to binary cut: `kmeans`, `dynamicTreeCut`,
-`mclust`, `apcluster`, `fast_greedy`, `leading_eigen`, `louvain` and `walktrap`. The
-actual R functions used to perform corresponding analysis can be found in text
-in previous sections in this vignette.
+We compare the following clustering methods to binary cut: `kmeans`,
+`dynamicTreeCut`, `mclust`, `apcluster`, `fast_greedy`, `leading_eigen`,
+`louvain` and `walktrap`. The actual R functions used to perform corresponding
+analysis can be found in text in previous sections in this vignette.
 
 ### On random datasets
 
 500 random GO terms are generated from Biology Process ontology. One example
-of the clustering from different methods are in Figure 7. Basically we can see
+of the clustering from different methods are illustrated in Figure 7. Basically we can see
 `kmeans`, `dynamicTreeCut`, `mclust` and `apcluster` generate too many small
 clusters and cannot split tiny cluster. `fast_greedy`, `leading_eigen`,
-`louvain` and `walktrap` can identify small and large cluster, however, some
+`louvain` and `walktrap` can identify both small and large clusters, however, some
 large clusters are too ...
 
-```{r, echo = FALSE, fig.cap = "Figure 7. ..."}
+```{r, echo = FALSE, fig.cap = "Figure 7. Compare clustering from different methods. Tiny clusters (size < 5) are merged into a separated cluster marked by a green line."}
 knitr::include_graphics("GO_heatmap_random_BP_1.jpg")
 ```
 
@@ -372,9 +372,20 @@ The random GO terms were generated 100 times and we compared following metrics:
    Kolmogorov-Smirnov statistic between the two distributions.
 2. Number of clusters. For each there are two numbers: the number of all
    clusters and the number of clusters with size >= 5
-3. the mean of the blocks
+3. the mean similarity values of the blocks in the similarity heatmap, which is the mean similarity
+   for the terms in the same clusters.
 
-```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. ..."}
+In Figure 8, we can see binary cut has the highest difference score, which means, in the 
+clustering by binary cut, the terms in the same clusters shows the most distinct distribution
+to the rest of values in the similarity matrix.
+
+Next we calculate the similarity between clustering methods. For the partitions
+from two methods, first adjust the labels...
+
+Then the concordance of the two partitions is calculated as:
+
+
+```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. Compare metrics for different clustering methods, on randomly generated datasets."}
 lt = readRDS("random_BP_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -400,35 +411,29 @@ p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
 
 library(cowplot)
 m_mean = apply(arr, 1:2, mean)
-p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance")))
+p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance", column_names_rot = 45)))
 
 plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
 	p4, nrow = 1)
 ```
 
-In Figure 8, we can see
-
-Next we calculate the similarity between clustering methods. For the partitions
-from two methods, first adjust the labels...
-
-Then the concordance of the two partitions is calculated as:
-
-
-Figure 9 show the mean concordance ...
-
-
-The heatmaps for the 100 runs of random GO terms can be found at https://jokergoo.github.io/simplifyGO_figures/random_BP.html.
+The heatmaps for the 100 runs of clustering random GO terms can be found at https://jokergoo.github.io/simplifyGO_figures/random_BP.html.
 
 
 ### On real datasets
 
-We downloaded the datasets from [EBI Expression Atlas](https://www.ebi.ac.uk/gxa/download).
-We applied [**clusterProfiler**](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html) 
-to the significantly expressed genes only with the GO Biological Process ontology. And we
-only took the datasets with significant GO terms in [100, 1000].
+We downloaded the datasets from [EBI Expression
+Atlas](https://www.ebi.ac.uk/gxa/download). We applied
+[**clusterProfiler**](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
+to the significantly expressed genes (FDR < 0.05, number in [500, 3000]) only
+with the GO Biological Process ontology. And we only took the datasets with
+significant GO terms in [100, 1000].
 
 
-```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 9. ..."}
+
+The heatmaps can be found at https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html.
+
+```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 9. Compare metrics for different clustering methods, on real-world datasets."}
 lt = readRDS("EBI_Expression_Atlas_results.rds")
 diff_score_df = lt$diff_score_df
 cluster_number_df = lt$cluster_number_df
@@ -453,23 +458,41 @@ p3 = ggplot(block_mean_df, aes(x = method, y = value)) +
 	theme(axis.title.x = element_blank(), axis.text.x = element_text(angle = 45, hjust = 1))
 
 m_mean = apply(arr, 1:2, mean)
-p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance")))
+p4 = grid.grabExpr(draw(Heatmap(m_mean, name = "concordance", column_names_rot = 45)))
 
 plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
 	p4, nrow = 1)
 ```
 
-The heatmaps can be found at https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html.
 
-### Utility functions to compare clustering methods
+### Utility functions for comparing clustering methods
 
-Here we still use the variable `mat` which is the similarity matrix from the 500 random GO terms.
+In the **simplifyEnrichment** package, there are also functions that compare
+clustering results from different methods. Here we still use previously
+generated variable `mat` which is the similarity matrix from the 500 random GO
+terms. Simply running `compare_methods()` performs all the supported methods (encoded in `simplifyEnrichment:::ALL_CLUSTERING_METHODS`) excluding `mclust`, since `mclust` usually
+takes very long time to run. The function generates a figure with three panels:
 
-```{r, fig.width = 10, fig.height = 6}
+1. A heatmap of the similarity matrix with different classifications as row
+   annotations.
+2. A heatmap of the pair-wise concordance of the classifications of every two
+   clustering methods.
+3. Barplots of the difference scores for each method (calculated by
+   `difference_score`), the number of clusters (all clusters and the clusters
+   with size >= 5) and the mean similarity in the terms that are in the same
+   cluster.
+
+
+```{r, fig.width = 10, fig.height = 7}
 compare_methods(mat)
 ```
 
-```{r, fig.width = 10, fig.height = 5}
+If `plot_type` argument is set to `heatmap`. There are heatmaps for the
+similarity matrix under clusterings from different methods. The last panel is
+a table with the number of clusters under different clusterings.
+
+```{r, eval = FALSE}
+# The following code may take long time to run (several minutes)
 compare_methods(mat, plot_type = "heatmap")
 ```
 

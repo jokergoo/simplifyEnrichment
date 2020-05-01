@@ -85,39 +85,55 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 	}
 		
 	if(plot_type == "mixed") {
+		
+		if("binary_cut" %in% names(clt)) {
+			ref_class = clt[, "binary_cut"]
+		} else {
+			ref_class = clt[, which.min(sapply(clt, function(x) length(unique(x))))]
+		}
+		clt2 = lapply(clt, function(x) relabel_class(x, ref_class, return_map = FALSE))
+		clt2 = as.data.frame(clt2)
 
 		ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
 			name = "Similarity",
 			show_row_names = FALSE, show_column_names = FALSE, 
 			# cluster_rows = dend, cluster_columns = dend,
-			show_row_dend = FALSE, show_column_dend = FALSE,
-			right_annotation = rowAnnotation(df = clt, show_legend = FALSE))
+			show_row_dend = FALSE, show_column_dend = FALSE) +
+			Heatmap(as.matrix(clt2), show_heatmap_legend = FALSE, 
+				width = unit(5, "mm")*ncol(clt2), column_names_rot = 45)
 		p0 = grid.grabExpr(draw(ht1))
 
 		stats = compare_methods_calc_stats(mat, clt)
-		stats$method = rownames(stats)
+		stats$method = factor(rownames(stats), levels = rownames(stats))
 
 		if(!requireNamespace("ggplot2", quietly = TRUE)) {
 			stop_wrap("Package ggplot2 should be installed.")
 		}
-		p1 = ggplot2::ggplot(stats, ggplot2::aes(x = method, y = diff_s)) +
+		suppressWarnings(
+			p1 <- ggplot2::ggplot(stats, ggplot2::aes(x = stats$method, y = stats$diff_s)) +
 			ggplot2::geom_bar(stat = "identity") + ggplot2::ylab("Difference score") +
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+		)
 
 		df1 = stats[, c("method", "n_all")]; colnames(df1) = c("method", "value")
 		df2 = stats[, c("method", "n_large")]; colnames(df2) = c("method", "value")
 		df1$type = "All sizes"
 		df2$type = "size >= 5"
-		p2 = ggplot2::ggplot(rbind(df1, df2), ggplot2::aes(x = method, y = value, col = type, fill = type)) +
-			ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + ggplot2::ylab("Cluster number") +
+		df = rbind(df1, df2)
+		suppressWarnings(
+			p2 <- ggplot2::ggplot(df, ggplot2::aes(x = df$method, y = df$value, col = df$type, fill = df$type)) +
+			ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + ggplot2::ylab("Cluster number") + ggplot2::labs(col = "Type", fill = "Type") +
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+		)
 
-		p3 = ggplot2::ggplot(stats, ggplot2::aes(x = method, y = block_mean)) +
+		suppressWarnings(
+			p3 <- ggplot2::ggplot(stats, ggplot2::aes(x = stats$method, y = stats$block_mean)) +
 			ggplot2::geom_bar(stat = "identity") + ggplot2::ylab("Block mean") +
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+		)
 
 		cm = compare_methods_calc_concordance(clt)
-		p4 = grid.grabExpr(draw(Heatmap(cm, name = "concordance")))
+		p4 = grid.grabExpr(draw(Heatmap(cm, name = "concordance", column_names_rot = 45)))
 
 		cowplot::plot_grid(
 			cowplot::plot_grid(p0, p4, ncol = 1), 
@@ -293,6 +309,7 @@ compare_methods_calc_stats = function(mat, clt) {
 # \dontrun{
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # compare_methods(mat)
+# compare_methods(mat, plot_type = "heatmap")
 # }
 compare_methods = function(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
 	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
