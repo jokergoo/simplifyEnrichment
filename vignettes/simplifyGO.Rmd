@@ -427,7 +427,7 @@ two sets of labels to maximize $\sum_i I(s_{1i}, m(s_{2i}))$. Denote the adjuste
 labels for the second method as $s'_{2i} = map(s_{2i})$, the concordance 
 between the two clusterings are calculated as:
 
-$$ \frac{1}{n}\sum_i^n I(s_{1i}, s'_{2i}}) $$
+$$ \frac{1}{n}\sum_i^n I(s_{1i}, s'_{2i}) $$
 
 where $I(x, y)$ is an indicator function to be 1 if $x = y$ and 0 if $x \ne y$.
 
@@ -568,7 +568,7 @@ compare different plots, users can also use the following code without
 specifying the random seed.
 
 ```{r, eval = FALSE}
-clt = compare_methods_make_clusters(mat)
+clt = compare_methods_make_clusters(mat) # just a list of cluster labels
 compare_methods_make_plot(mat, clt)
 compare_methods_make_plot(mat, clt, plot_type = "heatmap")
 ```

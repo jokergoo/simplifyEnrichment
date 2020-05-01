@@ -175,7 +175,7 @@ code > span.fu { color: #900; font-weight: bold; }
 code > span.er { color: #a61717; background-color: #e3d2d2; } 
 
 
-caption {
+.caption {
 	font-style: italic;
 	color: grey;
 }
