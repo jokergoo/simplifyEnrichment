@@ -516,13 +516,15 @@ plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights 
 ```
 
 
-### Utility functions for comparing clustering methods
+## Utility functions for comparing clustering methods
 
 In the **simplifyEnrichment** package, there are also functions that compare
 clustering results from different methods. Here we still use previously
 generated variable `mat` which is the similarity matrix from the 500 random GO
-terms. Simply running `compare_methods()` performs all the supported methods (encoded in `simplifyEnrichment:::ALL_CLUSTERING_METHODS`) excluding `mclust`, since `mclust` usually
-takes very long time to run. The function generates a figure with three panels:
+terms. Simply running `compare_methods()` performs all the supported methods
+(encoded in `all_clustering_methods()`) excluding `mclust`, since `mclust`
+usually takes very long time to run. The function generates a figure with
+three panels:
 
 1. A heatmap of the similarity matrix with different clusterings as row
    annotations.

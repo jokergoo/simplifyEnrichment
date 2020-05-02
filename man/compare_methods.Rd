@@ -7,13 +7,13 @@ Compare clustering methods
 Compare clustering methods
 }
 \usage{
-compare_methods(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+compare_methods(mat, method = setdiff(all_clustering_methods(), "mclust"),
     plot_type = c("mixed", "heatmap"), verbose = TRUE)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{method}{Which methods to compare. All available methods are in \code{simplifyEnrichment:::ALL_CLUSTERING_METHODS}. A value of \code{all} takes all available methods. By default \code{mclust} is excluded because its long runtime.}
+  \item{method}{Which methods to compare. All available methods are in \code{\link{all_clustering_methods}}. A value of \code{all} takes all available methods. By default \code{mclust} is excluded because its long runtime.}
   \item{plot_type}{See explanation in \code{\link{compare_methods_make_plot}}.}
   \item{verbose}{Whether to print messages.}
 

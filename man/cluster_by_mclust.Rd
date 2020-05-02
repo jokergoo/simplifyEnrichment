@@ -7,16 +7,18 @@ Cluster similarity matrix by mclust
 Cluster similarity matrix by mclust
 }
 \usage{
-cluster_by_mclust(mat, ...)
+cluster_by_mclust(mat, G = 1:max(2, min(round(nrow(mat)/5), 100)), ...)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
+  \item{G}{Passed to the \code{G} argument in \code{\link[mclust]{Mclust}}.}
   \item{...}{Other arguments passed to \code{\link[mclust]{Mclust}}.}
 
 }
 \details{
 The value of \code{G} in \code{\link[mclust]{Mclust}} is set to \code{1:min(round(nrow(mat)/5), 100)}.
+
 }
 \value{
 A vector of cluster labels (in numeric).

@@ -7,17 +7,17 @@ Cluster similarity matrix by k-means clustering
 Cluster similarity matrix by k-means clustering
 }
 \usage{
-cluster_by_kmeans(mat, ...)
+cluster_by_kmeans(mat, max_k = max(2, min(round(nrow(mat)/5), 100)), ...)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
+  \item{max_k}{maximal k for k-means clustering.}
   \item{...}{Other arguments passed to \code{\link[stats]{kmeans}}.}
 
 }
 \details{
-The number of clusters are tried from 2 to \code{min(round(nrow(mat)/5), 100)}. The best number
-of k for k-means clustering is identified according to the "elbow" or "knee" method on
+The best number of k for k-means clustering is identified according to the "elbow" or "knee" method on
 the distribution of within-cluster sum of squares at each k.
 }
 \value{

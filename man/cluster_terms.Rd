@@ -7,19 +7,20 @@ Cluster functional terms
 Cluster functional terms
 }
 \usage{
-cluster_terms(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...)
+cluster_terms(mat, method = "binary_cut", control = list(), catch_error = FALSE,
+    verbose = TRUE)
 }
 \arguments{
 
   \item{mat}{A similarity matrix.}
   \item{method}{Method for clustering the matrix.}
+  \item{control}{A list of parameters passed to the corresponding clustering function.}
   \item{catch_error}{Internally used.}
   \item{verbose}{Whether to print messages.}
-  \item{...}{Other arguments passed to the clustering function.}
 
 }
 \details{
-The following methods are supported:
+The following methods are the default:
 
 \describe{
   \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
@@ -33,7 +34,9 @@ The following methods are supported:
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
 }
 
-Note the parametes for each clustering method are passes by \code{...} from \code{\link{cluster_terms}}.
+Also the user-defined methods in \code{\link{all_clustering_methods}} can be used here.
+
+New clustering methods can be registered by \code{\link{register_clustering_methods}}.
 }
 \value{
 A numeric vector of cluster labels (in numeric).

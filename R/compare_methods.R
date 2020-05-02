@@ -1,25 +1,15 @@
 
-ALL_CLUSTERING_METHODS = c("kmeans", 
-			               "dynamicTreeCut", 
-			               "mclust", 
-			               "apcluster", 
-			               "fast_greedy", 
-			               "leading_eigen", 
-			               "louvain", 
-			               "walktrap",
-			               "binary_cut")
-
 # == title
 # Apply various clustering methods
 #
 # == param
 # -mat The similarity matrix.
-# -method Which methods to compare. All available methods are in ``simplifyEnrichment:::ALL_CLUSTERING_METHODS``.
+# -method Which methods to compare. All available methods are in `all_clustering_methods`.
 #         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
 # -verbose Whether to print messages.
 #
 # == details
-# The function compares following clustering methods:
+# The function compares following default clustering methods:
 #
 # -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
@@ -31,15 +21,17 @@ ALL_CLUSTERING_METHODS = c("kmeans",
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 #
+# Also the user-defined methods in `all_clustering_methods` are also compared.
+#
 # == value
 # A list of cluster label vectors for different clustering methods.
 #
-compare_methods_make_clusters = function(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	verbose = TRUE) {
 
 	clt = list()
 	if("all" %in% method) {
-		method = ALL_CLUSTERING_METHODS
+		method = all_clustering_methods()
 	}
 
 	clt = lapply(method, function(me) cluster_terms(mat, me, verbose = verbose))
@@ -280,7 +272,7 @@ compare_methods_calc_stats = function(mat, clt) {
 #
 # == param
 # -mat The similarity matrix.
-# -method Which methods to compare. All available methods are in ``simplifyEnrichment:::ALL_CLUSTERING_METHODS``.
+# -method Which methods to compare. All available methods are in `all_clustering_methods`.
 #         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
 # -plot_type See explanation in `compare_methods_make_plot`.
 # -verbose Whether to print messages.
@@ -312,7 +304,7 @@ compare_methods_calc_stats = function(mat, clt) {
 # compare_methods(mat)
 # compare_methods(mat, plot_type = "heatmap")
 # }
-compare_methods = function(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+compare_methods = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
 
 	clt = compare_methods_make_clusters(mat, method, verbose = verbose)

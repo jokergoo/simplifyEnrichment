@@ -44,8 +44,13 @@
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
 	plot = TRUE, term = NULL, verbose = TRUE, ...) {
 	
-	cl = do.call(cluster_terms, c(list(mat = mat, method = method, verbose = verbose), control))
+	cl = do.call(cluster_terms, list(mat = mat, method = method, verbose = verbose, control = control))
 	go_id = rownames(mat)
+
+	if(!all(grepl("^GO:\\d+$", go_id))) {
+		stop_wrap("Please ensure GO IDs are the row names of the similarity matrix and should be matched to '^GO:\\d+$'.")
+	}
+	
 	if(is.null(term)) {
 		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	}

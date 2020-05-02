@@ -7,18 +7,18 @@ Apply various clustering methods
 Apply various clustering methods
 }
 \usage{
-compare_methods_make_clusters(mat, method = setdiff(ALL_CLUSTERING_METHODS, "mclust"),
+compare_methods_make_clusters(mat, method = setdiff(all_clustering_methods(), "mclust"),
     verbose = TRUE)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{method}{Which methods to compare. All available methods are in \code{simplifyEnrichment:::ALL_CLUSTERING_METHODS}. A value of \code{all} takes all available methods. By default \code{mclust} is excluded because its long runtime.}
+  \item{method}{Which methods to compare. All available methods are in \code{\link{all_clustering_methods}}. A value of \code{all} takes all available methods. By default \code{mclust} is excluded because its long runtime.}
   \item{verbose}{Whether to print messages.}
 
 }
 \details{
-The function compares following clustering methods:
+The function compares following default clustering methods:
 
 \describe{
   \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
@@ -31,6 +31,8 @@ The function compares following clustering methods:
   \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
 }
+
+Also the user-defined methods in \code{\link{all_clustering_methods}} are also compared.
 }
 \value{
 A list of cluster label vectors for different clustering methods.

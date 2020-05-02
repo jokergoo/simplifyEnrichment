@@ -5,12 +5,12 @@
 # == param
 # -mat A similarity matrix.
 # -method Method for clustering the matrix.
+# -control A list of parameters passed to the corresponding clustering function.
 # -catch_error Internally used.
 # -verbose Whether to print messages.
-# -... Other arguments passed to the clustering function.
 #
 # == details
-# The following methods are supported:
+# The following methods are the default:
 #
 # -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
@@ -22,14 +22,17 @@
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 #
-# Note the parametes for each clustering method are passes by ``...`` from `cluster_terms`.
+# Also the user-defined methods in `all_clustering_methods` can be used here.
+#
+# New clustering methods can be registered by `register_clustering_methods`.
 #
 # == value
 # A numeric vector of cluster labels (in numeric).
 #
 # If ``catch_error`` is set to ``TRUE`` and if the clustering produces an error,
 # the function returns a ``try-error`` object.
-cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
+cluster_terms = function(mat, method = "binary_cut", control = list(), catch_error = FALSE, 
+	verbose = TRUE) {
 	
 	if(nrow(mat) != ncol(mat)) {
 		stop_wrap("The matrix should be square.")
@@ -37,28 +40,10 @@ cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbos
 
 	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
 
-	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
-		oe = try(cl <- cluster_by_kmeans(mat, ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_by_dynamicTreeCut", "dynamicTreeCut"))) {
-		oe  = try(cl <- cluster_by_dynamicTreeCut(mat, ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_by_mclust", "mclust"))) {
-		oe = try(cl <- cluster_by_mclust(mat, ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_by_apcluster", "apcluster"))) {
-		oe = try(cl <- cluster_by_apcluster(mat, ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_fast_greedy", "fast_greedy"))) {
-		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_fast_greedy", ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_leading_eigen", "leading_eigen"))) {
-		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_leading_eigen", ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_louvain", "louvain"))) {
-		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_louvain", ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_walktrap", "walktrap"))) {
-		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_walktrap", ...), silent = TRUE)
-	} else if(any(method %in% c("cluster_by_binarycut", "binary_cut"))) {
-		oe = try(cl <- binary_cut(mat, ...), silent = TRUE)
-	} else {
-		stop_wrap(qq("method '@{method}' is not supported."))
-	}
-
+	fun = get_clustering_method(method, control = control)
+	
+	oe = try(cl <- fun(mat), silent = TRUE)
+	
 	if(inherits(oe, "try-error")) {
 		if(catch_error) {
 			return(oe)
@@ -73,33 +58,81 @@ cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbos
 	return(cl)
 }
 
+
+# cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
+	
+# 	if(nrow(mat) != ncol(mat)) {
+# 		stop_wrap("The matrix should be square.")
+# 	}
+
+# 	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
+
+# 	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
+# 		oe = try(cl <- cluster_by_kmeans(mat, ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_by_dynamicTreeCut", "dynamicTreeCut"))) {
+# 		oe  = try(cl <- cluster_by_dynamicTreeCut(mat, ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_by_mclust", "mclust"))) {
+# 		oe = try(cl <- cluster_by_mclust(mat, ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_by_apcluster", "apcluster"))) {
+# 		oe = try(cl <- cluster_by_apcluster(mat, ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_fast_greedy", "fast_greedy"))) {
+# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_fast_greedy", ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_leading_eigen", "leading_eigen"))) {
+# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_leading_eigen", ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_louvain", "louvain"))) {
+# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_louvain", ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_walktrap", "walktrap"))) {
+# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_walktrap", ...), silent = TRUE)
+# 	} else if(any(method %in% c("cluster_by_binarycut", "binary_cut"))) {
+# 		oe = try(cl <- binary_cut(mat, ...), silent = TRUE)
+# 	} else {
+# 		stop_wrap(qq("method '@{method}' is not supported."))
+# 	}
+
+# 	if(inherits(oe, "try-error")) {
+# 		if(catch_error) {
+# 			return(oe)
+# 		} else {
+# 			cat("\n")
+# 			stop(oe)
+# 		}
+# 	}
+
+# 	if(verbose) qqcat(" @{length(unique(cl))} clusters.\n")
+
+# 	return(cl)
+# }
+
 # == title
 # Cluster similarity matrix by k-means clustering
 #
 # == param
 # -mat The similarity matrix.
+# -max_k maximal k for k-means clustering.
 # -... Other arguments passed to `stats::kmeans`.
 #
 # == details
-# The number of clusters are tried from 2 to ``min(round(nrow(mat)/5), 100)``. The best number
-# of k for k-means clustering is identified according to the "elbow" or "knee" method on
+# The best number of k for k-means clustering is identified according to the "elbow" or "knee" method on
 # the distribution of within-cluster sum of squares at each k.
 #
 # == value
 # A vector of cluster labels (in numeric).
 #
-cluster_by_kmeans = function(mat, ...) {
+cluster_by_kmeans = function(mat, max_k = max(2, min(round(nrow(mat)/5), 100)), ...) {
 	
 	cl = list()
 	wss = NULL
-	max_km = min(round(nrow(mat)/5), 100)
 
-	for (i in 2:max_km) {
+	if(max_k <= 2) {
+		stop_wrap("`max_k` should be larger than 2.")
+	}
+
+	for (i in 2:max_k) {
 		suppressWarnings(km <- kmeans(mat, centers = i, iter.max = 50))
 		cl[[i - 1]] = km$cluster
 		wss[i - 1] = sum(km$withinss)
 	}
-	best_km = min(elbow_finder(2:max_km, wss)[1], knee_finder(2:max_km, wss)[1])
+	best_km = min(elbow_finder(2:max_k, wss)[1], knee_finder(2:max_k, wss)[1])
 
 	cl[[best_km - 1]]
 }
@@ -154,7 +187,7 @@ cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 		stop_wrap("Package dynamicTreeCut should be installed.")
 	}
 	cl = dynamicTreeCut::cutreeDynamic(hclust(dist(mat)), distM = 1 - mat, minClusterSize = minClusterSize, verbose = 0, ...)
-	as.character(unname(cl))
+	unname(cl)
 }
 
 # == title
@@ -205,20 +238,18 @@ cluster_by_igraph = function(mat,
 #
 # == param
 # -mat The similarity matrix.
+# -G Passed to the ``G`` argument in `mclust::Mclust`.
 # -... Other arguments passed to `mclust::Mclust`.
-#
-# == details
-# The value of ``G`` in `mclust::Mclust` is set to ``1:min(round(nrow(mat)/5), 100)``.
 #
 # == value
 # A vector of cluster labels (in numeric).
 #
-cluster_by_mclust = function(mat, ...) {
+cluster_by_mclust = function(mat, G = 1:max(2, min(round(nrow(mat)/5), 100)), ...) {
 	if(!requireNamespace("mclust", quietly = TRUE)) {
 		stop_wrap("Package mclust should be installed.")
 	}
 	mclustBIC = mclust::mclustBIC
-	fit = mclust::Mclust(as.matrix(mat), G = 1:min(round(nrow(mat)/5), 100), verbose = FALSE, ...)
+	fit = mclust::Mclust(as.matrix(mat), G = G, verbose = FALSE, ...)
 	unname(fit$classification)
 }
 
@@ -227,16 +258,17 @@ cluster_by_mclust = function(mat, ...) {
 #
 # == param
 # -mat The similarity matrix.
+# -s Passed to the ``s`` argument in `apcluster::apcluster`.
 # -... Other arguments passed to `apcluster::apcluster`.
 #
 # == value
 # A vector of cluster labels (in numeric).
 #
-cluster_by_apcluster = function(mat, ...) {
+cluster_by_apcluster = function(mat, s = apcluster::negDistMat(r = 2), ...) {
 	if(!requireNamespace("apcluster", quietly = TRUE)) {
 		stop_wrap("Package apcluster should be installed.")
 	}
-	x = apcluster::apcluster(apcluster::negDistMat(r = 2), mat, ...)
+	x = apcluster::apcluster(s, mat, ...)
 	cl = numeric(nrow(mat))
 	for(i in seq_along(x@clusters)) {
 		cl[x@clusters[[i]]] = i
