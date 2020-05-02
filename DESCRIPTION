@@ -6,7 +6,7 @@ Date: 2020-05-01
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.5.0)
-Imports: GOSemSim, ComplexHeatmap (>= 2.4.1), circlize, GetoptLong, digest, 
+Imports: GOSemSim, ComplexHeatmap (>= 2.4.2), circlize, GetoptLong, digest, 
          tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods, clue,
          grDevices, graphics, stats, utils
 Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph, gridExtra,
