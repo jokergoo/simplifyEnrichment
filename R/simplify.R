@@ -6,7 +6,7 @@
 # == param
 # -mat A GO similarity matrix.
 # -method Method for clustering the matrix. See `cluster_terms`.
-# -control A list of parameters passed to `cluster_terms`.
+# -control A list of parameters for controlling the clustering method, passed to `cluster_terms`.
 # -plot Whether to make the heatmap.
 # -term The full name or the description of the corresponding GO IDs. 
 # -verbose Whether to print messages.
@@ -16,7 +16,7 @@
 # This is basically a wrapper function that it first runs `cluster_terms` to cluster
 # GO terms and then runs `ht_clusters` to visualize the clustering.
 #
-# The arguments passed to `ht_clusters` are:
+# The arguments in `simplifyGO` passed to `ht_clusters` are:
 #
 # -``draw_word_cloud`` Whether to draw the word clouds.
 # -``min_term`` Minimal number of GO terms in a cluster. All the clusters
@@ -50,7 +50,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	if(!all(grepl("^GO:\\d+$", go_id))) {
 		stop_wrap("Please ensure GO IDs are the row names of the similarity matrix and should be matched to '^GO:\\d+$'.")
 	}
-	
+
 	if(is.null(term)) {
 		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	}

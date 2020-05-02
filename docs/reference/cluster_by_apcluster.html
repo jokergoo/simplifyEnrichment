@@ -129,7 +129,7 @@
     <p>Cluster similarity matrix by apcluster</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cluster_by_apcluster</span>(<span class='no'>mat</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>cluster_by_apcluster</span>(<span class='no'>mat</span>, <span class='kw'>s</span> <span class='kw'>=</span> <span class='kw pkg'>apcluster</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/apcluster/man/similarities.html'>negDistMat</a></span>(<span class='kw'>r</span> <span class='kw'>=</span> <span class='fl'>2</span>), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -137,6 +137,10 @@
     <tr>
       <th>mat</th>
       <td><p>The similarity matrix.</p></td>
+    </tr>
+    <tr>
+      <th>s</th>
+      <td><p>Passed to the <code>s</code> argument in <code><a href='https://rdrr.io/pkg/apcluster/man/apcluster-methods.html'>apcluster</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>

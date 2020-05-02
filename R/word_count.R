@@ -1,6 +1,6 @@
 
 # == title
-# Calculate word cloud
+# Calculate word frequency
 #
 # == param
 # -id A vector of term IDs.
@@ -202,7 +202,7 @@ word_cloud_grob = function(text, fontsize,
 }
 
 # == title
-# Width for word_cloud Grob
+# Width for word_cloud grob
 #
 # == param
 # -x The ``word_cloud`` grob returned by `word_cloud_grob`.
@@ -214,7 +214,7 @@ widthDetails.word_cloud = function(x) {
 }
 
 # == title
-# Height for word_cloud Grob
+# Height for word_cloud grob
 #
 # == param
 # -x The ``word_cloud`` grob returned by `word_cloud_grob`.

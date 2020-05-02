@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Apply various clustering methods — compare_methods_make_clusters • simplifyEnrichment</title>
+<title>Reset to default clustering methods — reset_clustering_methods • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Apply various clustering methods — compare_methods_make_clusters" />
-<meta property="og:description" content="Apply various clustering methods" />
+<meta property="og:title" content="Reset to default clustering methods — reset_clustering_methods" />
+<meta property="og:description" content="Reset to default clustering methods" />
 
 
 
@@ -120,43 +120,26 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Apply various clustering methods</h1>
+    <h1>Reset to default clustering methods</h1>
     
-    <div class="hidden name"><code>compare_methods_make_clusters.Rd</code></div>
+    <div class="hidden name"><code>reset_clustering_methods.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Apply various clustering methods</p>
+    <p>Reset to default clustering methods</p>
     </div>
 
-    <pre class="usage"><span class='fu'>compare_methods_make_clusters</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>setdiff</a></span>(<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>(), <span class='st'>"mclust"</span>),
-    <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>reset_clustering_methods</span>()</pre>
 
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>mat</th>
-      <td><p>The similarity matrix.</p></td>
-    </tr>
-    <tr>
-      <th>method</th>
-      <td><p>Which methods to compare. All available methods are in <code><a href='all_clustering_methods.html'>all_clustering_methods</a></code>. A value of <code>all</code> takes all available methods. By default <code>mclust</code> is excluded because its long runtime.</p></td>
-    </tr>
-    <tr>
-      <th>verbose</th>
-      <td><p>Whether to print messages.</p></td>
-    </tr>
-    </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The function compares following default clustering methods:</p>
+    <p>The default methods are:</p>
 <dl'>
   <dt><code>binary_cut</code></dt><dd><p>see <code><a href='binary_cut.html'>binary_cut</a></code>.</p></dd>
   <dt><code>kmeans</code></dt><dd><p>see <code><a href='cluster_by_kmeans.html'>cluster_by_kmeans</a></code>.</p></dd>
   <dt><code>dynamicTreeCut</code></dt><dd><p>see <code><a href='cluster_by_dynamicTreeCut.html'>cluster_by_dynamicTreeCut</a></code>.</p></dd>
-  <dt><code>mclust</code></dt><dd><p>see <code><a href='cluster_by_mclust.html'>cluster_by_mclust</a></code>. By default it is not included.</p></dd>
+  <dt><code>mclust</code></dt><dd><p>see <code><a href='cluster_by_mclust.html'>cluster_by_mclust</a></code>.</p></dd>
   <dt><code>apcluster</code></dt><dd><p>see <code><a href='cluster_by_apcluster.html'>cluster_by_apcluster</a></code>.</p></dd>
   <dt><code>fast_greedy</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
   <dt><code>leading_eigen</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
@@ -165,15 +148,19 @@
 
 </dl>
 
-<p>Also the user-defined methods in <code><a href='all_clustering_methods.html'>all_clustering_methods</a></code> are also compared.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list of cluster label vectors for different clustering methods.</p>
+    <p>No value is returned.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>()</div><div class='output co'>#&gt; [1] "kmeans"         "dynamicTreeCut" "mclust"         "apcluster"     
+#&gt; [5] "fast_greedy"    "leading_eigen"  "louvain"        "walktrap"      
+#&gt; [9] "binary_cut"    </div><div class='input'><span class='fu'><a href='remove_clustering_methods.html'>remove_clustering_methods</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"kmeans"</span>, <span class='st'>"mclust"</span>))
+<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>()</div><div class='output co'>#&gt; [1] "dynamicTreeCut" "apcluster"      "fast_greedy"    "leading_eigen" 
+#&gt; [5] "louvain"        "walktrap"       "binary_cut"    </div><div class='input'><span class='fu'>reset_clustering_methods</span>()
+<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>()</div><div class='output co'>#&gt; [1] "kmeans"         "dynamicTreeCut" "mclust"         "apcluster"     
+#&gt; [5] "fast_greedy"    "leading_eigen"  "louvain"        "walktrap"      
+#&gt; [9] "binary_cut"    </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

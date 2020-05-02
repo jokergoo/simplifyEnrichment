@@ -62,7 +62,7 @@ large blocks correspond to the sets of GO terms in large branches or more
 consentrated to the root of the graph, while small blocks contain GO terms in
 smaller branches or more to the leaves of the graph.
 
-Classifying GO terms into groups basically is a task of clustering the GO
+Classifying GO terms into groups can be thought as a task of clustering the GO
 simialrity matrix. To solve this problem, there are two types of approaches:
 1. the clustering methods that directly apply to a matrix, _e.g._, _k_-means
 clustering, and 2. the methods that treat the similarity matrix as an
@@ -75,21 +75,22 @@ problems for clustering GO terms. First, the sizes of the GO clusters vary a
 lot, which means, there are very large clusters, and at the same time, there
 are also many tiny clusters. Large clusters tend to have relatively lower mean
 similarities across terms while small clusters have relatively higher mean
-similarity values. Methods such as _k_-means cannot preserve the large cluster
-but further split it into smaller clusters, which might produce redundancy
-information among these smaller clusters, and on the other hand, they are not
-able to separate tiny clusters. 2. Large GO clusters contain many terms and
-locate more to the root of the GO tree, which makes it possible that some
-terms in cluster A also share similarities to terms in cluster B. In the other
-words, large clusters are less mutually exclusive than small cluster. Some
-graph community detection methods merge cluster A and B into a larger cluster.
-These two problems can be summarized as 1. large clusters are split into small
-clusters and 2. large clusters are merged into larger cluster. Thus, we need
-to find a effective method to balance these two scenarios. This is a balance
-between the generality and specificity of GO clusters.
+similarity values. Methods such as _k_-means clustering sometimes cannot
+preserve the large cluster but further split it into smaller clusters, which
+might produce redundant information among these smaller clusters. On the other
+hand, they are not able to separate tiny clusters (see examples in Figure 7).
+2. Large GO clusters contain amounts of terms and locate more to the root of
+the GO graph, which makes it possible that some terms in cluster A also share
+similarities to terms in cluster B. In the other words, large clusters are
+less mutually exclusive than small clusters. Some graph community detection
+methods will merge cluster A and B into a larger cluster. These two problems
+can be summarized as 1. large clusters are split into small clusters and 2.
+large clusters are merged into larger cluster. Thus, we need to find an
+effective method to balance these two scenarios, which is a balance between
+the generality and specificity of GO clusters.
 
 Here we proposed a new clustering method called "**binary cut**" to spit GO
-terms into groups. The idea behind is very simple and staightforward which is
+terms into groups. The idea behind is very simple and staightforward that is
 to identify "blocks" in the similarity heatmap. As shown in Figure 2, the
 both two heatmaps are similarity matrices for two subsets of GO terms.
 
@@ -138,13 +139,13 @@ popViewport()
 ```
 
 Let's denote the two matrices as $M_a$ (the left matrix) and $M_b$ (the right
-matrix). Intuitively, terms in $M_a$ all have high pairwise similarity and
+matrix). Intuitively, terms in $M_a$ all have high pairwise similarities and
 thus should be treated as one single cluster and should not be split any more,
 while terms in $M_b$ still show two-block pattern and should be further split
 into two more groups. To measure whether a certain subset of GO terms need to
 be split, we calculate a score denoted as $s$ as follows:
 
-For a similarity atrix which corresponds to a subset of GO terms, _e.g._,
+For a similarity matrix which corresponds to a subset of GO terms, _e.g._,
 $M_a$ or $M_b$, _k_-means clustering with two groups is applied on rows and
 columns and partitions the matrix into four parts, as illustrated in Figure 2.
 Denote the score for the four partitions as $s_{11}$, $s_{12}$, $s_{21}$ and
@@ -181,16 +182,16 @@ cluster.
 Nodes with large number of terms tend to have relatively smaller $s$, thus, it
 is possible at a certain node, $s$ does not exceed the cutoff (very close to
 it), while its child nodes have $s$ larger than the cutoff. In this case, we
-don't want to close the node so early and we still split this node into
-two subgroups so that its child nodes can be split further more. To overcome
-this, the rule in phase 2 are modified as: **If a node does not exceed the
-cutoff, but if at least one of its child nodes exceed the cutoff, the node is
-still split.**
+don't want to close the node so early and we still split this node into two
+subgroups so that its child nodes can be split further more. To overcome this,
+the rule in phase 2 are modified as: **If a node in the dendrogram does not
+exceed the cutoff, but if at least one of its child nodes exceed the cutoff,
+the node is still split.**
 
 Examples of the step-wise clustering are illustrated in Figure 3 (the first 4
 iterations):
 
-```{r, fig.width = 20, fig.height = 4, echo = FALSE, fig.cap = "Figure 3. Process of binary clustering the similarity matrix. In the plot only the first 4 iterations are shown."}
+```{r, fig.width = 20, fig.height = 4, echo = FALSE, fig.cap = "Figure 3. Process of binary clustering the similarity matrix. Only the first 4 iterations are shown."}
 dend = simplifyEnrichment:::cluster_mat(mat)
 p1 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 1, show_heatmap_legend = FALSE))
 p2 = grid.grabExpr(simplifyEnrichment:::plot_binary_cut(mat, dend = dend, depth = 2, show_heatmap_legend = FALSE))
@@ -201,7 +202,7 @@ plot_grid(p1, p2, p3, p4, nrow = 1)
 ```
 
 Figure 4 illustrates the complete dendrogram and the partitions in the
-heatmap. In the dendrogram, for each node, the score corresponds to the color
+heatmap. In the dendrogram, for each node, the score $s$ corresponds to the color
 of the edge connected to the top of the node. The edges in grey connect the
 leaves of the dendrogram. The nodes marked with cross lines are the nodes that
 need to be split under the default cutoff (0.85).
@@ -214,7 +215,7 @@ In Figure 4 we can see there are a lot of tiny clusters that they can actually
 be put into a separated group. Figure 5 is an improved visualization where
 clusters with size less than 5 are put into a separated group marked by a
 green line and moved to the bottom right of the heatmap. This makes the plot
-looks more clean.
+looks much more clean.
 
 ```{r, fig.width = 5, fig.height = 4, echo = FALSE, fig.cap = "Figure 5. An improved visualization on the clustering of GO terms."}
 cl = simplifyEnrichment:::cut_dend(dend)
@@ -269,13 +270,14 @@ can also use other clustering methods. The supported methods are:
 - `binary_cut`: This is the default clustering method and it uses
   `binary_cut()`.
 - `kmeans`: It uses _k_-means clustering. The number of clusters are tried with
-  `2:min(round(nrow(mat)/5), 100)`. The best number of _k_ for _k_-means
+  `2:max(2, min(round(nrow(mat)/5), 100))`. The best number of _k_ for _k_-means
   clustering is identified according to the "elbow" or "knee" method on the
   distribution of within-cluster sum of squares at each _k_.
-- `dynamicTreeCut` It uses `dynamicTreeCut::cutreeDynamic()`.
+- `dynamicTreeCut` It uses `dynamicTreeCut::cutreeDynamic()`. The `minClusterSize` argument
+  is set to 5.
 - `mclust`: It uses `mclust::Mclust()`. The value of `G` in `mclust::Mclust()`
-  is set to `1:min(round(nrow(mat)/5), 100)`. Note this method is very time-consuming.
-- `apcluster`: It uses `apcluster::apcluster()`.
+  is set to `1:max(2, min(round(nrow(mat)/5), 100))`. Note this method is very time-consuming.
+- `apcluster`: It uses `apcluster::apcluster()`. The `s` argument is set to `apcluster::negDistMat(r = 2)`.
 - `fast_greedy`: It treats the similarity matrix as an adjacency matrix and
   converts it to a graph where the similarity values are the weight of
   the edges in the graph. Then the clustering on the similarity matrix is
@@ -343,7 +345,7 @@ The size of GO clusters can be retrieved by:
 sort(table(df$cluster))
 ```
 
-Or split the data by the cluster labels:
+Or split the data frame by the cluster labels:
 
 ```{r, eval = FALSE}
 split(df, df$cluster)
@@ -369,12 +371,11 @@ analysis can be found in text in previous sections in this vignette.
 ### On random datasets
 
 500 random GO terms are generated from Biology Process ontology. One example
-of the clustering from different methods is illustrated in Figure 7. Basically
-we can see `kmeans`, `dynamicTreeCut`, `mclust` and `apcluster` generate too
-many small clusters and put tiny cluster into a same group. `fast_greedy`,
-`leading_eigen`, `louvain` and `walktrap` can identify both small and large
-clusters, however, some large clusters should still need to be split further
-more.
+of the clusterings from different methods is illustrated in Figure 7.
+Basically we can see `kmeans`, `dynamicTreeCut`, `mclust` and `apcluster`
+generate too many small clusters. `fast_greedy`, `leading_eigen`, `louvain`
+and `walktrap` can identify both small and large clusters, however, some large
+clusters should still need to be split further more.
 
 ```{r, echo = FALSE, fig.cap = "Figure 7. Compare clustering from different methods. Tiny clusters (size < 5) are merged into a separated cluster marked by a green line."}
 knitr::include_graphics("GO_heatmap_random_BP.jpg")
@@ -383,57 +384,63 @@ knitr::include_graphics("GO_heatmap_random_BP.jpg")
 We use the following metrics to benchmark the clustering methods:
 
 1. **Different score**: This is the difference between the similarity values
-   for the terms that belong to the same clusters and in different clusters.
-   For a similarity matrix $M$, for term $i$ and $j$ where $i \ne j$, the
+   for the terms that belong to the same clusters and different clusters.
+   For a similarity matrix $M$, for term $i$ and term $j$ where $i \ne j$, the
    similarity value $x_{i,j}$ is saved to the vector $\mathbf{x_1}$ only when
    term $i$ and $j$ are in a same cluster. $x_{i,j}$ is saved to the vector
    $\mathbf{x_2}$ when term $i$ and $j$ are not in the same cluster. The
-   difference score measure the distribution difference between $\mathbf{x_1}$
+   difference score measures the distribution difference between $\mathbf{x_1}$
    and $\mathbf{x_2}$, calculated as the Kolmogorov-Smirnov statistic between
    the two distributions.
 2. **Number of clusters**: For each clustering, there are two numbers: the
    number of total clusters and the number of clusters with size >= 5 (only
    the big clusters).
 3. **Block mean**: The mean similarity values of the blocks in the similarity
-   heatmap. Similar denotation as in difference score, for a similarity matrix
-   $M$, for term $i$ and $j$ where $i$ can be the same as $j$, the similarity
-   value $x_{i,j}$ is saved to the vector $\mathbf{x_1}$ only when term $i$
-   and $j$ are in a same cluster. The block mean is the mean value over
-   $\mathbf{x_1}$.
+   heatmap. Similar denotation as difference score, for term $i$ and $j$ where
+   $i$ can be the same as $j$ (values on the diagonal are also used), the
+   similarity value $x_{i,j}$ is saved to the vector $\mathbf{x_3}$ only when
+   term $i$ and $j$ are in a same cluster. The block mean is the mean value
+   over $\mathbf{x_3}$.
 
 The random GO terms were generated 100 times and the metrics are compared in Figure 8.
 
-In the left plot in Figure 8, we can see binary cut has the highest difference
-score, which means, in the clustering by binary cut, the terms in the same
-clusters shows the most distinct distribution to the rest of values in the
-similarity matrix. `dynamicTreeCut` and `apcluster` generates huge number of 
-clusters, as we already see in Figure 7. They just too stringent to cluster GO
-terms that they should have high redundant information between clusters. As a comparison,
-community-based methods and binary cut generates moderate number of clusters,
-especially, the number of "big cluster" (those with size >= 5) drops dramatically 
-compare to the total clusters, indicating these methods are able to identify
-tiny clusters that have very low similarity to any other terms. Binary cut generates
-clusters with moderate "block mean", while `kmeans`, `dynamicTreeCut`, `mclust`
-and `apcluster` generate very high block mean and community detection methods
-generate very low block mean. This indicate binary cut keeps both generality
-and flexibility of GO clusters.
+In the left plot in Figure 8, in the top panel, we can see binary cut has the
+highest difference score, which means, in the clustering by binary cut, the
+terms in the same clusters shows the most distinct distribution to the rest of
+values in the similarity matrix. In the middle panel, `dynamicTreeCut` and
+`apcluster` generates huge number of clusters, as we already see in Figure 7.
+They are just too stringent to cluster GO terms that the clusters should have
+very high redundant information. As a comparison, community-based methods and
+binary cut generate moderate number of clusters, especially, the number of
+"big cluster" (those with size >= 5) drops dramatically compare to the total
+clusters, indicating these methods are able to identify tiny clusters that
+have very low similarity to any other terms. In the bottom panel, Binary cut
+generates clusters with moderate "block mean". As a comparison, `kmeans`,
+`dynamicTreeCut`, `mclust` and `apcluster` generate very high block mean,
+which associates to the huge amount of small clusters by these methods, and
+community detection methods generate very low block mean, which is mainly
+because terms in some of the large clusters have almost no similarities and
+these large clusters should be still split into smaller ones. This comparison
+indicates binary cut keeps both generality and flexibility of GO clusters.
 
-Next we look at the similarity between clustering methods. For the clustering
+Next we look at the similarity between clustering methods. For the clusterings
 from two methods, first the cluster labels are adjusted. Denote $\mathbf{s_1}$
-is the label vector for method 1 and $\mathbf{s_2}$ is the label vector for
-method 2, and $\mathbf{s_1}$ is taken as the reference labels, we apply
+as the label vector for method 1, $\mathbf{s_2}$ as the label vector for
+method 2, and $\mathbf{s_1}$ as the reference labels, we apply
 `clue::solve_LSAP()` function generate a mapping function $m()$ between the
-two sets of labels to maximize $\sum_i I(s_{1i}, m(s_{2i}))$. Denote the adjusted
-labels for the second method as $s'_{2i} = map(s_{2i})$, the concordance 
-between the two clusterings are calculated as:
+two sets of labels to maximize $\sum^n_i I(s_{1i}, m(s_{2i}))$ where $n$ is
+the length of $\mathbf{s_1}$ or $\mathbf{s_2}$. Denote the adjusted labels for
+the second method as $s'_{2i} = m(s_{2i})$, the concordance between the two
+clusterings are calculated as:
 
 $$ \frac{1}{n}\sum_i^n I(s_{1i}, s'_{2i}) $$
 
-where $I(x, y)$ is an indicator function to be 1 if $x = y$ and 0 if $x \ne y$.
+where $I(x, y)$ is an indicator function with value 1 if $x = y$ and 0 if $x \ne y$.
+A concordance of 1 means the two clusterings are identical.
 
-Right plot in Figure 8 illustrates the heatmap for the mean concordance 
-over 500 random runs. We see binary cut shows similar clusterings as the community
-detection methods.
+Right plot in Figure 8 illustrates the heatmap for the mean concordance of the
+clusterings from 500 runs on the random GO datasets. We see binary cut is more
+similar as the community detection methods.
 
 ```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. Compare metrics for different clustering methods, on randomly generated datasets."}
 lt = readRDS("random_BP_results.rds")
@@ -475,9 +482,10 @@ The heatmaps for the 100 runs of clustering random GO terms can be found at http
 We downloaded the datasets from [EBI Expression
 Atlas](https://www.ebi.ac.uk/gxa/download). We applied
 [**clusterProfiler**](https://bioconductor.org/packages/release/bioc/html/clusterProfiler.html)
-to the significantly expressed genes (FDR < 0.05, number of significant genes in [500, 3000]) only
-with the GO Biological Process ontology. We only took the datasets with
-number of significant GO terms in [100, 1000]. Finally there are 475 GO lists.
+to the significantly expressed genes (FDR < 0.05) only with the GO Biological
+Process ontology. We only took the datasets with number of significant genes
+in [500, 3000] and number of significant GO terms in [100, 1000]. Finally
+there are 475 GO lists.
 
 Figure 9 illustrates the results for the comparison. The conclusion is
 basically the same as the random GO datasets.
@@ -521,17 +529,17 @@ plot_grid(plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights 
 In the **simplifyEnrichment** package, there are also functions that compare
 clustering results from different methods. Here we still use previously
 generated variable `mat` which is the similarity matrix from the 500 random GO
-terms. Simply running `compare_methods()` performs all the supported methods
-(encoded in `all_clustering_methods()`) excluding `mclust`, since `mclust`
-usually takes very long time to run. The function generates a figure with
-three panels:
+terms. Simply running `compare_methods()` function performs all supported
+methods (in `all_clustering_methods()`) excluding `mclust`, because
+`mclust` usually takes very long time to run. The function generates a figure
+with three panels:
 
 1. A heatmap of the similarity matrix with different clusterings as row
    annotations.
-2. A heatmap of the pair-wise concordance of the clustering of every two methods.
+2. A heatmap of the pair-wise concordance of the clustering from every two methods.
 3. Barplots of the difference scores for each method, the number of clusters
-   (all clusters and the clusters with size >= 5) and the mean similarity of
-   the terms that are in the same clusters. The methods to calculate these
+   (total clusters and the clusters with size >= 5) and the mean similarity of
+   the terms that are in the same clusters (block mean). The methods to calculate these
    metrics are introduced in the previous section.
 
 ```{r, fig.width = 10, fig.height = 7, fig.cap = "Figure 10. Compare different clustering methods."}
@@ -539,9 +547,9 @@ compare_methods(mat)
 ```
 
 If `plot_type` argument is set to `heatmap`. There are heatmaps for the
-similarity matrix under clusterings from different methods. The last panel is
-a table with the number of clusters under different clusterings. `nrow` argument
-controls the number of rows in the layout.
+similarity matrix under different clusterings methods. The last panel is a
+table with the number of clusters. `nrow` argument controls the number of rows
+in the layout.
 
 ```{r, eval = FALSE}
 # The following code may take long time to run (several minutes)

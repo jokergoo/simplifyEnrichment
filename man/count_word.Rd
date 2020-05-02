@@ -1,10 +1,10 @@
 \name{count_word}
 \alias{count_word}
 \title{
-Calculate word cloud
+Calculate word frequency
 }
 \description{
-Calculate word cloud
+Calculate word frequency
 }
 \usage{
 count_word(id, term = NULL, exclude_words = NULL)

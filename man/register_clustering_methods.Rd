@@ -1,10 +1,10 @@
 \name{register_clustering_methods}
 \alias{register_clustering_methods}
 \title{
-Register a new clustering method
+Register new clustering methods
 }
 \description{
-Register a new clustering method
+Register new clustering methods
 }
 \usage{
 register_clustering_methods(...)

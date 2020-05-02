@@ -129,7 +129,7 @@
     <p>Compare clustering methods</p>
     </div>
 
-    <pre class="usage"><span class='fu'>compare_methods</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>setdiff</a></span>(<span class='no'>ALL_CLUSTERING_METHODS</span>, <span class='st'>"mclust"</span>),
+    <pre class="usage"><span class='fu'>compare_methods</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>setdiff</a></span>(<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>(), <span class='st'>"mclust"</span>),
     <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"mixed"</span>, <span class='st'>"heatmap"</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -141,7 +141,7 @@
     </tr>
     <tr>
       <th>method</th>
-      <td><p>Which methods to compare. All available methods are in <code>simplifyEnrichment:::ALL_CLUSTERING_METHODS</code>. A value of <code>all</code> takes all available methods. By default <code>mclust</code> is excluded because its long runtime.</p></td>
+      <td><p>Which methods to compare. All available methods are in <code><a href='all_clustering_methods.html'>all_clustering_methods</a></code>. A value of <code>all</code> takes all available methods. By default <code>mclust</code> is excluded because its long runtime.</p></td>
     </tr>
     <tr>
       <th>plot_type</th>
@@ -189,7 +189,7 @@
 #&gt; cluster 500 terms by leading_eigen... 18 clusters.
 #&gt; cluster 500 terms by louvain... 20 clusters.
 #&gt; cluster 500 terms by walktrap... 18 clusters.
-#&gt; cluster 500 terms by binary_cut... 32 clusters.</div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `stats$method` is discouraged. Use `method` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `stats$diff_s` is discouraged. Use `diff_s` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$method` is discouraged. Use `method` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$value` is discouraged. Use `value` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$type` is discouraged. Use `type` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `df$type` is discouraged. Use `type` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `stats$method` is discouraged. Use `method` instead.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Use of `stats$block_mean` is discouraged. Use `block_mean` instead.</span></div><div class='img'><img src='compare_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_methods</span>(<span class='no'>mat</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"heatmap"</span>)</div><div class='output co'>#&gt; cluster 500 terms by kmeans... 16 clusters.
+#&gt; cluster 500 terms by binary_cut... 32 clusters.</div><div class='img'><img src='compare_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_methods</span>(<span class='no'>mat</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"heatmap"</span>)</div><div class='output co'>#&gt; cluster 500 terms by kmeans... 16 clusters.
 #&gt; cluster 500 terms by dynamicTreeCut... 56 clusters.
 #&gt; cluster 500 terms by apcluster... 42 clusters.
 #&gt; cluster 500 terms by fast_greedy... 19 clusters.

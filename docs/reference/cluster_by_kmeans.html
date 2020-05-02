@@ -129,7 +129,7 @@
     <p>Cluster similarity matrix by k-means clustering</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cluster_by_kmeans</span>(<span class='no'>mat</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>cluster_by_kmeans</span>(<span class='no'>mat</span>, <span class='kw'>max_k</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>max</a></span>(<span class='fl'>2</span>, <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>)/<span class='fl'>5</span>), <span class='fl'>100</span>)), <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -139,6 +139,10 @@
       <td><p>The similarity matrix.</p></td>
     </tr>
     <tr>
+      <th>max_k</th>
+      <td><p>maximal k for k-means clustering.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Other arguments passed to <code><a href='https://rdrr.io/r/stats/kmeans.html'>kmeans</a></code>.</p></td>
     </tr>
@@ -146,8 +150,7 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The number of clusters are tried from 2 to <code><a href='https://rdrr.io/r/base/Extremes.html'>min(round(nrow(mat)/5), 100)</a></code>. The best number
-of k for k-means clustering is identified according to the "elbow" or "knee" method on
+    <p>The best number of k for k-means clustering is identified according to the "elbow" or "knee" method on
 the distribution of within-cluster sum of squares at each k.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 

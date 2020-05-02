@@ -14,7 +14,7 @@ simplifyGO(mat, method = "binary_cut", control = list(),
 
   \item{mat}{A GO similarity matrix.}
   \item{method}{Method for clustering the matrix. See \code{\link{cluster_terms}}.}
-  \item{control}{A list of parameters passed to \code{\link{cluster_terms}}.}
+  \item{control}{A list of parameters for controlling the clustering method, passed to \code{\link{cluster_terms}}.}
   \item{plot}{Whether to make the heatmap.}
   \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{verbose}{Whether to print messages.}
@@ -25,7 +25,7 @@ simplifyGO(mat, method = "binary_cut", control = list(),
 This is basically a wrapper function that it first runs \code{\link{cluster_terms}} to cluster
 GO terms and then runs \code{\link{ht_clusters}} to visualize the clustering.
 
-The arguments passed to \code{\link{ht_clusters}} are:
+The arguments in \code{\link{simplifyGO}} passed to \code{\link{ht_clusters}} are:
 
 \describe{
   \item{\code{draw_word_cloud}}{Whether to draw the word clouds.}

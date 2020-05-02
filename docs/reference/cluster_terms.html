@@ -129,7 +129,8 @@
     <p>Cluster functional terms</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cluster_terms</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"binary_cut"</span>, <span class='kw'>catch_error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>cluster_terms</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"binary_cut"</span>, <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>catch_error</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,6 +144,10 @@
       <td><p>Method for clustering the matrix.</p></td>
     </tr>
     <tr>
+      <th>control</th>
+      <td><p>A list of parameters passed to the corresponding clustering function.</p></td>
+    </tr>
+    <tr>
       <th>catch_error</th>
       <td><p>Internally used.</p></td>
     </tr>
@@ -150,15 +155,11 @@
       <th>verbose</th>
       <td><p>Whether to print messages.</p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Other arguments passed to the clustering function.</p></td>
-    </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The following methods are supported:</p>
+    <p>The following methods are the default:</p>
 <dl'>
   <dt><code>binary_cut</code></dt><dd><p>see <code><a href='binary_cut.html'>binary_cut</a></code>.</p></dd>
   <dt><code>kmeans</code></dt><dd><p>see <code><a href='cluster_by_kmeans.html'>cluster_by_kmeans</a></code>.</p></dd>
@@ -172,7 +173,8 @@
 
 </dl>
 
-<p>Note the parametes for each clustering method are passes by <code>...</code> from <code>cluster_terms</code>.</p>
+<p>Also the user-defined methods in <code><a href='all_clustering_methods.html'>all_clustering_methods</a></code> can be used here.</p>
+<p>New clustering methods can be registered by <code><a href='register_clustering_methods.html'>register_clustering_methods</a></code>.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A numeric vector of cluster labels (in numeric).</p>

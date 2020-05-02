@@ -27,7 +27,7 @@ get_clustering_method = function(method, control = list()) {
 }
 
 # == title
-# Register a new clustering method
+# Register new clustering methods
 #
 # == param
 # -... A named list of clustering functions, see Details
@@ -141,6 +141,7 @@ register_clustering_methods(
 # reset_clustering_methods()
 # all_clustering_methods()
 reset_clustering_methods = function() {
+	remove_clustering_methods(all_clustering_methods())
 	register_clustering_methods(
 		kmeans = function(mat, ...) cluster_by_kmeans(mat, ...),
 		dynamicTreeCut = function(mat, ...) cluster_by_dynamicTreeCut(mat, ...),

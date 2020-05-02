@@ -1,10 +1,10 @@
 \name{widthDetails.word_cloud}
 \alias{widthDetails.word_cloud}
 \title{
-Width for word_cloud Grob
+Width for word_cloud grob
 }
 \description{
-Width for word_cloud Grob
+Width for word_cloud grob
 }
 \usage{
 \method{widthDetails}{word_cloud}(x)

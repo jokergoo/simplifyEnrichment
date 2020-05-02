@@ -50,6 +50,6 @@ importFrom("stats", "coef", "lm")
 importFrom("stats", "cutree", "ecdf")
 importFrom("stats", "kmeans")
 importFrom("stats", "nobs", "order.dendrogram")
-importFrom("utils", "getFromNamespace")
+importFrom("utils", "getFromNamespace", "packageDescription")
 importFrom(circlize, "colorRamp2", "rand_color")
 

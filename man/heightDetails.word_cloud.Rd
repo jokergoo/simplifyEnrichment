@@ -1,10 +1,10 @@
 \name{heightDetails.word_cloud}
 \alias{heightDetails.word_cloud}
 \title{
-Height for word_cloud Grob
+Height for word_cloud grob
 }
 \description{
-Height for word_cloud Grob
+Height for word_cloud grob
 }
 \usage{
 \method{heightDetails}{word_cloud}(x)

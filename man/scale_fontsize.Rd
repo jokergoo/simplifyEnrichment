@@ -13,7 +13,7 @@ scale_fontsize(x, rg = c(1, 30), fs = c(4, 16))
 
   \item{x}{A numeric vector.}
   \item{rg}{The range.}
-  \item{fs}{Range of th font size.}
+  \item{fs}{Range of the font size.}
 
 }
 \section{Detaisl}{

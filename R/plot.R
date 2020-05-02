@@ -142,7 +142,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 # == param
 # -x A numeric vector.
 # -rg The range.
-# -fs Range of th font size.
+# -fs Range of the font size.
 #
 # == detaisl
 # It is a linear interpolation.
