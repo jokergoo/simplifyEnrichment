@@ -43,6 +43,9 @@ get_clustering_method = function(method, control = list()) {
 #
 # The function should return a vector of cluster labels. Internally it is converted to numeric labels.
 #
+# == value
+# No value is returned.
+#
 register_clustering_methods = function(...) {
 	
 	lt = list(...)

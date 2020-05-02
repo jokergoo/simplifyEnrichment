@@ -25,6 +25,9 @@ number of clusters.
 
 The function should return a vector of cluster labels. Internally it is converted to numeric labels.
 }
+\value{
+No value is returned.
+}
 \examples{
 # There is no example
 NULL
