@@ -14,6 +14,10 @@
 devtools::install_github("jokergoo/simplifyEnrichment")
 ```
 
+### Vignette
+
+- [Simplify Gene Ontology Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifyGO.html)
+
 ### Usage
 
 As an example, we first generate a list of random GO IDs.
