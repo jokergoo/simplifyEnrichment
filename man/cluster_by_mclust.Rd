@@ -7,7 +7,7 @@ Cluster similarity matrix by mclust
 Cluster similarity matrix by mclust
 }
 \usage{
-cluster_by_mclust(mat, G = 1:max(2, min(round(nrow(mat)/5), 100)), ...)
+cluster_by_mclust(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100))), ...)
 }
 \arguments{
 

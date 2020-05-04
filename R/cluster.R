@@ -244,7 +244,7 @@ cluster_by_igraph = function(mat,
 # == value
 # A vector of cluster labels (in numeric).
 #
-cluster_by_mclust = function(mat, G = 1:max(2, min(round(nrow(mat)/5), 100)), ...) {
+cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100))), ...) {
 	if(!requireNamespace("mclust", quietly = TRUE)) {
 		stop_wrap("Package mclust should be installed.")
 	}

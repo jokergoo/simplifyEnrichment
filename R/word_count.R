@@ -53,12 +53,12 @@ count_word = function(id, term = NULL, exclude_words = NULL) {
 all_GO_word_count = function() {
 	all_go = as.list(GO.db::GOTERM)
 
-	ontology = sapply(all_go, slot, "Ontology")
-	term = sapply(all_go, slot, "Term")
+	ontology = vapply(all_go, slot, "Ontology", "a")
+	term = vapply(all_go, slot, "Term", "a")
 
 	lt = tapply(term, ontology, function(x) {
 		df = count_word(term = x)
-		df = df[order(df$freq, decreasing = TRUE)[1:min(50, nrow(df))], ]
+		df = df[order(df$freq, decreasing = TRUE)[seq_len(min(50, nrow(df)))], ]
 	})
 	lt[c("BP", "CC", "MF")]
 }
@@ -126,8 +126,8 @@ word_cloud_grob = function(text, fontsize,
 
 	n = length(text)
 	text_gb_lt = lapply(seq_len(n), function(i) textGrob(text[i], gp = gpar(fontsize = fontsize[i])))
-	text_width = sapply(text_gb_lt, function(gb) convertWidth(grobWidth(gb), "mm", valueOnly = TRUE))
-	text_height = sapply(text_gb_lt, function(gb) convertHeight(grobHeight(gb), "mm", valueOnly = TRUE))
+	text_width = vapply(text_gb_lt, function(gb) convertWidth(grobWidth(gb), "mm", valueOnly = TRUE), 0)
+	text_height = vapply(text_gb_lt, function(gb) convertHeight(grobHeight(gb), "mm", valueOnly = TRUE), 0)
 
 	if(is.unit(line_space)) line_space = convertHeight(line_space, "mm", valueOnly = TRUE)
 	if(is.unit(word_space)) word_space = convertWidth(word_space, "mm", valueOnly = TRUE)

@@ -94,8 +94,8 @@ dend_node_apply = function(dend, fun) {
 	.do(dend, fun, NULL)
 
 	var = env$var
-	if(all(sapply(var, is.atomic))) {
-		if(all(sapply(var, length) == 1)) {
+	if(all(vapply(var, is.atomic, TRUE))) {
+		if(all(vapply(var, length, 0) == 1)) {
 			var = unlist(var)
 		}
 	}

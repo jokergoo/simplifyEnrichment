@@ -40,11 +40,11 @@ cluster_mat = function(mat, value_fun = median) {
 		if(is.leaf(d)) {
 			attr(d, "score2") = s
 		} else {
-			l = sapply(d, is.leaf)
+			l = vapply(d, is.leaf, TRUE)
 			if(all(l)) {
 				attr(d, "score2") = s
 			} else {
-				attr(d, "score2") = max(s, sapply(d[!l], function(x) attr(x, "score")))
+				attr(d, "score2") = max(s, vapply(d[!l], function(x) attr(x, "score"), 0))
 			}
 		}
 
@@ -185,9 +185,9 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 
 	## make sure all sub-nodes having height 0 if the node is 0 height
 	is_parent_zero_height = function(index) {
-		h = sapply(seq_along(index), function(i) {
+		h = vapply(seq_along(index), function(i) {
 			attr(dend2[[ index[seq_len(i)] ]], "height")
-		})
+		}, 0)
 		any(h == 0)
 	}
 	dend2 = edit_node(dend2, function(d, index) {

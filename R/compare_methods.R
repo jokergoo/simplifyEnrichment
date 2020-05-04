@@ -82,7 +82,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 		if("binary_cut" %in% names(clt)) {
 			ref_class = clt[, "binary_cut"]
 		} else {
-			ref_class = clt[, which.min(sapply(clt, function(x) length(unique(x))))]
+			ref_class = clt[, which.min(vapply(clt, function(x) length(unique(x)), 0))]
 		}
 		clt2 = lapply(clt, function(x) relabel_class(x, ref_class, return_map = FALSE))
 		clt2 = as.data.frame(clt2)
@@ -259,10 +259,10 @@ compare_methods_calc_concordance = function(clt) {
 }
 
 compare_methods_calc_stats = function(mat, clt) {
-	x = data.frame("diff_s" = sapply(clt, function(x) difference_score(mat, x)),
-		 "n_all" = sapply(clt, function(x) length(table(x))),
-	     "n_large" = sapply(clt, function(x) {tb = table(x); sum(tb >= 5)}),
-		 "block_mean" = sapply(clt, function(x) block_mean(mat, x)))
+	x = data.frame("diff_s" = vapply(clt, function(x) difference_score(mat, x), 0),
+		 "n_all" = vapply(clt, function(x) length(table(x)), 0),
+	     "n_large" = vapply(clt, function(x) {tb = table(x); sum(tb >= 5)}, 0),
+		 "block_mean" = vapply(clt, function(x) block_mean(mat, x), 0))
 	return(x)
 	
 }

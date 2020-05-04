@@ -80,13 +80,13 @@ ht_clusters = function(mat, cl, dend = NULL,
 				}
 				df = df[df$freq > 1, , drop = FALSE]
 				if(nrow(df) > max_words) {
-					df = df[order(df$freq, decreasing = TRUE)[1:max_words], ]
+					df = df[order(df$freq, decreasing = TRUE)[seq_len(max_words)], ]
 				}
 				df
 			})
-			keywords = keywords[sapply(keywords, nrow) > 0]
+			keywords = keywords[vapply(keywords, nrow, 0) > 0]
 
-			align_to = split(1:nrow(mat), cl)
+			align_to = split(seq_len(nrow(mat)), cl)
 			align_to = align_to[names(align_to) != "0"]
 			align_to = align_to[names(align_to) %in% names(keywords)]
 
