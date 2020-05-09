@@ -18,6 +18,7 @@
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
 #       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
 #       to the maximal word frequency. The font size interlopation is linear.
+# -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
 # == value
@@ -30,7 +31,8 @@
 ht_clusters = function(mat, cl, dend = NULL, 
 	draw_word_cloud = TRUE, term = NULL, min_term = 5, order_by_size = FALSE,
 	exclude_words = character(0), max_words = 10,
-	word_cloud_grob_param = list(), fontsize_range = c(4, 16), ...) {
+	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
+	ht_list = NULL, ...) {
 
 	if(inherits(cl, "try-error")) {
 		grid.newpage()
@@ -133,7 +135,13 @@ ht_clusters = function(mat, cl, dend = NULL,
 			}
 		}
 	}
-	draw(ht, gap = unit(2, "pt"), ...)
+	gap = unit(2, "pt")
+	if(!is.null(ht_list)) {
+		n = length(ht_list)
+		ht = ht_list + ht
+		gap = unit.c(unit(rep(2, n), "mm"), gap)
+	}
+	draw(ht, main_heatmap = "Similarity", gap = gap, ...)
 }
 
 # == title

@@ -10,6 +10,7 @@
 # -plot Whether to make the heatmap.
 # -term The full name or the description of the corresponding GO IDs. 
 # -verbose Whether to print messages.
+# -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
 # -... Arguments passed to `ht_clusters`.
 #
 # == details
@@ -42,7 +43,7 @@
 # head(df)
 # }
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
-	plot = TRUE, term = NULL, verbose = TRUE, ...) {
+	plot = TRUE, term = NULL, verbose = TRUE, ht_list = NULL, ...) {
 	
 	cl = do.call(cluster_terms, list(mat = mat, method = method, verbose = verbose, control = control))
 	go_id = rownames(mat)
@@ -55,7 +56,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 	}
 
-	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"), ...)
+	if(plot) ht_clusters(mat, cl, term = term, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"), ht_list = ht_list, ...)
 
 	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
 }

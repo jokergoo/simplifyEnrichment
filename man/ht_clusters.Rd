@@ -10,7 +10,8 @@ Visualize the similarity matrix and the clustering
 ht_clusters(mat, cl, dend = NULL,
     draw_word_cloud = TRUE, term = NULL, min_term = 5, order_by_size = FALSE,
     exclude_words = character(0), max_words = 10,
-    word_cloud_grob_param = list(), fontsize_range = c(4, 16), ...)
+    word_cloud_grob_param = list(), fontsize_range = c(4, 16),
+    ht_list = NULL, ...)
 }
 \arguments{
 
@@ -25,6 +26,7 @@ ht_clusters(mat, cl, dend = NULL,
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
   \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
+  \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}
   \item{...}{Other arguments passed to \code{\link[ComplexHeatmap:draw-HeatmapList-method]{draw,HeatmapList-method}}.}
 
 }
