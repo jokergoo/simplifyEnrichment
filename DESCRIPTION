@@ -2,7 +2,7 @@ Package: simplifyEnrichment
 Type: Package
 Title: Simplify Functional Enrichment Results
 Version: 0.99.0
-Date: 2020-05-01
+Date: 2020-05-04
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.6.0)
