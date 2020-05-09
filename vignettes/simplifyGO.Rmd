@@ -226,7 +226,7 @@ Once the GO terms are clustered into groups, the functions of the terms in
 each group can be summarized by word clouds of keywords, illustrated in Figure
 6.
 
-```{r, fig.width = 8, fig.height = 5, echo = FALSE, fig.cap = "Figure 6. A clustering of GO terms with word clouds as the annotation."}
+```{r, fig.width = 8, fig.height = 4.5, echo = FALSE, fig.cap = "Figure 6. A clustering of GO terms with word clouds as the annotation."}
 df = simplifyGO(mat, verbose = FALSE)
 ```
 
