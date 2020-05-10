@@ -234,7 +234,7 @@ df = simplifyGO(mat, verbose = FALSE)
 
 **simplifyGO** starts with the GO similarity matrix. Users can use their own
 similarity matrices or use the `GO_similarity()` function to calculate one. The
-`GO_similarity()` function is simply a wrapper on `GOSemSim::mgoSim`. The
+`GO_similarity()` function is simply a wrapper on `GOSemSim::termSim`. The
 function accepts a vector of GO IDs. Note the GO should only belong to one
 same ontology (_i.e._, `BP`, `CC` or `MF`).
 
@@ -248,7 +248,7 @@ go_id = random_GO(500)
 mat = GO_similarity(go_id)
 ```
 
-By default, `GO_similarity()` uses `Rel` method in `GOSemSim::mgoSim`. Other
+By default, `GO_similarity()` uses `Rel` method in `GOSemSim::termSim`. Other
 methods to calculate GO similarities can be set by `measure` argument, _e.g._:
 
 ```{r, eval = FALSE}
@@ -549,7 +549,7 @@ compare_methods(mat)
 If `plot_type` argument is set to `heatmap`. There are heatmaps for the
 similarity matrix under different clusterings methods. The last panel is a
 table with the number of clusters. `nrow` argument controls the number of rows
-in the layout.
+in the layout. An example can be found in Figure 7.
 
 ```{r, eval = FALSE}
 # The following code may take long time to run (several minutes)
@@ -582,6 +582,34 @@ compare_methods_make_plot(mat, clt)
 compare_methods_make_plot(mat, clt, plot_type = "heatmap")
 ```
 
+### Register new clustering methods
+
+New clustering methods can be added by `register_clustering_methods()`,
+removed by `remove_clustering_methods()` and reset to the default methods by
+`reset_clustering_methods()`. All the supported methods can be retrieved by
+`all_clustering_methods()`. `compare_methods()` runs all the clustering methods
+in `all_clustering_methods()`.
+
+The new clustering methods should be as user-defined functions and sent to
+`register_clustering_methods()` as named arguments, e.g.:
+
+```{r, eval = FALSE}
+register_clustering_methods(
+    method1 = function(mat, ...) ...,
+    method2 = function(mat, ...) ...,
+    ...
+)
+```
+
+The functions should accept at least one argument which is the input matrix
+(`mat` in above example). The second optional argument should always be `...`
+so that parameters for the clustering function can be passed by `control`
+argument from `cluster_terms()` or `simplifyGO()`. If users forget to add
+`...`, it is added internally.
+
+Please note, the user-defined function should automatically identify the
+optimized number of clusters. The function should return a vector of cluster
+labels. Internally it is converted to numeric labels.
 
 ## Session Info
 

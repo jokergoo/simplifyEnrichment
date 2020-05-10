@@ -18,6 +18,7 @@
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
 #       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
 #       to the maximal word frequency. The font size interlopation is linear.
+# -column_title Column title for the heatmap.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
@@ -32,7 +33,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 	draw_word_cloud = TRUE, term = NULL, min_term = 5, order_by_size = FALSE,
 	exclude_words = character(0), max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
-	ht_list = NULL, ...) {
+	column_title = NULL, ht_list = NULL, ...) {
 
 	if(inherits(cl, "try-error")) {
 		grid.newpage()
@@ -49,7 +50,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 
 	if(!is.null(dend)) {
 		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-			name = "Similarity", column_title = NULL,
+			name = "Similarity", column_title = column_title,
 			show_row_names = FALSE, show_column_names = FALSE,
 			cluster_rows = dend, cluster_columns = dend, 
 			show_row_dend = TRUE, show_column_dend = FALSE,
@@ -57,7 +58,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 			border = "#404040", row_title = NULL)
 	} else {
 		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
-			name = "Similarity", column_title = NULL,
+			name = "Similarity", column_title = column_title,
 			show_row_names = FALSE, show_column_names = FALSE,
 			show_row_dend = FALSE, show_column_dend = FALSE,
 			cluster_row_slices = !order_by_size, 

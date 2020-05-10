@@ -130,7 +130,9 @@
     </div>
 
     <pre class="usage"><span class='fu'>simplifyGO</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"binary_cut"</span>, <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+    <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <span class='kw'>column_title</span> <span class='kw'>=</span> <span class='fu'>qq</span>(<span class='st'>"@{nrow(mat)} GO terms clustered by '@{method}'"</span>),
+    <span class='kw'>ht_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -156,8 +158,16 @@
       <td><p>The full name or the description of the corresponding GO IDs.</p></td>
     </tr>
     <tr>
+      <th>column_title</th>
+      <td><p>Column title for the heatmap.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
       <td><p>Whether to print messages.</p></td>
+    </tr>
+    <tr>
+      <th>ht_list</th>
+      <td><p>A list of additional heatmaps added to the left of the similarity heatmap.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -189,7 +199,7 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
 <span class='no'>go_id</span> <span class='kw'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span>(<span class='fl'>500</span>)
-<span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span>(<span class='no'>go_id</span>)</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>simplifyGO</span>(<span class='no'>mat</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='output co'>#&gt; cluster 500 terms by binary_cut... 42 clusters.</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>df</span>)</div><div class='output co'>#&gt;           id                                                            term
+<span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span>(<span class='no'>go_id</span>)</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>simplifyGO</span>(<span class='no'>mat</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='output co'>#&gt; cluster 500 terms by binary_cut... 41 clusters.</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>df</span>)</div><div class='output co'>#&gt;           id                                                            term
 #&gt; 1 GO:0046654                           tetrahydrofolate biosynthetic process
 #&gt; 2 GO:0060003                                               copper ion export
 #&gt; 3 GO:0019918 peptidyl-arginine methylation, to symmetrical-dimethyl arginine

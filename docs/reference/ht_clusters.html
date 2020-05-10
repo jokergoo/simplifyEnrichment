@@ -132,7 +132,8 @@
     <pre class="usage"><span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>dend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
     <span class='kw'>draw_word_cloud</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min_term</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>order_by_size</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
     <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>max_words</span> <span class='kw'>=</span> <span class='fl'>10</span>,
-    <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>fontsize_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>16</span>), <span class='no'>...</span>)</pre>
+    <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>fontsize_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>16</span>),
+    <span class='kw'>column_title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ht_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -180,6 +181,14 @@
     <tr>
       <th>fontsize_range</th>
       <td><p>The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.</p></td>
+    </tr>
+    <tr>
+      <th>column_title</th>
+      <td><p>Column title for the heatmap.</p></td>
+    </tr>
+    <tr>
+      <th>ht_list</th>
+      <td><p>A list of additional heatmaps added to the left of the similarity heatmap.</p></td>
     </tr>
     <tr>
       <th>...</th>
