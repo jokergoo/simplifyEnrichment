@@ -36,7 +36,7 @@ mat = GO_similarity(go_id)
 simplifyGO(mat)
 ```
 
-![image](https://user-images.githubusercontent.com/449218/81970226-750a8e00-961f-11ea-9ced-99448bd8a892.png)
+![image](https://user-images.githubusercontent.com/449218/81970861-78eae000-9620-11ea-9ea2-c9d51d36ff4c.png)
 
 ### Examples
 
