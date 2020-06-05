@@ -10,8 +10,19 @@
 
 ### Install
 
+`simplifyEnrichment` is available on [Bioconductor](http://www.bioconductor.org/packages/devel/bioc/html/simplifyEnrichment.html), you can install it by:
+
 ```r
-devtools::install_github("jokergoo/simplifyEnrichment")
+if (!requireNamespace("BiocManager", quietly=TRUE))
+    install.packages("BiocManager")
+BiocManager::install("simplifyEnrichment")
+```
+
+If you want the latest version, install it directly from GitHub:
+
+```r
+library(devtools)
+install_github("jokergoo/simplifyEnrichment")
 ```
 
 ### Vignette
@@ -23,6 +34,7 @@ devtools::install_github("jokergoo/simplifyEnrichment")
 As an example, we first generate a list of random GO IDs.
 
 ```r
+library(simplifyEnrichment)
 set.seed(88)
 go_id = random_GO(500)
 head(go_id)
