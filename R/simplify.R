@@ -64,3 +64,15 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
 }
 
+simplifyEnrichment = function(mat, method = "binary_cut", control = list(), 
+	plot = TRUE, term = NULL, verbose = TRUE, 
+	column_title = qq("@{nrow(mat)} terms clustered by '@{method}'"),
+	ht_list = NULL, ...) {
+	
+	cl = do.call(cluster_terms, list(mat = mat, method = method, verbose = verbose, control = control))
+	term_id = rownames(mat)
+	
+	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
+
+	return(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE))
+}

@@ -76,8 +76,8 @@ GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 # -max_width The maximal width of the viewport to put the word cloud. The value can be a `grid::unit` object or a numeric scalar which is measured in mm.
 #        Note this might be larger than the final width of the returned grob object.
 # -col Colors for the words. The value can be a vector, in numeric or character, which should have the same
-#      length as ``text``. Or it is a self-defined function that takes the number of words and font size as 
-#      the two arguments. The function should return a color vector. See Examples.
+#      length as ``text``. Or it is a self-defined function that takes the font size vector as 
+#      the only argument. The function should return a color vector. See Examples.
 # -test Internally used. It basically adds borders to the words and the viewport.
 #
 # == value
@@ -107,13 +107,17 @@ GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 # require(circlize)
 # col_fun = colorRamp2(c(5, 17, 30), c("blue", "black", "red"))
 # gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-#     max_width = 100, col = function(n, fs) col_fun(fs))
+#     max_width = 100, col = function(fs) col_fun(fs))
 # grid.newpage(); grid.draw(gb)
 #
 word_cloud_grob = function(text, fontsize, 
 	line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(80, "mm"), 
-	col = function(n, fs) circlize::rand_color(n, luminosity = "dark"),
+	col = function(fs) circlize::rand_color(length(fs), luminosity = "dark"),
 	test = FALSE) { # width in mm
+
+	if(length(text) != length(fontsize)) {
+		stop_wrap("`text` and `fontsize` should the same length.")
+	}
 	
 	od = order(fontsize, decreasing = TRUE)
 	text = text[od]
@@ -170,14 +174,9 @@ word_cloud_grob = function(text, fontsize,
 
 	if(is.character(col) || is.numeric(col)) {
 		if(length(col) == 1) col = rep(col, n)
-		col_fun = function(n, fontsize) return(col)
+		col_fun = function(fontsize) return(col)
 	} else if(is.function(col)) {
 		col_fun = col
-
-		if(length(as.list(formals(col_fun))) == 1) {
-			col_fun2 = col_fun
-			col_fun = function(n, fontsize) col_fun2(n)
-		}
 	} else {
 		stop_wrap("`col` can only be a function or a character vector.")
 	}
@@ -185,14 +184,14 @@ word_cloud_grob = function(text, fontsize,
 	if(test) {
 		gl = gList(
 			rectGrob(),
-			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(n, fontsize)), 
+			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(fontsize)), 
 				default.units = "mm", just = c(0, 0)),
 			rectGrob(x = x, y = y, width = text_width, height = text_height, default.units = "mm", just = c(0, 0))
 
 		)
 	} else {
 		gl = gList(
-			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(n, fontsize)), 
+			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(fontsize)), 
 				default.units = "mm", just = c(0, 0))
 		)
 	}

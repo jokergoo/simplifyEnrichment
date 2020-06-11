@@ -9,7 +9,7 @@ A simple grob for the word cloud
 \usage{
 word_cloud_grob(text, fontsize,
     line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(80, "mm"),
-    col = function(n, fs) circlize::rand_color(n, luminosity = "dark"),
+    col = function(fs) circlize::rand_color(length(fs), luminosity = "dark"),
     test = FALSE)
 }
 \arguments{
@@ -19,7 +19,7 @@ word_cloud_grob(text, fontsize,
   \item{line_space}{Space between lines. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm.}
   \item{word_space}{Space between words. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm.}
   \item{max_width}{The maximal width of the viewport to put the word cloud. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm. Note this might be larger than the final width of the returned grob object.}
-  \item{col}{Colors for the words. The value can be a vector, in numeric or character, which should have the same length as \code{text}. Or it is a self-defined function that takes the number of words and font size as  the two arguments. The function should return a color vector. See Examples.}
+  \item{col}{Colors for the words. The value can be a vector, in numeric or character, which should have the same length as \code{text}. Or it is a self-defined function that takes the font size vector as  the only argument. The function should return a color vector. See Examples.}
   \item{test}{Internally used. It basically adds borders to the words and the viewport.}
 
 }
@@ -50,6 +50,6 @@ grid.newpage(); grid.draw(gb)
 require(circlize)
 col_fun = colorRamp2(c(5, 17, 30), c("blue", "black", "red"))
 gb = word_cloud_grob(words, fontsize = runif(30, min = 5, max = 30), 
-    max_width = 100, col = function(n, fs) col_fun(fs))
+    max_width = 100, col = function(fs) col_fun(fs))
 grid.newpage(); grid.draw(gb)
 }

@@ -67,6 +67,12 @@ ht_clusters = function(mat, cl, dend = NULL,
 			border = "#404040", row_title = NULL,
 			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"))
 
+		if(is.null(term)) {
+			if(!grepl("^GO:[0-9]+$", rownames(mat)[1])) {
+				draw_word_cloud = FALSE
+			}
+		}
+
 		if(draw_word_cloud) {
 			go_id = rownames(mat)
 			if(!is.null(term)) {

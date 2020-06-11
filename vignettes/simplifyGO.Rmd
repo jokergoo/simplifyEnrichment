@@ -439,7 +439,7 @@ where $I(x, y)$ is an indicator function with value 1 if $x = y$ and 0 if $x \ne
 A concordance of 1 means the two clusterings are identical.
 
 Right plot in Figure 8 illustrates the heatmap for the mean concordance of the
-clusterings from 500 runs on the random GO datasets. We see binary cut is more
+clusterings from 100 runs on the random GO datasets. We see binary cut is more
 similar as the community detection methods.
 
 ```{r, echo = FALSE, fig.width = 10, fig.height = 5, fig.cap = "Figure 8. Compare metrics for different clustering methods, on randomly generated datasets."}

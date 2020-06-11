@@ -89,28 +89,35 @@ cluster_mat = function(mat, value_fun = median) {
 		l1 = l2
 		l2 = l3
 	}
-	x11 = .env$value_fun(mat[l1, l1])
+	m11 = mat[l1, l1, drop = FALSE]
+	m11 = m11[ lower.tri(m11) | upper.tri(m11)]
+	x11 = .env$value_fun(m11)
 	x12 = .env$value_fun(mat[l1, l2])
 	x21 = .env$value_fun(mat[l2, l1])
-	x22 = .env$value_fun(mat[l2, l2])
+	m22 = mat[l2, l2, drop = FALSE]
+	m22 = m22[ lower.tri(m22) | upper.tri(m22)]
+	x22 = .env$value_fun(m22)
+
+	if(is.na(x11)) x11 = 0
+	if(is.na(x22)) x22 = 0
 
 	s = (x11 + x22)/(x11 + x12 + x21 + x22)
 	if(is.na(s)) s = 1
 
-	sr = numeric(1)
-	for(i in seq_len(10)) {
-		clr = sample(cl, length(cl))
-		l1r = clr == 1
-		l2r = clr == 2
-		x11r = sample(as.vector(mat[l1r, l1r]), 1)
-		x12r = sample(as.vector(mat[l1r, l2r]), 1)
-		x21r = sample(as.vector(mat[l2r, l1r]), 1)
-		x22r = sample(as.vector(mat[l2r, l2r]), 1)
+	# sr = numeric(1)
+	# for(i in seq_len(10)) {
+	# 	clr = sample(cl, length(cl))
+	# 	l1r = clr == 1
+	# 	l2r = clr == 2
+	# 	x11r = sample(as.vector(mat[l1r, l1r]), 1)
+	# 	x12r = sample(as.vector(mat[l1r, l2r]), 1)
+	# 	x21r = sample(as.vector(mat[l2r, l1r]), 1)
+	# 	x22r = sample(as.vector(mat[l2r, l2r]), 1)
 
-		sr[i] = (x11r + x22r)/(x11r + x12r + x21r + x22r)
-		if(is.na(sr[i])) sr[i] = 1
-	}
-	sr = mean(sr)
+	# 	sr[i] = (x11r + x22r)/(x11r + x12r + x21r + x22r)
+	# 	if(is.na(sr[i])) sr[i] = 1
+	# }
+	# sr = mean(sr)
 
 	if(is.null(dend_index)) {
 		.env$dend = list()
@@ -118,7 +125,7 @@ cluster_mat = function(mat, value_fun = median) {
 			members = nrow(mat),
 			height = depth,
 			score = s,
-			random_score = sr,
+			# random_score = sr,
 			index = NULL,
 			class = "dendrogram"
 		)
@@ -128,7 +135,7 @@ cluster_mat = function(mat, value_fun = median) {
 			members = nrow(mat),
 			height = depth,
 			score = s,
-			random_score = sr,
+			# random_score = sr,
 			index = dend_index,
 			class = "dendrogram"
 		)
