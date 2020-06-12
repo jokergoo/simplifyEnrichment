@@ -39,11 +39,14 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 	}
 
 	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
+	flush.console()
 
 	fun = get_clustering_method(method, control = control)
 	
+	t1 = Sys.time()
 	oe = try(cl <- fun(mat), silent = TRUE)
-	
+	t2 = Sys.time()
+
 	if(inherits(oe, "try-error")) {
 		if(catch_error) {
 			return(oe)
@@ -53,7 +56,9 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		}
 	}
 
-	if(verbose) qqcat(" @{length(unique(cl))} clusters.\n")
+	t_diff = t2 - t1
+	t_diff = format(t_diff)
+	if(verbose) qqcat(" @{length(unique(cl))} clusters, used @{t_diff}.\n")
 
 	return(cl)
 }
@@ -241,9 +246,6 @@ cluster_by_igraph = function(mat,
 # -G Passed to the ``G`` argument in `mclust::Mclust`.
 # -... Other arguments passed to `mclust::Mclust`.
 #
-# == details
-# mclust is applied on the first three principle compoments of ``mat``.
-#
 # == value
 # A vector of cluster labels (in numeric).
 #
@@ -253,8 +255,7 @@ cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100
 	}
 	mclustBIC = mclust::mclustBIC
 
-	pca = prcomp(as.matrix(mat))
-	fit = mclust::Mclust(pca$x[, 1:3], G = G, verbose = FALSE, control = mclust::emControl(itmax = c(1000, 1000)), ...)
+	fit = mclust::Mclust(mat, G = G, verbose = FALSE, control = mclust::emControl(itmax = c(1000, 1000)), ...)
 
 	unname(fit$classification)
 }

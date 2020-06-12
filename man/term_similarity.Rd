@@ -17,4 +17,5 @@ term_similarity(gl)
 \examples{
 # There is no example
 NULL
+
 }

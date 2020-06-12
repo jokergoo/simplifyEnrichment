@@ -14,7 +14,7 @@
 # -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
-# -``mclust`` see `cluster_by_mclust`. By default it is not included.
+# -``mclust`` see `cluster_by_mclust`. By default it is not included for its long runtime.
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
@@ -26,7 +26,7 @@
 # == value
 # A list of cluster label vectors for different clustering methods.
 #
-compare_methods_make_clusters = function(mat, method = all_clustering_methods(),
+compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	verbose = TRUE) {
 
 	clt = list()

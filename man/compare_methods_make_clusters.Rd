@@ -24,7 +24,7 @@ The function compares following default clustering methods:
   \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
   \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
-  \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}. By default it is not included.}
+  \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}. By default it is not included for its long runtime.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}
   \item{\code{fast_greedy}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{leading_eigen}}{see \code{\link{cluster_by_igraph}}.}
