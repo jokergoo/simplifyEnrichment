@@ -26,6 +26,7 @@ export("remove_clustering_methods")
 export("reset_clustering_methods")
 export("scale_fontsize")
 export("simplifyGO")
+export("term_similarity")
 export("word_cloud_grob")
 
 import(AnnotationDbi)

@@ -1,4 +1,9 @@
-
+# == title
+# Similarity between terms based on the overlap of genes
+#
+# == param
+# -gl A list of genes that are in the terms.
+#
 term_similarity = function(gl) {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
