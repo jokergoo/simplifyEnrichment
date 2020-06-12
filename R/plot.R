@@ -30,7 +30,8 @@
 # cl = binary_cut(mat)
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 ht_clusters = function(mat, cl, dend = NULL, 
-	draw_word_cloud = TRUE, term = NULL, min_term = 5, order_by_size = FALSE,
+	draw_word_cloud = TRUE, term = NULL, min_term = 5, 
+	order_by_size = FALSE, cluster_slices = FALSE,
 	exclude_words = character(0), max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
 	column_title = NULL, ht_list = NULL, ...) {
@@ -43,13 +44,18 @@ ht_clusters = function(mat, cl, dend = NULL,
 		return(invisible(NULL))
 	}
 
-	cl = as.character(cl)
 	cl_tb = table(cl)
-	cl[cl %in% names(cl_tb[cl_tb < min_term])] = "0"
-	cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
+	cl[as.character(cl) %in% names(cl_tb[cl_tb < min_term])] = 0
+	cl = factor(cl, levels = c(setdiff(sort(cl), 0), 0))
 
+		
+	if(order_by_size) {
+		cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
+	}
+
+	col_fun = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red"))
 	if(!is.null(dend)) {
-		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
+		ht = Heatmap(mat, col = col_fun,
 			name = "Similarity", column_title = column_title,
 			show_row_names = FALSE, show_column_names = FALSE,
 			cluster_rows = dend, cluster_columns = dend, 
@@ -57,12 +63,12 @@ ht_clusters = function(mat, cl, dend = NULL,
 			row_dend_width = unit(4, "cm"),
 			border = "#404040", row_title = NULL)
 	} else {
-		ht = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
+		ht = Heatmap(mat, col = col_fun,
 			name = "Similarity", column_title = column_title,
 			show_row_names = FALSE, show_column_names = FALSE,
 			show_row_dend = FALSE, show_column_dend = FALSE,
-			cluster_row_slices = !order_by_size, 
-			cluster_column_slices = !order_by_size,
+			cluster_row_slices = cluster_slices, 
+			cluster_column_slices = cluster_slices,
 			row_split = cl, column_split = cl, 
 			border = "#404040", row_title = NULL,
 			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"))
@@ -93,6 +99,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 				}
 				df
 			})
+			keywords = keywords[names(keywords) != "0"]
 			keywords = keywords[vapply(keywords, nrow, 0) > 0]
 
 			align_to = split(seq_len(nrow(mat)), cl)

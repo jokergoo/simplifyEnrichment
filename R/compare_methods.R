@@ -34,7 +34,14 @@ compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_me
 		method = all_clustering_methods()
 	}
 
-	clt = lapply(method, function(me) cluster_terms(mat, me, verbose = verbose))
+	clt = lapply(method, function(me) {
+		oe = try(cl <- cluster_terms(mat, me, verbose = verbose))
+		if(inherits(oe, "try-error")) {
+			rep(NA, nrow(mat))
+		} else {
+			cl
+		}
+	})
 	names(clt) = method
 	clt = as.data.frame(clt)
 
@@ -78,6 +85,10 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 	}
 		
 	if(plot_type == "mixed") {
+
+		l = sapply(clt, function(x) any(is.na(x)))
+		clt = clt[!l]
+		methods = methods[!l]
 		
 		if("binary_cut" %in% names(clt)) {
 			ref_class = clt[, "binary_cut"]
@@ -137,19 +148,58 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 } else {
 		pl = list()
 		for(i in seq_along(methods)) {
-			pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, column_title = qq("@{nrow(mat)} terms clustered by '@{methods[i]}'")))
+			if(any(is.na(clt[[i]]))) {
+				pl[[i]] = textGrob(qq("@{methods[i]}\nan error occured."))
+			} else {
+				pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, 
+					column_title = qq("@{nrow(mat)} terms clustered by '@{methods[i]}'"),
+					show_heatmap_legend = FALSE))
+			}
 		}
 
-		stats = compare_methods_calc_stats(mat, clt)
+		n_all = sapply(clt, function(x) {
+			if(any(is.na(x))) {
+				NA
+			} else {
+				length(unique(x))
+			}
+		})
+		n_big = sapply(clt, function(x) {
+			if(any(is.na(x))) {
+				NA
+			} else {
+				tb = table(x)
+				sum(tb >= 5)
+			}
+		})
 
-		tb = data.frame(method = methods, "#clusters" = stats["n_all"], "#cluster(size >= 5)" = stats["n_large"], check.names = FALSE)
+		tb = data.frame(method = methods, "#clusters" = n_all, "#cluster(size >= 5)" = n_big, check.names = FALSE)
 
 		if(!requireNamespace("gridExtra", quietly = TRUE)) {
 			stop_wrap("Package gridExtra should be installed.")
 		}
 		pl[[length(pl) + 1]] = gridExtra::tableGrob(tb, rows = NULL)
 
-		print(cowplot::plot_grid(plotlist = pl, nrow = nrow))
+		np = length(pl)
+
+		grid.newpage()
+		ncol = ceiling(np/nrow)
+		pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
+		for(i in 1:np) {
+			ir = ceiling(i/ncol)
+			ic = i %% ncol; if(ic == 0) ic = ncol
+			pushViewport(viewport(layout.pos.row = ir, layout.pos.col = ic))
+			if(i < np) {
+				grid.draw(pl[[i]])
+			} else {
+				pushViewport(viewport(x = unit(0, "npc"), y = unit(0.5, "npc"),
+					width = sum(pl[[i]]$widths), height = sum(pl[[i]]$heights),
+					just = "left"))
+				grid.draw(pl[[i]])
+				popViewport()
+			}
+			popViewport()
+		}
 	}
 }
 

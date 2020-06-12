@@ -13,6 +13,7 @@ cluster_mat = function(mat, value_fun = median) {
 	.cluster_mat(mat, dist_mat = dist(mat), .env = env)
 
 	dend = env$dend
+
 	max_d = dend_max_depth(dend)
 	dend = dendrapply(dend, function(d) {
 		attr(d, "height") = max_d - attr(d, "height")
@@ -21,6 +22,7 @@ cluster_mat = function(mat, value_fun = median) {
 
 	# to correctly assign midpoint for each node
 	dend2 = as.dendrogram(as.hclust(dend))
+
 	dend = edit_node(dend, function(d, index) {
 		if(is.null(index)) {  # top node
 			if(!is.leaf(d)) {
@@ -84,7 +86,7 @@ cluster_mat = function(mat, value_fun = median) {
 	}
 	l1 = cl == 1
 	l2 = cl == 2
-	if(sum(mat[l1, l1]) > sum(mat[l2, l2])) {
+	if(mean(mat[l1, l1]) > mean(mat[l2, l2])) {
 		l3 = l1
 		l1 = l2
 		l2 = l3
@@ -208,7 +210,16 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 	if(return == "dend") {
 		dend2
 	} else {
-		cutree(as.hclust(dend2), h = 0.1)
+		cl = cutree(as.hclust(dend2), h = 0.1)
+
+		od = order.dendrogram(dend2)
+		cl = factor(cl, levels = unique(cl[od]))
+		tb = table(cl)
+		tb = sort(tb, decreasing = TRUE)
+
+		map = structure(1:length(tb), names = names(tb))
+		cl = map[as.character(cl)]
+		return(cl)
 	}
 }
 
@@ -328,6 +339,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 			row_title = NULL, column_title = NULL,
 			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
 			border = border, show_heatmap_legend = show_heatmap_legend) + NULL
+
 		if(is.null(score_col_fun)) {
 			draw(ht)
 		} else {
