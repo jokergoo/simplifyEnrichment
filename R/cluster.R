@@ -254,7 +254,7 @@ cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100
 	mclustBIC = mclust::mclustBIC
 
 	pca = prcomp(as.matrix(mat))
-	fit = mclust::Mclust(pca$x[, 1:3], G = G, verbose = FALSE, control = emControl(itmax = c(1000, 1000)), ...)
+	fit = mclust::Mclust(pca$x[, 1:3], G = G, verbose = FALSE, control = mclust::emControl(itmax = c(1000, 1000)), ...)
 
 	unname(fit$classification)
 }

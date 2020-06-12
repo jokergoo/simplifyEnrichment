@@ -26,7 +26,7 @@
 # == value
 # A list of cluster label vectors for different clustering methods.
 #
-compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
+compare_methods_make_clusters = function(mat, method = all_clustering_methods(),
 	verbose = TRUE) {
 
 	clt = list()
