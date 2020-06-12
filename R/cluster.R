@@ -241,6 +241,9 @@ cluster_by_igraph = function(mat,
 # -G Passed to the ``G`` argument in `mclust::Mclust`.
 # -... Other arguments passed to `mclust::Mclust`.
 #
+# == details
+# mclust is applied on the first three principle compoments of ``mat``.
+#
 # == value
 # A vector of cluster labels (in numeric).
 #
@@ -249,7 +252,10 @@ cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100
 		stop_wrap("Package mclust should be installed.")
 	}
 	mclustBIC = mclust::mclustBIC
-	fit = mclust::Mclust(as.matrix(mat), G = G, verbose = FALSE, ...)
+
+	pca = prcomp(as.matrix(mat))
+	fit = mclust::Mclust(pca$x[, 1:3], G = G, verbose = FALSE, control = emControl(itmax = c(1000, 1000)), ...)
+
 	unname(fit$classification)
 }
 

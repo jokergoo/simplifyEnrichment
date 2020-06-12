@@ -378,7 +378,7 @@ and `walktrap` can identify both small and large clusters, however, some large
 clusters should still need to be split further more.
 
 ```{r, echo = FALSE, fig.cap = "Figure 7. Compare clustering from different methods. Tiny clusters (size < 5) are merged into a separated cluster marked by a green line."}
-knitr::include_graphics("GO_heatmap_random_BP.jpg")
+knitr::include_graphics("https://jokergoo.github.io/simplifyGO_figures/random_BP/GO_heatmap_random_BP_1.jpg")
 ```
 
 We use the following metrics to benchmark the clustering methods:
