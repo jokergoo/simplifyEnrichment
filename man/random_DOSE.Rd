@@ -20,4 +20,5 @@ A vector of DOSE IDs.
 \examples{
 # There is no example
 NULL
+
 }

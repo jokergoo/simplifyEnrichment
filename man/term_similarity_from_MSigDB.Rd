@@ -21,4 +21,5 @@ A symmetric matrix
 \examples{
 # There is no example
 NULL
+
 }

@@ -36,4 +36,5 @@ No value is returned.
 \examples{
 # There is no example
 NULL
+
 }

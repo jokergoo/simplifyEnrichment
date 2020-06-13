@@ -20,4 +20,5 @@ The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA pack
 \examples{
 # There is no example
 NULL
+
 }

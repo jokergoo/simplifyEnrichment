@@ -40,4 +40,5 @@ A vector of cluster labels (in numeric).
 \examples{
 # There is no example
 NULL
+
 }

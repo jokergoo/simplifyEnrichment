@@ -40,4 +40,5 @@ A list of cluster label vectors for different clustering methods.
 \examples{
 # There is no example
 NULL
+
 }
