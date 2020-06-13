@@ -16,15 +16,10 @@ cluster_by_mclust(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100))), ...)
   \item{...}{Other arguments passed to \code{\link[mclust]{Mclust}}.}
 
 }
-\details{
-mclust is applied on the first three principle compoments of \code{mat}.
-
-}
 \value{
 A vector of cluster labels (in numeric).
 }
 \examples{
 # There is no example
 NULL
-
 }

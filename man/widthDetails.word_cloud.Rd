@@ -20,5 +20,4 @@ A \code{\link[grid]{unit}} object.
 \examples{
 # There is no example
 NULL
-
 }

@@ -26,5 +26,4 @@ If there are more than one ontologies detected. It returns \code{NULL}.
 \examples{
 # There is no example
 NULL
-
 }

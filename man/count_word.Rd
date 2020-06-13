@@ -25,5 +25,4 @@ A data frame with words and frequencies.
 \examples{
 # There is no example
 NULL
-
 }

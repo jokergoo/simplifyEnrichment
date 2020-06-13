@@ -22,5 +22,4 @@ A vector of GO IDs.
 \examples{
 # There is no example
 NULL
-
 }

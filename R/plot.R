@@ -12,6 +12,7 @@
 #     with size less than ``min_term`` are all merged into one separated cluster in the heatmap.
 # -order_by_size Whether to reorder clusters by their sizes. The cluster
 #      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
+# -cluster_slices Whether to cluster slices.
 # -exclude_words Words that are excluded in the word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
 # -word_cloud_grob_param A list of graphic parameters passed to `word_cloud_grob`.

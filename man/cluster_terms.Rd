@@ -47,5 +47,4 @@ the function returns a \code{try-error} object.
 \examples{
 # There is no example
 NULL
-
 }

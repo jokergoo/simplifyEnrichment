@@ -14,8 +14,10 @@ term_similarity(gl)
   \item{gl}{A list of genes that are in the terms.}
 
 }
+\value{
+A symmetric matrix
+}
 \examples{
 # There is no example
 NULL
-
 }
