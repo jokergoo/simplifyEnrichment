@@ -6,7 +6,7 @@
 #
 # == value
 # A symmetric matrix
-term_similarity = function(gl, method = c("jaccard", "kappa")) {
+term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
@@ -109,7 +109,7 @@ term_similarity_from_enrichResult = function(x) {
 #
 # == value
 # A symmetric matrix
-term_similarity_from_KEGG = function(term_id) {
+term_similarity_from_KEGG = function(term_id, ...) {
 
 	if(!requireNamespace("clusterProfiler")) {
 		stop_wrap("'clusterProfiler' package should be installed.")
@@ -123,7 +123,7 @@ term_similarity_from_KEGG = function(term_id) {
 
 	gl = KEGG_DATA$PATHID2EXTID[term_id]
 
-	term_similarity(gl)
+	term_similarity(gl, ...)
 }
 
 # == title
@@ -134,7 +134,7 @@ term_similarity_from_KEGG = function(term_id) {
 #
 # == value
 # A symmetric matrix
-term_similarity_from_Reactome = function(term_id) {
+term_similarity_from_Reactome = function(term_id, ...) {
 	if(!requireNamespace("reactome.db")) {
 		stop_wrap("'reactome.db' package should be installed.")
 	}
@@ -142,7 +142,7 @@ term_similarity_from_Reactome = function(term_id) {
 	all = as.list(reactome.db::reactomePATHID2EXTID)
 	gl = all[term_id]
 
-	term_similarity(gl)
+	term_similarity(gl, ...)
 }
 
 # == title
@@ -154,7 +154,7 @@ term_similarity_from_Reactome = function(term_id) {
 #
 # == value
 # A symmetric matrix
-term_similarity_from_MSigDB = function(term_id, category = NULL) {
+term_similarity_from_MSigDB = function(term_id, category = NULL, ...) {
 	if(!requireNamespace("msigdbr")) {
 		stop_wrap("'msigdbr' package should be installed.")
 	}
@@ -163,7 +163,7 @@ term_similarity_from_MSigDB = function(term_id, category = NULL) {
 	lt = split(m_df$entrez_gene, m_df$gs_name)
 	gl = lt[term_id]
 
-	term_similarity(gl)
+	term_similarity(gl, ...)
 }
 
 # == title
@@ -177,7 +177,7 @@ term_similarity_from_MSigDB = function(term_id, category = NULL) {
 #
 # == value
 # A symmetric matrix
-term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL) {
+term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL, ...) {
 	ln = readLines(gmt)
 
 	term_id = sapply(ln, function(x) x[1])
@@ -190,5 +190,5 @@ term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL) {
 
 	gl = lapply(ln, function(x) x[-(1:2)])
 	names(gl) = term_id
-	term_similarity(gl)
+	term_similarity(gl, ...)
 }
