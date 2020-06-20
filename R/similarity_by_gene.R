@@ -38,7 +38,9 @@ kappa = function(x, y) {
 	tab = length(x)
 	oab = sum(x == y)/tab
 	aab = (sum(x)*sum(y) + sum(!x)*sum(!y))/tab/tab
-	(oab - aab)/(1 - aab)
+	k = (oab - aab)/(1 - aab)
+	if(k < 0) k = 0
+	return(k)
 }
 
 #### similarity from enrichResult object ########
@@ -95,8 +97,8 @@ subset_enrichResult = function(x, i) {
 # == details
 # The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
 #
-term_similarity_from_enrichResult = function(x) {
-	term_similarity(x@geneSets[x@result$ID])
+term_similarity_from_enrichResult = function(x, ...) {
+	term_similarity(x@geneSets[x@result$ID], ...)
 }
 
 #### similarity directly from term IDs ######
