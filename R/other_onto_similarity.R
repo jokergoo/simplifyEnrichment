@@ -13,7 +13,7 @@
 #
 DOSE_similarity = function(do_id, measure = "Rel") {
 
-	if(requireNamespace("DOSE")) {
+	if(!requireNamespace("DOSE")) {
 		stop_wrap("'DOSE' package should be installed.")
 	}
 
@@ -38,7 +38,7 @@ DOSE_similarity = function(do_id, measure = "Rel") {
 # A vector of DOSE IDs.
 #
 random_DOSE = function(n) {
-	if(requireNamespace("DO.db")) {
+	if(!requireNamespace("DO.db")) {
 		stop_wrap("'DO.db' package should be installed.")
 	}
 	all_do_id = names(as.list(DO.db::DOTERM))
@@ -60,7 +60,7 @@ random_DOSE = function(n) {
 # A symmetric matrix.
 #
 mesh_similarity = function(mesh_id, measure = "Rel") {
-	if(requireNamespace("meshes")) {
+	if(!requireNamespace("meshes")) {
 		stop_wrap("'meshes' package should be installed.")
 	}
 
@@ -85,7 +85,7 @@ mesh_similarity = function(mesh_id, measure = "Rel") {
 # A vector of mesh IDs.
 #
 random_mesh = function(n) {
-	if(requireNamespace("MeSH.db")) {
+	if(!requireNamespace("MeSH.db")) {
 		stop_wrap("'MeSH.db' package should be installed.")
 	}
 	all_mesh_id = keys(MeSH.db::MeSH.db, keytype = "MESHID")

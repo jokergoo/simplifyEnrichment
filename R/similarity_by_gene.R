@@ -111,7 +111,7 @@ term_similarity_from_enrichResult = function(x) {
 # A symmetric matrix
 term_similarity_from_KEGG = function(term_id) {
 
-	if(requireNamespace("clusterProfiler")) {
+	if(!requireNamespace("clusterProfiler")) {
 		stop_wrap("'clusterProfiler' package should be installed.")
 	}
 
@@ -135,7 +135,7 @@ term_similarity_from_KEGG = function(term_id) {
 # == value
 # A symmetric matrix
 term_similarity_from_Reactome = function(term_id) {
-	if(requireNamespace("reactome.db")) {
+	if(!requireNamespace("reactome.db")) {
 		stop_wrap("'reactome.db' package should be installed.")
 	}
 
@@ -155,7 +155,7 @@ term_similarity_from_Reactome = function(term_id) {
 # == value
 # A symmetric matrix
 term_similarity_from_MSigDB = function(term_id, category = NULL) {
-	if(requireNamespace("msigdbr")) {
+	if(!requireNamespace("msigdbr")) {
 		stop_wrap("'msigdbr' package should be installed.")
 	}
 
