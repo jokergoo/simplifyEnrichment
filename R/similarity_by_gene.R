@@ -6,7 +6,7 @@
 #
 # == value
 # A symmetric matrix
-term_similarity = function(gl) {
+term_similarity = function(gl, method = c("jaccard", "kappa")) {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
@@ -16,17 +16,35 @@ term_similarity = function(gl) {
 		mg[i, gl[[i]]] = 1
 	}
 
-	mat = 1 - dist(mg, method = "binary")
-	mat = as.matrix(mat)
+	method = match.arg(method)[1]
+	if(method == "jaccard") {
+		mat = 1 - dist(mg, method = "binary")
+		mat = as.matrix(mat)
+	} else if(method == "kappa") {
+		mat = matrix(1, nrow = n, ncol = n)
+		for(i in seq(1, n - 1)) {
+			for(j in seq(i+1, n)) {
+				mat[i, j] = mat[j, i] = kappa(mg[i, ], mg[j, ])
+			}
+		}
+	}
 	diag(mat) = 1
 	rownames(mat) = colnames(mat) = names(gl)
-	mat
+	return(mat)
+}
+
+# x and y are logical
+kappa = function(x, y) {
+	tab = length(x)
+	oab = sum(x == y)/tab
+	aab = (sum(x)*sum(y) + sum(!x)*sum(!y))/tab/tab
+	(oab - aab)/(1 - aab)
 }
 
 #### similarity from enrichResult object ########
 
 # == title
-# Subset method of teh enrichResult class
+# Subset method of the enrichResult class
 #
 # == param
 # -x A ``enrichResult`` object.
@@ -47,6 +65,22 @@ term_similarity = function(gl) {
 	} else {
 		x@result = x@result[i, j, drop = FALSE]
 	}
+
+	x@geneSets = x@geneSets[x@result$ID]
+	return(x)
+}
+
+# == title
+# Subset method of the enrichResult class
+#
+# == param
+# -x A ``enrichResult`` object.
+# -i Row indices.
+#
+subset_enrichResult = function(x, i) {
+	rownames(x@result) = x@result$ID
+
+	x@result = x@result[i, , drop = FALSE]
 
 	x@geneSets = x@geneSets[x@result$ID]
 	return(x)

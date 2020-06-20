@@ -18,4 +18,5 @@ subset_enrichResult(x, i)
 \examples{
 # There is no example
 NULL
+
 }

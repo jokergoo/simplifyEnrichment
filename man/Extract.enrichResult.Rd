@@ -2,10 +2,10 @@
 \alias{[.enrichResult}
 \alias{Extract.enrichResult}
 \title{
-Subset method of teh enrichResult class
+Subset method of the enrichResult class
 }
 \description{
-Subset method of teh enrichResult class
+Subset method of the enrichResult class
 }
 \usage{
 \method{[}{enrichResult}(x, i, j, drop = FALSE)
@@ -21,4 +21,5 @@ Subset method of teh enrichResult class
 \examples{
 # There is no example
 NULL
+
 }
