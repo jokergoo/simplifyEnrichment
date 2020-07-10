@@ -56,6 +56,19 @@ cluster_mat = function(mat, value_fun = median) {
 	return(dend)
 }
 
+consensus_kmeans = function(mat, centers, km_repeats = 10) {
+    partition_list = lapply(seq_len(km_repeats), function(i) {
+        as.cl_hard_partition(kmeans(mat, centers))
+    })
+    partition_list = cl_ensemble(list = partition_list)
+    partition_consensus = cl_consensus(partition_list)
+    cl = as.vector(cl_class_ids(partition_consensus))
+    if(length(unique(cl)) == 1) {
+    	cl = partition_list[[1]]$.Data$cluster
+    }
+    cl
+}
+
 .cluster_mat = function(mat, dist_mat = dist(mat), .env, index = seq_len(nrow(mat)), 
 	depth = 0, dend_index = NULL) {
 
@@ -74,11 +87,10 @@ cluster_mat = function(mat, value_fun = median) {
 		)
 		return(NULL)
 	}
-
 	if(nrow(mat) == 2) {
 		cl = c(1, 2)
 	} else {
-		oe = try(suppressWarnings(cl <- kmeans(mat, centers = 2)$cluster), silent = TRUE)
+		oe = try(suppressWarnings(cl <- consensus_kmeans(mat, centers = 2)), silent = TRUE)
 		if(inherits(oe, "try-error")) {
 			cl = rep(2, nr)
 			cl[seq_len(ceiling(nr/2))] = 1

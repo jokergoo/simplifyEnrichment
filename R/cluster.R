@@ -81,50 +81,6 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 }
 
 
-# cluster_terms = function(mat, method = "binary_cut", catch_error = FALSE, verbose = TRUE, ...) {
-	
-# 	if(nrow(mat) != ncol(mat)) {
-# 		stop_wrap("The matrix should be square.")
-# 	}
-
-# 	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
-
-# 	if(any(method %in% c("cluster_by_kmeans", "kmeans"))) {
-# 		oe = try(cl <- cluster_by_kmeans(mat, ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_by_dynamicTreeCut", "dynamicTreeCut"))) {
-# 		oe  = try(cl <- cluster_by_dynamicTreeCut(mat, ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_by_mclust", "mclust"))) {
-# 		oe = try(cl <- cluster_by_mclust(mat, ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_by_apcluster", "apcluster"))) {
-# 		oe = try(cl <- cluster_by_apcluster(mat, ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_fast_greedy", "fast_greedy"))) {
-# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_fast_greedy", ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_leading_eigen", "leading_eigen"))) {
-# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_leading_eigen", ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_louvain", "louvain"))) {
-# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_louvain", ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_walktrap", "walktrap"))) {
-# 		oe = try(cl <- cluster_by_igraph(mat, method = "cluster_walktrap", ...), silent = TRUE)
-# 	} else if(any(method %in% c("cluster_by_binarycut", "binary_cut"))) {
-# 		oe = try(cl <- binary_cut(mat, ...), silent = TRUE)
-# 	} else {
-# 		stop_wrap(qq("method '@{method}' is not supported."))
-# 	}
-
-# 	if(inherits(oe, "try-error")) {
-# 		if(catch_error) {
-# 			return(oe)
-# 		} else {
-# 			cat("\n")
-# 			stop(oe)
-# 		}
-# 	}
-
-# 	if(verbose) qqcat(" @{length(unique(cl))} clusters.\n")
-
-# 	return(cl)
-# }
-
 # == title
 # Cluster similarity matrix by k-means clustering
 #

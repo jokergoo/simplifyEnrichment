@@ -1,9 +1,9 @@
 # == title
-# Calculate DOSE similarity matrix
+# Calculate Disease Ontology (DO) similarity matrix
 #
 # == param
-# -do_id A vector of DOSE IDs.
-# -measure Measurement for the DOSE similarity, pass to `GOSemSim::termSim`.
+# -do_id A vector of DO IDs.
+# -measure Measurement for the DO similarity, pass to `GOSemSim::termSim`.
 #
 # == details
 # This function is basically a wrapper on `GOSemSim::termSim`.
@@ -11,7 +11,7 @@
 # == value
 # A symmetric matrix.
 #
-DOSE_similarity = function(do_id, measure = "Rel") {
+DO_similarity = function(do_id, measure = "Rel") {
 
 	if(!requireNamespace("DOSE")) {
 		stop_wrap("'DOSE' package should be installed.")
@@ -29,15 +29,15 @@ DOSE_similarity = function(do_id, measure = "Rel") {
 }
 
 # == title
-# Generate random DOSE IDs
+# Generate random DO IDs
 #
 # == param
-# -n Number of DOSE IDs.
+# -n Number of DO IDs.
 #
 # == value
-# A vector of DOSE IDs.
+# A vector of DO IDs.
 #
-random_DOSE = function(n) {
+random_DO = function(n) {
 	if(!requireNamespace("DO.db")) {
 		stop_wrap("'DO.db' package should be installed.")
 	}

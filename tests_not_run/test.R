@@ -125,7 +125,7 @@ split_by_block = function(n, size) {
 }
 
 NCOL <- length(go_id)
-SPLIT = split_by_block(NCOL, size)
+SPLIT = split_by_block(NCOL, 250)
 COMBS <- expand.grid(1:length(SPLIT), 1:length(SPLIT))
 COMBS <- t(apply(COMBS, 1, sort))
 COMBS <- unique(COMBS)
@@ -147,5 +147,4 @@ for(i in seq_len(nrow(COMBS))) {
 		m[ind2, ind1] = lt[[i]]
 	}
 }
-
 
