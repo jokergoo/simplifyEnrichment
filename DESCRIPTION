@@ -8,7 +8,7 @@ Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.6.0), BiocGenerics
 Imports: GOSemSim, ComplexHeatmap (>= 2.4.2), circlize, GetoptLong, digest, 
          tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods, clue,
-         grDevices, graphics, stats, utils
+         grDevices, graphics, stats, utils, proxyC, Matrix
 Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph, gridExtra,
           dynamicTreeCut, testthat, gridtext, gridGraphics, clusterProfiler,
           msigdbr, meshes, MeSH.db, DOSE, DO.db, reactome.db

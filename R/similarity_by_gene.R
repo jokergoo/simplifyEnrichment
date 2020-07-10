@@ -15,18 +15,13 @@ term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	for(i in seq_len(n)) {
 		mg[i, gl[[i]]] = 1
 	}
+	mg = as(mg, "sparsematrix")
 
 	method = match.arg(method)[1]
 	if(method == "jaccard") {
-		mat = 1 - dist(mg, method = "binary")
-		mat = as.matrix(mat)
+		mat = proxyC::simil(mg, method = "jaccard")
 	} else if(method == "kappa") {
-		mat = matrix(1, nrow = n, ncol = n)
-		for(i in seq(1, n - 1)) {
-			for(j in seq(i+1, n)) {
-				mat[i, j] = mat[j, i] = kappa(mg[i, ], mg[j, ])
-			}
-		}
+		mat = kappa_dist(mg)
 	}
 	diag(mat) = 1
 	rownames(mat) = colnames(mat) = names(gl)
@@ -40,6 +35,18 @@ kappa = function(x, y) {
 	aab = (sum(x)*sum(y) + sum(!x)*sum(!y))/tab/tab
 	k = (oab - aab)/(1 - aab)
 	if(k < 0) k = 0
+	return(k)
+}
+
+# by rows
+kappa_dist = function(m) {
+	tab = ncol(m)
+	oab = proxyC::simil(m, method = "simple matching")
+	m1 = rowSums(m)
+	m2 = abs(rowSums(m - 1))
+	aab = (outer(m1, m1) + outer(m2, m2))/tab/tab
+	k = (oab - aab)/(1 - aab)
+	k[k < 0] = 0
 	return(k)
 }
 

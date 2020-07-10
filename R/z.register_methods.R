@@ -115,6 +115,7 @@ register_clustering_methods(
 	leading_eigen = function(mat, ...) cluster_by_igraph(mat, method = "cluster_leading_eigen", ...),
 	louvain = function(mat, ...) cluster_by_igraph(mat, method = "cluster_louvain", ...),
 	walktrap = function(mat, ...) cluster_by_igraph(mat, method = "cluster_walktrap", ...),
+	hdbscan = function(mat, ...) dbscan::hdbscan(mat, minPts = 5)$cluster,
 	binary_cut = function(mat, ...) binary_cut(mat, ...)
 )
 
