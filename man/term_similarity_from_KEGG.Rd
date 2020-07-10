@@ -7,7 +7,7 @@ Similarity between KEGG terms
 Similarity between KEGG terms
 }
 \usage{
-term_similarity_from_KEGG(term_id)
+term_similarity_from_KEGG(term_id, ...)
 }
 \arguments{
 

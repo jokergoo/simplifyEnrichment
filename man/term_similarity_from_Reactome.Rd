@@ -7,7 +7,7 @@ Similarity between Reactome terms
 Similarity between Reactome terms
 }
 \usage{
-term_similarity_from_Reactome(term_id)
+term_similarity_from_Reactome(term_id, ...)
 }
 \arguments{
 

@@ -7,7 +7,7 @@ Similarity between terms based on the overlap of genes
 Similarity between terms based on the overlap of genes
 }
 \usage{
-term_similarity(gl, method = c("jaccard", "kappa"))
+term_similarity(gl, method = c("kappa", "jaccard"))
 }
 \arguments{
 

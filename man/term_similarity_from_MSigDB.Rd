@@ -7,7 +7,7 @@ Similarity between MSigDB terms
 Similarity between MSigDB terms
 }
 \usage{
-term_similarity_from_MSigDB(term_id, category = NULL)
+term_similarity_from_MSigDB(term_id, category = NULL, ...)
 }
 \arguments{
 

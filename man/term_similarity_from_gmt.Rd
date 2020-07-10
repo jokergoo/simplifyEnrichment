@@ -7,7 +7,7 @@ Similarity between terms from a gmt file
 Similarity between terms from a gmt file
 }
 \usage{
-term_similarity_from_gmt(term_id, gmt, extract_term_id = NULL)
+term_similarity_from_gmt(term_id, gmt, extract_term_id = NULL, ...)
 }
 \arguments{
 

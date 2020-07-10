@@ -7,7 +7,7 @@ Similarity between terms in the enrichResult class
 Similarity between terms in the enrichResult class
 }
 \usage{
-term_similarity_from_enrichResult(x)
+term_similarity_from_enrichResult(x, ...)
 }
 \arguments{
 
