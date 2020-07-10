@@ -17,7 +17,7 @@ DO_similarity = function(do_id, measure = "Rel") {
 		stop_wrap("'DOSE' package should be installed.")
 	}
 
-	if(!exist(".DOSEEnv", envir = .GlobalEnv)) {
+	if(!exists(".DOSEEnv", envir = .GlobalEnv)) {
 		message_wrap("'DOSE' package requires a '.DOSEEnv' variable stored in the '.GlobalEnv' environment. Please manualy create one by `.GlobalEnv$.DOSEEnv = new.env()` or simply `library(DOSE)`.")
 	}
 
