@@ -15,7 +15,7 @@ term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	for(i in seq_len(n)) {
 		mg[i, gl[[i]]] = 1
 	}
-	mg = as(mg, "sparsematrix")
+	mg = as(mg, "sparseMatrix")
 
 	method = match.arg(method)[1]
 	if(method == "jaccard") {
