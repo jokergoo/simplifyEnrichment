@@ -68,7 +68,7 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		class_mean = do.call(rbind, class_mean)
 		ns = nrow(class_mean)
 
-		class_dend = as.dendrogram(hclust(dist(class_mean)))
+		class_dend = as.dendrogram(hclust(stats::dist(class_mean)))
 		class_dend = reorder(class_dend, wts = rowSums(class_mean))
 		map = structure(1:ns, names = order.dendrogram(class_dend))
 
@@ -164,7 +164,7 @@ cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 	if(!requireNamespace("dynamicTreeCut", quietly = TRUE)) {
 		stop_wrap("Package dynamicTreeCut should be installed.")
 	}
-	cl = dynamicTreeCut::cutreeDynamic(hclust(dist(mat)), distM = 1 - mat, minClusterSize = minClusterSize, verbose = 0, ...)
+	cl = dynamicTreeCut::cutreeDynamic(hclust(stats::dist(mat)), distM = 1 - mat, minClusterSize = minClusterSize, verbose = 0, ...)
 	unname(cl)
 }
 
