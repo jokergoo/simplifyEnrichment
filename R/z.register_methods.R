@@ -111,11 +111,11 @@ register_clustering_methods(
 	dynamicTreeCut = function(mat, ...) cluster_by_dynamicTreeCut(mat, ...),
 	mclust = function(mat, ...) cluster_by_mclust(mat, ...),
 	apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),
+	hdbscan = function(mat, ...) dbscan::hdbscan(mat, minPts = 5)$cluster,
 	fast_greedy = function(mat, ...) cluster_by_igraph(mat, method = "cluster_fast_greedy", ...),
 	leading_eigen = function(mat, ...) cluster_by_igraph(mat, method = "cluster_leading_eigen", ...),
 	louvain = function(mat, ...) cluster_by_igraph(mat, method = "cluster_louvain", ...),
 	walktrap = function(mat, ...) cluster_by_igraph(mat, method = "cluster_walktrap", ...),
-	hdbscan = function(mat, ...) dbscan::hdbscan(mat, minPts = 5)$cluster,
 	binary_cut = function(mat, ...) binary_cut(mat, ...)
 )
 

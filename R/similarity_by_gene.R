@@ -23,6 +23,7 @@ term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	} else if(method == "kappa") {
 		mat = kappa_dist(mg)
 	}
+	mat = as.matrix(mat)
 	diag(mat) = 1
 	rownames(mat) = colnames(mat) = names(gl)
 	return(mat)
