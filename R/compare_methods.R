@@ -147,13 +147,16 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 
 } else {
 		pl = list()
+		lgd = NULL
 		for(i in seq_along(methods)) {
 			if(any(is.na(clt[[i]]))) {
 				pl[[i]] = textGrob(qq("@{methods[i]}\nan error occured."))
 			} else {
-				pl[[i]] = grid.grabExpr(ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, 
+				pl[[i]] = grid.grabExpr(ht <- ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, 
 					column_title = qq("@{nrow(mat)} terms clustered by '@{methods[i]}'"),
 					show_heatmap_legend = FALSE))
+				lgd = color_mapping_legend(ht@ht_list[[1]]@matrix_color_mapping, plot = FALSE,
+					legend_direction = "horizontal", title_position = "lefttop")
 			}
 		}
 
@@ -192,11 +195,15 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 			if(i < np) {
 				grid.draw(pl[[i]])
 			} else {
-				pushViewport(viewport(x = unit(0, "npc"), y = unit(0.5, "npc"),
+				pushViewport(viewport(x = unit(0, "npc") + unit(2, "mm"), y = unit(1, "npc") - unit(1, "cm"),
 					width = sum(pl[[i]]$widths), height = sum(pl[[i]]$heights),
-					just = "left"))
+					just = c("left", "top")))
 				grid.draw(pl[[i]])
 				popViewport()
+
+				if(!is.null(lgd)) {
+					draw(lgd, x = unit(0, "npc") + unit(2, "mm"), y = unit(1, "npc") - sum(pl[[i]]$heights) - unit(1.5, "cm"), just = c("left", "top"))
+				}
 			}
 			popViewport()
 		}

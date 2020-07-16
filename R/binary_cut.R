@@ -297,6 +297,10 @@ render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE
 }
 
 dend_env = new.env()
+
+# == title
+# Visualize the process of binary cut
+#
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL, 
 	border = "#404040", depth = NULL, show_heatmap_legend = TRUE, ...) {
 

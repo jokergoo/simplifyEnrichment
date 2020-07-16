@@ -9,7 +9,7 @@ Depends: R (>= 3.6.0), BiocGenerics
 Imports: GOSemSim, ComplexHeatmap (>= 2.4.2), circlize, GetoptLong, digest, 
          tm, GO.db, org.Hs.eg.db, AnnotationDbi, grid, slam, methods, clue,
          grDevices, graphics, stats, utils, proxyC, Matrix
-Suggests: knitr, ggplot2, cowplot, mclust, apcluster, igraph, gridExtra,
+Suggests: knitr, ggplot2, cowplot, mclust, apcluster, MCL, igraph, gridExtra,
           dynamicTreeCut, testthat, gridtext, gridGraphics, clusterProfiler,
           msigdbr, meshes, MeSH.db, DOSE, DO.db, reactome.db
 Description: A new method (binary cut) is proposed to effectively cluster 
