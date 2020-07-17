@@ -17,9 +17,9 @@ partition_by_pam = function(mat, k) {
 }
 
 partition_by_hclust = function(mat, k) {
-    cutree(hclust(dist(mat), k))
+    cutree(hclust(dist(mat)), k)
 }
 
 partition_by_skmeans = function(mat, k) {
-    skmeans::skmeans(x = mat, k = k)
+    skmeans::skmeans(x = mat, k = k)$cluster
 }
