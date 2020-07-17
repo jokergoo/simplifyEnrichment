@@ -13,6 +13,7 @@ term_similarity_from_MSigDB(term_id, category = NULL, ...)
 
   \item{term_id}{A vector of MSigDB gene set names.}
   \item{category}{E.g., C1, C2, ...}
+  \item{...}{-...}
 
 }
 \value{

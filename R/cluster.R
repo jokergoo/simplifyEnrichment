@@ -256,3 +256,39 @@ cluster_by_apcluster = function(mat, s = apcluster::negDistMat(r = 2), ...) {
 	cl
 }
 
+
+# == title
+# Cluster similarity matrix by hdbscan
+#
+# == param
+# -mat The similarity matrix.
+# -minPts Passed to the ``minPts`` argument in `dbscan::hdbscan`.
+# -... Other arguments passed to `dbscan::hdbscan`.
+#
+# == value
+# A vector of cluster labels (in numeric).
+#
+cluster_by_hdbscan = function(mat, minPts = 5, ...) {
+	if(!requireNamespace("dbscan", quietly = TRUE)) {
+		stop_wrap("Package 'dbscan' should be installed.")
+	}
+	dbscan::hdbscan(mat, minPts = minPts, ...)$cluster
+}
+
+# == title
+# Cluster similarity matrix by MCL
+#
+# == param
+# -mat The similarity matrix.
+# -addLoops Passed to the ``addLoops`` argument in `MCL::mcl`.
+# -... Other arguments passed to `MCL::mcl`.
+#
+# == value
+# A vector of cluster labels (in numeric).
+#
+cluster_by_MCL = function(mat, addLoops = FALSE, ...) {
+	if(!requireNamespace("MCL", quietly = TRUE)) {
+		stop_wrap("Package 'MCL' should be installed.")
+	}
+	MCL::mcl(mat, addLoops = addLoops, allow1 = TRUE, ...)$Cluster
+}

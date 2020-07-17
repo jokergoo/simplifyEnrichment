@@ -10,6 +10,7 @@ simplifyGO(mat)
 cutoff = seq(0.6, 0.9, by = 0.01)
 s = NULL
 for(i in seq_along(cutoff)) {
+	qqcat("@{i}/@{length(cutoff)}...\n")
 	cl = binary_cut(mat, cutoff = cutoff[i])
 	s[i] = difference_score(mat, cl)
 }

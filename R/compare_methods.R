@@ -72,7 +72,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_me
 #
 # == value
 # No value is returned.
-compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap", "UMAP"), nrow = 2) {
+compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
@@ -81,7 +81,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap",
 	plot_type = match.arg(plot_type)[1]
 
 	if(!requireNamespace("cowplot", quietly = TRUE)) {
-		stop_wrap("Package cowplot should be installed.")
+		stop_wrap("Package 'cowplot' should be installed.")
 	}
 		
 	if(plot_type == "mixed") {
@@ -111,7 +111,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap",
 		stats$method = factor(rownames(stats), levels = rownames(stats))
 
 		if(!requireNamespace("ggplot2", quietly = TRUE)) {
-			stop_wrap("Package ggplot2 should be installed.")
+			stop_wrap("Package 'ggplot2' should be installed.")
 		}
 		suppressWarnings(
 			p1 <- ggplot2::ggplot(stats, ggplot2::aes(x = stats$method, y = stats$diff_s)) +
@@ -155,8 +155,10 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap",
 				pl[[i]] = grid.grabExpr(ht <- ht_clusters(mat, clt[[i]], draw_word_cloud = FALSE, 
 					column_title = qq("@{nrow(mat)} terms clustered by '@{methods[i]}'"),
 					show_heatmap_legend = FALSE))
-				lgd = color_mapping_legend(ht@ht_list[[1]]@matrix_color_mapping, plot = FALSE,
+				lgd1 = color_mapping_legend(ht@ht_list[[1]]@matrix_color_mapping, plot = FALSE,
 					legend_direction = "horizontal", title_position = "lefttop")
+				lgd2 = Legend(labels = "Small clusters (<= 5)", legend_gp = gpar(fill = "darkgreen"))
+				lgd = packLegend(lgd1, lgd2)
 			}
 		}
 
@@ -207,37 +209,38 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap",
 			}
 			popViewport()
 		}
-	} else if(tolower(plot_type) == "umap") {
-		fit = umap::umap(mat)
-	    loc = fit$layout
-
-	    rgx = range(loc[, 1])
-	    rgy = range(loc[, 2])
-
-	    rgx = c(rgx[1] - diff(rgx)*0.05, rgx[2] + diff(rgx)*0.05)
-	    rgy = c(rgy[1] - diff(rgy)*0.05, rgy[2] + diff(rgy)*0.05)
-
-	    np = length(clt)
-
-		grid.newpage()
-		ncol = ceiling(np/nrow)
-		pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
-		for(i in 1:np) {
-			ir = ceiling(i/ncol)
-			ic = i %% ncol; if(ic == 0) ic = ncol
-			pushViewport(viewport(layout.pos.row = ir, layout.pos.col = ic))
-			
-			pushViewport(viewport(xscale = rgx, yscale = rgy,
-				width = 0.9, height = 0.8))
-			grid.rect()
-			col = rand_color(length(unique(clt[[i]])))
-			names(col) = as.character(unique(clt[[i]]))
-			grid.points(loc[, 1], loc[, 2], pch = 16, size = unit(2, "bigpts"), gp = gpar(col = col[ as.character(clt[[i]]) ]))
-			grid.text(names(clt)[i], y = unit(1, "npc") + unit(4, "pt"), just = "bottom", gp = gpar(fontsize = 8))
-			popViewport()
-			popViewport()
-		}
 	}
+	#  else if(tolower(plot_type) == "umap") {
+	# 	fit = umap::umap(mat)
+	#     loc = fit$layout
+
+	#     rgx = range(loc[, 1])
+	#     rgy = range(loc[, 2])
+
+	#     rgx = c(rgx[1] - diff(rgx)*0.05, rgx[2] + diff(rgx)*0.05)
+	#     rgy = c(rgy[1] - diff(rgy)*0.05, rgy[2] + diff(rgy)*0.05)
+
+	#     np = length(clt)
+
+	# 	grid.newpage()
+	# 	ncol = ceiling(np/nrow)
+	# 	pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
+	# 	for(i in 1:np) {
+	# 		ir = ceiling(i/ncol)
+	# 		ic = i %% ncol; if(ic == 0) ic = ncol
+	# 		pushViewport(viewport(layout.pos.row = ir, layout.pos.col = ic))
+			
+	# 		pushViewport(viewport(xscale = rgx, yscale = rgy,
+	# 			width = 0.9, height = 0.8))
+	# 		grid.rect()
+	# 		col = rand_color(length(unique(clt[[i]])))
+	# 		names(col) = as.character(unique(clt[[i]]))
+	# 		grid.points(loc[, 1], loc[, 2], pch = 16, size = unit(2, "bigpts"), gp = gpar(col = col[ as.character(clt[[i]]) ]))
+	# 		grid.text(names(clt)[i], y = unit(1, "npc") + unit(4, "pt"), just = "bottom", gp = gpar(fontsize = 8))
+	# 		popViewport()
+	# 		popViewport()
+	# 	}
+	# }
 }
 
 compare_methods_calc_concordance = function(clt) {

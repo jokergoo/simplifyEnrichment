@@ -20,4 +20,5 @@ A vector of DO IDs.
 \examples{
 # There is no example
 NULL
+
 }

@@ -12,6 +12,7 @@ term_similarity_from_KEGG(term_id, ...)
 \arguments{
 
   \item{term_id}{A vector of KEGG IDs.}
+  \item{...}{-...}
 
 }
 \value{

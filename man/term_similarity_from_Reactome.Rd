@@ -12,6 +12,7 @@ term_similarity_from_Reactome(term_id, ...)
 \arguments{
 
   \item{term_id}{A vector of Reactome IDs.}
+  \item{...}{-...}
 
 }
 \value{

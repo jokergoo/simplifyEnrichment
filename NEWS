@@ -2,4 +2,5 @@ CHANGES in VERSION 0.99.4
 
 * support more ontologies.
 * support to calculate similarity matrix by gene overlap.
+* node partition fun changed to pam
 ----------------------------------

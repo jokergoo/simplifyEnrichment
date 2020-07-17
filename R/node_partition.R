@@ -13,13 +13,13 @@ consensus_kmeans = function(mat, centers, km_repeats = 10) {
 }
 
 partition_by_pam = function(mat, k) {
-    cluster::pam(mat, k)$clustering
+    pam(mat, k)$clustering
 }
 
 partition_by_hclust = function(mat, k) {
     cutree(hclust(dist(mat)), k)
 }
 
-partition_by_skmeans = function(mat, k) {
-    skmeans::skmeans(x = mat, k = k)$cluster
-}
+# partition_by_skmeans = function(mat, k) {
+#     skmeans::skmeans(x = mat, k = k)$cluster
+# }

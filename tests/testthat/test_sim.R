@@ -43,4 +43,4 @@ km = kappa_dist(sm)
 test_that("test jaccard similarity", {
 	expect_that(km[1, 2], equals(kappa(m[1, ], m[2, ])))
 	expect_that(km[2, 1], equals(kappa(m[2, ], m[1, ])))
-}
+})

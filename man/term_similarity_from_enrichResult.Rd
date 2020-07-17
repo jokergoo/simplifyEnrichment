@@ -12,6 +12,7 @@ term_similarity_from_enrichResult(x, ...)
 \arguments{
 
   \item{x}{A \code{enrichResult} object.}
+  \item{...}{-...}
 
 }
 \details{

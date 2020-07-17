@@ -3,6 +3,7 @@
 #
 # == param
 # -gl A list of genes that are in the terms.
+# -method
 #
 # == value
 # A symmetric matrix
@@ -101,6 +102,7 @@ subset_enrichResult = function(x, i) {
 #
 # == param
 # -x A ``enrichResult`` object.
+# -...
 #
 # == details
 # The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
@@ -116,6 +118,7 @@ term_similarity_from_enrichResult = function(x, ...) {
 #
 # == param
 # -term_id A vector of KEGG IDs.
+# -...
 #
 # == value
 # A symmetric matrix
@@ -141,6 +144,7 @@ term_similarity_from_KEGG = function(term_id, ...) {
 #
 # == param
 # -term_id A vector of Reactome IDs.
+# -...
 #
 # == value
 # A symmetric matrix
@@ -161,6 +165,7 @@ term_similarity_from_Reactome = function(term_id, ...) {
 # == param
 # -term_id A vector of MSigDB gene set names.
 # -category E.g., C1, C2, ...
+# -...
 #
 # == value
 # A symmetric matrix
@@ -184,6 +189,7 @@ term_similarity_from_MSigDB = function(term_id, category = NULL, ...) {
 # -gmt The path of the gmt file.
 # -extract_term_id If the term ID in contained in the first column only as a substring,
 #      setting a function to extract this substring.
+# -...
 #
 # == value
 # A symmetric matrix

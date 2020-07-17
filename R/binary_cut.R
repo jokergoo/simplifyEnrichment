@@ -6,7 +6,7 @@ dend_max_depth = function(dend) {
 }
 
 # cluster the similarity matrix and assign scores to nodes
-cluster_mat = function(mat, value_fun = median, partition_fun = consensus_kmeans) {
+cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam) {
 
 	env = new.env()
 	env$value_fun = value_fun
@@ -287,18 +287,17 @@ dend_env = new.env()
 # Visualize the process of binary cut
 #
 # == param
-# -mat
+# -mat The similarity matrix.
 # -value_fun
 # -cutoff
 # -partition_fun
 # -dend
-# -border
 # -depth
 # -show_heatmap_legend
 # -...
 #
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
-	partition_fun = consensus_kmeans, dend = NULL, 
+	partition_fun = partition_by_pam, dend = NULL, 
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
 	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
@@ -389,6 +388,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # == param
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
+# -partition_fun
 # -cutoff The cutoff for splitting the dendrogram.
 #
 # == value
@@ -397,7 +397,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # == example
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # binary_cut(mat)
-binary_cut = function(mat, value_fun = median, partition_fun = consensus_kmeans,
+binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 	cutoff = 0.85) {
 
 	dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
@@ -405,4 +405,54 @@ binary_cut = function(mat, value_fun = median, partition_fun = consensus_kmeans,
 	return(as.vector(unname(cl)))
 }
 
+# == title
+# Select the cutoff for binary cut
+#
+# == param
+# -mat
+# -cutoff
+#
+select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01)) {
+	s1 = s2 = s3 = s4 = NULL
+	for(i in seq_along(cutoff)) {
+		qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")
+		cl = binary_cut(mat, cutoff = cutoff[i])
+		s1[i] = difference_score(mat, cl)
+		tb = table(cl)
+		s2[i] = length(tb)
+		s3[i] = sum(tb >= 5)
+		s4[i] = block_mean(mat, cl)
+	}
+
+	if(!requireNamespace("cowplot", quietly = TRUE)) {
+		stop_wrap("Package 'cowplot' should be installed.")
+	}
+	if(!requireNamespace("ggplot2", quietly = TRUE)) {
+		stop_wrap("Package 'ggplot2' should be installed.")
+	}
+	suppressWarnings(
+		p1 <- ggplot2::ggplot(data = NULL, ggplot2::aes(x = cutoff, y = s1)) +
+		ggplot2::geom_point() + ggplot2::ylab("Difference score") +
+		ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+	)
+
+	df1 = data.frame(cutoff, s2); colnames(df1) = c("method", "value")
+	df2 = data.frame(cutoff, s3); colnames(df2) = c("method", "value")
+	df1$type = "All sizes"
+	df2$type = "size >= 5"
+	df = rbind(df1, df2)
+	suppressWarnings(
+		p2 <- ggplot2::ggplot(df, ggplot2::aes(x = df$method, y = df$value, col = df$type, fill = df$type)) +
+		ggplot2::geom_point() + ggplot2::ylab("Cluster number") + ggplot2::labs(col = "Type", fill = "Type") +
+		ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
+	)
+
+	suppressWarnings(
+		p3 <- ggplot2::ggplot(data = NULL, ggplot2::aes(x = cutoff, y = s4)) +
+		ggplot2::geom_point() + ggplot2::ylab("Block mean") +
+		ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+	)
+
+	suppressWarnings(cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)))
+}
 

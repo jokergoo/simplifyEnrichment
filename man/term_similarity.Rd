@@ -12,6 +12,7 @@ term_similarity(gl, method = c("kappa", "jaccard"))
 \arguments{
 
   \item{gl}{A list of genes that are in the terms.}
+  \item{method}{-method}
 
 }
 \value{
