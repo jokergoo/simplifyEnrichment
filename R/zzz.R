@@ -14,3 +14,6 @@ This message can be suppressed by:
 
     packageStartupMessage(msg)
 }
+
+
+se_opt = list("verbose" = TRUE)

@@ -148,3 +148,6 @@ for(i in seq_len(nrow(COMBS))) {
 	}
 }
 
+lt = binary_cut_stability(mat, partition_fun = partition_by_pam)
+
+

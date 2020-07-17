@@ -38,7 +38,7 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		stop_wrap("The matrix should be square.")
 	}
 
-	if(verbose) qqcat("cluster @{nrow(mat)} terms by @{method}...")
+	if(verbose) qqcat("Cluster @{nrow(mat)} terms by '@{method}'...")
 	flush.console()
 
 	fun = get_clustering_method(method, control = control)
@@ -162,7 +162,7 @@ knee_finder = function(x, y) {
 #
 cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 	if(!requireNamespace("dynamicTreeCut", quietly = TRUE)) {
-		stop_wrap("Package dynamicTreeCut should be installed.")
+		stop_wrap("Package 'dynamicTreeCut' should be installed.")
 	}
 	cl = dynamicTreeCut::cutreeDynamic(hclust(stats::dist(mat)), distM = 1 - mat, minClusterSize = minClusterSize, verbose = 0, ...)
 	unname(cl)
@@ -198,7 +198,7 @@ cluster_by_igraph = function(mat,
     ...) {
 
 	if(!requireNamespace("igraph", quietly = TRUE)) {
-		stop_wrap("Package igraph should be installed.")
+		stop_wrap("Package 'igraph' should be installed.")
 	}
 
 	if(is.character(method)) {
@@ -224,7 +224,7 @@ cluster_by_igraph = function(mat,
 #
 cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100))), ...) {
 	if(!requireNamespace("mclust", quietly = TRUE)) {
-		stop_wrap("Package mclust should be installed.")
+		stop_wrap("Package 'mclust' should be installed.")
 	}
 	mclustBIC = mclust::mclustBIC
 
@@ -246,7 +246,7 @@ cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100
 #
 cluster_by_apcluster = function(mat, s = apcluster::negDistMat(r = 2), ...) {
 	if(!requireNamespace("apcluster", quietly = TRUE)) {
-		stop_wrap("Package apcluster should be installed.")
+		stop_wrap("Package 'apcluster' should be installed.")
 	}
 	x = apcluster::apcluster(s, mat, ...)
 	cl = numeric(nrow(mat))

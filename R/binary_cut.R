@@ -6,13 +6,15 @@ dend_max_depth = function(dend) {
 }
 
 # cluster the similarity matrix and assign scores to nodes
-cluster_mat = function(mat, value_fun = median) {
+cluster_mat = function(mat, value_fun = median, partition_fun = consensus_kmeans) {
 
 	env = new.env()
 	env$value_fun = value_fun
-	.cluster_mat(mat, dist_mat = dist(mat), .env = env)
+	env$partition_fun = partition_fun
 
+	.cluster_mat(mat, dist_mat = dist(mat), .env = env)
 	dend = env$dend
+	dend = rev(dend)
 
 	max_d = dend_max_depth(dend)
 	dend = dendrapply(dend, function(d) {
@@ -53,25 +55,15 @@ cluster_mat = function(mat, value_fun = median) {
 		return(d)
 	})
 
-	return(dend)
-}
+	hash = digest::digest(list(mat, value_fun, partition_fun))
+	dend_env$dend = dend
+	dend_env$hash = hash
 
-consensus_kmeans = function(mat, centers, km_repeats = 10) {
-    partition_list = lapply(seq_len(km_repeats), function(i) {
-        as.cl_hard_partition(kmeans(mat, centers))
-    })
-    partition_list = cl_ensemble(list = partition_list)
-    partition_consensus = cl_consensus(partition_list)
-    cl = as.vector(cl_class_ids(partition_consensus))
-    if(length(unique(cl)) == 1) {
-    	cl = partition_list[[1]]$.Data$cluster
-    }
-    cl
+	return(dend)
 }
 
 .cluster_mat = function(mat, dist_mat = dist(mat), .env, index = seq_len(nrow(mat)), 
 	depth = 0, dend_index = NULL) {
-
 	nr = nrow(mat)
 
 	if(nr == 1) {
@@ -90,7 +82,7 @@ consensus_kmeans = function(mat, centers, km_repeats = 10) {
 	if(nrow(mat) == 2) {
 		cl = c(1, 2)
 	} else {
-		oe = try(suppressWarnings(cl <- consensus_kmeans(mat, centers = 2)), silent = TRUE)
+		oe = try(suppressWarnings(cl <- .env$partition_fun(mat, 2)), silent = TRUE)
 		if(inherits(oe, "try-error")) {
 			cl = rep(2, nr)
 			cl[seq_len(ceiling(nr/2))] = 1
@@ -190,10 +182,10 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 			attr(d, "height") = 0
 			d
 		})
-		if(plot) {
-			plot(dend)
-			box()
-		}
+		# if(plot) {
+		# 	plot(dend)
+		# 	box()
+		# }
 		return(dend2)
 	}
 
@@ -223,14 +215,7 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 		dend2
 	} else {
 		cl = cutree(as.hclust(dend2), h = 0.1)
-
-		od = order.dendrogram(dend2)
-		cl = factor(cl, levels = unique(cl[od]))
-		tb = table(cl)
-		tb = sort(tb, decreasing = TRUE)
-
-		map = structure(1:length(tb), names = names(tb))
-		cl = map[as.character(cl)]
+		cl = factor(cl, levels = unique(cl[order.dendrogram(dend)]))
 		return(cl)
 	}
 }
@@ -301,17 +286,32 @@ dend_env = new.env()
 # == title
 # Visualize the process of binary cut
 #
-plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL, 
-	border = "#404040", depth = NULL, show_heatmap_legend = TRUE, ...) {
+# == param
+# -mat
+# -value_fun
+# -cutoff
+# -partition_fun
+# -dend
+# -border
+# -depth
+# -show_heatmap_legend
+# -...
+#
+plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
+	partition_fun = consensus_kmeans, dend = NULL, 
+	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
 	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
-		stop_wrap("Package gridGraphics should be installed.")
+		stop_wrap("Package 'gridGraphics' should be installed.")
 	}
 
-	hash = digest::digest(list(mat, value_fun))
+	hash = digest::digest(list(mat, value_fun, partition_fun))
 	if(is.null(dend)) {
 		if(identical(hash, dend_env$hash)) {
 			dend = dend_env$dend
+			if(se_opt$verbose) {
+				cat("use the cached dendrogram.\n")
+			}
 		} else {
 			dend_env$hash = NULL
 		}
@@ -320,7 +320,10 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 		dend_env$hash = NULL
 	}
 	if(is.null(dend)) {
-		dend = cluster_mat(mat, value_fun = value_fun)
+		if(se_opt$verbose) {
+			cat("create a new dendrogram.\n")
+		}
+		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
 		dend_env$dend = dend
 		dend_env$hash = hash
 	}
@@ -334,7 +337,6 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 		cl = cutree(as.hclust(dend2), h = 0.1)
 	}
 	
-	dend2 = rev(dend2)
 	f = function() {
 		op =  par(c("mar","xpd"))
 		par(mar = c(0, 0, 0, 0), xpd = NA)
@@ -346,21 +348,28 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 	}
 	od = order.dendrogram(dend2)
 	p2 = grid.grabExpr({
-		cl = factor(cl, levels = unique(cl[od]))
-		col_fun = colorRamp2(c(0, 1), c("white", "red"))
+		col_fun = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red"))
 		ht = Heatmap(mat, name = "Similarity", col = col_fun,
 			show_row_names = FALSE, show_column_names = FALSE,
 			row_order = od, column_order = od,
-			row_split = cl, column_split = cl,
 			row_title = NULL, column_title = NULL,
-			row_gap = unit(0, "mm"), column_gap = unit(0, "mm"),
-			border = border, show_heatmap_legend = show_heatmap_legend) + NULL
+			show_heatmap_legend = show_heatmap_legend,
+			use_raster = TRUE) + NULL
 
 		if(is.null(score_col_fun)) {
 			draw(ht)
 		} else {
 			draw(ht, heatmap_legend_list = list(Legend(title = "Score", col_fun = score_col_fun)))
 		}
+		decorate_heatmap_body("Similarity", {
+			grid.rect(gp = gpar(fill = NA, col = "#404040"))
+			cl = factor(cl, levels = unique(cl[od]))
+			tbcl = table(cl)
+			ncl = length(cl)
+			x = cumsum(c(0, tbcl))/ncl
+			grid.segments(x, 0, x, 1, default.units = "npc", gp = gpar(col = "#404040"))
+			grid.segments(0, 1 - x, 1, 1 - x, default.units = "npc", gp = gpar(col = "#404040"))
+		})
 	})
 
 	grid.newpage()
@@ -381,8 +390,6 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -cutoff The cutoff for splitting the dendrogram.
-# -n_run If the value is larger than one, `binary_cut` is executed multiple times
-#      and generates a consensus clustering.
 #
 # == value
 # A vector of cluster labels (in numeric). 
@@ -390,21 +397,12 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, dend = NULL,
 # == example
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # binary_cut(mat)
-binary_cut = function(mat, value_fun = median, cutoff = 0.85, n_run = 1) {
-	if(n_run == 1) {
-		dend = cluster_mat(mat, value_fun = value_fun)
-		cl = cut_dend(dend, cutoff)
-		return(unname(cl))
-	} else {
-		partition_list = lapply(seq_len(n_run), function(i) {
-			dend = cluster_mat(mat, value_fun = value_fun)
-			cl = cut_dend(dend, cutoff)
-            as.cl_hard_partition(cl)
-        })
-        partition_list = cl_ensemble(list = partition_list)
-        partition_consensus = cl_consensus(partition_list)
-        as.vector(cl_class_ids(partition_consensus)) 
-	}
+binary_cut = function(mat, value_fun = median, partition_fun = consensus_kmeans,
+	cutoff = 0.85) {
+
+	dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+	cl = cut_dend(dend, cutoff)
+	return(as.vector(unname(cl)))
 }
 
 

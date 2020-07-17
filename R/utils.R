@@ -1,7 +1,7 @@
 
 relabel_class = function (class, ref, full_set = union(class, ref), return_map = TRUE) {
     if(!requireNamespace("clue")) {
-        stop_wrap("Package clue should be installed.")
+        stop_wrap("Package 'clue' should be installed.")
     }
 
     md = mode(class)
@@ -35,4 +35,10 @@ stop_wrap = function (...) {
     x = paste0(...)
     x = paste(strwrap(x), collapse = "\n")
     stop(x, call. = FALSE)
+}
+
+message_wrap = function (...)  {
+    x = paste0(...)
+    x = paste(strwrap(x), collapse = "\n")
+    message(x)
 }

@@ -5,7 +5,7 @@
 
 get_clustering_method = function(method, control = list()) {
 	if(!method %in% .ENV$ALL_CLUSTERING_METHODS) {
-		stop_wrap(qq("clustering method '@{method}' has not been defined yet."))
+		stop_wrap(qq("Clustering method '@{method}' has not been defined yet."))
 	}
 	fun = .ENV$ALL_CLUSTERING_FUN[[method]]
 
@@ -16,7 +16,7 @@ get_clustering_method = function(method, control = list()) {
 				stop_wrap("Length of clusterings should be the same as number of matrix rows.")
 			}
 		} else {
-			stop_wrap(qq("clustering method '@{method}' should return an atomic vector."))
+			stop_wrap(qq("Clustering method '@{method}' should return an atomic vector."))
 		}
 		cl = as.numeric(as.factor(cl))
 

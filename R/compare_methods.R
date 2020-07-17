@@ -72,7 +72,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_me
 #
 # == value
 # No value is returned.
-compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
+compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap", "UMAP"), nrow = 2) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
@@ -145,7 +145,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 			nrow = 1
 		))
 
-} else {
+	} else if(tolower(plot_type) == "heatmap") {
 		pl = list()
 		lgd = NULL
 		for(i in seq_along(methods)) {
@@ -205,6 +205,36 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 					draw(lgd, x = unit(0, "npc") + unit(2, "mm"), y = unit(1, "npc") - sum(pl[[i]]$heights) - unit(1.5, "cm"), just = c("left", "top"))
 				}
 			}
+			popViewport()
+		}
+	} else if(tolower(plot_type) == "umap") {
+		fit = umap::umap(mat)
+	    loc = fit$layout
+
+	    rgx = range(loc[, 1])
+	    rgy = range(loc[, 2])
+
+	    rgx = c(rgx[1] - diff(rgx)*0.05, rgx[2] + diff(rgx)*0.05)
+	    rgy = c(rgy[1] - diff(rgy)*0.05, rgy[2] + diff(rgy)*0.05)
+
+	    np = length(clt)
+
+		grid.newpage()
+		ncol = ceiling(np/nrow)
+		pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
+		for(i in 1:np) {
+			ir = ceiling(i/ncol)
+			ic = i %% ncol; if(ic == 0) ic = ncol
+			pushViewport(viewport(layout.pos.row = ir, layout.pos.col = ic))
+			
+			pushViewport(viewport(xscale = rgx, yscale = rgy,
+				width = 0.9, height = 0.8))
+			grid.rect()
+			col = rand_color(length(unique(clt[[i]])))
+			names(col) = as.character(unique(clt[[i]]))
+			grid.points(loc[, 1], loc[, 2], pch = 16, size = unit(2, "bigpts"), gp = gpar(col = col[ as.character(clt[[i]]) ]))
+			grid.text(names(clt)[i], y = unit(1, "npc") + unit(4, "pt"), just = "bottom", gp = gpar(fontsize = 8))
+			popViewport()
 			popViewport()
 		}
 	}
