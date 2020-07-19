@@ -12,15 +12,17 @@
 # == details
 # The following methods are the default:
 #
-# -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
+# -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
+# -``MCL`` see `cluster_by_MCL`.
+# -``binary_cut`` see `binary_cut`.
 #
 # Also the user-defined methods in `all_clustering_methods` can be used here.
 #
@@ -91,7 +93,7 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 #
 # == details
 # The best number of k for k-means clustering is identified according to the "elbow" or "knee" method on
-# the distribution of within-cluster sum of squares at each k.
+# the distribution of within-cluster sum of squares (WSS) at each k.
 #
 # == value
 # A vector of cluster labels (in numeric).

@@ -1,5 +1,5 @@
-\name{compare_methods_make_plot}
-\alias{compare_methods_make_plot}
+\name{cmp_make_plot}
+\alias{cmp_make_plot}
 \title{
 Make plots for comparing clustering methods
 }
@@ -7,12 +7,12 @@ Make plots for comparing clustering methods
 Make plots for comparing clustering methods
 }
 \usage{
-compare_methods_make_plot(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2)
+cmp_make_plot(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2)
 }
 \arguments{
 
   \item{mat}{A similarity matrix.}
-  \item{clt}{A list of clusterings from \code{\link{compare_methods_make_clusters}}.}
+  \item{clt}{A list of clusterings from \code{\link{cmp_make_clusters}}.}
   \item{plot_type}{What type of plots to make. See Details.}
   \item{nrow}{Number of rows of the layout when \code{plot_type} is set to \code{heatmap}.}
 

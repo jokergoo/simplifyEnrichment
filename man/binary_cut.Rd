@@ -1,10 +1,10 @@
 \name{binary_cut}
 \alias{binary_cut}
 \title{
-Cluster functional terms by binary cutting the similarity matrix
+Cluster functional terms by recursively binary cutting the similarity matrix
 }
 \description{
-Cluster functional terms by binary cutting the similarity matrix
+Cluster functional terms by recursively binary cutting the similarity matrix
 }
 \usage{
 binary_cut(mat, value_fun = median, partition_fun = partition_by_pam,
@@ -14,7 +14,7 @@ binary_cut(mat, value_fun = median, partition_fun = partition_by_pam,
 
   \item{mat}{A similarity matrix.}
   \item{value_fun}{Value function to calculate the score for each node in the dendrogram.}
-  \item{partition_fun}{-partition_fun}
+  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions is this package are \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} (the default) and \code{\link{partition_by_hclust}}.}
   \item{cutoff}{The cutoff for splitting the dendrogram.}
 
 }

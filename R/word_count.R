@@ -3,21 +3,32 @@
 # Calculate word frequency
 #
 # == param
-# -id A vector of term IDs.
+# -go_id A vector of GO IDs.
 # -term The corresponding names or description of terms.
 # -exclude_words The words that should be excluded.
 #
 # == details
+# The input can be simply set with a vector of GO id to ``go_id`` argument that the GO names
+# are automatically extracted, or provide long names/descriptions by ``term`` argument.
+#
+# If the input is GO id, the following words are excluded: ``c("via", "protein", "factor", "side", "type", "specific")``.
+# They are analyzed by ``simplifyEnrichment:::all_GO_word_count()``.
+#
 # The text preprocessing followings the instructions from http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need .
 #
 # == value
 # A data frame with words and frequencies.
 #
-count_word = function(id, term = NULL, exclude_words = NULL) {
+# == example
+# \donttest{
+# go_id = random_GO(500)
+# head(count_word(go_id))
+# }
+count_word = function(go_id, term = NULL, exclude_words = NULL) {
 	
 	if(is.null(term)) {
-		if(grepl("^GO:[0-9]+$", id[1])) {
-			suppressMessages(term <- select(GO.db::GO.db, keys = id, columns = "TERM")$TERM)
+		if(is_GO_id(go_id[1])) {
+			suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
 		} else {
 			stop_wrap("Cannot automatically retrieve the term names by the input ID, please set values for `term` argument manually.")
 		}
@@ -26,26 +37,32 @@ count_word = function(id, term = NULL, exclude_words = NULL) {
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
 	# Load the text as a corpus
-	docs = Corpus(VectorSource(term))
-	# Convert the text to lower case
-	docs = tm_map(docs, content_transformer(tolower))
-	# Remove numbers
-	docs = tm_map(docs, removeNumbers)
-	# Remove stopwords for the language 
-	docs = tm_map(docs, removeWords, stopwords())
-	# Remove punctuations
-	docs = tm_map(docs, removePunctuation)
-	# Eliminate extra white spaces
-	docs = tm_map(docs, stripWhitespace)
-	# Remove your own stopwords
-	docs = tm_map(docs, removeWords, c(exclude_words, GO_EXCLUDE_WORDS))
-	
-	# Create term-document matrix
-	tdm = TermDocumentMatrix(docs)
+	suppressWarnings({
+		docs = Corpus(VectorSource(term))
+		# Convert the text to lower case
+		docs = tm_map(docs, content_transformer(tolower))
+		# Remove numbers
+		docs = tm_map(docs, removeNumbers)
+		# Remove stopwords for the language 
+		docs = tm_map(docs, removeWords, stopwords())
+		# Remove punctuations
+		docs = tm_map(docs, removePunctuation)
+		# Eliminate extra white spaces
+		docs = tm_map(docs, stripWhitespace)
+		# Remove your own stopwords
+		docs = tm_map(docs, removeWords, c(exclude_words, GO_EXCLUDE_WORDS))
+		
+		# Create term-document matrix
+		tdm = TermDocumentMatrix(docs)
+	})
 
 	v = sort(slam::row_sums(tdm), decreasing = TRUE)
 	d = data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
 	d
+}
+
+is_GO_id = function(x) {
+	grepl("^GO:[0-9]+$", x)
 }
 
 
@@ -70,7 +87,7 @@ GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 #
 # == param
 # -text A vector of words.
-# -fontsize The corresponding font size.
+# -fontsize The corresponding font size. With the frequency of the words known, `scale_fontsize` can be used to linearly interpolate frequencies to font sizes.
 # -line_space Space between lines. The value can be a `grid::unit` object or a numeric scalar which is measured in mm.
 # -word_space Space between words. The value can be a `grid::unit` object or a numeric scalar which is measured in mm.
 # -max_width The maximal width of the viewport to put the word cloud. The value can be a `grid::unit` object or a numeric scalar which is measured in mm.

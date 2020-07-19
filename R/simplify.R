@@ -1,7 +1,7 @@
 
 
 # == title
-# Simplify GO enrichment results
+# Simplify Gene Ontology (GO) enrichment results
 #
 # == param
 # -mat A GO similarity matrix.
@@ -36,7 +36,7 @@
 # A data frame with three columns: GO IDs, GO term names and cluster labels.
 #
 # == example
-# \dontrun{
+# \donttest{
 # set.seed(123)
 # go_id = random_GO(500)
 # mat = GO_similarity(go_id)
@@ -61,9 +61,26 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 
 	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
 
-	return(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE))
+	return(invisible(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE)))
 }
 
+# == title
+# Simplify functional enrichment results
+#
+# == param
+# -mat A similarity matrix.
+# -method Method for clustering the matrix. See `cluster_terms`.
+# -control A list of parameters for controlling the clustering method, passed to `cluster_terms`.
+# -plot Whether to make the heatmap.
+# -term The full name or the description of the corresponding terms. 
+# -column_title Column title for the heatmap.
+# -verbose Whether to print messages.
+# -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
+# -... Arguments passed to `ht_clusters`.
+#
+# == details
+# The usage is the same as `simplifyGO`, except you need to manually provide the term names by ``term`` argument.
+#
 simplifyEnrichment = function(mat, method = "binary_cut", control = list(), 
 	plot = TRUE, term = NULL, verbose = TRUE, 
 	column_title = qq("@{nrow(mat)} terms clustered by '@{method}'"),
@@ -74,5 +91,9 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 	
 	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
 
-	return(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE))
+	if(is.null(term)) {
+		return(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE))
+	} else {
+		return(data.frame(id = term_id, term = term, cluster = cl, stringsAsFactors = FALSE))
+	}
 }

@@ -14,17 +14,26 @@ plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{value_fun}{-value_fun}
-  \item{cutoff}{-cutoff}
-  \item{partition_fun}{-partition_fun}
-  \item{dend}{-dend}
-  \item{depth}{-depth}
-  \item{show_heatmap_legend}{-show_heatmap_legend}
-  \item{...}{-...}
+  \item{value_fun}{Value function to calculate the score for each node in the dendrogram.}
+  \item{cutoff}{The cutoff for splitting the dendrogram.}
+  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions is this package are \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} (the default) and \code{\link{partition_by_hclust}}.}
+  \item{dend}{A dendrogram object, used internally.}
+  \item{depth}{Depth of the recursive binary cut process.}
+  \item{show_heatmap_legend}{Whether to show the heatmap legend.}
+  \item{...}{Other arguments.}
 
 }
+\details{
+After the functions which performs clustering are executed, such as \code{\link{simplifyGO}} or
+\code{\link{binary_cut}}, the dendrogram is temporarily saved and \code{\link{plot_binary_cut}} directly
+uses this dendrogram. So, if the partition function brings randomness, it makes sure
+the clustering is the same as the one made by e.g. \code{\link{simplifyGO}}.
+}
 \examples{
-# There is no example
-NULL
-
+\donttest{
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+plot_binary_cut(mat, depth = 1)
+plot_binary_cut(mat, depth = 2)
+plot_binary_cut(mat)
+}
 }

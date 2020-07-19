@@ -3,10 +3,17 @@
 #
 # == param
 # -gl A list of genes that are in the terms.
-# -method
+# -method Kappa coefficient or Jaccard coefficient.
+#
+# == details
+# For two sets of genes, the Jaccard coefficient is calculated as:
+#
+#     length(intersect(set1, set2))/length(union(set1, set2))
+#
+# For the calculation of Kappa coefficient, see https://en.wikipedia.org/wiki/Cohen\%27s_kappa .
 #
 # == value
-# A symmetric matrix
+# A symmetric matrix.
 term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
@@ -54,7 +61,7 @@ kappa_dist = function(m) {
 
 #### similarity from enrichResult object ########
 
-# == title
+# title
 # Subset method of the enrichResult class
 #
 # == param
@@ -85,7 +92,7 @@ kappa_dist = function(m) {
 # Subset method of the enrichResult class
 #
 # == param
-# -x A ``enrichResult`` object.
+# -x A ``enrichResult`` object from 'clusterProfiler' or other related packages.
 # -i Row indices.
 #
 subset_enrichResult = function(x, i) {
@@ -101,12 +108,14 @@ subset_enrichResult = function(x, i) {
 # Similarity between terms in the enrichResult class
 #
 # == param
-# -x A ``enrichResult`` object.
-# -...
+# -x A ``enrichResult`` object from 'clusterProfiler' or other related packages.
+# -... Pass to `term_similarity`.
 #
 # == details
 # The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
 #
+# == value
+# A symmetric matrix.
 term_similarity_from_enrichResult = function(x, ...) {
 	term_similarity(x@geneSets[x@result$ID], ...)
 }
@@ -118,10 +127,10 @@ term_similarity_from_enrichResult = function(x, ...) {
 #
 # == param
 # -term_id A vector of KEGG IDs.
-# -...
+# -... Pass to `term_similarity`.
 #
 # == value
-# A symmetric matrix
+# A symmetric matrix.
 term_similarity_from_KEGG = function(term_id, ...) {
 
 	if(!requireNamespace("clusterProfiler")) {
@@ -144,10 +153,10 @@ term_similarity_from_KEGG = function(term_id, ...) {
 #
 # == param
 # -term_id A vector of Reactome IDs.
-# -...
+# -... Pass to `term_similarity`.
 #
 # == value
-# A symmetric matrix
+# A symmetric matrix.
 term_similarity_from_Reactome = function(term_id, ...) {
 	if(!requireNamespace("reactome.db")) {
 		stop_wrap("'reactome.db' package should be installed.")
@@ -164,18 +173,22 @@ term_similarity_from_Reactome = function(term_id, ...) {
 #
 # == param
 # -term_id A vector of MSigDB gene set names.
-# -category E.g., C1, C2, ...
-# -...
+# -category E.g., 'C1', 'C2', ...
+# -... Pass to `term_similarity`.
 #
 # == value
-# A symmetric matrix
+# A symmetric matrix.
 term_similarity_from_MSigDB = function(term_id, category = NULL, ...) {
 	if(!requireNamespace("msigdbr")) {
 		stop_wrap("'msigdbr' package should be installed.")
 	}
 
 	m_df = msigdbr::msigdbr(species = "Homo sapiens", category = category)
-	lt = split(m_df$entrez_gene, m_df$gs_name)
+	if(all(grepl("^M\\d+$", term_id))) {
+		lt = split(m_df$entrez_gene, m_df$gs_id)
+	} else {
+		lt = split(m_df$entrez_gene, m_df$gs_name)
+	}
 	gl = lt[term_id]
 
 	term_similarity(gl, ...)
@@ -189,10 +202,10 @@ term_similarity_from_MSigDB = function(term_id, category = NULL, ...) {
 # -gmt The path of the gmt file.
 # -extract_term_id If the term ID in contained in the first column only as a substring,
 #      setting a function to extract this substring.
-# -...
+# -... Pass to `term_similarity`.
 #
 # == value
-# A symmetric matrix
+# A symmetric matrix.
 term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL, ...) {
 	ln = readLines(gmt)
 

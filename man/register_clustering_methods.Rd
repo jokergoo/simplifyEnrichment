@@ -17,7 +17,7 @@ register_clustering_methods(...)
 \details{
 The user-defined functions should accept at least one argument which is the input matrix. 
 The second optional argument should always be \code{...} so that parameters
-for the clustering function can be passed by \code{control} argument from \code{\link{cluster_terms}} or \code{\link{simplifyGO}}.
+for the clustering function can be passed by \code{control} argument from \code{\link{cluster_terms}}, \code{\link{simplifyGO}} or \code{\link{simplifyEnrichment}}.
 If users forget to add \code{...}, it is added internally.
 
 Please note, the user-defined function should automatically identify the optimized
@@ -29,7 +29,10 @@ The function should return a vector of cluster labels. Internally it is converte
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+register_clustering_methods(
+	# assume there are 5 groups
+	random = function(mat, ...) sample(5, nrow(mat), replace = TRUE)
+)
+all_clustering_methods()
+remove_clustering_methods("random")
 }

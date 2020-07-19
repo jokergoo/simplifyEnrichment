@@ -12,17 +12,19 @@ DO_similarity(do_id, measure = "Rel")
 \arguments{
 
   \item{do_id}{A vector of DO IDs.}
-  \item{measure}{Measurement for the DO similarity, pass to \code{\link[GOSemSim]{termSim}}.}
+  \item{measure}{Measurement for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
 
 }
 \details{
-This function is basically a wrapper on \code{\link[GOSemSim]{termSim}}.
+This function is basically a wrapper on \code{\link[DOSE]{doSim}}.
 }
 \value{
 A symmetric matrix.
 }
 \examples{
-# There is no example
-NULL
-
+\donttest{
+require(DOSE)
+do_id = random_DO(10)
+DO_similarity(do_id)
+}
 }

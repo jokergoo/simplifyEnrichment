@@ -11,7 +11,7 @@ subset_enrichResult(x, i)
 }
 \arguments{
 
-  \item{x}{A \code{enrichResult} object.}
+  \item{x}{A \code{enrichResult} object from 'clusterProfiler' or other related packages.}
   \item{i}{Row indices.}
 
 }

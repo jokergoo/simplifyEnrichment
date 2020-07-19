@@ -288,14 +288,28 @@ dend_env = new.env()
 #
 # == param
 # -mat The similarity matrix.
-# -value_fun
-# -cutoff
-# -partition_fun
-# -dend
-# -depth
-# -show_heatmap_legend
-# -...
+# -value_fun Value function to calculate the score for each node in the dendrogram.
+# -cutoff The cutoff for splitting the dendrogram.
+# -partition_fun A function to split each node into two groups. Pre-defined functions
+#                is this package are `partition_by_kmeans`, `partition_by_pam` (the default) and `partition_by_hclust`.
+# -dend A dendrogram object, used internally.
+# -depth Depth of the recursive binary cut process.
+# -show_heatmap_legend Whether to show the heatmap legend.
+# -... Other arguments.
 #
+# == details
+# After the functions which performs clustering are executed, such as `simplifyGO` or
+# `binary_cut`, the dendrogram is temporarily saved and `plot_binary_cut` directly
+# uses this dendrogram. So, if the partition function brings randomness, it makes sure
+# the clustering is the same as the one made by e.g. `simplifyGO`.
+#
+# == example
+# \donttest{
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# plot_binary_cut(mat, depth = 1)
+# plot_binary_cut(mat, depth = 2)
+# plot_binary_cut(mat)
+# }
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
 	partition_fun = partition_by_pam, dend = NULL, 
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
@@ -383,12 +397,13 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 }
 
 # == title
-# Cluster functional terms by binary cutting the similarity matrix
+# Cluster functional terms by recursively binary cutting the similarity matrix
 #
 # == param
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
-# -partition_fun
+# -partition_fun A function to split each node into two groups. Pre-defined functions
+#                is this package are `partition_by_kmeans`, `partition_by_pam` (the default) and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
 #
 # == value
@@ -402,17 +417,34 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 
 	dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
 	cl = cut_dend(dend, cutoff)
-	return(as.vector(unname(cl)))
+	return(as.numeric(as.vector(unname(cl))))
 }
 
 # == title
 # Select the cutoff for binary cut
 #
 # == param
-# -mat
-# -cutoff
+# -mat A similarity matrix.
+# -cutoff A list of cutoffs to test. Note the range of the cutoff values should be inside [0.5, 1].
 #
+# == details
+# Binary cut is applied to each of the cutoff and the clustering results are evaluated by following metrics:
+#
+# - difference score, calculated by `difference_score`.
+# - number of clusters.
+# - block mean, which is the mean similarity in the blocks in the diagonal of the heatmap.
+#
+# A good cutoff is selected where the lines in the plot becomes stably flat.
+#
+# == example
+# \donttest{
+# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# select_cutoff(mat)
+# }
 select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01)) {
+
+	cutoff = cutoff[cutoff >= 0.5 & cutoff <= 1]
+
 	s1 = s2 = s3 = s4 = NULL
 	for(i in seq_along(cutoff)) {
 		qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")

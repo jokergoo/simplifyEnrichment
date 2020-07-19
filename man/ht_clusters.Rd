@@ -40,4 +40,6 @@ A \code{\link[ComplexHeatmap]{HeatmapList-class}} object.
 mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 cl = binary_cut(mat)
 ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
+ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80),
+    order_by_size = TRUE)
 }

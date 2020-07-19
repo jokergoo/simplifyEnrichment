@@ -35,7 +35,7 @@ get_clustering_method = function(method, control = list()) {
 # == details
 # The user-defined functions should accept at least one argument which is the input matrix. 
 # The second optional argument should always be ``...`` so that parameters
-# for the clustering function can be passed by ``control`` argument from `cluster_terms` or `simplifyGO`.
+# for the clustering function can be passed by ``control`` argument from `cluster_terms`, `simplifyGO` or `simplifyEnrichment`.
 # If users forget to add ``...``, it is added internally.
 #
 # Please note, the user-defined function should automatically identify the optimized
@@ -46,6 +46,13 @@ get_clustering_method = function(method, control = list()) {
 # == value
 # No value is returned.
 #
+# == example
+# register_clustering_methods(
+# 	# assume there are 5 groups
+# 	random = function(mat, ...) sample(5, nrow(mat), replace = TRUE)
+# )
+# all_clustering_methods()
+# remove_clustering_methods("random")
 register_clustering_methods = function(...) {
 	
 	lt = list(...)
@@ -72,18 +79,23 @@ register_clustering_methods = function(...) {
 # == details
 # The default clustering methods are:
 #
-# -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
-# -``mclust`` see `cluster_by_mclust`. By default it is not included.
+# -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
+# -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
+# -``MCL`` see `cluster_by_MCL`.
+# -``binary_cut`` see `binary_cut`.
 #
 # == value
-# A vector of method names
+# A vector of method names.
+#
+# == seealso
+# New methods can be added by `register_clustering_methods`.
 #
 # == example
 # all_clustering_methods()
@@ -126,15 +138,17 @@ register_clustering_methods(
 # == details
 # The default methods are:
 #
-# -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
+# -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
+# -``MCL`` see `cluster_by_MCL`.
+# -``binary_cut`` see `binary_cut`.
 #
 # == value
 # No value is returned.

@@ -1,10 +1,10 @@
 \name{GO_similarity}
 \alias{GO_similarity}
 \title{
-Calculate GO similarity matrix
+Calculate Gene Ontology (GO) similarity matrix
 }
 \description{
-Calculate GO similarity matrix
+Calculate Gene Ontology (GO) similarity matrix
 }
 \usage{
 GO_similarity(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel")

@@ -1,10 +1,10 @@
 \name{random_DO}
 \alias{random_DO}
 \title{
-Generate random DO IDs
+Generate random Disease Ontology (DO) IDs
 }
 \description{
-Generate random DO IDs
+Generate random Disease Ontology (DO) IDs
 }
 \usage{
 random_DO(n)
@@ -18,7 +18,7 @@ random_DO(n)
 A vector of DO IDs.
 }
 \examples{
-# There is no example
-NULL
-
+\donttest{
+random_DO(100)
+}
 }

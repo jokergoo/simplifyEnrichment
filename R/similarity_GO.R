@@ -3,7 +3,7 @@ env = new.env()
 env$semData_hash = ""
 
 # == title
-# Calculate GO similarity matrix
+# Calculate Gene Ontology (GO) similarity matrix
 #
 # == param
 # -go_id A vector of GO IDs.

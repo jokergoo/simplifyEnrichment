@@ -11,22 +11,24 @@
 # == details
 # The function compares following default clustering methods:
 #
-# -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
-# -``mclust`` see `cluster_by_mclust`. By default it is not included for its long runtime.
+# -``mclust`` see `cluster_by_mclust`. By default it is not included.
 # -``apcluster`` see `cluster_by_apcluster`.
+# -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
+# -``MCL`` see `cluster_by_MCL`.
+# -``binary_cut`` see `binary_cut`.
 #
 # Also the user-defined methods in `all_clustering_methods` are also compared.
 #
 # == value
 # A list of cluster label vectors for different clustering methods.
 #
-compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
+cmp_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	verbose = TRUE) {
 
 	clt = list()
@@ -53,7 +55,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_me
 #
 # == param
 # -mat A similarity matrix.
-# -clt A list of clusterings from `compare_methods_make_clusters`.
+# -clt A list of clusterings from `cmp_make_clusters`.
 # -plot_type What type of plots to make. See Details.
 # -nrow Number of rows of the layout when ``plot_type`` is set to ``heatmap``.
 #
@@ -72,7 +74,7 @@ compare_methods_make_clusters = function(mat, method = setdiff(all_clustering_me
 #
 # == value
 # No value is returned.
-compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
+cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
@@ -87,15 +89,15 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 	if(plot_type == "mixed") {
 
 		l = sapply(clt, function(x) any(is.na(x)))
-		clt = clt[!l]
+		clt2 = clt[!l]
 		methods = methods[!l]
 		
 		if("binary_cut" %in% names(clt)) {
-			ref_class = clt[, "binary_cut"]
+			ref_class = clt2[, "binary_cut"]
 		} else {
-			ref_class = clt[, which.min(vapply(clt, function(x) length(unique(x)), 0))]
+			ref_class = clt2[, which.min(vapply(clt2, function(x) length(unique(x)), 0))]
 		}
-		clt2 = lapply(clt, function(x) relabel_class(x, ref_class, return_map = FALSE))
+		clt2 = lapply(clt2, function(x) relabel_class(x, ref_class, return_map = FALSE))
 		clt2 = as.data.frame(clt2)
 
 		ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
@@ -107,7 +109,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 				width = unit(5, "mm")*ncol(clt2), column_names_rot = 45)
 		p0 = grid.grabExpr(draw(ht1))
 
-		stats = compare_methods_calc_stats(mat, clt)
+		stats = cmp_calc_stats(mat, clt)
 		stats$method = factor(rownames(stats), levels = rownames(stats))
 
 		if(!requireNamespace("ggplot2", quietly = TRUE)) {
@@ -136,7 +138,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 		)
 
-		cm = compare_methods_calc_concordance(clt)
+		cm = cmp_calc_concordance(clt)
 		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
 
 		suppressWarnings(cowplot::plot_grid(
@@ -243,7 +245,7 @@ compare_methods_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap")
 	# }
 }
 
-compare_methods_calc_concordance = function(clt) {
+cmp_calc_concordance = function(clt) {
 
 	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
@@ -277,7 +279,7 @@ compare_methods_calc_concordance = function(clt) {
 	mm
 }
 
-compare_methods_calc_stats = function(mat, clt) {
+cmp_calc_stats = function(mat, clt) {
 	x = data.frame("diff_s" = vapply(clt, function(x) difference_score(mat, x), 0),
 		 "n_all" = vapply(clt, function(x) length(table(x)), 0),
 	     "n_large" = vapply(clt, function(x) {tb = table(x); sum(tb >= 5)}, 0),
@@ -292,26 +294,28 @@ compare_methods_calc_stats = function(mat, clt) {
 # -mat The similarity matrix.
 # -method Which methods to compare. All available methods are in `all_clustering_methods`.
 #         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
-# -plot_type See explanation in `compare_methods_make_plot`.
+# -plot_type See explanation in `cmp_make_plot`.
 # -verbose Whether to print messages.
 #
 # == details
 # The function compares following clustering methods:
 #
-# -``binary_cut`` see `binary_cut`.
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`. By default it is not included.
 # -``apcluster`` see `cluster_by_apcluster`.
+# -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
+# -``MCL`` see `cluster_by_MCL`.
+# -``binary_cut`` see `binary_cut`.
 #
-# This functon is basically a wrapper function. It calls following two functions:
+# This functon is basically a wrapper function. It calls the following two functions:
 #
-# - `compare_methods_make_clusters`: applies clustering by different methods.
-# - `compare_methods_make_plot`: makes the plots.
+# - `cmp_make_clusters`: applies clustering by different methods.
+# - `cmp_make_plot`: makes the plots.
 #
 # == value
 # No value is returned.
@@ -325,9 +329,9 @@ compare_methods_calc_stats = function(mat, clt) {
 compare_methods = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
 
-	clt = compare_methods_make_clusters(mat, method, verbose = verbose)
+	clt = cmp_make_clusters(mat, method, verbose = verbose)
 
 	plot_type = match.arg(plot_type)[1]
-	compare_methods_make_plot(mat, clt, plot_type = plot_type)
+	cmp_make_plot(mat, clt, plot_type = plot_type)
 }
 

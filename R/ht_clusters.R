@@ -30,6 +30,8 @@
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # cl = binary_cut(mat)
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
+# ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80),
+#     order_by_size = TRUE)
 ht_clusters = function(mat, cl, dend = NULL, 
 	draw_word_cloud = TRUE, term = NULL, min_term = 5, 
 	order_by_size = FALSE, cluster_slices = FALSE,
@@ -44,7 +46,6 @@ ht_clusters = function(mat, cl, dend = NULL,
 			show_row_names = FALSE, show_column_names = FALSE,
 			cluster_rows = dend, cluster_columns = dend, 
 			show_row_dend = TRUE, show_column_dend = FALSE,
-			row_dend_reorder = FALSE, column_dend_reorder = FALSE,
 			row_dend_width = unit(4, "cm"),
 			border = "#404040", row_title = NULL,
 			use_raster = TRUE)
@@ -65,9 +66,9 @@ ht_clusters = function(mat, cl, dend = NULL,
 		cl[as.character(cl) %in% names(cl_tb[cl_tb < min_term])] = 0
 		cl = factor(cl, levels = c(setdiff(sort(cl), 0), 0))
 
-		# if(order_by_size) {
-		# 	cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
-		# }
+		if(order_by_size) {
+			cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
+		}
 		# od2 = order.dendrogram(dend_env$dend)
 		od2 = unlist(lapply(levels(cl), function(le) {
 			l = cl == le

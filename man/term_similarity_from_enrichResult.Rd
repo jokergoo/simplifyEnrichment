@@ -11,12 +11,15 @@ term_similarity_from_enrichResult(x, ...)
 }
 \arguments{
 
-  \item{x}{A \code{enrichResult} object.}
-  \item{...}{-...}
+  \item{x}{A \code{enrichResult} object from 'clusterProfiler' or other related packages.}
+  \item{...}{Pass to \code{\link{term_similarity}}.}
 
 }
 \details{
 The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
+}
+\value{
+A symmetric matrix.
 }
 \examples{
 # There is no example

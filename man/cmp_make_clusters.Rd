@@ -1,5 +1,5 @@
-\name{compare_methods_make_clusters}
-\alias{compare_methods_make_clusters}
+\name{cmp_make_clusters}
+\alias{cmp_make_clusters}
 \title{
 Apply various clustering methods
 }
@@ -7,7 +7,7 @@ Apply various clustering methods
 Apply various clustering methods
 }
 \usage{
-compare_methods_make_clusters(mat, method = setdiff(all_clustering_methods(), "mclust"),
+cmp_make_clusters(mat, method = setdiff(all_clustering_methods(), "mclust"),
     verbose = TRUE)
 }
 \arguments{
@@ -21,15 +21,17 @@ compare_methods_make_clusters(mat, method = setdiff(all_clustering_methods(), "m
 The function compares following default clustering methods:
 
 \describe{
-  \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
   \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
-  \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}. By default it is not included for its long runtime.}
+  \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}. By default it is not included.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}
+  \item{\code{hdbscan}}{see \code{\link{cluster_by_hdbscan}}.}
   \item{\code{fast_greedy}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{leading_eigen}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
+  \item{\code{MCL}}{see \code{\link{cluster_by_MCL}}.}
+  \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
 }
 
 Also the user-defined methods in \code{\link{all_clustering_methods}} are also compared.

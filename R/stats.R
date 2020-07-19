@@ -69,3 +69,6 @@ other_mean = function(mat, cl) {
 	x2 = mat[l_block2]
 	mean(x2)
 }
+
+
+ # sapply(clt,function(cl)modularity(g, membership = cl, weights = get.edge.attribute(g, "weight")))

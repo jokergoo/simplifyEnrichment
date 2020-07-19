@@ -15,7 +15,7 @@ word_cloud_grob(text, fontsize,
 \arguments{
 
   \item{text}{A vector of words.}
-  \item{fontsize}{The corresponding font size.}
+  \item{fontsize}{The corresponding font size. With the frequency of the words known, \code{\link{scale_fontsize}} can be used to linearly interpolate frequencies to font sizes.}
   \item{line_space}{Space between lines. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm.}
   \item{word_space}{Space between words. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm.}
   \item{max_width}{The maximal width of the viewport to put the word cloud. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm. Note this might be larger than the final width of the returned grob object.}

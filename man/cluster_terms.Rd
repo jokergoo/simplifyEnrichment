@@ -23,15 +23,17 @@ cluster_terms(mat, method = "binary_cut", control = list(), catch_error = FALSE,
 The following methods are the default:
 
 \describe{
-  \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
   \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
   \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}
+  \item{\code{hdbscan}}{see \code{\link{cluster_by_hdbscan}}.}
   \item{\code{fast_greedy}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{leading_eigen}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
+  \item{\code{MCL}}{see \code{\link{cluster_by_MCL}}.}
+  \item{\code{binary_cut}}{see \code{\link{binary_cut}}.}
 }
 
 Also the user-defined methods in \code{\link{all_clustering_methods}} can be used here.

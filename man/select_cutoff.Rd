@@ -11,12 +11,24 @@ select_cutoff(mat, cutoff = seq(0.6, 0.9, by = 0.01))
 }
 \arguments{
 
-  \item{mat}{-mat}
-  \item{cutoff}{-cutoff}
+  \item{mat}{A similarity matrix.}
+  \item{cutoff}{A list of cutoffs to test. Note the range of the cutoff values should be inside [0.5, 1].}
 
 }
-\examples{
-# There is no example
-NULL
+\details{
+Binary cut is applied to each of the cutoff and the clustering results are evaluated by following metrics:
 
+\itemize{
+  \item difference score, calculated by \code{\link{difference_score}}.
+  \item number of clusters.
+  \item block mean, which is the mean similarity in the blocks in the diagonal of the heatmap.
+}
+
+A good cutoff is selected where the lines in the plot becomes stably flat.
+}
+\examples{
+\donttest{
+mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+select_cutoff(mat)
+}
 }
