@@ -1,6 +1,6 @@
 # Simplify functional enrichment Results
 
-[![Build Status](https://travis-ci.org/jokergoo/simplifyGO.svg)](https://travis-ci.org/jokergoo/simplifyGO)
+[![Build Status](https://travis-ci.org/jokergoo/simplifyEnrichment.svg)](https://travis-ci.org/jokergoo/simplifyEnrichment)
 [![bioc](http://www.bioconductor.org/shields/downloads/devel/simplifyEnrichment.svg)](https://bioconductor.org/packages/stats/bioc/simplifyEnrichment/) 
 [![bioc](http://www.bioconductor.org/shields/years-in-bioc/simplifyEnrichment.svg)](http://bioconductor.org/packages/devel/bioc/html/simplifyEnrichment.html)
 
