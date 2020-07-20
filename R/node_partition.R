@@ -33,7 +33,7 @@ partition_by_kmeans = function(mat, k, n_repeats = 10) {
 # == details
 # The clustering is performed by `cluster::pam`.
 partition_by_pam = function(mat, k) {
-    pam(mat, k)$clustering
+    pam(mat, k, pamonce = 5)$clustering
 }
 
 # == title
