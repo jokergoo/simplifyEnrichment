@@ -25,11 +25,13 @@ term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	}
 	mg = as(mg, "sparseMatrix")
 
-	method = match.arg(method)[1]
+	# method = match.arg(method)[1]
 	if(method == "jaccard") {
 		mat = proxyC::simil(mg, method = "jaccard")
 	} else if(method == "kappa") {
 		mat = kappa_dist(mg)
+	} else if(method == "overlap") {
+		mat = overlap_dist(mg)
 	}
 	mat = as.matrix(mat)
 	diag(mat) = 1
@@ -57,6 +59,19 @@ kappa_dist = function(m) {
 	k = (oab - aab)/(1 - aab)
 	k[k < 0] = 0
 	return(k)
+}
+
+overlap_dist = function(m) {
+	n = rowSums(m)
+	proxyC::simil(m, method = "dice")*outer(n, n, "+")/2/outer(n, n, pmin)
+}
+
+overlap_single = function(x, y) {
+	sum(x & y)/min(sum(x), sum(y))
+}
+
+odd_single = function(x, y) {
+	sum(x & y)*sum(!x & !y)/sum(x & !y)/sum(!x & y)
 }
 
 #### similarity from enrichResult object ########
