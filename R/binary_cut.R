@@ -186,7 +186,11 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 		# 	plot(dend)
 		# 	box()
 		# }
-		return(dend2)
+		if(return == "dend") {
+			return(dend2)
+		} else {
+			return(rep(1, nobs(dend)))
+		}
 	}
 
 	dend2 = edit_node(dend, function(d, index) {
