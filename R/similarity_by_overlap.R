@@ -14,7 +14,7 @@
 #
 # == value
 # A symmetric matrix.
-term_similarity = function(gl, method = c("kappa", "jaccard")) {
+term_similarity = function(gl, method = "kappa") {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
@@ -26,13 +26,14 @@ term_similarity = function(gl, method = c("kappa", "jaccard")) {
 	mg = as(mg, "sparseMatrix")
 
 	# method = match.arg(method)[1]
-	if(method == "jaccard") {
-		mat = proxyC::simil(mg, method = "jaccard")
-	} else if(method == "kappa") {
+	if(method == "kappa") {
 		mat = kappa_dist(mg)
 	} else if(method == "overlap") {
 		mat = overlap_dist(mg)
+	} else {
+		mat = proxyC::simil(mg, method = method)
 	}
+
 	mat = as.matrix(mat)
 	diag(mat) = 1
 	rownames(mat) = colnames(mat) = names(gl)
@@ -68,10 +69,6 @@ overlap_dist = function(m) {
 
 overlap_single = function(x, y) {
 	sum(x & y)/min(sum(x), sum(y))
-}
-
-odd_single = function(x, y) {
-	sum(x & y)*sum(!x & !y)/sum(x & !y)/sum(!x & y)
 }
 
 #### similarity from enrichResult object ########
@@ -235,4 +232,29 @@ term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL, ...) {
 	gl = lapply(ln, function(x) x[-(1:2)])
 	names(gl) = term_id
 	term_similarity(gl, ...)
+}
+
+
+gene_weight = function(gl) {
+	all = unique(unlist(gl))
+	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
+	n = length(gl)
+
+	mg = matrix(0, ncol = length(all), nrow = n)
+	for(i in seq_len(n)) {
+		mg[i, gl[[i]]] = 1
+	}
+	mg = as(mg, "sparseMatrix")
+
+	log(1 + nrow(mg)/colSums(mg))
+
+}
+
+weighted_jaccard = function(x, y, weight = 1) {
+	x = as.logical(x)
+	y = as.logical(y)
+	if(length(weight) == 1) weight = rep(weight, length(x))
+	l1 = x & y
+
+	sum(weight[l1])/(sum(weight[x]) + sum(weight[y]) - sum(weight[l1]))
 }
