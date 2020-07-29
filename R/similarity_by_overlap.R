@@ -67,6 +67,7 @@ overlap_dist = function(m) {
 	proxyC::simil(m, method = "dice")*outer(n, n, "+")/2/outer(n, n, pmin)
 }
 
+# only for testing
 overlap_single = function(x, y) {
 	sum(x & y)/min(sum(x), sum(y))
 }
@@ -240,21 +241,41 @@ gene_weight = function(gl) {
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
 
-	mg = matrix(0, ncol = length(all), nrow = n)
+	mg = Matrix(0, ncol = length(all), nrow = n)
 	for(i in seq_len(n)) {
 		mg[i, gl[[i]]] = 1
 	}
-	mg = as(mg, "sparseMatrix")
 
 	log(1 + nrow(mg)/colSums(mg))
-
 }
 
-weighted_jaccard = function(x, y, weight = 1) {
+weighted_jaccard_single = function(x, y, weight = 1) {
 	x = as.logical(x)
 	y = as.logical(y)
 	if(length(weight) == 1) weight = rep(weight, length(x))
 	l1 = x & y
 
 	sum(weight[l1])/(sum(weight[x]) + sum(weight[y]) - sum(weight[l1]))
+}
+
+
+weighted_jaccard = function(gl) {
+	all = unique(unlist(gl))
+	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
+	n = length(gl)
+
+	mg = Matrix(0, ncol = length(all), nrow = n)
+	for(i in seq_len(n)) {
+		mg[i, gl[[i]]] = 1
+	}
+
+	w = log(1 + nrow(mg)/colSums(mg))
+	
+	m = matrix(1, nrow = n, ncol = n)
+	for(i in seq(1, n-1)) {
+		for(j in seq(i+1, n)) {
+			m[i, j] = m[j, i] = weighted_jaccard_single(mg[i, ], mg[j, ], w)
+		}
+	}
+	m
 }

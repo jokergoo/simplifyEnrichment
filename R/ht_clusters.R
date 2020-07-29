@@ -88,7 +88,9 @@ ht_clusters = function(mat, cl, dend = NULL,
 			use_raster = TRUE)
 
 		if(is.null(term)) {
-			if(!grepl("^GO:[0-9]+$", rownames(mat)[1])) {
+			if(is.null(rownames(mat))) {
+				draw_word_cloud = FALSE
+			} else if(!grepl("^GO:[0-9]+$", rownames(mat)[1])) {
 				draw_word_cloud = FALSE
 			}
 		}

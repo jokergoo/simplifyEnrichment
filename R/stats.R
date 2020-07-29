@@ -22,6 +22,10 @@ difference_score = function(mat, cl) {
 	n = nrow(mat)
 	l_block = matrix(FALSE, nrow = nrow(mat), ncol = ncol(mat))
 
+	if(length(unique(cl)) == 1) {
+		return(NA)
+	}
+
 	for(le in unique(cl)) {
 		l = cl == le
 		l_block[l, l] = TRUE

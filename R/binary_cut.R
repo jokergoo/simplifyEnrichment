@@ -315,7 +315,7 @@ dend_env = new.env()
 # plot_binary_cut(mat)
 # }
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
-	partition_fun = partition_by_pam, dend = NULL, 
+	partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
 	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
@@ -390,11 +390,11 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 	})
 
 	grid.newpage()
-	pushViewport(viewport(x = 0, width = 0.3, just = "left"))
+	pushViewport(viewport(x = 0, width = dend_width, just = "left"))
 	pushViewport(viewport(height = unit(1, "npc") - unit(4, "mm"), x = unit(2, "mm"), width = unit(1, "npc") - unit(2, "mm"), just = "left"))
 	gridGraphics::grid.echo(f, newpage = FALSE)
 	popViewport(2)
-	pushViewport(viewport(x = 0.3, width = 0.7, just = "left"))
+	pushViewport(viewport(x = dend_width, width = unit(1, "npc") - dend_width, just = "left"))
 	grid.draw(p2)
 	popViewport()
 

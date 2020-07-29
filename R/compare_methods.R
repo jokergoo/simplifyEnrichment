@@ -323,15 +323,29 @@ cmp_calc_stats = function(mat, clt) {
 # == example
 # \dontrun{
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
-# compare_methods(mat)
-# compare_methods(mat, plot_type = "heatmap")
+# compare_clustering_methods(mat)
+# compare_clustering_methods(mat, plot_type = "heatmap")
 # }
-compare_methods = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
+compare_clustering_methods = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
 
 	clt = cmp_make_clusters(mat, method, verbose = verbose)
 
 	plot_type = match.arg(plot_type)[1]
 	cmp_make_plot(mat, clt, plot_type = plot_type)
+}
+
+
+# == title
+# Compare clustering methods
+#
+# == param
+# -... All pass to `compare_clustering_methods`.
+#
+# == details
+# This function will be removed soon.
+#
+compare_methods = function(...) {
+	compare_clustering_methods(...)
 }
 

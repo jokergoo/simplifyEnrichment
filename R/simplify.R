@@ -88,6 +88,9 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 	
 	cl = do.call(cluster_terms, list(mat = mat, method = method, verbose = verbose, control = control))
 	term_id = rownames(mat)
+	if(is.null(term_id)) {
+		term_id = paste0("row_", 1:nrow(mat))
+	}
 	
 	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
 
