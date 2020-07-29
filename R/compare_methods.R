@@ -109,7 +109,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 				width = unit(5, "mm")*ncol(clt2), column_names_rot = 45)
 		p0 = grid.grabExpr(draw(ht1))
 
-		stats = cmp_calc_stats(mat, clt)
+		stats = cmp_calc_stats(mat, clt2)
 		stats$method = factor(rownames(stats), levels = rownames(stats))
 
 		if(!requireNamespace("ggplot2", quietly = TRUE)) {
