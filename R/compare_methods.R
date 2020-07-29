@@ -100,7 +100,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 		clt2 = lapply(clt2, function(x) relabel_class(x, ref_class, return_map = FALSE))
 		clt2 = as.data.frame(clt2)
 
-		ht1 = Heatmap(mat, col = colorRamp2(c(0, 1), c("white", "red")),
+		ht1 = Heatmap(mat, col = col_fun = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red")),
 			name = "Similarity",
 			show_row_names = FALSE, show_column_names = FALSE, 
 			# cluster_rows = dend, cluster_columns = dend,
@@ -141,11 +141,11 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 		cm = cmp_calc_concordance(clt2)
 		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
 
-		suppressWarnings(cowplot::plot_grid(
+		suppressWarnings(print(cowplot::plot_grid(
 			cowplot::plot_grid(p0, p4, ncol = 1), 
 			cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)),
 			nrow = 1
-		))
+		)))
 
 	} else if(tolower(plot_type) == "heatmap") {
 		pl = list()
