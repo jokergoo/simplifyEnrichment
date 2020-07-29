@@ -138,7 +138,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 		)
 
-		cm = cmp_calc_concordance(clt)
+		cm = cmp_calc_concordance(clt2)
 		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
 
 		suppressWarnings(cowplot::plot_grid(
