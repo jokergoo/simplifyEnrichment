@@ -430,6 +430,7 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 # == param
 # -mat A similarity matrix.
 # -cutoff A list of cutoffs to test. Note the range of the cutoff values should be inside [0.5, 1].
+# -verbose Whether to print messages.
 #
 # == details
 # Binary cut is applied to each of the cutoff and the clustering results are evaluated by following metrics:
@@ -445,13 +446,13 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 # mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
 # select_cutoff(mat)
 # }
-select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01)) {
+select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01), verbose = TRUE) {
 
 	cutoff = cutoff[cutoff >= 0.5 & cutoff <= 1]
 
 	s1 = s2 = s3 = s4 = NULL
 	for(i in seq_along(cutoff)) {
-		qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")
+		if(verbose) qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")
 		cl = binary_cut(mat, cutoff = cutoff[i])
 		s1[i] = difference_score(mat, cl)
 		tb = table(cl)
@@ -475,20 +476,20 @@ select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01)) {
 	df1 = data.frame(cutoff, s2); colnames(df1) = c("method", "value")
 	df2 = data.frame(cutoff, s3); colnames(df2) = c("method", "value")
 	df1$type = "All sizes"
-	df2$type = "size >= 5"
+	df2$type = "Size >= 5"
 	df = rbind(df1, df2)
 	suppressWarnings(
 		p2 <- ggplot2::ggplot(df, ggplot2::aes(x = df$method, y = df$value, col = df$type, fill = df$type)) +
-		ggplot2::geom_point() + ggplot2::ylab("Cluster number") + ggplot2::labs(col = "Type", fill = "Type") +
+		ggplot2::geom_point() + ggplot2::ylab("Number of clusters") + ggplot2::labs(col = "Type", fill = "Type") +
 		ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
 	)
 
 	suppressWarnings(
 		p3 <- ggplot2::ggplot(data = NULL, ggplot2::aes(x = cutoff, y = s4)) +
-		ggplot2::geom_point() + ggplot2::ylab("Block mean") +
-		ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
+		ggplot2::geom_point() + ggplot2::ylab("Block mean") + ggplot2::xlab("Cutoff") +
+		ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 	)
 
-	suppressWarnings(cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.5)))
+	suppressWarnings(print(cowplot::plot_grid(p1, p2, p3, nrow = 3, align = "v", axis = "lr", rel_heights = c(1, 1, 1.3))))
 }
 

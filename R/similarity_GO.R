@@ -50,7 +50,7 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 	go_sim[is.na(go_sim)] = 0
 
 	go_sim[lower.tri(go_sim)]  = t(go_sim)[lower.tri(go_sim)]
-	diag(go_sim) = 1
+	if(measure != "Resnik")	diag(go_sim) = 1
 
 	attr(go_sim, "measure") = measure
 	attr(go_sim, "ontology") = "GO"
