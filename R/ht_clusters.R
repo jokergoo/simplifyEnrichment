@@ -21,6 +21,7 @@
 #       to the maximal word frequency. The font size interlopation is linear.
 # -column_title Column title for the heatmap.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
+# -use_raster Whether to write the heatmap as a raster image.
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
 # == value
@@ -37,7 +38,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 	order_by_size = FALSE, cluster_slices = FALSE,
 	exclude_words = character(0), max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
-	column_title = NULL, ht_list = NULL, ...) {
+	column_title = NULL, ht_list = NULL, use_raster = TRUE, ...) {
 
 	col_fun = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red"))
 	if(!is.null(dend)) {
@@ -48,7 +49,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 			show_row_dend = TRUE, show_column_dend = FALSE,
 			row_dend_width = unit(4, "cm"),
 			border = "#404040", row_title = NULL,
-			use_raster = TRUE)
+			use_raster = use_raster)
 		draw(ht)
 		return(invisible(NULL))
 	} else {
@@ -85,7 +86,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 			show_row_dend = FALSE, show_column_dend = FALSE,
 			row_order = od2, column_order = od2,
 			border = "#404040", row_title = NULL,
-			use_raster = TRUE)
+			use_raster = use_raster)
 
 		if(is.null(term)) {
 			if(is.null(rownames(mat))) {
