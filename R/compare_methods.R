@@ -76,7 +76,6 @@ cmp_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mc
 # No value is returned.
 cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
 
-	clt = lapply(clt, as.character)
 	clt = as.data.frame(clt)
 	methods = names(clt)
 	
@@ -97,7 +96,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 		} else {
 			ref_class = clt2[, which.min(vapply(clt2, function(x) length(unique(x)), 0))]
 		}
-		clt2 = lapply(clt2, function(x) relabel_class(x, ref_class, return_map = FALSE))
+		clt2 = lapply(clt2, function(x) as.character(relabel_class(x, ref_class, return_map = FALSE)))
 		clt2 = as.data.frame(clt2)
 
 		ht1 = Heatmap(mat, col = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red")),
@@ -124,11 +123,11 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 		df1 = stats[, c("method", "n_all")]; colnames(df1) = c("method", "value")
 		df2 = stats[, c("method", "n_large")]; colnames(df2) = c("method", "value")
 		df1$type = "All sizes"
-		df2$type = "size >= 5"
+		df2$type = "Size >= 5"
 		df = rbind(df1, df2)
 		suppressWarnings(
 			p2 <- ggplot2::ggplot(df, ggplot2::aes(x = df$method, y = df$value, col = df$type, fill = df$type)) +
-			ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + ggplot2::ylab("Cluster number") + ggplot2::labs(col = "Type", fill = "Type") +
+			ggplot2::geom_bar(stat = "identity", position = ggplot2::position_dodge()) + ggplot2::ylab("Number of clusters") + ggplot2::labs(col = "Type", fill = "Type") +
 			ggplot2::theme(axis.title.x = ggplot2::element_blank(), axis.text.x = ggplot2::element_blank())
 		)
 
@@ -139,7 +138,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 		)
 
 		cm = cmp_calc_concordance(clt2)
-		p4 = grid.grabExpr(draw(Heatmap(cm, name = "Concordance", column_names_rot = 45)))
+		p4 = grid.grabExpr(draw(Heatmap(cm, col = colorRamp2(c(0, 0.5, 1), c("blue", "white", "red")), name = "Concordance", column_names_rot = 45)))
 
 		suppressWarnings(print(cowplot::plot_grid(
 			cowplot::plot_grid(p0, p4, ncol = 1), 
@@ -150,6 +149,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 	} else if(tolower(plot_type) == "heatmap") {
 		pl = list()
 		lgd = NULL
+
 		for(i in seq_along(methods)) {
 			if(any(is.na(clt[[i]]))) {
 				pl[[i]] = textGrob(qq("@{methods[i]}\nan error occured."))
@@ -159,7 +159,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 					show_heatmap_legend = FALSE))
 				lgd1 = color_mapping_legend(ht@ht_list[[1]]@matrix_color_mapping, plot = FALSE,
 					legend_direction = "horizontal", title_position = "lefttop")
-				lgd2 = Legend(labels = "Small clusters (<= 5)", legend_gp = gpar(fill = "darkgreen"))
+				lgd2 = Legend(labels = "Small clusters (size < 5)", legend_gp = gpar(fill = "darkgreen"))
 				lgd = packLegend(lgd1, lgd2)
 			}
 		}
@@ -189,8 +189,8 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 
 		np = length(pl)
 
-		grid.newpage()
 		ncol = ceiling(np/nrow)
+		grid.newpage()
 		pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
 		for(i in 1:np) {
 			ir = ceiling(i/ncol)

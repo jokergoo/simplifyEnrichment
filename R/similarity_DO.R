@@ -31,7 +31,7 @@ DO_similarity = function(do_id, measure = "Rel") {
 	do_sim[is.na(do_sim)] = 0
 
 	do_sim[lower.tri(do_sim)]  = t(do_sim)[lower.tri(do_sim)]
-	diag(do_sim) = 1
+	if(measure != "Resnik")	diag(do_sim) = 1
 
 	attr(do_sim, "measure") = measure
 	attr(do_sim, "ontology") = "DO"

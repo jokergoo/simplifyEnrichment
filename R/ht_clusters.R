@@ -68,7 +68,7 @@ ht_clusters = function(mat, cl, dend = NULL,
 		cl = factor(cl, levels = c(setdiff(sort(cl), 0), 0))
 
 		if(order_by_size) {
-			cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), "0"), "0"))
+			cl = factor(cl, levels = c(setdiff(names(sort(table(cl), decreasing = TRUE)), 0), 0))
 		}
 		# od2 = order.dendrogram(dend_env$dend)
 		od2 = unlist(lapply(levels(cl), function(le) {

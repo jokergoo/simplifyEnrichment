@@ -31,11 +31,11 @@ difference_score = function(mat, cl) {
 		l_block[l, l] = TRUE
 	}
 	l_block2 = l_block
-	l_block2[upper.tri(mat)] = FALSE
+	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
 	x1 = mat[l_block2]
 
 	l_block2 = !l_block
-	l_block2[upper.tri(mat)] = FALSE
+	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
 	x2 = mat[l_block2]
 
 	ecdf1 = ecdf(x1)
@@ -54,7 +54,7 @@ block_mean = function(mat, cl) {
 		l_block[l, l] = TRUE
 	}
 	l_block2 = l_block
-	l_block2[upper.tri(mat)] = FALSE
+	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
 	x1 = mat[l_block2]
 	mean(x1)
 }
@@ -69,7 +69,7 @@ other_mean = function(mat, cl) {
 	}
 
 	l_block2 = !l_block
-	l_block2[upper.tri(mat)] = FALSE
+	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
 	x2 = mat[l_block2]
 	mean(x2)
 }
