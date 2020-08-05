@@ -38,6 +38,9 @@ difference_score = function(mat, cl) {
 	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
 	x2 = mat[l_block2]
 
+	if(length(x1) < 1) return(NA)
+	if(length(x2) < 1) return(NA)
+
 	ecdf1 = ecdf(x1)
 	ecdf2 = ecdf(x2)
 
