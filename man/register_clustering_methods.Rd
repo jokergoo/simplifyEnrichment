@@ -11,7 +11,7 @@ register_clustering_methods(...)
 }
 \arguments{
 
-  \item{...}{A named list of clustering functions, see Details}
+  \item{...}{A named list of clustering functions, see Details.}
 
 }
 \details{

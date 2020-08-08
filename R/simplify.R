@@ -8,7 +8,8 @@
 # -method Method for clustering the matrix. See `cluster_terms`.
 # -control A list of parameters for controlling the clustering method, passed to `cluster_terms`.
 # -plot Whether to make the heatmap.
-# -term The full name or the description of the corresponding GO IDs. 
+# -term The full name or the description of the corresponding GO IDs. The values are automatically
+#      extracted if it is not provided.
 # -column_title Column title for the heatmap.
 # -verbose Whether to print messages.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
@@ -79,7 +80,8 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 # -... Arguments passed to `ht_clusters`.
 #
 # == details
-# The usage is the same as `simplifyGO`, except you need to manually provide the term names by ``term`` argument.
+# The usage is the same as `simplifyGO`, except you need to manually provide the term names by ``term`` argument
+# if you want to draw the word clouds.
 #
 simplifyEnrichment = function(mat, method = "binary_cut", control = list(), 
 	plot = TRUE, term = NULL, verbose = TRUE, 

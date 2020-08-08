@@ -4,12 +4,12 @@
 #
 # == param
 # -go_id A vector of GO IDs.
-# -term The corresponding names or description of terms.
+# -term The corresponding names or description of terms if the input are not GO terms.
 # -exclude_words The words that should be excluded.
 #
 # == details
 # The input can be simply set with a vector of GO id to ``go_id`` argument that the GO names
-# are automatically extracted, or provide long names/descriptions by ``term`` argument.
+# are automatically extracted. If the input are not GO terms, users need to provide a vector of long names/descriptions by ``term`` argument.
 #
 # If the input is GO id, the following words are excluded: ``c("via", "protein", "factor", "side", "type", "specific")``.
 # They are analyzed by ``simplifyEnrichment:::all_GO_word_count()``.
@@ -101,6 +101,7 @@ GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 # A `grid::grob` object. The width and height of the grob can be get by `grid::grobWidth` and `grid::grobHeight`.
 #
 # == example
+# # very old R versions do not have strrep() function
 # if(!exists("strrep")) {
 #     strrep = function(x, i) paste(rep(x, i), collapse = "")
 # }

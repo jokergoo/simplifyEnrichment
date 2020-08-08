@@ -16,7 +16,9 @@ partition_by_pam(mat, k)
 
 }
 \details{
-The clustering is performed by \code{\link[cluster]{pam}}.
+The clustering is performed by \code{\link[cluster]{pam}} with setting \code{pamonce} argument to 5.
+
+This function is used to set to the \code{partition_fun} argument in \code{\link{binary_cut}}.
 }
 \examples{
 # There is no example

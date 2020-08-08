@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -84,19 +84,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -145,9 +136,15 @@
       <tr>
         
         <td>
+          <p><code><a href="DO_similarity.html">DO_similarity()</a></code> </p>
+        </td>
+        <td><p>Calculate Disease Ontology (DO) semantic similarity matrix</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="GO_similarity.html">GO_similarity()</a></code> </p>
         </td>
-        <td><p>Calculate GO similarity matrix</p></td>
+        <td><p>Calculate Gene Ontology (GO) semantic similarity matrix</p></td>
       </tr><tr>
         
         <td>
@@ -159,7 +156,13 @@
         <td>
           <p><code><a href="binary_cut.html">binary_cut()</a></code> </p>
         </td>
-        <td><p>Cluster functional terms by binary cutting the similarity matrix</p></td>
+        <td><p>Cluster functional terms by recursively binary cutting the similarity matrix</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cluster_by_MCL.html">cluster_by_MCL()</a></code> </p>
+        </td>
+        <td><p>Cluster similarity matrix by MCL</p></td>
       </tr><tr>
         
         <td>
@@ -172,6 +175,12 @@
           <p><code><a href="cluster_by_dynamicTreeCut.html">cluster_by_dynamicTreeCut()</a></code> </p>
         </td>
         <td><p>Cluster similarity matrix by dynamicTreeCut</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="cluster_by_hdbscan.html">cluster_by_hdbscan()</a></code> </p>
+        </td>
+        <td><p>Cluster similarity matrix by hdbscan</p></td>
       </tr><tr>
         
         <td>
@@ -199,21 +208,27 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="compare_methods.html">compare_methods()</a></code> </p>
-        </td>
-        <td><p>Compare clustering methods</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="compare_methods_make_clusters.html">compare_methods_make_clusters()</a></code> </p>
+          <p><code><a href="cmp_make_clusters.html">cmp_make_clusters()</a></code> </p>
         </td>
         <td><p>Apply various clustering methods</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="compare_methods_make_plot.html">compare_methods_make_plot()</a></code> </p>
+          <p><code><a href="cmp_make_plot.html">cmp_make_plot()</a></code> </p>
         </td>
         <td><p>Make plots for comparing clustering methods</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compare_clustering_methods.html">compare_clustering_methods()</a></code> </p>
+        </td>
+        <td><p>Compare clustering methods</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="compare_methods.html">compare_methods()</a></code> </p>
+        </td>
+        <td><p>Compare clustering methods</p></td>
       </tr><tr>
         
         <td>
@@ -259,6 +274,36 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="partition_by_hclust.html">partition_by_hclust()</a></code> </p>
+        </td>
+        <td><p>Partition by hclust</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="partition_by_kmeans.html">partition_by_kmeans()</a></code> </p>
+        </td>
+        <td><p>Partition by kmeans</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="partition_by_pam.html">partition_by_pam()</a></code> </p>
+        </td>
+        <td><p>Partition by PAM</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="plot_binary_cut.html">plot_binary_cut()</a></code> </p>
+        </td>
+        <td><p>Visualize the process of binary cut</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="random_DO.html">random_DO()</a></code> </p>
+        </td>
+        <td><p>Generate random Disease Ontology (DO) IDs</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="random_GO.html">random_GO()</a></code> </p>
         </td>
         <td><p>Generate random GO IDs</p></td>
@@ -289,9 +334,63 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="select_cutoff.html">select_cutoff()</a></code> </p>
+        </td>
+        <td><p>Select the cutoff for binary cut</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="simplifyEnrichment.html">simplifyEnrichment()</a></code> </p>
+        </td>
+        <td><p>Simplify functional enrichment results</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="simplifyGO.html">simplifyGO()</a></code> </p>
         </td>
-        <td><p>Simplify GO enrichment results</p></td>
+        <td><p>Simplify Gene Ontology (GO) enrichment results</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="subset_enrichResult.html">subset_enrichResult()</a></code> </p>
+        </td>
+        <td><p>Subset method of the enrichResult class</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity.html">term_similarity()</a></code> </p>
+        </td>
+        <td><p>Similarity between terms based on the overlap of genes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity_from_KEGG.html">term_similarity_from_KEGG()</a></code> </p>
+        </td>
+        <td><p>Similarity between KEGG terms</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity_from_MSigDB.html">term_similarity_from_MSigDB()</a></code> </p>
+        </td>
+        <td><p>Similarity between MSigDB terms</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity_from_Reactome.html">term_similarity_from_Reactome()</a></code> </p>
+        </td>
+        <td><p>Similarity between Reactome terms</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity_from_enrichResult.html">term_similarity_from_enrichResult()</a></code> </p>
+        </td>
+        <td><p>Similarity between terms in the enrichResult class</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="term_similarity_from_gmt.html">term_similarity_from_gmt()</a></code> </p>
+        </td>
+        <td><p>Similarity between terms from a gmt file</p></td>
       </tr><tr>
         
         <td>

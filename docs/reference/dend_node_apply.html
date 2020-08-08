@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -172,8 +163,8 @@ it is possible to get information of its child nodes and parent nodes.</p>
     <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>matrix</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span>(<span class='fl'>100</span>), <span class='fl'>10</span>)
 <span class='no'>dend</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span>(<span class='no'>mat</span>)))
 <span class='co'># number of members on every node</span>
-<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>"members"</span>))</div><div class='output co'>#&gt;  [1] 10  3  1  2  1  1  7  1  6  3  1  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
-<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>index</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>))</div><div class='output co'>#&gt;  [1] 0 1 2 2 3 3 1 2 2 3 4 4 5 5 3 4 4 5 5</div></pre>
+<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>) <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span>(<span class='no'>d</span>, <span class='st'>"members"</span>))</div><div class='output co'>#&gt;  [1] 10  4  1  3  1  2  1  1  6  1  5  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
+<span class='fu'>dend_node_apply</span>(<span class='no'>dend</span>, <span class='kw'>function</span>(<span class='no'>d</span>, <span class='no'>index</span>) <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>index</span>))</div><div class='output co'>#&gt;  [1] 0 1 2 2 3 3 4 4 1 2 2 3 4 4 3 4 4 5 5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

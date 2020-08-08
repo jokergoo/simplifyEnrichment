@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -161,20 +152,24 @@
 
     <p>The following methods are the default:</p>
 <dl'>
-  <dt><code>binary_cut</code></dt><dd><p>see <code><a href='binary_cut.html'>binary_cut</a></code>.</p></dd>
   <dt><code>kmeans</code></dt><dd><p>see <code><a href='cluster_by_kmeans.html'>cluster_by_kmeans</a></code>.</p></dd>
   <dt><code>dynamicTreeCut</code></dt><dd><p>see <code><a href='cluster_by_dynamicTreeCut.html'>cluster_by_dynamicTreeCut</a></code>.</p></dd>
   <dt><code>mclust</code></dt><dd><p>see <code><a href='cluster_by_mclust.html'>cluster_by_mclust</a></code>.</p></dd>
   <dt><code>apcluster</code></dt><dd><p>see <code><a href='cluster_by_apcluster.html'>cluster_by_apcluster</a></code>.</p></dd>
+  <dt><code>hdbscan</code></dt><dd><p>see <code><a href='cluster_by_hdbscan.html'>cluster_by_hdbscan</a></code>.</p></dd>
   <dt><code>fast_greedy</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
   <dt><code>leading_eigen</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
   <dt><code>louvain</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
   <dt><code>walktrap</code></dt><dd><p>see <code><a href='cluster_by_igraph.html'>cluster_by_igraph</a></code>.</p></dd>
+  <dt><code>MCL</code></dt><dd><p>see <code><a href='cluster_by_MCL.html'>cluster_by_MCL</a></code>.</p></dd>
+  <dt><code>binary_cut</code></dt><dd><p>see <code><a href='binary_cut.html'>binary_cut</a></code>.</p></dd>
 
 </dl>
 
 <p>Also the user-defined methods in <code><a href='all_clustering_methods.html'>all_clustering_methods</a></code> can be used here.</p>
 <p>New clustering methods can be registered by <code><a href='register_clustering_methods.html'>register_clustering_methods</a></code>.</p>
+<p>Please note it is better to directly call <code>cluster_terms</code> for clustering while not the individual <code>cluster_by_*</code> functions
+because <code>cluster_terms</code> does additional cluster label adjustment.</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A numeric vector of cluster labels (in numeric).</p>

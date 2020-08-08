@@ -6,8 +6,8 @@
 
 ### Features
 
-- A new method (binary cut) is proposed to effectively cluster functional terms (e.g. GO terms) into groups from the semantic similarity matrix.
-- Summaries of GO terms in each cluster are visualized by word clouds.
+- A new method (binary cut) is proposed to efficiently cluster functional terms (_e.g._ GO terms) into groups from the semantic similarity matrix.
+- Summaries of functional terms in each cluster are visualized by word clouds.
 
 
 ### Install
@@ -29,7 +29,7 @@ install_github("jokergoo/simplifyEnrichment")
 
 ### Vignette
 
-- [Simplify Gene Ontology Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifyGO.html)
+- [Simplify Functional Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifysimplifyEnrichment.html)
 
 ### Usage
 
@@ -37,10 +37,11 @@ As an example, we first generate a list of random GO IDs.
 
 ```r
 library(simplifyEnrichment)
-set.seed(88)
+set.seed(888)
 go_id = random_GO(500)
 head(go_id)
-# [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353" "GO:0046101"
+# [1] "GO:0003283" "GO:0060032" "GO:0031334" "GO:0097476" "GO:1901222"
+# [6] "GO:0018216"
 ```
 
 Then generate the GO similarity matrix, split GO terms into clusters and visualize it.
@@ -50,12 +51,13 @@ mat = GO_similarity(go_id)
 simplifyGO(mat)
 ```
 
-![image](https://user-images.githubusercontent.com/449218/81970861-78eae000-9620-11ea-9ea2-c9d51d36ff4c.png)
+![image](https://user-images.githubusercontent.com/449218/89673686-133c8600-d8e7-11ea-89fe-5221cb64d819.png)
 
 ### Examples
 
-- [Randomly generated GO terms](https://jokergoo.github.io/simplifyGO_figures/random_BP.html)
-- [Enriched GO terms from EBI Expression Atlas datasets](https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html)
+- [Examples of simplifyEnrichment](https://simplifyenrichment.github.io/examples/)
+- [Compare different similarity measurements for functional terms](https://simplifyenrichment.github.io/compare_similarity/)
+- [Compare different partitioning methods in binary cut clustering](https://simplifyenrichment.github.io/test_partition_methods/)
 
 ### License
 

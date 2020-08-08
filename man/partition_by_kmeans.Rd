@@ -13,12 +13,14 @@ partition_by_kmeans(mat, k, n_repeats = 10)
 
   \item{mat}{The similarity matrix.}
   \item{k}{Number of clusters.}
-  \item{n_repeats}{Number of repeated run of k-means.}
+  \item{n_repeats}{Number of repeated runs of k-means.}
 
 }
 \details{
 Since k-means clustering brings randomness, this function performs
-k-means clustering several times and uses the final consensus clustering.
+k-means clustering several times and uses the final consensus partitioning.
+
+This function is used to set to the \code{partition_fun} argument in \code{\link{binary_cut}}.
 }
 \examples{
 # There is no example

@@ -30,7 +30,7 @@ get_clustering_method = function(method, control = list()) {
 # Register new clustering methods
 #
 # == param
-# -... A named list of clustering functions, see Details
+# -... A named list of clustering functions, see Details.
 #
 # == details
 # The user-defined functions should accept at least one argument which is the input matrix. 

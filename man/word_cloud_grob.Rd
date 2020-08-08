@@ -27,6 +27,7 @@ word_cloud_grob(text, fontsize,
 A \code{\link[grid:grid.grob]{grob}} object. The width and height of the grob can be get by \code{\link[grid]{grobWidth}} and \code{\link[grid:grobWidth]{grobHeight}}.
 }
 \examples{
+# very old R versions do not have strrep() function
 if(!exists("strrep")) {
     strrep = function(x, i) paste(rep(x, i), collapse = "")
 }

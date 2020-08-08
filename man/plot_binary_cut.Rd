@@ -16,9 +16,10 @@ plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
   \item{mat}{The similarity matrix.}
   \item{value_fun}{Value function to calculate the score for each node in the dendrogram.}
   \item{cutoff}{The cutoff for splitting the dendrogram.}
-  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions is this package are \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} (the default) and \code{\link{partition_by_hclust}}.}
+  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions in this package are \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} (the default) and \code{\link{partition_by_hclust}}.}
   \item{dend}{A dendrogram object, used internally.}
   \item{depth}{Depth of the recursive binary cut process.}
+  \item{dend_width}{Width of the dendrogram.}
   \item{show_heatmap_legend}{Whether to show the heatmap legend.}
   \item{...}{Other arguments.}
 
@@ -31,7 +32,8 @@ the clustering is the same as the one made by e.g. \code{\link{simplifyGO}}.
 }
 \examples{
 \donttest{
-mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", 
+    package = "simplifyEnrichment"))
 plot_binary_cut(mat, depth = 1)
 plot_binary_cut(mat, depth = 2)
 plot_binary_cut(mat)

@@ -14,6 +14,9 @@ random_DO(n)
   \item{n}{Number of DO IDs.}
 
 }
+\details{
+\code{DO.db} package should be installed.
+}
 \value{
 A vector of DO IDs.
 }

@@ -7,7 +7,7 @@ Make plots for comparing clustering methods
 Make plots for comparing clustering methods
 }
 \usage{
-cmp_make_plot(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2)
+cmp_make_plot(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3)
 }
 \arguments{
 
@@ -34,7 +34,11 @@ clusterings.
 No value is returned.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+    package = "simplifyEnrichment"))
+clt = cmp_make_clusters(mat)
+cmp_make_plot(mat, clt)
+cmp_make_plot(mat, clt, plot_type = "heatmap")
+}
 }

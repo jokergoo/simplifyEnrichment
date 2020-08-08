@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -131,7 +122,7 @@
 
     <pre class="usage"><span class='fu'>word_cloud_grob</span>(<span class='no'>text</span>, <span class='no'>fontsize</span>,
     <span class='kw'>line_space</span> <span class='kw'>=</span> <span class='fu'>unit</span>(<span class='fl'>4</span>, <span class='st'>"pt"</span>), <span class='kw'>word_space</span> <span class='kw'>=</span> <span class='fu'>unit</span>(<span class='fl'>4</span>, <span class='st'>"pt"</span>), <span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fu'>unit</span>(<span class='fl'>80</span>, <span class='st'>"mm"</span>),
-    <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>fs</span>) <span class='kw pkg'>circlize</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/circlize/man/rand_color.html'>rand_color</a></span>(<span class='no'>n</span>, <span class='kw'>luminosity</span> <span class='kw'>=</span> <span class='st'>"dark"</span>),
+    <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>fs</span>) <span class='kw pkg'>circlize</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/circlize/man/rand_color.html'>rand_color</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span>(<span class='no'>fs</span>), <span class='kw'>luminosity</span> <span class='kw'>=</span> <span class='st'>"dark"</span>),
     <span class='kw'>test</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -143,7 +134,7 @@
     </tr>
     <tr>
       <th>fontsize</th>
-      <td><p>The corresponding font size.</p></td>
+      <td><p>The corresponding font size. With the frequency of the words known, <code><a href='scale_fontsize.html'>scale_fontsize</a></code> can be used to linearly interpolate frequencies to font sizes.</p></td>
     </tr>
     <tr>
       <th>line_space</th>
@@ -159,7 +150,7 @@
     </tr>
     <tr>
       <th>col</th>
-      <td><p>Colors for the words. The value can be a vector, in numeric or character, which should have the same length as <code>text</code>. Or it is a self-defined function that takes the number of words and font size as  the two arguments. The function should return a color vector. See Examples.</p></td>
+      <td><p>Colors for the words. The value can be a vector, in numeric or character, which should have the same length as <code>text</code>. Or it is a self-defined function that takes the font size vector as  the only argument. The function should return a color vector. See Examples.</p></td>
     </tr>
     <tr>
       <th>test</th>
@@ -172,7 +163,8 @@
     <p>A <code><a href='https://rdrr.io/r/grid/grid-defunct.html'>grob</a></code> object. The width and height of the grob can be get by <code><a href='https://rdrr.io/r/grid/grobWidth.html'>grobWidth</a></code> and <code><a href='https://rdrr.io/r/grid/grobWidth.html'>grobHeight</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"strrep"</span>)) {
+    <pre class="examples"><div class='input'><span class='co'># very old R versions do not have strrep() function</span>
+<span class='kw'>if</span>(!<span class='fu'><a href='https://rdrr.io/r/base/exists.html'>exists</a></span>(<span class='st'>"strrep"</span>)) {
     <span class='no'>strrep</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>, <span class='no'>i</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span>(<span class='no'>x</span>, <span class='no'>i</span>), <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>""</span>)
 }
 <span class='no'>words</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span>(<span class='fl'>1</span>:<span class='fl'>30</span>, <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/strrep.html'>strrep</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='no'>letters</span>, <span class='fl'>1</span>), <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>3</span>:<span class='fl'>10</span>, <span class='fl'>1</span>)))
@@ -189,7 +181,7 @@
 <span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span>(); <span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='no'>gb</span>)</div><div class='img'><img src='word_cloud_grob-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># color as a function</span>
 <span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>circlize</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: circlize</span></div><div class='output co'>#&gt; <span class='message'>========================================</span>
-#&gt; <span class='message'>circlize version 0.4.9</span>
+#&gt; <span class='message'>circlize version 0.4.11</span>
 #&gt; <span class='message'>CRAN page: https://cran.r-project.org/package=circlize</span>
 #&gt; <span class='message'>Github page: https://github.com/jokergoo/circlize</span>
 #&gt; <span class='message'>Documentation: https://jokergoo.github.io/circlize_book/book/</span>
@@ -202,7 +194,7 @@
 #&gt; <span class='message'>  suppressPackageStartupMessages(library(circlize))</span>
 #&gt; <span class='message'>========================================</span></div><div class='input'><span class='no'>col_fun</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/circlize/man/colorRamp2.html'>colorRamp2</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>5</span>, <span class='fl'>17</span>, <span class='fl'>30</span>), <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"blue"</span>, <span class='st'>"black"</span>, <span class='st'>"red"</span>))
 <span class='no'>gb</span> <span class='kw'>=</span> <span class='fu'>word_cloud_grob</span>(<span class='no'>words</span>, <span class='kw'>fontsize</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/Uniform.html'>runif</a></span>(<span class='fl'>30</span>, <span class='kw'>min</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>max</span> <span class='kw'>=</span> <span class='fl'>30</span>),
-    <span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>fs</span>) <span class='fu'>col_fun</span>(<span class='no'>fs</span>))
+    <span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>col</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>fs</span>) <span class='fu'>col_fun</span>(<span class='no'>fs</span>))
 <span class='fu'><a href='https://rdrr.io/r/grid/grid.newpage.html'>grid.newpage</a></span>(); <span class='fu'><a href='https://rdrr.io/r/grid/grid.draw.html'>grid.draw</a></span>(<span class='no'>gb</span>)</div><div class='img'><img src='word_cloud_grob-4.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -1,9 +1,9 @@
 # == title
-# Calculate Disease Ontology (DO) similarity matrix
+# Calculate Disease Ontology (DO) semantic similarity matrix
 #
 # == param
 # -do_id A vector of DO IDs.
-# -measure Measurement for the DO similarity, pass to `DOSE::doSim`.
+# -measure Semantic measurement for the DO similarity, pass to `DOSE::doSim`.
 #
 # == details
 # This function is basically a wrapper on `DOSE::doSim`.
@@ -24,7 +24,7 @@ DO_similarity = function(do_id, measure = "Rel") {
 	}
 
 	if(!exists(".DOSEEnv", envir = .GlobalEnv)) {
-		message_wrap("'DOSE' package requires a '.DOSEEnv' variable stored in the '.GlobalEnv' environment. Please manualy create one by `.GlobalEnv$.DOSEEnv = new.env()` or simply `library(DOSE)`.")
+		message_wrap("'DOSE' package requires a '.DOSEEnv' variable stored in the '.GlobalEnv' environment. Please manualy create one by `.GlobalEnv$.DOSEEnv = new.env()` or simply doing `library(DOSE)`.")
 	}
 
 	do_sim = DOSE::doSim(do_id, do_id, measure = measure)
@@ -43,6 +43,9 @@ DO_similarity = function(do_id, measure = "Rel") {
 #
 # == param
 # -n Number of DO IDs.
+#
+# == details
+# ``DO.db`` package should be installed.
 #
 # == value
 # A vector of DO IDs.

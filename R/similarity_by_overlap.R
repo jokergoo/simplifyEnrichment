@@ -3,18 +3,14 @@
 #
 # == param
 # -gl A list of genes that are in the terms.
-# -method Kappa coefficient or Jaccard coefficient.
+# -method The similarity measurement.
 #
 # == details
-# For two sets of genes, the Jaccard coefficient is calculated as:
-#
-#     length(intersect(set1, set2))/length(union(set1, set2))
-#
-# For the calculation of Kappa coefficient, see https://en.wikipedia.org/wiki/Cohen\%27s_kappa .
+# The definition of the four similarity measurements can be found at https://simplifyenrichment.github.io/supplementary/suppl1_coefficient_definition/suppl1_coefficient_definition.html .
 #
 # == value
 # A symmetric matrix.
-term_similarity = function(gl, method = "kappa") {
+term_similarity = function(gl, method = c("kappa", "jaccard", "dice", "overlap")) {
 	all = unique(unlist(gl))
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
@@ -25,7 +21,7 @@ term_similarity = function(gl, method = "kappa") {
 	}
 	mg = as(mg, "sparseMatrix")
 
-	# method = match.arg(method)[1]
+	method = match.arg(method)[1]
 	if(method == "kappa") {
 		mat = kappa_dist(mg)
 	} else if(method == "overlap") {
@@ -108,6 +104,8 @@ overlap_single = function(x, y) {
 # -x A ``enrichResult`` object from 'clusterProfiler' or other related packages.
 # -i Row indices.
 #
+# == value
+# Still a ``enrichResult`` object but with the selected subset of rows.
 subset_enrichResult = function(x, i) {
 	rownames(x@result) = x@result$ID
 
@@ -125,7 +123,7 @@ subset_enrichResult = function(x, i) {
 # -... Pass to `term_similarity`.
 #
 # == details
-# The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
+# The object is normally from the 'clusterProfiler', 'DOSE', 'meshes' or 'ReactomePA' package.
 #
 # == value
 # A symmetric matrix.
@@ -139,7 +137,7 @@ term_similarity_from_enrichResult = function(x, ...) {
 # Similarity between KEGG terms
 #
 # == param
-# -term_id A vector of KEGG IDs.
+# -term_id A vector of KEGG IDs, e.g., hsa001.
 # -... Pass to `term_similarity`.
 #
 # == value
@@ -186,17 +184,18 @@ term_similarity_from_Reactome = function(term_id, ...) {
 #
 # == param
 # -term_id A vector of MSigDB gene set names.
-# -category E.g., 'C1', 'C2', ...
+# -category E.g., 'C1', 'C2', pass to `msigdbr::msigdbr`.
+# -subcategory E.g., 'CGP', 'BP', pass to `msigdbr::msigdbr`.
 # -... Pass to `term_similarity`.
 #
 # == value
 # A symmetric matrix.
-term_similarity_from_MSigDB = function(term_id, category = NULL, ...) {
+term_similarity_from_MSigDB = function(term_id, category = NULL, subcategory = NULL, ...) {
 	if(!requireNamespace("msigdbr")) {
 		stop_wrap("'msigdbr' package should be installed.")
 	}
 
-	m_df = msigdbr::msigdbr(species = "Homo sapiens", category = category)
+	m_df = msigdbr::msigdbr(species = "Homo sapiens", category = category, subcategory = subcategory)
 	if(all(grepl("^M\\d+$", term_id))) {
 		lt = split(m_df$entrez_gene, m_df$gs_id)
 	} else {

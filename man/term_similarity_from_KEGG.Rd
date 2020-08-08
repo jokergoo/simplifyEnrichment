@@ -11,7 +11,7 @@ term_similarity_from_KEGG(term_id, ...)
 }
 \arguments{
 
-  \item{term_id}{A vector of KEGG IDs.}
+  \item{term_id}{A vector of KEGG IDs, e.g., hsa001.}
   \item{...}{Pass to \code{\link{term_similarity}}.}
 
 }

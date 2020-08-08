@@ -28,13 +28,15 @@
 # A `ComplexHeatmap::HeatmapList-class` object.
 #
 # == example
-# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+#     package = "simplifyEnrichment"))
 # cl = binary_cut(mat)
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80),
 #     order_by_size = TRUE)
 ht_clusters = function(mat, cl, dend = NULL, 
-	draw_word_cloud = TRUE, term = NULL, min_term = 5, 
+	draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term), 
+	term = NULL, min_term = 5, 
 	order_by_size = FALSE, cluster_slices = FALSE,
 	exclude_words = character(0), max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
@@ -124,23 +126,31 @@ ht_clusters = function(mat, cl, dend = NULL,
 			align_to = align_to[names(align_to) %in% names(keywords)]
 
 			word_cloud_grob_param = word_cloud_grob_param[setdiff(names(word_cloud_grob_param), c("text", "fontsize"))]
-			gbl = lapply(names(align_to), function(nm) {
-				kw = rev(keywords[[nm]][, 1])
-				freq = rev(keywords[[nm]][, 2])
-				fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
+			pdf(NULL)
+			oe = try({
+					gbl <- lapply(names(align_to), function(nm) {
+					kw = rev(keywords[[nm]][, 1])
+					freq = rev(keywords[[nm]][, 2])
+					fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
 
-				lt = c(list(text = kw, fontsize = fontsize), word_cloud_grob_param)
-				do.call(word_cloud_grob, lt)
-			})
-			names(gbl) = names(align_to)
+					lt = c(list(text = kw, fontsize = fontsize), word_cloud_grob_param)
+					do.call(word_cloud_grob, lt)
+				})
+				names(gbl) = names(align_to)
+			
+				margin = unit(8, "pt")
+				gbl_h = lapply(gbl, function(x) convertHeight(grobHeight(x), "cm") + margin)
+				gbl_h = do.call(unit.c, gbl_h)
 
-			margin = unit(8, "pt")
-			gbl_h = lapply(gbl, function(x) convertHeight(grobHeight(x), "cm") + margin)
-			gbl_h = do.call(unit.c, gbl_h)
+				gbl_w = lapply(gbl, function(x) convertWidth(grobWidth(x), "cm"))
+				gbl_w = do.call(unit.c, gbl_w)
+				gbl_w = max(gbl_w) + margin
 
-			gbl_w = lapply(gbl, function(x) convertWidth(grobWidth(x), "cm"))
-			gbl_w = do.call(unit.c, gbl_w)
-			gbl_w = max(gbl_w) + margin
+			}, silent = TRUE)
+			dev.off()
+			if(inherits(oe, "try-error")) {
+				stop(oe)
+			}
 
 			panel_fun = function(index, nm) {
 				pushViewport(viewport())
@@ -202,7 +212,9 @@ ht_clusters = function(mat, cl, dend = NULL,
 # A numeric vector.
 #
 # == example
-# scale_fontsize(runif(10, min = 1, max = 20))
+# x = runif(10, min = 1, max = 20)
+# # scale x to fontsize 4 to 16.
+# scale_fontsize(x)
 scale_fontsize = function(x, rg = c(1, 30), fs = c(4, 16)) {
 	k = (fs[2] - fs[1])/(rg[2] - rg[1]) 
 	b = fs[2] - k*rg[2]

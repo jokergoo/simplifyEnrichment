@@ -2,6 +2,6 @@ pandoc: 2.9.2.1
 pkgdown: 1.5.1
 pkgdown_sha: ~
 articles:
-  simplifyGO: simplifyGO.html
-last_built: 2020-05-10T12:03Z
+  simplifyEnrichment: simplifyEnrichment.html
+last_built: 2020-08-08T15:20Z
 

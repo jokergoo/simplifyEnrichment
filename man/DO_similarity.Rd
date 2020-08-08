@@ -1,10 +1,10 @@
 \name{DO_similarity}
 \alias{DO_similarity}
 \title{
-Calculate Disease Ontology (DO) similarity matrix
+Calculate Disease Ontology (DO) semantic similarity matrix
 }
 \description{
-Calculate Disease Ontology (DO) similarity matrix
+Calculate Disease Ontology (DO) semantic similarity matrix
 }
 \usage{
 DO_similarity(do_id, measure = "Rel")
@@ -12,7 +12,7 @@ DO_similarity(do_id, measure = "Rel")
 \arguments{
 
   \item{do_id}{A vector of DO IDs.}
-  \item{measure}{Measurement for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
+  \item{measure}{Semantic measurement for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
 
 }
 \details{

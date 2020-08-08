@@ -7,12 +7,13 @@ Similarity between MSigDB terms
 Similarity between MSigDB terms
 }
 \usage{
-term_similarity_from_MSigDB(term_id, category = NULL, ...)
+term_similarity_from_MSigDB(term_id, category = NULL, subcategory = NULL, ...)
 }
 \arguments{
 
   \item{term_id}{A vector of MSigDB gene set names.}
-  \item{category}{E.g., 'C1', 'C2', ...}
+  \item{category}{E.g., 'C1', 'C2', pass to \code{\link[msigdbr]{msigdbr}}.}
+  \item{subcategory}{E.g., 'CGP', 'BP', pass to \code{\link[msigdbr]{msigdbr}}.}
   \item{...}{Pass to \code{\link{term_similarity}}.}
 
 }

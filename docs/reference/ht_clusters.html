@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -130,10 +121,12 @@
     </div>
 
     <pre class="usage"><span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>dend</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-    <span class='kw'>draw_word_cloud</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min_term</span> <span class='kw'>=</span> <span class='fl'>5</span>, <span class='kw'>order_by_size</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <span class='kw'>draw_word_cloud</span> <span class='kw'>=</span> <span class='fu'>is_GO_id</span>(<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span>(<span class='no'>mat</span>)[<span class='fl'>1</span>]) <span class='kw'>||</span> !<span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span>(<span class='no'>term</span>),
+    <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min_term</span> <span class='kw'>=</span> <span class='fl'>5</span>,
+    <span class='kw'>order_by_size</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>cluster_slices</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
     <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span>(<span class='fl'>0</span>), <span class='kw'>max_words</span> <span class='kw'>=</span> <span class='fl'>10</span>,
     <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(), <span class='kw'>fontsize_range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>4</span>, <span class='fl'>16</span>),
-    <span class='kw'>column_title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ht_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <span class='kw'>column_title</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>ht_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>use_raster</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,6 +160,10 @@
       <td><p>Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size &lt; <code>min_term</code>) is always put to the bottom of the heatmap.</p></td>
     </tr>
     <tr>
+      <th>cluster_slices</th>
+      <td><p>Whether to cluster slices.</p></td>
+    </tr>
+    <tr>
       <th>exclude_words</th>
       <td><p>Words that are excluded in the word cloud.</p></td>
     </tr>
@@ -191,6 +188,10 @@
       <td><p>A list of additional heatmaps added to the left of the similarity heatmap.</p></td>
     </tr>
     <tr>
+      <th>use_raster</th>
+      <td><p>Whether to write the heatmap as a raster image.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>Other arguments passed to <code>draw,HeatmapList-method</code>.</p></td>
     </tr>
@@ -201,9 +202,11 @@
     <p>A <code><a href='https://rdrr.io/pkg/ComplexHeatmap/man/HeatmapList-class.html'>HeatmapList-class</a></code> object.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"similarity_mat.rds"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
+    <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
+    <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
 <span class='no'>cl</span> <span class='kw'>=</span> <span class='fu'><a href='binary_cut.html'>binary_cut</a></span>(<span class='no'>mat</span>)
-<span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='img'><img src='ht_clusters-1.png' alt='' width='700' height='433' /></div></pre>
+<span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='img'><img src='ht_clusters-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>ht_clusters</span>(<span class='no'>mat</span>, <span class='no'>cl</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>),
+    <span class='kw'>order_by_size</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='ht_clusters-2.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

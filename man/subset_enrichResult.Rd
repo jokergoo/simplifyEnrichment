@@ -15,6 +15,9 @@ subset_enrichResult(x, i)
   \item{i}{Row indices.}
 
 }
+\value{
+Still a \code{enrichResult} object but with the selected subset of rows.
+}
 \examples{
 # There is no example
 NULL

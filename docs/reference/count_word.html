@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -129,18 +120,18 @@
     <p>Calculate word frequency</p>
     </div>
 
-    <pre class="usage"><span class='fu'>count_word</span>(<span class='no'>id</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>count_word</span>(<span class='no'>go_id</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>id</th>
-      <td><p>A vector of term IDs.</p></td>
+      <th>go_id</th>
+      <td><p>A vector of GO IDs.</p></td>
     </tr>
     <tr>
       <th>term</th>
-      <td><p>The corresponding names or description of terms.</p></td>
+      <td><p>The corresponding names or description of terms if the input are not GO terms.</p></td>
     </tr>
     <tr>
       <th>exclude_words</th>
@@ -150,14 +141,25 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The text preprocessing followings the instructions from <a href='http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need'>http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need</a> .</p>
+    <p>The input can be simply set with a vector of GO id to <code>go_id</code> argument that the GO names
+are automatically extracted. If the input are not GO terms, users need to provide a vector of long names/descriptions by <code>term</code> argument.</p>
+<p>If the input is GO id, the following words are excluded: <code><a href='https://rdrr.io/r/base/c.html'>c("via", "protein", "factor", "side", "type", "specific")</a></code>.
+They are analyzed by <code>simplifyEnrichment:::all_GO_word_count()</code>.</p>
+<p>The text preprocessing followings the instructions from <a href='http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need'>http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need</a> .</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with words and frequencies.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
+<span class='no'>go_id</span> <span class='kw'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span>(<span class='fl'>500</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>count_word</span>(<span class='no'>go_id</span>))</div><div class='output co'>#&gt;                  word freq
+#&gt; regulation regulation  191
+#&gt; process       process   66
+#&gt; positive     positive   65
+#&gt; negative     negative   58
+#&gt; cell             cell   56
+#&gt; signaling   signaling   36</div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

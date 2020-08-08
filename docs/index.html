@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -46,19 +46,10 @@
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+  <a href="reference/index.html">Reference</a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -88,41 +79,50 @@
 <h3 class="hasAnchor">
 <a href="#features" class="anchor"></a>Features</h3>
 <ul>
-<li>A new method (binary cut) is proposed to effectively cluster functional terms (e.g. GO terms) into groups from the semantic similarity matrix.</li>
-<li>Summaries of GO terms in each cluster are visualized by word clouds.</li>
+<li>A new method (binary cut) is proposed to efficiently cluster functional terms (<em>e.g.</em> GO terms) into groups from the semantic similarity matrix.</li>
+<li>Summaries of functional terms in each cluster are visualized by word clouds.</li>
 </ul>
 </div>
 <div id="install" class="section level3">
 <h3 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h3>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="kw pkg">devtools</span><span class="kw ns">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/simplifyEnrichment"</span>)</pre></div>
+<p><code>simplifyEnrichment</code> is available on <a href="http://www.bioconductor.org/packages/devel/bioc/html/simplifyEnrichment.html">Bioconductor</a>, you can install it by:</p>
+<div class="sourceCode" id="cb1"><pre class="r"><span class="kw">if</span> (!<span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span>(<span class="st">"BiocManager"</span>, <span class="kw">quietly</span><span class="kw">=</span><span class="fl">TRUE</span>))
+    <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"BiocManager"</span>)
+<span class="kw pkg">BiocManager</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html">install</a></span>(<span class="st">"simplifyEnrichment"</span>)</pre></div>
+<p>If you want the latest version, install it directly from GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">devtools</span>)
+<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span>(<span class="st">"jokergoo/simplifyEnrichment"</span>)</pre></div>
 </div>
 <div id="vignette" class="section level3">
 <h3 class="hasAnchor">
 <a href="#vignette" class="anchor"></a>Vignette</h3>
 <ul>
-<li><a href="https://jokergoo.github.io/simplifyEnrichment/articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a></li>
+<li><a href="https://jokergoo.github.io/simplifyEnrichment/articles/simplifysimplifyEnrichment.html">Simplify Functional Enrichment Results</a></li>
 </ul>
 </div>
 <div id="usage" class="section level3">
 <h3 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h3>
 <p>As an example, we first generate a list of random GO IDs.</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">88</span>)
+<div class="sourceCode" id="cb3"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">simplifyEnrichment</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">888</span>)
 <span class="no">go_id</span> <span class="kw">=</span> <span class="fu"><a href="reference/random_GO.html">random_GO</a></span>(<span class="fl">500</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">go_id</span>)
-<span class="co"># [1] "GO:0042981" "GO:0000338" "GO:0006929" "GO:0043161" "GO:0006353" "GO:0046101"</span></pre></div>
+<span class="co"># [1] "GO:0003283" "GO:0060032" "GO:0031334" "GO:0097476" "GO:1901222"</span>
+<span class="co"># [6] "GO:0018216"</span></pre></div>
 <p>Then generate the GO similarity matrix, split GO terms into clusters and visualize it.</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="reference/GO_similarity.html">GO_similarity</a></span>(<span class="no">go_id</span>)
+<div class="sourceCode" id="cb4"><pre class="r"><span class="no">mat</span> <span class="kw">=</span> <span class="fu"><a href="reference/GO_similarity.html">GO_similarity</a></span>(<span class="no">go_id</span>)
 <span class="fu"><a href="reference/simplifyGO.html">simplifyGO</a></span>(<span class="no">mat</span>)</pre></div>
-<p><img src="https://user-images.githubusercontent.com/449218/79051702-027a4d00-7c32-11ea-887e-ed3e171a03a0.png" alt="image"></p>
+<p><img src="https://user-images.githubusercontent.com/449218/89673686-133c8600-d8e7-11ea-89fe-5221cb64d819.png" alt="image"></p>
 </div>
 <div id="examples" class="section level3">
 <h3 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h3>
 <ul>
-<li><a href="https://jokergoo.github.io/simplifyGO_figures/random_BP.html">Randomly generated GO terms</a></li>
-<li><a href="https://jokergoo.github.io/simplifyGO_figures/EBI_Expression_Atlas.html">Enriched GO terms from EBI Expression Atlas datasets</a></li>
+<li><a href="https://simplifyenrichment.github.io/examples/">Examples of simplifyEnrichment</a></li>
+<li><a href="https://simplifyenrichment.github.io/compare_similarity/">Compare different similarity measurements for functional terms</a></li>
+<li><a href="https://simplifyenrichment.github.io/test_partition_methods/">Compare different partitioning methods in binary cut clustering</a></li>
 </ul>
 </div>
 <div id="license" class="section level3">
@@ -137,6 +137,8 @@
     <div class="links">
 <h2>Links</h2>
 <ul class="list-unstyled">
+<li>Download from BIOC at <br><a href="https://www.bioconductor.org/packages/simplifyEnrichment">https://​www.bioconductor.org/​packages/​simplifyEnrichment</a>
+</li>
 <li>Browse source code at <br><a href="https://github.com/jokergoo/simplifyEnrichment/">https://​github.com/​jokergoo/​simplifyEnrichment/​</a>
 </li>
 </ul>
@@ -159,7 +161,9 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/jokergoo/simplifyGO"><img src="https://travis-ci.org/jokergoo/simplifyGO.svg" alt="Build Status"></a></li>
+<li><a href="https://travis-ci.org/jokergoo/simplifyEnrichment"><img src="https://travis-ci.org/jokergoo/simplifyEnrichment.svg" alt="Build Status"></a></li>
+<li><a href="https://bioconductor.org/packages/stats/bioc/simplifyEnrichment/"><img src="http://www.bioconductor.org/shields/downloads/devel/simplifyEnrichment.svg" alt="bioc"></a></li>
+<li><a href="http://bioconductor.org/packages/devel/bioc/html/simplifyEnrichment.html"><img src="http://www.bioconductor.org/shields/years-in-bioc/simplifyEnrichment.svg" alt="bioc"></a></li>
 </ul>
 </div>
 </div>

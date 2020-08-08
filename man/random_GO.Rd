@@ -20,7 +20,7 @@ random_GO(n, ont = "BP", db = 'org.Hs.eg.db')
 A vector of GO IDs.
 }
 \examples{
-# There is no example
-NULL
-
+\donttest{
+go_id = random_GO(100)
+}
 }

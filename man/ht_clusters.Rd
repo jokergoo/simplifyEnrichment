@@ -8,11 +8,12 @@ Visualize the similarity matrix and the clustering
 }
 \usage{
 ht_clusters(mat, cl, dend = NULL,
-    draw_word_cloud = TRUE, term = NULL, min_term = 5,
+    draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term),
+    term = NULL, min_term = 5,
     order_by_size = FALSE, cluster_slices = FALSE,
     exclude_words = character(0), max_words = 10,
     word_cloud_grob_param = list(), fontsize_range = c(4, 16),
-    column_title = NULL, ht_list = NULL, ...)
+    column_title = NULL, ht_list = NULL, use_raster = TRUE, ...)
 }
 \arguments{
 
@@ -30,6 +31,7 @@ ht_clusters(mat, cl, dend = NULL,
   \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
   \item{column_title}{Column title for the heatmap.}
   \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}
+  \item{use_raster}{Whether to write the heatmap as a raster image.}
   \item{...}{Other arguments passed to \code{\link[ComplexHeatmap:draw-HeatmapList-method]{draw,HeatmapList-method}}.}
 
 }
@@ -37,7 +39,8 @@ ht_clusters(mat, cl, dend = NULL,
 A \code{\link[ComplexHeatmap]{HeatmapList-class}} object.
 }
 \examples{
-mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+    package = "simplifyEnrichment"))
 cl = binary_cut(mat)
 ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80),

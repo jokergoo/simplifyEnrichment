@@ -24,7 +24,8 @@ A single character scalar of "BP", "CC" or "MF".
 If there are more than one ontologies detected. It returns \code{NULL}.
 }
 \examples{
-# There is no example
-NULL
-
+\donttest{
+go_id = random_GO(100)
+guess_ont(go_id)
+}
 }

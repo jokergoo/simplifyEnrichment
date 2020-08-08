@@ -18,7 +18,7 @@ cmp_make_clusters(mat, method = setdiff(all_clustering_methods(), "mclust"),
 
 }
 \details{
-The function compares following default clustering methods:
+The function compares following default clustering methods by default:
 
 \describe{
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
@@ -40,7 +40,9 @@ Also the user-defined methods in \code{\link{all_clustering_methods}} are also c
 A list of cluster label vectors for different clustering methods.
 }
 \examples{
-# There is no example
-NULL
-
+\dontrun{
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+    package = "simplifyEnrichment"))
+clt = cmp_make_clusters(mat)
+}
 }

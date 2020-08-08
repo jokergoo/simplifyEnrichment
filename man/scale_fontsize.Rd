@@ -22,5 +22,7 @@ It is a linear interpolation.}
 A numeric vector.
 }
 \examples{
-scale_fontsize(runif(10, min = 1, max = 20))
+x = runif(10, min = 1, max = 20)
+# scale x to fontsize 4 to 16.
+scale_fontsize(x)
 }

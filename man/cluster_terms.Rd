@@ -39,6 +39,9 @@ The following methods are the default:
 Also the user-defined methods in \code{\link{all_clustering_methods}} can be used here.
 
 New clustering methods can be registered by \code{\link{register_clustering_methods}}.
+
+Please note it is better to directly call \code{\link{cluster_terms}} for clustering while not the individual \code{cluster_by_*} functions
+because \code{\link{cluster_terms}} does additional cluster label adjustment.
 }
 \value{
 A numeric vector of cluster labels (in numeric).

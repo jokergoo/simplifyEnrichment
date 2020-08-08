@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Cluster functional terms by binary cutting the similarity matrix — binary_cut • simplifyEnrichment</title>
+<title>Cluster functional terms by recursively binary cutting the similarity matrix — binary_cut • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Cluster functional terms by binary cutting the similarity matrix — binary_cut" />
-<meta property="og:description" content="Cluster functional terms by binary cutting the similarity matrix" />
+<meta property="og:title" content="Cluster functional terms by recursively binary cutting the similarity matrix — binary_cut" />
+<meta property="og:description" content="Cluster functional terms by recursively binary cutting the similarity matrix" />
 
 
 
@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
       </span>
     </div>
 
@@ -85,19 +85,10 @@
   </a>
 </li>
 <li>
-  <a href="../reference/index.html">Reference</a>
+  <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/simplifyGO.html">Simplify Gene Ontology Enrichment Results</a>
-    </li>
-  </ul>
+<li>
+  <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,16 +111,17 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Cluster functional terms by binary cutting the similarity matrix</h1>
+    <h1>Cluster functional terms by recursively binary cutting the similarity matrix</h1>
     
     <div class="hidden name"><code>binary_cut.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Cluster functional terms by binary cutting the similarity matrix</p>
+    <p>Cluster functional terms by recursively binary cutting the similarity matrix</p>
     </div>
 
-    <pre class="usage"><span class='fu'>binary_cut</span>(<span class='no'>mat</span>, <span class='kw'>value_fun</span> <span class='kw'>=</span> <span class='no'>median</span>, <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.85</span>, <span class='kw'>n_run</span> <span class='kw'>=</span> <span class='fl'>1</span>)</pre>
+    <pre class="usage"><span class='fu'>binary_cut</span>(<span class='no'>mat</span>, <span class='kw'>value_fun</span> <span class='kw'>=</span> <span class='no'>median</span>, <span class='kw'>partition_fun</span> <span class='kw'>=</span> <span class='no'>partition_by_pam</span>,
+    <span class='kw'>cutoff</span> <span class='kw'>=</span> <span class='fl'>0.85</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -143,12 +135,12 @@
       <td><p>Value function to calculate the score for each node in the dendrogram.</p></td>
     </tr>
     <tr>
-      <th>cutoff</th>
-      <td><p>The cutoff for splitting the dendrogram.</p></td>
+      <th>partition_fun</th>
+      <td><p>A function to split each node into two groups. Pre-defined functions in this package are <code><a href='partition_by_kmeans.html'>partition_by_kmeans</a></code>, <code><a href='partition_by_pam.html'>partition_by_pam</a></code> (the default) and <code><a href='partition_by_hclust.html'>partition_by_hclust</a></code>.</p></td>
     </tr>
     <tr>
-      <th>n_run</th>
-      <td><p>If the value is larger than one, <code>binary_cut</code> is executed multiple times and generates a consensus clustering.</p></td>
+      <th>cutoff</th>
+      <td><p>The cutoff for splitting the dendrogram.</p></td>
     </tr>
     </table>
 
@@ -157,27 +149,28 @@
     <p>A vector of cluster labels (in numeric).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"similarity_mat.rds"</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
-<span class='fu'>binary_cut</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt;   [1]  1  2  3  4  3  2  2  4  4  1  1  5  5  6  7  8  4  1  3  9  2  1  3  2  3
-#&gt;  [26]  2  3  2  2  2  3  3  5  2  3  2  5  3  2  4  2  1  2  5  3  4  4  3  2  4
-#&gt;  [51]  2  2  2  3  5  2  1  5  3 10  2 11  4  2  3  2  3  5  3  3 12  4  4  3  4
-#&gt;  [76]  3  2  4  2 12  3  2  4  4  3  3  2  2  4  4  3  1  4  4  7  3  4  3  3  5
-#&gt; [101]  2  2  3 13  3  2  2  5  5  3  4 14  4  4  4  3  3  9  5  3  3  3  3  3  2
-#&gt; [126]  4  4  1  5  2  5  3  5  2  2  3  3  2  2  5  2  3  2  4  4  3 15  2  2  2
-#&gt; [151]  5  4  3  4  5  3  2  3  7  2  2  2  4 16  1  1  2  4  3 17  3  5  3  2  4
-#&gt; [176]  3  3  3  2  2  3  3  3  3  2  5  4  2  3  3  3  2  1  4  3  3  2  2  5 12
-#&gt; [201]  4  3  2  2  1  5  2  3  2 12  3  2  5  3 14 14  3  3 18  2  2  3  8  3  5
-#&gt; [226]  8  2 12  7  4  3 19  2  1  4  2  4  4  3 20 21  3 14  4  3  3  3  2  2  4
-#&gt; [251]  7  3  3  3  2  5  4  3  3  4  4  5 22  2  2  3  2  2  3  3  2  5 23 14  3
-#&gt; [276]  2  2  5 14  3  2  9  5  3  3  4  2  9  4  4 24  3  9  4  2  2  5  2  7  4
-#&gt; [301]  2  4  2  3 25  2  1  2  4  3  1  3  4 26  5  4  4  3  3  5  2 15  2  3  1
-#&gt; [326]  5  2  5  2  4  2  5  5  3  3  2  4  2  2  2  4  2  4  3  2  2  3  3  5  5
-#&gt; [351]  4  1  5  1  2  4  4  3  1  2  4  2  4  2 12  2  5  2  5  8  2  5 27  5  3
-#&gt; [376]  2  2  2  3  4  3  4  5  3 14  3  3  3  4  5  8  3  2  2  2  1  2  3  4 15
-#&gt; [401]  4 28  4  9  2  1  8  2  5  2  1  2  3  5  3  4  3  9 12  5  9  7  5  2  3
-#&gt; [426]  1  5  5  4  5  2  2 29  2  3  4  4 30  5  1  3  2  3  3  3  5  5  8  2  4
-#&gt; [451]  2  2  1  4  4  4  3  3  3  4  3  2  5  5  2  3 12  3  3  4  1  5  2  3  3
-#&gt; [476]  4  7  5  4  2  4  3  2  1  3  2  4  3  7  3  5  3  3  5  2  3  5  2  3  2</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
+    <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
+<span class='fu'>binary_cut</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt;   [1]  1  1  2  3  4  1  2  3  1  3  5  6  1  3  1  3  6  7  3  3  4  8  4  4  1
+#&gt;  [26]  1  3  6  3  1  4  3  3  2  3  4  3  4  4  2  2  4  6  6  9  2  6  2  2  3
+#&gt;  [51]  3  4  2  2  4  6  3  3  4  3  4  3  3  3 10  3  1 11  3  1  6  4  6  3 12
+#&gt;  [76]  1 13  4 14  2  4 11  6  1  3  4  1  4  4  4 15  3  6  3  3  3  4  3 14  6
+#&gt; [101]  3  4 16  6  1  2  2  2 11  4  3  3  3 17  1  4  1  3  6  3  1  3  1  3  4
+#&gt; [126]  3 16  4  6  4  3  9  3  3  3  3  1  2  3  4  3  1  3  3  3 18  1  2  3  1
+#&gt; [151]  3 19  1  3  4  1  1  1  1  4  3 20 15  2  3  1  1  1  1  1 21  4  1  4  6
+#&gt; [176]  4  4  3  1  4  1  4 11 11 11  1  4 11  1  3  6  2  3  1 22  1  3  6  1 14
+#&gt; [201]  1  3  4  4  4  2  4  6  3  3  1  3  1  6  3  4  4 11  4  1  1 23  1 24  6
+#&gt; [226]  4  3  2  1  1  3  1  1  6  1  1  1  4  6  3  4  3  4 16  3  1  1  4 25  4
+#&gt; [251]  4  4  1  1 26  4  4  4  6  4  1  3  3  3  2 19  4  3  4 27  4  4  2  6  3
+#&gt; [276]  3 11  3  6  2 16  3  3  2  1  1  6  6  6  3  3  3  1  3  4  3  1  3  1 14
+#&gt; [301] 15 28  2 20  1  3  1  1  1  4  1  3  3  4  1 19 24  4  4  4  1  4  6  4 29
+#&gt; [326]  3  3  6  1  1  3  1  4  2  1  3  3  3  3 19  6 14  3  1  1 11  1  1  4 14
+#&gt; [351]  6 11  3  3  4  3  3  2  1 14  1  1  4  1  2 30  1  1  4  1  3  4  3  1  3
+#&gt; [376] 31  1  1  3  1  3  6  3  3  3  1 19  6  3 11  3  1  3  3 29  2  1  4  4  1
+#&gt; [401]  6  1  4  2 15  6  4  2  3  4  4  4 14  3  3  4  4  1  1  3  6  2  3  2  1
+#&gt; [426]  4 24  1  3  1  1 23  3  6  4  9  1  1  6  4  1 32 33 34 35  1  1  1  4  2
+#&gt; [451]  1 14 15  4  3 14  3  3  6  2  1 15 16  3  4  3  3  4  3  3  4  1 36  6  4
+#&gt; [476]  3  3  4  3  4  6  2  2  3 37  4  6  4 38  3  1  3  1  3  1  6 39 40  4  1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -28,6 +28,9 @@
 #
 # New clustering methods can be registered by `register_clustering_methods`.
 #
+# Please note it is better to directly call `cluster_terms` for clustering while not the individual ``cluster_by_*`` functions
+# because `cluster_terms` does additional cluster label adjustment.
+#
 # == value
 # A numeric vector of cluster labels (in numeric).
 #

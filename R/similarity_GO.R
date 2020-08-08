@@ -3,14 +3,14 @@ env = new.env()
 env$semData_hash = ""
 
 # == title
-# Calculate Gene Ontology (GO) similarity matrix
+# Calculate Gene Ontology (GO) semantic similarity matrix
 #
 # == param
 # -go_id A vector of GO IDs.
 # -ont GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified,
 #      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
-# -measure Measurement for the GO similarity, pass to `GOSemSim::termSim`.
+# -measure Semantic measurement for the GO similarity, pass to `GOSemSim::termSim`.
 #
 # == details
 # This function is basically a wrapper on `GOSemSim::termSim`.
@@ -18,6 +18,11 @@ env$semData_hash = ""
 # == value
 # A symmetric matrix.
 #
+# == examples
+# \donttest{
+# go_id = random_GO(100)
+# mat = GO_similarity(go_id)
+# }
 GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 
 	if(missing(ont)) {
@@ -112,6 +117,12 @@ split_by_block = function(n, size) {
 # A single character scalar of "BP", "CC" or "MF".
 #
 # If there are more than one ontologies detected. It returns ``NULL``.
+#
+# == examples
+# \donttest{
+# go_id = random_GO(100)
+# guess_ont(go_id)
+# }
 guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 	test_go_id = sample(go_id, min(c(length(go_id), 10)))
 	suppressMessages(df <- select(get(db, asNamespace(db)), keys = test_go_id, columns = "ONTOLOGY", keytype = "GO"))
@@ -135,6 +146,10 @@ guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 # == value
 # A vector of GO IDs.
 #
+# == examples
+# \donttest{
+# go_id = random_GO(100)
+# }
 random_GO = function(n, ont = "BP", db = 'org.Hs.eg.db') {
 	hash = digest::digest(list(ont = ont, db = db))
 	if(hash == env$semData_hash) {

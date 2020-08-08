@@ -24,7 +24,8 @@ is the Kolmogorov-Smirnov statistic between the two distributions.
 A numeric scalar.
 }
 \examples{
-mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", 
+    package = "simplifyEnrichment"))
 cl = binary_cut(mat)
 difference_score(mat, cl)
 }

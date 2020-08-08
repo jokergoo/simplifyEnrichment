@@ -26,7 +26,8 @@ simplifyEnrichment(mat, method = "binary_cut", control = list(),
 
 }
 \details{
-The usage is the same as \code{\link{simplifyGO}}, except you need to manually provide the term names by \code{term} argument.
+The usage is the same as \code{\link{simplifyGO}}, except you need to manually provide the term names by \code{term} argument
+if you want to draw the word clouds.
 }
 \examples{
 # There is no example

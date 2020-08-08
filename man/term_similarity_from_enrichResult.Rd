@@ -16,7 +16,7 @@ term_similarity_from_enrichResult(x, ...)
 
 }
 \details{
-The object is normally from the clusterProfiler, DOSE, meshes or ReactomePA package.
+The object is normally from the 'clusterProfiler', 'DOSE', 'meshes' or 'ReactomePA' package.
 }
 \value{
 A symmetric matrix.

@@ -1,8 +1,8 @@
 Package: simplifyEnrichment
 Type: Package
 Title: Simplify Functional Enrichment Results
-Version: 0.99.4
-Date: 2020-05-14
+Version: 0.99.5
+Date: 2020-08-08
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.6.0), BiocGenerics
@@ -16,6 +16,6 @@ Description: A new method (binary cut) is proposed to effectively cluster
          GO terms into groups from the semantic similarity matrix.
          Summaries of GO terms in each cluster are visualized by word clouds.
 biocViews: Software, Visualization, GO, Clustering, GeneSetEnrichment
-URL: https://github.com/jokergoo/simplifyEnrichment, https://jokergoo.github.io/simplifyGO_figures
+URL: https://github.com/jokergoo/simplifyEnrichment, https://simplifyEnrichment.github.io
 VignetteBuilder: knitr
 License: MIT + file LICENSE

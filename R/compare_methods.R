@@ -9,7 +9,7 @@
 # -verbose Whether to print messages.
 #
 # == details
-# The function compares following default clustering methods:
+# The function compares following default clustering methods by default:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
@@ -28,6 +28,12 @@
 # == value
 # A list of cluster label vectors for different clustering methods.
 #
+# == examples
+# \dontrun{
+# mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+#     package = "simplifyEnrichment"))
+# clt = cmp_make_clusters(mat)
+# }
 cmp_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
 	verbose = TRUE) {
 
@@ -74,7 +80,16 @@ cmp_make_clusters = function(mat, method = setdiff(all_clustering_methods(), "mc
 #
 # == value
 # No value is returned.
-cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) {
+#
+# == examples
+# \dontrun{
+# mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+#     package = "simplifyEnrichment"))
+# clt = cmp_make_clusters(mat)
+# cmp_make_plot(mat, clt)
+# cmp_make_plot(mat, clt, plot_type = "heatmap")
+# }
+cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) {
 
 	clt = as.data.frame(clt)
 	methods = names(clt)
@@ -180,7 +195,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 			}
 		})
 
-		tb = data.frame(method = methods, "#clusters" = n_all, "#cluster(size >= 5)" = n_big, check.names = FALSE)
+		tb = data.frame(Method = methods, "All clusters" = n_all, "Big clusters (size >= 5)" = n_big, check.names = FALSE)
 
 		if(!requireNamespace("gridExtra", quietly = TRUE)) {
 			stop_wrap("Package gridExtra should be installed.")
@@ -203,6 +218,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 2) 
 					width = sum(pl[[i]]$widths), height = sum(pl[[i]]$heights),
 					just = c("left", "top")))
 				grid.draw(pl[[i]])
+				grid.text("Number of clusters", y = unit(1, "npc") + unit(2.5, "mm"), just = "bottom", gp = gpar(fontsize = 14))
 				popViewport()
 
 				if(!is.null(lgd)) {
@@ -295,10 +311,11 @@ cmp_calc_stats = function(mat, clt) {
 # -method Which methods to compare. All available methods are in `all_clustering_methods`.
 #         A value of ``all`` takes all available methods. By default ``mclust`` is excluded because its long runtime.
 # -plot_type See explanation in `cmp_make_plot`.
+# -nrow Number of rows of the layout when ``plot_type`` is set to ``heatmap``.
 # -verbose Whether to print messages.
 #
 # == details
-# The function compares following clustering methods:
+# The function compares following clustering methods by default:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
@@ -314,7 +331,7 @@ cmp_calc_stats = function(mat, clt) {
 #
 # This functon is basically a wrapper function. It calls the following two functions:
 #
-# - `cmp_make_clusters`: applies clustering by different methods.
+# - `cmp_make_clusters`: applies clustering with different methods.
 # - `cmp_make_plot`: makes the plots.
 #
 # == value
@@ -322,17 +339,18 @@ cmp_calc_stats = function(mat, clt) {
 #
 # == example
 # \dontrun{
-# mat = readRDS(system.file("extdata", "similarity_mat.rds", package = "simplifyEnrichment"))
+# mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
+#     package = "simplifyEnrichment"))
 # compare_clustering_methods(mat)
 # compare_clustering_methods(mat, plot_type = "heatmap")
 # }
 compare_clustering_methods = function(mat, method = setdiff(all_clustering_methods(), "mclust"),
-	plot_type = c("mixed", "heatmap"), verbose = TRUE) {
+	plot_type = c("mixed", "heatmap"), nrow = 3, verbose = TRUE) {
 
 	clt = cmp_make_clusters(mat, method, verbose = verbose)
 
 	plot_type = match.arg(plot_type)[1]
-	cmp_make_plot(mat, clt, plot_type = plot_type)
+	cmp_make_plot(mat, clt, plot_type = plot_type, nrow = nrow)
 }
 
 

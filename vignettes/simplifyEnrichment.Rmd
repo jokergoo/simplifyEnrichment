@@ -1,0 +1,266 @@
+---
+title: "Simplify Functional Enrichment Results"
+author: "Zuguang Gu (z.gu@dkfz.de)"
+date: '`r Sys.Date()`'
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: true
+    css: main.css
+vignette: >
+  %\VignetteIndexEntry{Simplify Functional Enrichment Results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, echo = FALSE}
+library(knitr)
+knitr::opts_chunk$set(
+    error = FALSE,
+    tidy  = FALSE,
+    message = FALSE,
+    warning = FALSE,
+    fig.align = "center",
+    dev = "jpeg"
+)
+options(width = 100)
+```
+
+The **simplifyEnrichment** package clusters functional terms into groups by
+clustering the similarity matrix of the terms with a new proposed method
+"binary cut" which recursively applies partition around medoids (PAM) with two
+groups on the similarity matrix and in each iteration step, a score is
+assigned to decide whether the group of gene sets that corresponds to the
+current sub-matrix should be split or not. For more details of the method, 
+please refer to the manuscript.
+
+## Simplify GO enrichment results
+
+```{r, echo = FALSE, message = FALSE}
+library(simplifyEnrichment)
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
+go_id = rownames(mat)
+```
+
+The major use case for **simplifyEnrichment** is for simplying the GO
+enrichment results by clustering the corresponding semantic similarity matrix
+of the significant GO terms. To demonstrate the usage, we first generate a
+list of random GO IDs from the Biological Process (BP) ontology category:
+
+```{r, eval = FALSE}
+library(simplifyEnrichment)
+set.seed(888)
+go_id = random_GO(500)
+```
+
+**simplifyEnrichment** starts with the GO similarity matrix. Users can use
+their own similarity matrices or use the `GO_similarity()` function to
+calculate the semantic similarity matrix. The `GO_similarity()` function is
+simply a wrapper on `GOSemSim::termSim()`. The function accepts a vector of GO
+IDs. Note the GO terms should only belong to one same ontology (_i.e._, `BP`,
+`CC` or `MF`).
+
+
+```{r, eval = FALSE}
+mat = GO_similarity(go_id)
+```
+
+By default, `GO_similarity()` uses `Rel` method in `GOSemSim::termSim()`. Other
+methods to calculate GO similarities can be set by `measure` argument, _e.g._:
+
+```{r, eval = FALSE}
+GO_similarity(go_id, measure = "Wang")
+```
+
+With the similarity matrix `mat`, users can directly apply `simplifyGO()`
+function to perform the clustering as well as visualizing the results.
+
+```{r, fig.width = 7*1.2, fig.height = 4*1.2}
+df = simplifyGO(mat)
+```
+
+On the right side of the heatmap there are the word cloud annotations which
+summarize the functions with keywords in every GO cluster. Note there is no
+word cloud for the cluster that is merged from small clusters (size < 5).
+
+The returned variable `df` is a data frame with GO IDs, GO terms and the
+cluster labels:
+
+```{r}
+head(df)
+```
+
+The size of GO clusters can be retrieved by:
+
+```{r}
+sort(table(df$cluster))
+```
+
+Or split the data frame by the cluster labels:
+
+```{r, eval = FALSE}
+split(df, df$cluster)
+```
+
+`plot` argument can be set to `FALSE` in `simplifyGO()`, so that no plot is
+generated and only the data frame is returned.
+
+If the aim is only to cluster GO terms, `binary_cut()` or `cluster_terms()` functions can be
+directly applied:
+
+```{r}
+binary_cut(mat)
+```
+
+or
+
+```{r, eval = FALSE}
+cluster_terms(mat, method = "binary_cut")
+```
+
+`binary_cut()` and `cluster_terms()` basically generate the same clusterings, but the labels of clusters might differ.
+
+## Simplify general functional enrichment results
+
+Semantic measurements can be used for the similarity of GO terms. However,
+there are still a lot of ontologies (e.g. MsigDB gene sets) that are only
+represented as a list of genes where the similarity between gene sets are
+mainly measured by gene overlap. **simplifyEnrichment** provides the
+`term_similarity()` and other related functions
+(`term_similarity_from_enrichResult()`, `term_similarity_from_KEGG()`,
+`term_similarity_from_Reactome()`, `term_similarity_from_MSigDB()` and
+`term_similarity_from_gmt()`) which calculate the similarity of terms by the
+gene overlapping, with methods of [Jaccard
+coefficient](https://en.wikipedia.org/wiki/Jaccard_index), [Dice
+coefficient](https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient),
+[overlap coefficient](https://en.wikipedia.org/wiki/Overlap_coefficient) and
+[kappa coefficient](https://en.wikipedia.org/wiki/Cohen%27s_kappa).
+
+The similarity can be calculated by providing:
+
+1. A list of gene sets where each gene set contains a vector of genes.
+2. A `enrichResult` object which is normally from the 'clusterProfiler', 'DOSE', 'meshes' or 'ReactomePA' package.
+3. A list of KEGG/Reactome/MsigDB IDs. The gene set names can also be provided for MsigDB ontologies.
+4. A gmt file and the corresponding gene set IDs.
+
+Once you have the similarity matrix, you can send it to `simplifyEnrichment()` function.
+But note, as we benchmarked in the manuscript, the clustering on the gene
+overlap similarity performs much worse than on the semantic similarity.
+
+## Comparing clustering methods
+
+In the **simplifyEnrichment** package, there are also functions that compare
+clustering results from different methods. Here we still use previously
+generated variable `mat` which is the similarity matrix from the 500 random GO
+terms. Simply running `compare_clustering_methods()` function performs all supported
+methods (in `all_clustering_methods()`) excluding `mclust`, because
+`mclust` usually takes very long time to run. The function generates a figure
+with three panels:
+
+1. A heatmap of the similarity matrix with different clusterings as row
+   annotations.
+2. A heatmap of the pair-wise concordance of the clustering from every two methods.
+3. Barplots of the difference scores for each method, the number of clusters
+   (total clusters and the clusters with size >= 5) and the mean similarity of
+   the terms that are in the same clusters (block mean).
+
+In the barplots, the three metrics are defined as follows:
+
+1. **Different score**: This is the difference between the similarity values
+   for the terms that belong to the same clusters and different clusters.
+   For a similarity matrix $M$, for term $i$ and term $j$ where $i \ne j$, the
+   similarity value $x_{i,j}$ is saved to the vector $\mathbf{x_1}$ only when
+   term $i$ and $j$ are in a same cluster. $x_{i,j}$ is saved to the vector
+   $\mathbf{x_2}$ when term $i$ and $j$ are not in the same cluster. The
+   difference score measures the distribution difference between $\mathbf{x_1}$
+   and $\mathbf{x_2}$, calculated as the Kolmogorov-Smirnov statistic between
+   the two distributions.
+2. **Number of clusters**: For each clustering, there are two numbers: the
+   number of total clusters and the number of clusters with size >= 5 (only
+   the big clusters).
+3. **Block mean**: The mean similarity values of the blocks in the similarity
+   heatmap. Similar denotation as difference score, for term $i$ and $j$ where
+   $i$ can be the same as $j$ (values on the diagonal are also used), the
+   similarity value $x_{i,j}$ is saved to the vector $\mathbf{x_3}$ only when
+   term $i$ and $j$ are in a same cluster. The block mean is the mean value
+   over $\mathbf{x_3}$.
+
+```{r, fig.width = 10, fig.height = 7}
+compare_clustering_methods(mat)
+```
+
+If `plot_type` argument is set to `heatmap`. There are heatmaps for the
+similarity matrix under different clusterings methods. The last panel is a
+table with the number of clusters.
+
+```{r, fig.width = 18, fig.height = 14, dev = "jpeg"}
+compare_clustering_methods(mat, plot_type = "heatmap")
+```
+
+Please note, the clustering methods might have randomness, which means,
+different runs of `compare_clustering_methods()` may generate different clusterings
+(slightly different). Thus, if users want to compare the plots between
+`compare_clustering_methods(mat)` and `compare_clustering_methods(mat, plot_type = "heatmap")`, they
+should set the same random seed before executing the function.
+
+```{r, eval = FALSE}
+set.seed(123)
+compare_clustering_methods(mat)
+set.seed(123)
+compare_clustering_methods(mat, plot_type = "heatmap")
+```
+
+`compare_clustering_methods()` is simply a wrapper on `cmp_make_clusters()`
+and `cmp_make_plot()` functions where the former function performs
+clustering with different methods and the latter visualizes the results. To
+compare different plots, users can also use the following code without
+specifying the random seed.
+
+```{r, eval = FALSE}
+clt = cmp_make_clusters(mat) # just a list of cluster labels
+cmp_make_plot(mat, clt)
+cmp_make_plot(mat, clt, plot_type = "heatmap")
+```
+
+### Register new clustering methods
+
+New clustering methods can be added by `register_clustering_methods()`,
+removed by `remove_clustering_methods()` and reset to the default methods by
+`reset_clustering_methods()`. All the supported methods can be retrieved by
+`all_clustering_methods()`. `compare_clustering_methods()` runs all the clustering methods
+in `all_clustering_methods()`.
+
+The new clustering methods should be as user-defined functions and sent to
+`register_clustering_methods()` as named arguments, e.g.:
+
+```{r, eval = FALSE}
+register_clustering_methods(
+    method1 = function(mat, ...) ...,
+    method2 = function(mat, ...) ...,
+    ...
+)
+```
+
+The functions should accept at least one argument which is the input matrix
+(`mat` in above example). The second optional argument should always be `...`
+so that parameters for the clustering function can be passed by `control`
+argument from `cluster_terms()` or `simplifyGO()`. If users forget to add
+`...`, it is added internally.
+
+Please note, the user-defined function should automatically identify the
+optimized number of clusters. The function should return a vector of cluster
+labels. Internally it is converted to numeric labels.
+
+## Examples
+
+There are following examples which we did for the benchmarking in the manuscript:
+
+- [Examples of simplifyEnrichment](https://simplifyenrichment.github.io/examples/).
+- [Compare different similarity measurements for functional terms](https://simplifyenrichment.github.io/compare_similarity/).
+- [Compare different partitioning methods in binary cut clustering](https://simplifyenrichment.github.io/test_partition_methods/).
+
+
+## Session Info
+
+```{r}
+sessionInfo()
+```
