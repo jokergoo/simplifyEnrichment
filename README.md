@@ -29,7 +29,7 @@ install_github("jokergoo/simplifyEnrichment")
 
 ### Vignette
 
-- [Simplify Functional Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifysimplifyEnrichment.html)
+- [Simplify Functional Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifyEnrichment.html)
 
 ### Usage
 
