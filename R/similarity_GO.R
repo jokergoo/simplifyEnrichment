@@ -73,6 +73,7 @@ split_by_block = function(n, size) {
     split(1:n, GROUP)
 }
 
+# # Don't think about it, SQLite does not allow multiple core
 # calc_similarity = function(go_id, measure, semData, mc.cores = 1) {
 
 # 	n = length(go_id)
