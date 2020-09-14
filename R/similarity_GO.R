@@ -74,35 +74,42 @@ split_by_block = function(n, size) {
 }
 
 # # Don't think about it, SQLite does not allow multiple core
-# calc_similarity = function(go_id, measure, semData, mc.cores = 1) {
+calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 
-# 	n = length(go_id)
-# 	SPLIT = split_by_block(n, floor(sqrt(n)))
-# 	COMBS = expand.grid(1:length(SPLIT), 1:length(SPLIT))
-# 	COMBS = t(apply(COMBS, 1, sort))
-# 	COMBS = unique(COMBS)
+	go_removed = setdiff(go_id, Lkeys(getFromNamespace("getAncestors", "GOSemSim")(semData@ont)))
 
-# 	lt = mclapply(seq_len(nrow(COMBS)), function(i) {
-# 		ind1 = SPLIT[[ COMBS[i, 1] ]]
-# 		ind2 = SPLIT[[ COMBS[i, 2] ]]
-# 		termSim(go_id[ind1], go_id[ind2], method = measure, semData = semData)
-# 	}, mc.cores = mc.cores)
+	if(length(go_removed)) {
+		message(qq("@{length(go_removed)}/@{length(go_id)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
+	}
+	go_id = setdiff(go_id, go_removed)
+	
+	n = length(go_id)
+	SPLIT = split_by_block(n, max(floor(sqrt(n)), 500))
+	COMBS = expand.grid(1:length(SPLIT), 1:length(SPLIT))
+	COMBS = t(apply(COMBS, 1, sort))
+	COMBS = unique(COMBS)
 
-# 	m = matrix(nrow = n, ncol = n)
-# 	dimnames(m) = list(go_id, go_id)
-# 	dimnames(m) = list(go_id, go_id)
-# 	for(i in seq_len(nrow(COMBS))) {
-# 		ind1 = SPLIT[[ COMBS[i, 1] ]]
-# 		ind2 = SPLIT[[ COMBS[i, 2] ]]
-# 		if(COMBS[i, 1] == COMBS[i, 2]) {
-# 			m[ind1, ind2] = lt[[i]]
-# 		} else {
-# 			m[ind1, ind2] = lt[[i]]
-# 			m[ind2, ind1] = lt[[i]]
-# 		}
-# 	}
-# 	return(m)
-# }
+	lt = lapply(seq_len(nrow(COMBS)), function(i) {
+		if(verbose) qqcat("apply block [@{COMBS[i, 1]}, @{COMBS[i, 2]}] @{i}/@{nrow(COMBS)} (@{round(i/nrow(COMBS)*100, 1)}%)\n")
+		ind1 = SPLIT[[ COMBS[i, 1] ]]
+		ind2 = SPLIT[[ COMBS[i, 2] ]]
+		invisible(termSim(go_id[ind1], go_id[ind2], method = measure, semData = semData))
+	})
+
+	m = matrix(nrow = n, ncol = n)
+	dimnames(m) = list(go_id, go_id)
+	for(i in seq_len(nrow(COMBS))) {
+		ind1 = SPLIT[[ COMBS[i, 1] ]]
+		ind2 = SPLIT[[ COMBS[i, 2] ]]
+		if(COMBS[i, 1] == COMBS[i, 2]) {
+			m[ind1, ind2] = lt[[i]]
+		} else {
+			m[ind1, ind2] = lt[[i]]
+			m[ind2, ind1] = lt[[i]]
+		}
+	}
+	return(m)
+}
 
 # == title
 # Guess the ontology of the input GO IDs
