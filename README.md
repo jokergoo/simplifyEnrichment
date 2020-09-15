@@ -1,4 +1,4 @@
-# Simplify functional enrichment Results
+# Simplify Functional Enrichment Results
 
 [![Build Status](https://travis-ci.org/jokergoo/simplifyEnrichment.svg)](https://travis-ci.org/jokergoo/simplifyEnrichment)
 [![bioc](http://www.bioconductor.org/shields/downloads/devel/simplifyEnrichment.svg)](https://bioconductor.org/packages/stats/bioc/simplifyEnrichment/) 
@@ -20,7 +20,7 @@ if (!requireNamespace("BiocManager", quietly=TRUE))
 BiocManager::install("simplifyEnrichment")
 ```
 
-If you want the latest version, install it directly from GitHub:
+If you want to try the latest version, install it directly from GitHub:
 
 ```r
 library(devtools)

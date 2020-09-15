@@ -1,3 +1,9 @@
+CHANGES in VERSION 0.99.5
+
+* in the clustering, considered when the size of cluster is only 1.
+
+---------------------------------
+
 CHANGES in VERSION 0.99.4
 
 * support more ontologies.

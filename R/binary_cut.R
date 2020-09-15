@@ -96,17 +96,24 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 		l2 = l3
 	}
 	m11 = mat[l1, l1, drop = FALSE]
-	m11 = m11[ lower.tri(m11) | upper.tri(m11)]
-	x11 = .env$value_fun(m11)
-	x12 = .env$value_fun(mat[l1, l2])
-	x21 = .env$value_fun(mat[l2, l1])
+	if(nrow(m11) == 1) {
+		x11 = 1
+		x12 = .env$value_fun(mat[l1, l2])
+		x21 = .env$value_fun(mat[l2, l1])
+	} else {
+		m11 = m11[ lower.tri(m11) | upper.tri(m11)]
+		x11 = .env$value_fun(m11)
+		x12 = .env$value_fun(mat[l1, l2])
+		x21 = .env$value_fun(mat[l2, l1])
+	}
 	m22 = mat[l2, l2, drop = FALSE]
-	m22 = m22[ lower.tri(m22) | upper.tri(m22)]
-	x22 = .env$value_fun(m22)
-
-	if(is.na(x11)) x11 = 0
-	if(is.na(x22)) x22 = 0
-
+	if(nrow(m22) == 1) {
+		x22 = 1
+	} else {
+		m22 = m22[ lower.tri(m22) | upper.tri(m22)]
+		x22 = .env$value_fun(m22)
+	}
+	
 	s = (x11 + x22)/(x11 + x12 + x21 + x22)
 	if(is.na(s)) s = 1
 
@@ -411,6 +418,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # -partition_fun A function to split each node into two groups. Pre-defined functions
 #                in this package are `partition_by_kmeans`, `partition_by_pam` (the default) and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
+# -cache Whether the dendrogram should be cached. Internally used.
 #
 # == value
 # A vector of cluster labels (in numeric). 
@@ -420,9 +428,25 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
 binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
-	cutoff = 0.85) {
+	cutoff = 0.85, cache = FALSE) {
 
-	dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+	if(cache) {
+		hash = digest::digest(list(mat, value_fun = value_fun, partition_fun = partition_fun))
+		if(is.null(.ENV$last_binary_cut_dend)) {
+			dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+			.ENV$last_binary_cut_dend = dend
+			.ENV$last_binary_cut_hash = hash
+		} else if(identical(hash, .ENV$last_binary_cut_hash)) {
+			dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+			.ENV$last_binary_cut_dend = dend
+			.ENV$last_binary_cut_hash = hash
+		} else {
+			dend = .ENV$last_binary_cut_dend
+		}
+		
+	} else {
+		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+	}
 	cl = cut_dend(dend, cutoff)
 	return(as.numeric(as.vector(unname(cl))))
 }
@@ -449,14 +473,14 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 #     package = "simplifyEnrichment"))
 # select_cutoff(mat)
 # }
-select_cutoff = function(mat, cutoff = seq(0.6, 0.9, by = 0.01), verbose = TRUE, ...) {
+select_cutoff = function(mat, cutoff = seq(0.6, 0.98, by = 0.01), verbose = TRUE, ...) {
 
 	cutoff = cutoff[cutoff >= 0.5 & cutoff <= 1]
 
 	s1 = s2 = s3 = s4 = NULL
 	for(i in seq_along(cutoff)) {
 		if(verbose) qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")
-		cl = binary_cut(mat, cutoff = cutoff[i], ...)
+		cl = binary_cut(mat, cutoff = cutoff[i], ..., cache = TRUE)
 		s1[i] = difference_score(mat, cl)
 		tb = table(cl)
 		s2[i] = length(tb)
