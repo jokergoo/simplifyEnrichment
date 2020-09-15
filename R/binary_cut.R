@@ -6,7 +6,7 @@ dend_max_depth = function(dend) {
 }
 
 # cluster the similarity matrix and assign scores to nodes
-cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam) {
+cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max_ds) {
 
 	env = new.env()
 	env$value_fun = value_fun
@@ -79,6 +79,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 		)
 		return(NULL)
 	}
+
 	if(nrow(mat) == 2) {
 		cl = c(1, 2)
 	} else {
@@ -231,7 +232,8 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 	}
 }
 
-render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE, depth = NULL) {
+render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE, depth = NULL,
+	add_label = FALSE) {
 
 	if(!is.null(depth)) {
 		dend = edit_node(dend, function(d, index) {
@@ -256,6 +258,7 @@ render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE
 				
 				if(attr(dend2, "height") > 0.5) {
 					attr(d, "nodePar") = list(pch = 4, cex = 0.5)
+					if(add_label) attr(d, "edgetext") = sprintf("%.2f", attr(d, "score"))
 				}
 			} else {
 				attr(d, "edgePar") = list(col = "#DDDDDD")
@@ -268,10 +271,12 @@ render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE
 					if(length(index) > 1) {
 						if(attr(dend2[[index[-length(index)]]], "height") > 0.5) {
 							attr(d, "nodePar") = list(pch = 4, cex = 0.5)
+							if(add_label) attr(d, "edgetext") = sprintf("%.2f", attr(d, "score"))
 						}
 					} else {
 						if(attr(dend2, "height") > 0.5) {
 							attr(d, "nodePar") = list(pch = 4, cex = 0.5)
+							if(add_label) attr(d, "edgetext") = sprintf("%.2f", attr(d, "score"))
 						}
 					}
 				}
@@ -302,7 +307,7 @@ dend_env = new.env()
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -cutoff The cutoff for splitting the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_kmeans`, `partition_by_pam` (the default) and `partition_by_hclust`.
+#                in this package are `partition_by_max_ds` (the default), `partition_by_kmeans`, `partition_by_pam` and `partition_by_hclust`.
 # -dend A dendrogram object, used internally.
 # -depth Depth of the recursive binary cut process.
 # -dend_width Width of the dendrogram.
@@ -324,7 +329,7 @@ dend_env = new.env()
 # plot_binary_cut(mat)
 # }
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
-	partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
+	partition_fun = partition_by_max_ds, dend = NULL, dend_width = unit(3, "cm"),
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
 	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
@@ -416,7 +421,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_kmeans`, `partition_by_pam` (the default) and `partition_by_hclust`.
+#                in this package are `partition_by_max_ds` (the default), `partition_by_kmeans`, `partition_by_pam`  and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
 # -cache Whether the dendrogram should be cached. Internally used.
 #
@@ -427,7 +432,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
-binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
+binary_cut = function(mat, value_fun = median, partition_fun = partition_by_max_ds,
 	cutoff = 0.85, cache = FALSE) {
 
 	if(cache) {
