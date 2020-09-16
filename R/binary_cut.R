@@ -439,8 +439,8 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE)
 		)
 		i = which.max(sapply(clt, function(cl) difference_score(mat, cl)))
-		if(length(i) == 0) i = 1
-		return(as.numeric(as.vector(unname(clt[[i]]))))
+		# if(length(i) == 0) i = 1
+		return(clt[[i]])
 	}
 
 	if(cache) {
