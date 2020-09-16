@@ -7,12 +7,11 @@ Partition by kmeans
 Partition by kmeans
 }
 \usage{
-partition_by_kmeans(mat, k, n_repeats = 10)
+partition_by_kmeans(mat, n_repeats = 10)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{k}{Number of clusters.}
   \item{n_repeats}{Number of repeated runs of k-means.}
 
 }

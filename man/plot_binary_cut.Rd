@@ -8,7 +8,7 @@ Visualize the process of binary cut
 }
 \usage{
 plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
-    partition_fun = partition_by_max_ds, dend = NULL, dend_width = unit(3, "cm"),
+    partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
     depth = NULL, show_heatmap_legend = TRUE, ...)
 }
 \arguments{
@@ -16,7 +16,7 @@ plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
   \item{mat}{The similarity matrix.}
   \item{value_fun}{Value function to calculate the score for each node in the dendrogram.}
   \item{cutoff}{The cutoff for splitting the dendrogram.}
-  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions in this package are \code{\link{partition_by_max_sd}} (the default), \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} and \code{\link{partition_by_hclust}}.}
+  \item{partition_fun}{A function to split each node into two groups. Pre-defined functions in this package are \code{\link{partition_by_kmeans}}, \code{\link{partition_by_pam}} and \code{\link{partition_by_hclust}}.}
   \item{dend}{A dendrogram object, used internally.}
   \item{depth}{Depth of the recursive binary cut process.}
   \item{dend_width}{Width of the dendrogram.}

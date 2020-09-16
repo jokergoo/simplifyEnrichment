@@ -7,12 +7,11 @@ Partition by PAM
 Partition by PAM
 }
 \usage{
-partition_by_pam(mat, k)
+partition_by_pam(mat)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{k}{Number of clusters.}
 
 }
 \details{

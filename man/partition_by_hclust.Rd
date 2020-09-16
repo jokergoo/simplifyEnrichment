@@ -7,12 +7,11 @@ Partition by hclust
 Partition by hclust
 }
 \usage{
-partition_by_hclust(mat, k)
+partition_by_hclust(mat)
 }
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{k}{Number of clusters.}
 
 }
 \details{
