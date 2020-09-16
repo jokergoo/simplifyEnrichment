@@ -9,7 +9,8 @@ dend_max_depth = function(dend) {
 # two scores attached to each ndoe
 # - score: the original score
 # - score2: the score which have checked the children nodes' scores
-cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam) {
+cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam,
+	cutoff = 0.85) {
 
 	env = new.env()
 	env$value_fun = value_fun
@@ -62,7 +63,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 		s = attr(d, "score")
 		if( min(nobs(d[[1]]), nobs(d[[2]]))/nobs(d) < 0.1 ) {
 			attr(d, "score2")  = s
-		} else if(s > s2*0.95 && s < s2) {
+		} else if(s > cutoff*0.95 && s < s2) {
 			attr(d, "score2") = s2
 		} else {
 			attr(d, "score2")  = s
@@ -71,7 +72,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 	}
 	dend = assign_score2(dend)
 
-	hash = digest::digest(list(mat, value_fun, partition_fun))
+	hash = digest::digest(list(mat, value_fun, partition_fun, cutoff))
 	dend_env$dend = dend
 	dend_env$hash = hash
 
@@ -326,7 +327,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 		stop_wrap("Package 'gridGraphics' should be installed.")
 	}
 
-	hash = digest::digest(list(mat, value_fun, partition_fun))
+	hash = digest::digest(list(mat, value_fun, partition_fun, cutoff))
 	if(is.null(dend)) {
 		if(identical(hash, dend_env$hash)) {
 			dend = dend_env$dend
@@ -344,7 +345,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 		if(se_opt$verbose) {
 			cat("create a new dendrogram.\n")
 		}
-		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
+		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
 		dend_env$dend = dend
 		dend_env$hash = hash
 	}
@@ -445,23 +446,8 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 		return(clt[[i]])
 	}
 
-	if(cache) {
-		hash = digest::digest(list(mat, value_fun = value_fun, partition_fun = partition_fun))
-		if(is.null(.ENV$last_binary_cut_dend)) {
-			dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
-			.ENV$last_binary_cut_dend = dend
-			.ENV$last_binary_cut_hash = hash
-		} else if(identical(hash, .ENV$last_binary_cut_hash)) {
-			dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
-			.ENV$last_binary_cut_dend = dend
-			.ENV$last_binary_cut_hash = hash
-		} else {
-			dend = .ENV$last_binary_cut_dend
-		}
-		
-	} else {
-		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun)
-	}
+	dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
+	
 	cl = cut_dend(dend, cutoff)
 	return(as.numeric(as.vector(unname(cl))))
 }
