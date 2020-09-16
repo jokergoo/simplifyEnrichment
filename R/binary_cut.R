@@ -6,7 +6,10 @@ dend_max_depth = function(dend) {
 }
 
 # cluster the similarity matrix and assign scores to nodes
-cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max_ds) {
+# two scores attached to each ndoe
+# - score: the original score
+# - score2: the score which have checked the children nodes' scores
+cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam) {
 
 	env = new.env()
 	env$value_fun = value_fun
@@ -39,6 +42,27 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max
 	})
 
 	## s2 = max(s, s_child_none_leaf)
+	get_child_node_score = function(d) {
+		if(is.leaf(d[[1]])) {
+			s1 = 0
+		} else {
+			if( min(nobs(d[[1]][[1]]), nobs(d[[1]][[2]]))/nobs(d[[1]]) > 0.2) {
+				s1 = attr(d[[1]], "score")
+			} else {
+				s1 = 0
+			}
+		}
+		if(is.leaf(d[[2]])) {
+			s2 = 0
+		} else {
+			if( min(nobs(d[[2]][[1]]), nobs(d[[2]][[2]]))/nobs(d[[2]]) > 0.2) {
+				s2 = attr(d[[2]], "score")
+			} else {
+				s2 = 0
+			}
+		}
+		max(s1, s2, attr(d, "score"))
+	}
 	dend = edit_node(dend, function(d, index) {
 		s = attr(d, "score")
 		if(is.leaf(d)) {
@@ -48,7 +72,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max
 			if(all(l)) {
 				attr(d, "score2") = s
 			} else {
-				attr(d, "score2") = max(s, vapply(d[!l], function(x) attr(x, "score"), 0))
+				attr(d, "score2") = max(s, 0.8*get_child_node_score(d))
 			}
 		}
 
@@ -118,21 +142,6 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max
 	s = (x11 + x22)/(x11 + x12 + x21 + x22)
 	if(is.na(s)) s = 1
 
-	# sr = numeric(1)
-	# for(i in seq_len(10)) {
-	# 	clr = sample(cl, length(cl))
-	# 	l1r = clr == 1
-	# 	l2r = clr == 2
-	# 	x11r = sample(as.vector(mat[l1r, l1r]), 1)
-	# 	x12r = sample(as.vector(mat[l1r, l2r]), 1)
-	# 	x21r = sample(as.vector(mat[l2r, l1r]), 1)
-	# 	x22r = sample(as.vector(mat[l2r, l2r]), 1)
-
-	# 	sr[i] = (x11r + x22r)/(x11r + x12r + x21r + x22r)
-	# 	if(is.na(sr[i])) sr[i] = 1
-	# }
-	# sr = mean(sr)
-
 	if(is.null(dend_index)) {
 		.env$dend = list()
 		attributes(.env$dend) = list(
@@ -163,37 +172,42 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_max
 
 cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 
-	children_score = function(dend, field) {
-		if(is.leaf(dend)) {
-			-Inf
+	## add a split attribute on each node
+	assign_child_node = function(d, split = NULL) {
+		if(is.null(split)) {
+			if(attr(d, field) >= cutoff) {
+				attr(d, "split") = TRUE
+				if(!is.leaf(d)) {
+					d[[1]] = assign_child_node(d[[1]], NULL)
+					d[[2]] = assign_child_node(d[[2]], NULL)
+				}
+			} else {
+				attr(d, "split") = FALSE
+				if(!is.leaf(d)) {
+					d[[1]] = assign_child_node(d[[1]], FALSE)
+					d[[2]] = assign_child_node(d[[2]], FALSE)
+				}
+			}
+			
 		} else {
-			d1 = dend[[1]]
-			d2 = dend[[2]]
-			c(attr(d1, field), attr(d2, field))
+			attr(d, "split") = split
+			if(!is.leaf(d)) {
+				d[[1]] = assign_child_node(d[[1]], split)
+				d[[2]] = assign_child_node(d[[2]], split)
+			}
 		}
+		d
 	}
 
-	dont_split = function(dend, field, cutoff) {
-		s = attr(dend, field)
-
-		if(s >= cutoff) {
-			return(FALSE)
-		} else {
-			s_children = children_score(dend, field)
-			all(s_children < cutoff)
-		}
-	}
+	dend = assign_child_node(dend)
 
 	# if the top node
-	if(dont_split(dend, field, cutoff)) {
+	if(!attr(dend, "split")) {
 		dend2 = dendrapply(dend, function(d) {
 			attr(d, "height") = 0
 			d
 		})
-		# if(plot) {
-		# 	plot(dend)
-		# 	box()
-		# }
+
 		if(return == "dend") {
 			return(dend2)
 		} else {
@@ -201,27 +215,12 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 		}
 	}
 
-	dend2 = edit_node(dend, function(d, index) {
-		if(dont_split(d, field, cutoff)) {
+	dend2 = edit_node(dend, function9d, index) {
+		if(!attr(d, "split")) {
 			attr(d, "height") = 0
 		}
 		d
-	})
-
-	## make sure all sub-nodes having height 0 if the node is 0 height
-	is_parent_zero_height = function(index) {
-		h = vapply(seq_along(index), function(i) {
-			attr(dend2[[ index[seq_len(i)] ]], "height")
-		}, 0)
-		any(h == 0)
 	}
-	dend2 = edit_node(dend2, function(d, index) {
-		if(is_parent_zero_height(index)) {
-			attr(d, "height") = 0
-			attr(d, "nodePar") = NULL
-		}
-		d
-	})
 
 	if(return == "dend") {
 		dend2
@@ -248,6 +247,7 @@ render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE
 		return(dend)
 	}
 
+	# note: in dend2 branches that are not split all have height 0
 	dend2 = cut_dend(dend, field = field, cutoff = cutoff, return = "dend")
 	col_fun = colorRamp2(c(0.5, cutoff, 1), c("blue", "yellow", "red"))
 	dend = edit_node(dend, function(d, index) {
@@ -307,7 +307,7 @@ dend_env = new.env()
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -cutoff The cutoff for splitting the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_max_ds` (the default), `partition_by_kmeans`, `partition_by_pam` and `partition_by_hclust`.
+#                in this package are `partition_by_kmeans`, `partition_by_pam` and `partition_by_hclust`.
 # -dend A dendrogram object, used internally.
 # -depth Depth of the recursive binary cut process.
 # -dend_width Width of the dendrogram.
@@ -329,7 +329,7 @@ dend_env = new.env()
 # plot_binary_cut(mat)
 # }
 plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
-	partition_fun = partition_by_max_ds, dend = NULL, dend_width = unit(3, "cm"),
+	partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
 	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
@@ -421,7 +421,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_max_ds` (the default), `partition_by_kmeans`, `partition_by_pam`  and `partition_by_hclust`.
+#                in this package are `partition_by_kmeans`, `partition_by_pam`  and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
 # -cache Whether the dendrogram should be cached. Internally used.
 #
@@ -432,7 +432,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
-binary_cut = function(mat, value_fun = median, partition_fun = partition_by_max_ds,
+binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 	cutoff = 0.85, cache = FALSE) {
 
 	if(cache) {

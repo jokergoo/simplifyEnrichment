@@ -48,6 +48,15 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	plot = TRUE, term = NULL, verbose = TRUE, 
 	column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
 	ht_list = NULL, ...) {
+
+	if(is.atomic(mat) && !is.matrix(mat)) {
+		go_id = mat
+		if(!all(grepl("^GO:\\d+$", go_id))) {
+			stop_wrap("If you specify a vector, it should contain all valid GO IDs.")
+		}
+
+		mat = GO_similarity(go_id)
+	}
 	
 	cl = do.call(cluster_terms, list(mat = mat, method = method, verbose = verbose, control = control))
 	go_id = rownames(mat)
