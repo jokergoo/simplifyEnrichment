@@ -8,7 +8,7 @@ Cluster functional terms by recursively binary cutting the similarity matrix
 }
 \usage{
 binary_cut(mat, value_fun = median, partition_fun = partition_by_pam,
-    cutoff = 0.85, cache = FALSE, try_all_partition_fun = TRUE)
+    cutoff = 0.85, cache = FALSE, try_all_partition_fun = FALSE)
 }
 \arguments{
 

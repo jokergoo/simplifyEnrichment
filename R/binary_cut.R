@@ -427,7 +427,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
 binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
-	cutoff = 0.85, cache = FALSE, try_all_partition_fun = TRUE) {
+	cutoff = 0.85, cache = FALSE, try_all_partition_fun = FALSE) {
 
 	if(try_all_partition_fun) {
 		clt = list(
