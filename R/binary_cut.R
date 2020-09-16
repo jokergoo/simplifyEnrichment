@@ -41,43 +41,35 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 		return(d)
 	})
 
-	## s2 = max(s, s_child_none_leaf)
-	get_child_node_score = function(d) {
-		if(is.leaf(d[[1]])) {
-			s1 = 0
-		} else {
-			if( min(nobs(d[[1]][[1]]), nobs(d[[1]][[2]]))/nobs(d[[1]]) > 0.2) {
-				s1 = attr(d[[1]], "score")
-			} else {
-				s1 = 0
-			}
-		}
-		if(is.leaf(d[[2]])) {
-			s2 = 0
-		} else {
-			if( min(nobs(d[[2]][[1]]), nobs(d[[2]][[2]]))/nobs(d[[2]]) > 0.2) {
-				s2 = attr(d[[2]], "score")
-			} else {
-				s2 = 0
-			}
-		}
-		max(s1, s2, attr(d, "score"))
-	}
-	dend = edit_node(dend, function(d, index) {
-		s = attr(d, "score")
+	## bottom-up
+	assign_score2 = function(d) {
 		if(is.leaf(d)) {
-			attr(d, "score2") = s
-		} else {
-			l = vapply(d, is.leaf, TRUE)
-			if(all(l)) {
-				attr(d, "score2") = s
-			} else {
-				attr(d, "score2") = max(s, 0.8*get_child_node_score(d))
-			}
+			attr(d, "score2") = 0.5
+			return(d)
+		}
+		# check the two child node
+		if(is.null(attr(d[[1]], "score2"))) {
+			d[[1]] = assign_score2(d[[1]])
+		}
+		if(is.null(attr(d[[2]], "score2"))) {
+			d[[2]] = assign_score2(d[[2]])
 		}
 
+		s2 = max(attr(d[[1]], "score2"), attr(d[[2]], "score2"))
+		# the node is assigned with its child nodes' score only if
+		# 1. the size of the two children should not be too extremely different
+		# 2. the score should not be too smaller than its child nodes' 
+		s = attr(d, "score")
+		if( min(nobs(d[[1]]), nobs(d[[2]]))/nobs(d) < 0.1 ) {
+			attr(d, "score2")  = s
+		} else if(s > s2*0.95 && s < s2) {
+			attr(d, "score2") = s2
+		} else {
+			attr(d, "score2")  = s
+		}
 		return(d)
-	})
+	}
+	dend = assign_score2(dend)
 
 	hash = digest::digest(list(mat, value_fun, partition_fun))
 	dend_env$dend = dend
@@ -107,7 +99,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 	if(nrow(mat) == 2) {
 		cl = c(1, 2)
 	} else {
-		oe = try(suppressWarnings(cl <- .env$partition_fun(mat, 2)), silent = TRUE)
+		oe = try(suppressWarnings(cl <- .env$partition_fun(mat)), silent = TRUE)
 		if(inherits(oe, "try-error")) {
 			cl = rep(2, nr)
 			cl[seq_len(ceiling(nr/2))] = 1
@@ -148,7 +140,6 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 			members = nrow(mat),
 			height = depth,
 			score = s,
-			# random_score = sr,
 			index = NULL,
 			class = "dendrogram"
 		)
@@ -158,7 +149,6 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 			members = nrow(mat),
 			height = depth,
 			score = s,
-			# random_score = sr,
 			index = dend_index,
 			class = "dendrogram"
 		)
@@ -215,12 +205,12 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 		}
 	}
 
-	dend2 = edit_node(dend, function9d, index) {
+	dend2 = edit_node(dend, function(d, index) {
 		if(!attr(d, "split")) {
 			attr(d, "height") = 0
 		}
 		d
-	}
+	})
 
 	if(return == "dend") {
 		dend2
@@ -231,8 +221,8 @@ cut_dend = function(dend, cutoff = 0.85, field = "score2", return = "cluster") {
 	}
 }
 
-render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE, depth = NULL,
-	add_label = FALSE) {
+render_dend = function(dend, field = "score2", cutoff = 0.85, align_leaf = FALSE, 
+	depth = NULL, add_label = FALSE) {
 
 	if(!is.null(depth)) {
 		dend = edit_node(dend, function(d, index) {
@@ -424,6 +414,10 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 #                in this package are `partition_by_kmeans`, `partition_by_pam`  and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
 # -cache Whether the dendrogram should be cached. Internally used.
+# -try_all_partition_fun Different ``partition_fun`` gives different clusterings. If the vaule
+#      of ``try_all_partition_fun`` is set to ``TRUE``, the similarity matrix is clustered by three
+#      partitioning method: `partition_by_pam`, `partition_by_kmeans` and `partition_by_hclust`.
+#      The clustering with the highest difference score is finally selected as the final clustering.
 #
 # == value
 # A vector of cluster labels (in numeric). 
@@ -433,7 +427,20 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
 binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
-	cutoff = 0.85, cache = FALSE) {
+	cutoff = 0.85, cache = FALSE, try_all_partition_fun = TRUE) {
+
+	if(try_all_partition_fun) {
+		clt = list(
+			by_pam = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_pam,
+				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE),
+			by_kmeans = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_kmeans,
+				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE),
+			by_hclust = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_hclust,
+				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE)
+		)
+		i = which.max(sapply(clt, function(cl) difference_score(mat, cl)))
+		return(as.numeric(as.vector(unname(clt[[i]]))))
+	}
 
 	if(cache) {
 		hash = digest::digest(list(mat, value_fun = value_fun, partition_fun = partition_fun))

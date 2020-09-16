@@ -35,3 +35,9 @@ gl = split(m_df$entrez_gene, m_df$gs_name)
 gl = gl[sample(length(gl), 500)]
 
 mat = term_similarity(gl, method = "kappa")
+
+
+### test multiple times
+go_id = random_GO(500)
+mat = GO_similarity(go_id)
+plot_binary_cut(mat)
