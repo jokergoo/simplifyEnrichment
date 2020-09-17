@@ -63,7 +63,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 		s = attr(d, "score")
 		if( min(nobs(d[[1]]), nobs(d[[2]]))/nobs(d) < 0.1 ) {
 			attr(d, "score2")  = s
-		} else if(s > cutoff*0.9 && s < s2) {
+		} else if(s > cutoff*0.8 && s < s2) {
 			attr(d, "score2") = s2
 		} else {
 			attr(d, "score2")  = s
