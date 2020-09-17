@@ -65,19 +65,21 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 	t_diff = format(t_diff)
 	if(verbose) qqcat(" @{length(unique(cl))} clusters, used @{t_diff}.\n")
 
-	if(method != "binary_cut") {
-		#reorder the class labels
-		class_mean = tapply(1:nrow(mat), cl, function(ind) {
-			colMeans(mat[ind, , drop = FALSE])
-		})
-		class_mean = do.call(rbind, class_mean)
-		ns = nrow(class_mean)
+	if(length(unique(cl)) > 1) {
+		if(method != "binary_cut") {
+			#reorder the class labels
+			class_mean = tapply(1:nrow(mat), cl, function(ind) {
+				colMeans(mat[ind, , drop = FALSE])
+			})
+			class_mean = do.call(rbind, class_mean)
+			ns = nrow(class_mean)
 
-		class_dend = as.dendrogram(hclust(stats::dist(class_mean)))
-		class_dend = reorder(class_dend, wts = rowSums(class_mean))
-		map = structure(1:ns, names = order.dendrogram(class_dend))
+			class_dend = as.dendrogram(hclust(stats::dist(class_mean)))
+			class_dend = reorder(class_dend, wts = rowSums(class_mean))
+			map = structure(1:ns, names = order.dendrogram(class_dend))
 
-		cl = map[as.character(cl)]
+			cl = map[as.character(cl)]
+		}
 	}
 
 	attr(cl, "running_time") = t_diff
