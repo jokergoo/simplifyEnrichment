@@ -11,7 +11,7 @@ Imports: GOSemSim, ComplexHeatmap (>= 2.5.4), circlize, GetoptLong, digest,
          grDevices, graphics, stats, utils, proxyC, Matrix, cluster (>= 1.14.2)
 Suggests: knitr, ggplot2, cowplot, mclust, apcluster, MCL, dbscan, igraph, gridExtra,
           dynamicTreeCut, testthat, gridtext, gridGraphics, clusterProfiler,
-          msigdbr, DOSE, DO.db, reactome.db
+          msigdbr, DOSE, DO.db, reactome.db, flexclust
 Description: A new method (binary cut) is proposed to effectively cluster 
          GO terms into groups from the semantic similarity matrix.
          Summaries of GO terms in each cluster are visualized by word clouds.

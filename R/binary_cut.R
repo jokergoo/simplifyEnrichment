@@ -106,6 +106,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 			cl[seq_len(ceiling(nr/2))] = 1
 		}
 	}
+
 	l1 = cl == 1
 	l2 = cl == 2
 	if(mean(mat[l1, l1]) > mean(mat[l2, l2])) {

@@ -57,3 +57,19 @@ partition_by_hclust = function(mat) {
 # partition_by_skmeans = function(mat) {
 #     skmeans::skmeans(x = mat, k = 2)$cluster
 # }
+
+
+# == title
+# Partition by kmeans++
+#
+# == param
+# -mat The similarity matrix.
+#
+# == details
+# This function is used to set to the ``partition_fun`` argument in `binary_cut`.
+partition_by_kmeanspp = function(mat) {
+    cl = flexclust::kcca(mat, k = 2, 
+        family = flexclust::kccaFamily("kmeans"),
+        control = list(initcent = "kmeanspp"))@cluster
+    cl
+}
