@@ -51,7 +51,7 @@ partition_by_pam = function(mat) {
 #
 # This function is used to set to the ``partition_fun`` argument in `binary_cut`.
 partition_by_hclust = function(mat) {
-    cutree(stats::hclust(stats::dist(mat)), 2)
+    cutree(stats::hclust(stats::dist(mat), method = "ward.D2"), 2)
 }
 
 # partition_by_skmeans = function(mat) {
