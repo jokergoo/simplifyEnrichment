@@ -63,6 +63,24 @@ block_mean = function(mat, cl) {
 	mean(x1)
 }
 
+consistence = function(mat, cl, range = c(0, 1)) {
+	n = nrow(mat)
+	l_block = matrix(FALSE, nrow = nrow(mat), ncol = ncol(mat))
+
+	for(le in unique(cl)) {
+		l = cl == le
+		l_block[l, l] = TRUE
+	}
+	l_block2 = l_block
+	l_block2[upper.tri(mat, diag = TRUE)] = FALSE
+	x1 = mat[l_block2]
+
+	f = ecdf(x1)
+    a = seq(range[1], range[2], length = 1000)
+    n = length(a)
+    1 - sum((a[2:n] - a[1:(n - 1)]) * f(a[-n]))
+}
+
 other_mean = function(mat, cl) {
 	n = nrow(mat)
 	l_block = matrix(FALSE, nrow = nrow(mat), ncol = ncol(mat))
