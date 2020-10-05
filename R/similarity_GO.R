@@ -55,7 +55,6 @@ GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
 	go_sim[is.na(go_sim)] = 0
 
 	go_sim[lower.tri(go_sim)]  = t(go_sim)[lower.tri(go_sim)]
-	if(measure != "Resnik")	diag(go_sim) = 1
 
 	attr(go_sim, "measure") = measure
 	attr(go_sim, "ontology") = "GO"
@@ -156,7 +155,7 @@ guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 #
 # == examples
 # \donttest{
-# go_id = random_GO(100)
+# random_GO(100)
 # }
 random_GO = function(n, ont = "BP", db = 'org.Hs.eg.db') {
 	hash = digest::digest(list(ont = ont, db = db))

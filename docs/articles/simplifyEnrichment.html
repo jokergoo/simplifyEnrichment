@@ -67,13 +67,13 @@
 
       
 
-      </header><script src="simplifyEnrichment_files/header-attrs-2.2/header-attrs.js"></script><div class="row">
+      </header><script src="simplifyEnrichment_files/header-attrs-2.3/header-attrs.js"></script><script src="simplifyEnrichment_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simplify Functional Enrichment Results</h1>
                         <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2020-08-08</h4>
+            <h4 class="date">2020-10-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/master/vignettes/simplifyEnrichment.Rmd"><code>vignettes/simplifyEnrichment.Rmd</code></a></small>
       <div class="hidden name"><code>simplifyEnrichment.Rmd</code></div>
@@ -96,7 +96,7 @@
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/GO_similarity.html">GO_similarity</a></span>(<span class="no">go_id</span>, <span class="kw">measure</span> <span class="kw">=</span> <span class="st">"Wang"</span>)</pre></body></html></div>
 <p>With the similarity matrix <code>mat</code>, users can directly apply <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code> function to perform the clustering as well as visualizing the results.</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">df</span> <span class="kw">=</span> <span class="fu"><a href="../reference/simplifyGO.html">simplifyGO</a></span>(<span class="no">mat</span>)</pre></body></html></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.854934 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.89732 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-6-1.png" width="806.4" style="display: block; margin: auto;"></p>
 <p>On the right side of the heatmap there are the word cloud annotations which summarize the functions with keywords in every GO cluster. Note there is no word cloud for the cluster that is merged from small clusters (size &lt; 5).</p>
 <p>The returned variable <code>df</code> is a data frame with GO IDs, GO terms and the cluster labels:</p>
@@ -111,10 +111,10 @@
 <p>The size of GO clusters can be retrieved by:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">df</span>$<span class="no">cluster</span>))</pre></body></html></div>
 <pre><code>## 
-##   5   7   8  10  12  13  17  18  21  22  25  26  27  28  30  31  32  33  34  35  36  37  38  39  40 
+##   5   7   8  10  12  13  17  18  21  22  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38 
 ##   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1   1 
-##  20  23  29   9  24  16  19  15  14  11   2   6   4   1   3 
-##   2   2   2   3   3   5   5   6  10  12  37  45  97 114 132</code></pre>
+##  39  40  41  42  43  20  23   9  16  19  15  14  11   2   6   4   1   3 
+##   1   1   1   1   1   2   2   3   5   5   6  10  12  37  45  97 114 132</code></pre>
 <p>Or split the data frame by the cluster labels:</p>
 <div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span>(<span class="no">df</span>, <span class="no">df</span>$<span class="no">cluster</span>)</pre></body></html></div>
 <p><code>plot</code> argument can be set to <code>FALSE</code> in <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code>, so that no plot is generated and only the data frame is returned.</p>
@@ -130,13 +130,13 @@
 ## [218] 11  4  1  1 23  1 24  6  4  3  2  1  1  3  1  1  6  1  1  1  4  6  3  4  3  4 16  3  1  1  4
 ## [249] 25  4  4  4  1  1 26  4  4  4  6  4  1  3  3  3  2 19  4  3  4 27  4  4  2  6  3  3 11  3  6
 ## [280]  2 16  3  3  2  1  1  6  6  6  3  3  3  1  3  4  3  1  3  1 14 15 28  2 20  1  3  1  1  1  4
-## [311]  1  3  3  4  1 19 24  4  4  4  1  4  6  4 29  3  3  6  1  1  3  1  4  2  1  3  3  3  3 19  6
-## [342] 14  3  1  1 11  1  1  4 14  6 11  3  3  4  3  3  2  1 14  1  1  4  1  2 30  1  1  4  1  3  4
-## [373]  3  1  3 31  1  1  3  1  3  6  3  3  3  1 19  6  3 11  3  1  3  3 29  2  1  4  4  1  6  1  4
-## [404]  2 15  6  4  2  3  4  4  4 14  3  3  4  4  1  1  3  6  2  3  2  1  4 24  1  3  1  1 23  3  6
-## [435]  4  9  1  1  6  4  1 32 33 34 35  1  1  1  4  2  1 14 15  4  3 14  3  3  6  2  1 15 16  3  4
-## [466]  3  3  4  3  3  4  1 36  6  4  3  3  4  3  4  6  2  2  3 37  4  6  4 38  3  1  3  1  3  1  6
-## [497] 39 40  4  1</code></pre>
+## [311]  1  3  3  4  1 19 29  4  4  4  1  4  6  4 30  3  3  6  1  1  3  1  4  2  1  3  3  3  3 19  6
+## [342] 14  3  1  1 11  1  1  4 14  6 11  3  3  4  3  3  2  1 14  1  1  4  1  2 31  1  1  4  1  3  4
+## [373]  3  1  3 32  1  1  3  1  3  6  3  3  3  1 19  6  3 11  3  1  3  3 33  2  1  4  4  1  6  1  4
+## [404]  2 15  6  4  2  3  4  4  4 14  3  3  4  4  1  1  3  6  2  3  2  1  4 34  1  3  1  1 23  3  6
+## [435]  4  9  1  1  6  4  1 35 36 37 38  1  1  1  4  2  1 14 15  4  3 14  3  3  6  2  1 15 16  3  4
+## [466]  3  3  4  3  3  4  1 39  6  4  3  3  4  3  4  6  2  2  3 40  4  6  4 41  3  1  3  1  3  1  6
+## [497] 42 43  4  1</code></pre>
 <p>or</p>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/cluster_terms.html">cluster_terms</a></span>(<span class="no">mat</span>, <span class="kw">method</span> <span class="kw">=</span> <span class="st">"binary_cut"</span>)</pre></body></html></div>
 <p><code><a href="../reference/binary_cut.html">binary_cut()</a></code> and <code><a href="../reference/cluster_terms.html">cluster_terms()</a></code> basically generate the same clusterings, but the labels of clusters might differ.</p>
@@ -173,29 +173,29 @@
 <strong>Block mean</strong>: The mean similarity values of the blocks in the similarity heatmap. Similar denotation as difference score, for term <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> where <span class="math inline">\(i\)</span> can be the same as <span class="math inline">\(j\)</span> (values on the diagonal are also used), the similarity value <span class="math inline">\(x_{i,j}\)</span> is saved to the vector <span class="math inline">\(\mathbf{x_3}\)</span> only when term <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> are in a same cluster. The block mean is the mean value over <span class="math inline">\(\mathbf{x_3}\)</span>.</li>
 </ol>
 <div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span>(<span class="no">mat</span>)</pre></body></html></div>
-<pre><code>## Cluster 500 terms by 'kmeans'... 18 clusters, used 5.206108 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.2267251 secs.
-## Cluster 500 terms by 'apcluster'... 39 clusters, used 1.205032 secs.
-## Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2814648 secs.
-## Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.2002099 secs.
-## Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.3914139 secs.
-## Cluster 500 terms by 'louvain'... 29 clusters, used 0.1250951 secs.
-## Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3676391 secs.
-## Cluster 500 terms by 'MCL'... 28 clusters, used 3.284764 secs.
-## Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.367974 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.952588 secs.
+## Cluster 500 terms by 'kmeans'... 20 clusters, used 5.237811 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.2608001 secs.
+## Cluster 500 terms by 'apcluster'... 39 clusters, used 1.637909 secs.
+## Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.3365221 secs.
+## Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.264257 secs.
+## Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.4339571 secs.
+## Cluster 500 terms by 'louvain'... 29 clusters, used 0.1160738 secs.
+## Cluster 500 terms by 'walktrap'... 26 clusters, used 0.4024129 secs.
+## Cluster 500 terms by 'MCL'... 28 clusters, used 3.373675 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>If <code>plot_type</code> argument is set to <code>heatmap</code>. There are heatmaps for the similarity matrix under different clusterings methods. The last panel is a table with the number of clusters.</p>
 <div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span>(<span class="no">mat</span>, <span class="kw">plot_type</span> <span class="kw">=</span> <span class="st">"heatmap"</span>)</pre></body></html></div>
-<pre><code>## Cluster 500 terms by 'kmeans'... 22 clusters, used 4.718244 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.2245219 secs.
-## Cluster 500 terms by 'apcluster'... 39 clusters, used 1.197426 secs.
-## Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.279108 secs.
-## Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.149363 secs.
-## Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.434525 secs.
-## Cluster 500 terms by 'louvain'... 29 clusters, used 0.442044 secs.
-## Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3576109 secs.
-## Cluster 500 terms by 'MCL'... 28 clusters, used 2.817071 secs.
-## Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.370469 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.456669 secs.
+## Cluster 500 terms by 'kmeans'... 16 clusters, used 5.79978 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.241194 secs.
+## Cluster 500 terms by 'apcluster'... 39 clusters, used 1.357504 secs.
+## Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2990639 secs.
+## Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.1889601 secs.
+## Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.435873 secs.
+## Cluster 500 terms by 'louvain'... 29 clusters, used 0.136852 secs.
+## Cluster 500 terms by 'walktrap'... 26 clusters, used 0.482012 secs.
+## Cluster 500 terms by 'MCL'... 28 clusters, used 3.399195 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-13-1.png" width="1728" style="display: block; margin: auto;"></p>
 <p>Please note, the clustering methods might have randomness, which means, different runs of <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> may generate different clusterings (slightly different). Thus, if users want to compare the plots between <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat)</a></code> and <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat, plot_type = "heatmap")</a></code>, they should set the same random seed before executing the function.</p>
 <div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">123</span>)
@@ -237,7 +237,7 @@
 <h2 class="hasAnchor">
 <a href="#session-info" class="anchor"></a>Session Info</h2>
 <div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span>()</pre></body></html></div>
-<pre><code>## R version 4.0.0 (2020-04-24)
+<pre><code>## R version 4.0.2 (2020-06-22)
 ## Platform: x86_64-apple-darwin17.0 (64-bit)
 ## Running under: macOS Catalina 10.15.5
 ## 
@@ -249,33 +249,33 @@
 ## [1] en_GB.UTF-8/en_GB.UTF-8/en_GB.UTF-8/C/en_GB.UTF-8/en_GB.UTF-8
 ## 
 ## attached base packages:
-## [1] parallel  stats     graphics  grDevices utils     datasets  methods   base     
+## [1] grid      parallel  stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
 ## [1] simplifyEnrichment_0.99.5 BiocGenerics_0.34.0       knitr_1.29               
 ## 
 ## loaded via a namespace (and not attached):
-##  [1] Biobase_2.48.0        dynamicTreeCut_1.63-1 bit64_0.9-7           RcppParallel_5.0.2   
-##  [5] assertthat_0.2.1      expm_0.999-4          stats4_4.0.0          blob_1.2.1           
-##  [9] yaml_2.2.1            slam_0.1-47           pillar_1.4.4          RSQLite_2.2.0        
-## [13] backports_1.1.8       lattice_0.20-41       glue_1.4.1            digest_0.6.25        
+##  [1] Biobase_2.48.0        dynamicTreeCut_1.63-1 bit64_4.0.5           RcppParallel_5.0.2   
+##  [5] assertthat_0.2.1      expm_0.999-5          stats4_4.0.2          blob_1.2.1           
+##  [9] yaml_2.2.1            slam_0.1-47           pillar_1.4.6          RSQLite_2.2.0        
+## [13] backports_1.1.9       lattice_0.20-41       glue_1.4.2            digest_0.6.25        
 ## [17] RColorBrewer_1.1-2    colorspace_1.4-1      cowplot_1.0.0         htmltools_0.5.0      
-## [21] Matrix_1.2-18         tm_0.7-7              pkgconfig_2.0.3       GetoptLong_1.0.0     
-## [25] magick_2.3            purrr_0.3.4           GO.db_3.11.4          scales_1.1.1         
-## [29] tibble_3.0.1          farver_2.0.3          generics_0.0.2        dbscan_1.1-5         
+## [21] Matrix_1.2-18         tm_0.7-7              pkgconfig_2.0.3       GetoptLong_1.0.3     
+## [25] magick_2.4.0          purrr_0.3.4           GO.db_3.11.4          scales_1.1.1         
+## [29] tibble_3.0.3          farver_2.0.3          generics_0.0.2        dbscan_1.1-5         
 ## [33] IRanges_2.22.2        ggplot2_3.3.2         ellipsis_0.3.1        NLP_0.2-0            
 ## [37] MCL_1.0               magrittr_1.5          crayon_1.3.4          memoise_1.1.0        
-## [41] evaluate_0.14         apcluster_1.4.8       fs_1.4.1              MASS_7.3-51.6        
-## [45] xml2_1.3.2            tools_4.0.0           org.Hs.eg.db_3.11.4   GlobalOptions_0.1.2  
-## [49] lifecycle_0.2.0       ComplexHeatmap_2.5.4  stringr_1.4.0         S4Vectors_0.26.1     
-## [53] munsell_0.5.0         cluster_2.1.0         AnnotationDbi_1.50.0  compiler_4.0.0       
-## [57] pkgdown_1.5.1         proxyC_0.1.5          rlang_0.4.6           grid_4.0.0           
+## [41] evaluate_0.14         apcluster_1.4.8       fs_1.5.0              MASS_7.3-52          
+## [45] xml2_1.3.2            tools_4.0.2           org.Hs.eg.db_3.11.4   GlobalOptions_0.1.2  
+## [49] lifecycle_0.2.0       matrixStats_0.56.0    ComplexHeatmap_2.5.5  stringr_1.4.0        
+## [53] S4Vectors_0.26.1      munsell_0.5.0         cluster_2.1.0         AnnotationDbi_1.50.3 
+## [57] compiler_4.0.2        pkgdown_1.5.1         proxyC_0.1.5          rlang_0.4.7          
 ## [61] rjson_0.2.20          circlize_0.4.11       igraph_1.2.5          labeling_0.3         
-## [65] rmarkdown_2.2         gtable_0.3.0          DBI_1.1.0             R6_2.4.1             
-## [69] gridExtra_2.3         dplyr_1.0.0           bit_1.1-15.2          clue_0.3-57          
-## [73] rprojroot_1.3-2       shape_1.4.4           desc_1.2.0            GOSemSim_2.14.0      
-## [77] stringi_1.4.6         Rcpp_1.0.4.6          vctrs_0.3.1           png_0.1-7            
-## [81] tidyselect_1.1.0      xfun_0.15</code></pre>
+## [65] rmarkdown_2.3         gtable_0.3.0          DBI_1.1.0             R6_2.4.1             
+## [69] gridExtra_2.3         dplyr_1.0.2           bit_4.0.4             clue_0.3-57          
+## [73] rprojroot_1.3-2       shape_1.4.4           desc_1.2.0            GOSemSim_2.14.1      
+## [77] stringi_1.4.6         Rcpp_1.0.5            vctrs_0.3.4           png_0.1-7            
+## [81] tidyselect_1.1.0      xfun_0.16</code></pre>
 </div>
   </div>
 

@@ -20,4 +20,5 @@ This function is used to set to the \code{partition_fun} argument in \code{\link
 \examples{
 # There is no example
 NULL
+
 }

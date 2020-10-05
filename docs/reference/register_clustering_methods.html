@@ -149,9 +149,9 @@ number of clusters.</p>
         <span class='co'># assume there are 5 groups</span>
         <span class='kw'>random</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>mat</span>, <span class='no'>...</span>) <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>mat</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 )
-<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>()</div><div class='output co'>#&gt;  [1] "kmeans"         "dynamicTreeCut" "mclust"         "apcluster"     
-#&gt;  [5] "hdbscan"        "fast_greedy"    "leading_eigen"  "louvain"       
-#&gt;  [9] "walktrap"       "MCL"            "binary_cut"     "random"        </div><div class='input'><span class='fu'><a href='remove_clustering_methods.html'>remove_clustering_methods</a></span>(<span class='st'>"random"</span>)</div></pre>
+<span class='fu'><a href='all_clustering_methods.html'>all_clustering_methods</a></span>()</div><div class='output co'>#&gt;  [1] "binary_cut"     "kmeans"         "dynamicTreeCut" "mclust"        
+#&gt;  [5] "apcluster"      "hdbscan"        "fast_greedy"    "leading_eigen" 
+#&gt;  [9] "louvain"        "walktrap"       "MCL"            "random"        </div><div class='input'><span class='fu'><a href='remove_clustering_methods.html'>remove_clustering_methods</a></span>(<span class='st'>"random"</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -180,25 +180,25 @@
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
     <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
-<span class='fu'>compare_clustering_methods</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 5.479928 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.250679 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.179936 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2738581 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.1439528 secs.
-#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.3847659 secs.
-#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.1390851 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3537209 secs.
-#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.829182 secs.
-#&gt; Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.445053 secs.</div><div class='img'><img src='compare_clustering_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_clustering_methods</span>(<span class='no'>mat</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"heatmap"</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 4.89691 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.215147 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.47484 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2693939 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.138499 secs.
-#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.4278228 secs.
-#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.094486 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3531699 secs.
-#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.773248 secs.
-#&gt; Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.418409 secs.</div><div class='img'><img src='compare_clustering_methods-2.png' alt='' width='700' height='433' /></div><div class='input'># }
+<span class='fu'>compare_clustering_methods</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.301988 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 5.139116 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.208364 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.140213 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.258935 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.219573 secs.
+#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.390841 secs.
+#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.09747195 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3382041 secs.
+#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.775569 secs.</div><div class='img'><img src='compare_clustering_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_clustering_methods</span>(<span class='no'>mat</span>, <span class='kw'>plot_type</span> <span class='kw'>=</span> <span class='st'>"heatmap"</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.243493 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 5.063554 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.2026269 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.259024 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2588141 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.139719 secs.
+#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.3822181 secs.
+#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.130506 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3448381 secs.
+#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.757166 secs.</div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;e2&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;89&gt;</span></div><div class='output co'>#&gt; <span class='warning'>Warning: conversion failure on 'Large clusters (size ≥ 5)' in 'mbcsToSbcs': dot substituted for &lt;a5&gt;</span></div><div class='img'><img src='compare_clustering_methods-2.png' alt='' width='700' height='433' /></div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

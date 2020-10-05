@@ -96,9 +96,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 	
 	plot_type = match.arg(plot_type)[1]
 
-	if(!requireNamespace("cowplot", quietly = TRUE)) {
-		stop_wrap("Package 'cowplot' should be installed.")
-	}
+	check_pkg("cowplot", bioc = FALSE)
 		
 	if(plot_type == "mixed") {
 
@@ -126,9 +124,8 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 		stats = cmp_calc_stats(mat, clt2)
 		stats$method = factor(rownames(stats), levels = rownames(stats))
 
-		if(!requireNamespace("ggplot2", quietly = TRUE)) {
-			stop_wrap("Package 'ggplot2' should be installed.")
-		}
+		check_pkg("ggplot2", bioc = FALSE)
+
 		suppressWarnings(
 			p1 <- ggplot2::ggplot(stats, ggplot2::aes(x = stats$method, y = stats$diff_s)) +
 			ggplot2::geom_bar(stat = "identity") + ggplot2::ylab("Difference score") +
@@ -138,7 +135,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 		df1 = stats[, c("method", "n_all")]; colnames(df1) = c("method", "value")
 		df2 = stats[, c("method", "n_large")]; colnames(df2) = c("method", "value")
 		df1$type = "All sizes"
-		df2$type = "Size >= 5"
+		df2$type = "Size \u2265 5"
 		df = rbind(df1, df2)
 		suppressWarnings(
 			p2 <- ggplot2::ggplot(df, ggplot2::aes(x = df$method, y = df$value, col = df$type, fill = df$type)) +
@@ -195,11 +192,10 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 			}
 		})
 
-		tb = data.frame(Method = methods, "All clusters" = n_all, "Big clusters (size >= 5)" = n_big, check.names = FALSE)
+		tb = data.frame(Method = methods, "All clusters" = n_all, "Large clusters (size \u2265 5)" = n_big, check.names = FALSE)
 
-		if(!requireNamespace("gridExtra", quietly = TRUE)) {
-			stop_wrap("Package gridExtra should be installed.")
-		}
+		check_pkg("gridExtra", bioc = FALSE)
+
 		pl[[length(pl) + 1]] = gridExtra::tableGrob(tb, rows = NULL)
 
 		np = length(pl)
@@ -228,37 +224,6 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 			popViewport()
 		}
 	}
-	#  else if(tolower(plot_type) == "umap") {
-	# 	fit = umap::umap(mat)
-	#     loc = fit$layout
-
-	#     rgx = range(loc[, 1])
-	#     rgy = range(loc[, 2])
-
-	#     rgx = c(rgx[1] - diff(rgx)*0.05, rgx[2] + diff(rgx)*0.05)
-	#     rgy = c(rgy[1] - diff(rgy)*0.05, rgy[2] + diff(rgy)*0.05)
-
-	#     np = length(clt)
-
-	# 	grid.newpage()
-	# 	ncol = ceiling(np/nrow)
-	# 	pushViewport(viewport(layout = grid.layout(nrow = nrow, ncol = ncol)))
-	# 	for(i in 1:np) {
-	# 		ir = ceiling(i/ncol)
-	# 		ic = i %% ncol; if(ic == 0) ic = ncol
-	# 		pushViewport(viewport(layout.pos.row = ir, layout.pos.col = ic))
-			
-	# 		pushViewport(viewport(xscale = rgx, yscale = rgy,
-	# 			width = 0.9, height = 0.8))
-	# 		grid.rect()
-	# 		col = rand_color(length(unique(clt[[i]])))
-	# 		names(col) = as.character(unique(clt[[i]]))
-	# 		grid.points(loc[, 1], loc[, 2], pch = 16, size = unit(2, "bigpts"), gp = gpar(col = col[ as.character(clt[[i]]) ]))
-	# 		grid.text(names(clt)[i], y = unit(1, "npc") + unit(4, "pt"), just = "bottom", gp = gpar(fontsize = 8))
-	# 		popViewport()
-	# 		popViewport()
-	# 	}
-	# }
 }
 
 cmp_calc_concordance = function(clt) {
@@ -351,19 +316,5 @@ compare_clustering_methods = function(mat, method = setdiff(all_clustering_metho
 
 	plot_type = match.arg(plot_type)[1]
 	cmp_make_plot(mat, clt, plot_type = plot_type, nrow = nrow)
-}
-
-
-# == title
-# Compare clustering methods
-#
-# == param
-# -... All pass to `compare_clustering_methods`.
-#
-# == details
-# This function will be removed soon.
-#
-compare_methods = function(...) {
-	compare_clustering_methods(...)
 }
 

@@ -47,7 +47,7 @@ partition_by_pam = function(mat) {
 # -mat The similarity matrix.
 #
 # == details
-# The clusering method and the distance method both take the defaults of `stats::hclust` and `stats::dist`.
+# The "ward.D2" clusering method was used.
 #
 # This function is used to set to the ``partition_fun`` argument in `binary_cut`.
 partition_by_hclust = function(mat) {
@@ -68,6 +68,8 @@ partition_by_hclust = function(mat) {
 # == details
 # This function is used to set to the ``partition_fun`` argument in `binary_cut`.
 partition_by_kmeanspp = function(mat) {
+    check_pkg("flexclust", bioc = FALSE)
+    
     cl = flexclust::kcca(mat, k = 2, 
         family = flexclust::kccaFamily("kmeans"),
         control = list(initcent = "kmeanspp"))@cluster

@@ -31,7 +31,7 @@ clustering the similarity matrix of the terms with a new proposed method
 groups on the similarity matrix and in each iteration step, a score is
 assigned to decide whether the group of gene sets that corresponds to the
 current sub-matrix should be split or not. For more details of the method, 
-please refer to the manuscript.
+please refer to the simplifyEnrichment paper.
 
 ## Simplify GO enrichment results
 

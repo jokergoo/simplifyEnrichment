@@ -21,6 +21,6 @@ A vector of GO IDs.
 }
 \examples{
 \donttest{
-go_id = random_GO(100)
+random_GO(100)
 }
 }

@@ -144,9 +144,7 @@ term_similarity_from_enrichResult = function(x, ...) {
 # A symmetric matrix.
 term_similarity_from_KEGG = function(term_id, ...) {
 
-	if(!requireNamespace("clusterProfiler")) {
-		stop_wrap("'clusterProfiler' package should be installed.")
-	}
+	check_pkg("clusterProfiler", bioc = TRUE)
 
 	species = gsub("^([a-zA-Z]+)(\\d+$)", "\\1", term_id[1])
 	oe = try(KEGG_DATA <- getFromNamespace("prepare_KEGG", "clusterProfiler")(species, "KEGG", "kegg"), silent = TRUE)
@@ -169,9 +167,8 @@ term_similarity_from_KEGG = function(term_id, ...) {
 # == value
 # A symmetric matrix.
 term_similarity_from_Reactome = function(term_id, ...) {
-	if(!requireNamespace("reactome.db")) {
-		stop_wrap("'reactome.db' package should be installed.")
-	}
+
+	check_pkg("reactome.db", bioc = TRUE)
 
 	all = as.list(reactome.db::reactomePATHID2EXTID)
 	gl = all[term_id]
@@ -191,9 +188,8 @@ term_similarity_from_Reactome = function(term_id, ...) {
 # == value
 # A symmetric matrix.
 term_similarity_from_MSigDB = function(term_id, category = NULL, subcategory = NULL, ...) {
-	if(!requireNamespace("msigdbr")) {
-		stop_wrap("'msigdbr' package should be installed.")
-	}
+
+	check_pkg("msigdbr", bioc = FALSE)
 
 	m_df = msigdbr::msigdbr(species = "Homo sapiens", category = category, subcategory = subcategory)
 	if(all(grepl("^M\\d+$", term_id))) {

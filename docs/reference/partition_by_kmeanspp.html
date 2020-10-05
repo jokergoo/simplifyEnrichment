@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Calculate Disease Ontology (DO) semantic similarity matrix — DO_similarity • simplifyEnrichment</title>
+<title>Partition by kmeans++ — partition_by_kmeanspp • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Calculate Disease Ontology (DO) semantic similarity matrix — DO_similarity" />
-<meta property="og:description" content="Calculate Disease Ontology (DO) semantic similarity matrix" />
+<meta property="og:title" content="Partition by kmeans++ — partition_by_kmeanspp" />
+<meta property="og:description" content="Partition by kmeans++" />
 
 
 
@@ -111,70 +111,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Calculate Disease Ontology (DO) semantic similarity matrix</h1>
+    <h1>Partition by kmeans++</h1>
     
-    <div class="hidden name"><code>DO_similarity.Rd</code></div>
+    <div class="hidden name"><code>partition_by_kmeanspp.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Calculate Disease Ontology (DO) semantic similarity matrix</p>
+    <p>Partition by kmeans++</p>
     </div>
 
-    <pre class="usage"><span class='fu'>DO_similarity</span>(<span class='no'>do_id</span>, <span class='kw'>measure</span> <span class='kw'>=</span> <span class='st'>"Rel"</span>)</pre>
+    <pre class="usage"><span class='fu'>partition_by_kmeanspp</span>(<span class='no'>mat</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>do_id</th>
-      <td><p>A vector of DO IDs.</p></td>
-    </tr>
-    <tr>
-      <th>measure</th>
-      <td><p>Semantic measurement for the DO similarity, pass to <code><a href='https://rdrr.io/pkg/DOSE/man/doSim.html'>doSim</a></code>.</p></td>
+      <th>mat</th>
+      <td><p>The similarity matrix.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This function is basically a wrapper on <code><a href='https://rdrr.io/pkg/DOSE/man/doSim.html'>doSim</a></code>.</p>
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>A symmetric matrix.</p>
+    <p>This function is used to set to the <code>partition_fun</code> argument in <code><a href='binary_cut.html'>binary_cut</a></code>.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>require</a></span>(<span class='no'>DOSE</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: DOSE</span></div><div class='output co'>#&gt; <span class='message'>DOSE v3.14.0  For help: https://guangchuangyu.github.io/software/DOSE</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>If you use DOSE in published research, please cite:</span>
-#&gt; <span class='message'>Guangchuang Yu, Li-Gen Wang, Guang-Rong Yan, Qing-Yu He. DOSE: an R/Bioconductor package for Disease Ontology Semantic and Enrichment analysis. Bioinformatics 2015, 31(4):608-609</span></div><div class='input'><span class='no'>do_id</span> <span class='kw'>=</span> <span class='fu'><a href='random_DO.html'>random_DO</a></span>(<span class='fl'>10</span>)
-<span class='fu'>DO_similarity</span>(<span class='no'>do_id</span>)</div><div class='output co'>#&gt;               DOID:6620 DOID:7212 DOID:13268 DOID:0050840  DOID:845 DOID:14737
-#&gt; DOID:6620    0.99987467 0.0000000   0.000000   0.04556613 0.0000000  0.0000000
-#&gt; DOID:7212    0.00000000 0.9998747   0.000000   0.00000000 0.0000000  0.0000000
-#&gt; DOID:13268   0.00000000 0.0000000   0.998684   0.00000000 0.0000000  0.0000000
-#&gt; DOID:0050840 0.04556613 0.0000000   0.000000   0.99993734 0.0000000  0.0000000
-#&gt; DOID:845     0.00000000 0.0000000   0.000000   0.00000000 0.9997493  0.0000000
-#&gt; DOID:14737   0.00000000 0.0000000   0.000000   0.00000000 0.0000000  0.9999373
-#&gt; DOID:11364   0.04922254 0.0000000   0.000000   0.19112061 0.0000000  0.0000000
-#&gt; DOID:2841    0.05461145 0.0000000   0.000000   0.05228405 0.0000000  0.0000000
-#&gt; DOID:13651   0.04556613 0.0000000   0.000000   0.17743197 0.0000000  0.0000000
-#&gt; DOID:5284    0.00000000 0.1108813   0.000000   0.00000000 0.0000000  0.0000000
-#&gt;              DOID:11364  DOID:2841 DOID:13651 DOID:5284
-#&gt; DOID:6620    0.04922254 0.05461145 0.04556613 0.0000000
-#&gt; DOID:7212    0.00000000 0.00000000 0.00000000 0.1108813
-#&gt; DOID:13268   0.00000000 0.00000000 0.00000000 0.0000000
-#&gt; DOID:0050840 0.19112061 0.05228405 0.17743197 0.0000000
-#&gt; DOID:845     0.00000000 0.00000000 0.00000000 0.0000000
-#&gt; DOID:14737   0.00000000 0.00000000 0.00000000 0.0000000
-#&gt; DOID:11364   0.99974934 0.05715572 0.30886118 0.0000000
-#&gt; DOID:2841    0.05715572 0.99862138 0.05228405 0.0000000
-#&gt; DOID:13651   0.30886118 0.05228405 0.99993734 0.0000000
-#&gt; DOID:5284    0.00000000 0.00000000 0.00000000 0.9999373
-#&gt; attr(,"measure")
-#&gt; [1] "Rel"
-#&gt; attr(,"ontology")
-#&gt; [1] "DO"</div><div class='input'># }
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># There is no example</span>
+<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

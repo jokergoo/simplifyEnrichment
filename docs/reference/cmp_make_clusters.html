@@ -167,16 +167,16 @@
     <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
 <span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span>(<span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
     <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"simplifyEnrichment"</span>))
-<span class='no'>clt</span> <span class='kw'>=</span> <span class='fu'>cmp_make_clusters</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'kmeans'... 15 clusters, used 5.220463 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.234534 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.333016 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2899199 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.2228889 secs.
-#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.5302639 secs.
-#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.09666204 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.3689902 secs.
-#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.863159 secs.
-#&gt; Cluster 500 terms by 'binary_cut'... 40 clusters, used 1.461798 secs.</div><div class='input'># }
+<span class='no'>clt</span> <span class='kw'>=</span> <span class='fu'>cmp_make_clusters</span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 1.345692 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 15 clusters, used 5.45076 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.238373 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 1.351876 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.2903421 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.210427 secs.
+#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.3726211 secs.
+#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.127928 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.331634 secs.
+#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 3.116431 secs.</div><div class='input'># }
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

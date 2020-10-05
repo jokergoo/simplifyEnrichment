@@ -168,9 +168,9 @@ knee_finder = function(x, y) {
 # A vector of cluster labels (in numeric).
 #
 cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
-	if(!requireNamespace("dynamicTreeCut", quietly = TRUE)) {
-		stop_wrap("Package 'dynamicTreeCut' should be installed.")
-	}
+
+	check_pkg("dynamicTreeCut", bioc = FALSE)
+
 	cl = dynamicTreeCut::cutreeDynamic(hclust(stats::dist(mat)), distM = 1 - mat, minClusterSize = minClusterSize, verbose = 0, ...)
 	unname(cl)
 }
@@ -204,9 +204,7 @@ cluster_by_igraph = function(mat,
                "cluster_walktrap"),
     ...) {
 
-	if(!requireNamespace("igraph", quietly = TRUE)) {
-		stop_wrap("Package 'igraph' should be installed.")
-	}
+	check_pkg("igraph", bioc = FALSE)
 
 	if(is.character(method)) {
 		method = match.arg(method)[1]
@@ -230,9 +228,9 @@ cluster_by_igraph = function(mat,
 # A vector of cluster labels (in numeric).
 #
 cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100))), ...) {
-	if(!requireNamespace("mclust", quietly = TRUE)) {
-		stop_wrap("Package 'mclust' should be installed.")
-	}
+	
+	check_pkg("mclust", bioc = FALSE)
+
 	mclustBIC = mclust::mclustBIC
 
 	fit = mclust::Mclust(mat, G = G, verbose = FALSE, control = mclust::emControl(itmax = c(1000, 1000)), ...)
@@ -252,9 +250,9 @@ cluster_by_mclust = function(mat, G = seq_len(max(2, min(round(nrow(mat)/5), 100
 # A vector of cluster labels (in numeric).
 #
 cluster_by_apcluster = function(mat, s = apcluster::negDistMat(r = 2), ...) {
-	if(!requireNamespace("apcluster", quietly = TRUE)) {
-		stop_wrap("Package 'apcluster' should be installed.")
-	}
+	
+	check_pkg("apcluster", bioc = FALSE)
+
 	x = apcluster::apcluster(s, mat, ...)
 	cl = numeric(nrow(mat))
 	for(i in seq_along(x@clusters)) {
@@ -276,9 +274,9 @@ cluster_by_apcluster = function(mat, s = apcluster::negDistMat(r = 2), ...) {
 # A vector of cluster labels (in numeric).
 #
 cluster_by_hdbscan = function(mat, minPts = 5, ...) {
-	if(!requireNamespace("dbscan", quietly = TRUE)) {
-		stop_wrap("Package 'dbscan' should be installed.")
-	}
+	
+	check_pkg("dbscan", bioc = FALSE)
+
 	dbscan::hdbscan(mat, minPts = minPts, ...)$cluster
 }
 
@@ -294,8 +292,8 @@ cluster_by_hdbscan = function(mat, minPts = 5, ...) {
 # A vector of cluster labels (in numeric).
 #
 cluster_by_MCL = function(mat, addLoops = FALSE, ...) {
-	if(!requireNamespace("MCL", quietly = TRUE)) {
-		stop_wrap("Package 'MCL' should be installed.")
-	}
+	
+	check_pkg("MCL", bioc = FALSE)
+
 	MCL::mcl(mat, addLoops = addLoops, allow1 = TRUE, ...)$Cluster
 }

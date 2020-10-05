@@ -299,7 +299,7 @@ dend_env = new.env()
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -cutoff The cutoff for splitting the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_kmeans`, `partition_by_pam` and `partition_by_hclust`.
+#                in this package are `partition_by_kmeanspp`, `partition_by_pam` and `partition_by_hclust`.
 # -dend A dendrogram object, used internally.
 # -depth Depth of the recursive binary cut process.
 # -dend_width Width of the dendrogram.
@@ -324,9 +324,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 	partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
-	if(!requireNamespace("gridGraphics", quietly = TRUE)) {
-		stop_wrap("Package 'gridGraphics' should be installed.")
-	}
+	check_pkg("gridGraphics", bioc = FALSE)
 
 	hash = digest::digest(list(mat, value_fun, partition_fun, cutoff))
 	if(is.null(dend)) {
@@ -413,12 +411,12 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # -mat A similarity matrix.
 # -value_fun Value function to calculate the score for each node in the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
-#                in this package are `partition_by_kmeans`, `partition_by_pam`  and `partition_by_hclust`.
+#                in this package are `partition_by_kmeanspp`, `partition_by_pam`  and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.
 # -cache Whether the dendrogram should be cached. Internally used.
 # -try_all_partition_fun Different ``partition_fun`` gives different clusterings. If the vaule
 #      of ``try_all_partition_fun`` is set to ``TRUE``, the similarity matrix is clustered by three
-#      partitioning method: `partition_by_pam`, `partition_by_kmeans` and `partition_by_hclust`.
+#      partitioning method: `partition_by_pam`, `partition_by_kmeanspp` and `partition_by_hclust`.
 #      The clustering with the highest difference score is finally selected as the final clustering.
 #
 # == value
@@ -435,7 +433,7 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 		clt = list(
 			by_pam = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_pam,
 				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE),
-			by_kmeans = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_kmeans,
+			by_kmeanspp = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_kmeanspp,
 				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE),
 			by_hclust = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_hclust,
 				cutoff = cutoff, cache = FALSE, try_all_partition_fun = FALSE)
@@ -490,12 +488,9 @@ select_cutoff = function(mat, cutoff = seq(0.6, 0.98, by = 0.01), verbose = TRUE
 		s4[i] = block_mean(mat, cl)
 	}
 
-	if(!requireNamespace("cowplot", quietly = TRUE)) {
-		stop_wrap("Package 'cowplot' should be installed.")
-	}
-	if(!requireNamespace("ggplot2", quietly = TRUE)) {
-		stop_wrap("Package 'ggplot2' should be installed.")
-	}
+	check_pkg("cowplot", bioc = FALSE)
+	check_pkg("ggplot2", bioc = FALSE)
+
 	suppressWarnings(
 		p1 <- ggplot2::ggplot(data = NULL, ggplot2::aes(x = cutoff, y = s1)) +
 		ggplot2::geom_point() + ggplot2::ylab("Difference score") +

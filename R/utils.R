@@ -42,3 +42,43 @@ message_wrap = function (...)  {
     x = paste(strwrap(x), collapse = "\n")
     message(x)
 }
+
+
+check_pkg = function(pkg, bioc = FALSE) {
+    if(requireNamespace(pkg, quietly = TRUE)) {
+        return(NULL)
+    } else {
+
+        if(!interactive()) {
+            if(bioc) {
+                stop_wrap(qq("You need to manually install package '@{pkg}' from Bioconductor."))
+            } else {
+                stop_wrap(qq("You need to manually install package '@{pkg}' from CRAN."))
+            }
+        }
+
+        if(bioc) {
+            answer = readline(qq("Package '@{pkg}' is required but not installed. Do you want to install it from Bioconductor? [y|n] "))
+        } else {
+            answer = readline(qq("Package '@{pkg}' is required but not installed. Do you want to install it from CRAN? [y|n] "))
+        }
+
+        if(bioc) {
+            if(tolower(answer) %in% c("y", "yes")) {
+                if(!requireNamespace("BiocManager", quietly = TRUE)) {
+                    install.packages("BiocManager")
+                }
+                BiocManager::install(pkg)
+            } else {
+                stop_wrap(qq("You need to manually install package '@{pkg}' from Bioconductor."))
+            }
+        } else {
+            if(tolower(answer) %in% c("y", "yes")) {
+                install.packages(pkg)
+            } else {
+                stop_wrap(qq("You need to manually install package '@{pkg}' from CRAN."))
+            }
+        }
+    }
+}
+
