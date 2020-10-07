@@ -7,7 +7,7 @@ Visualize the similarity matrix and the clustering
 Visualize the similarity matrix and the clustering
 }
 \usage{
-ht_clusters(mat, cl, dend = NULL,
+ht_clusters(mat, cl, dend = NULL, col = c("white", "red"),
     draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term),
     term = NULL, min_term = 5,
     order_by_size = FALSE, cluster_slices = FALSE,
@@ -20,6 +20,7 @@ ht_clusters(mat, cl, dend = NULL,
   \item{mat}{A similarity matrix.}
   \item{cl}{Cluster labels inferred from the similarity matrix, e.g. from \code{\link{cluster_terms}} or \code{\link{binary_cut}}.}
   \item{dend}{Used internally.}
+  \item{col}{A vector of colors that map from 0 to the 95^th percentile of the similarity values.}
   \item{draw_word_cloud}{Whether to draw the word clouds.}
   \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{min_term}{Minimal number of functional terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one separated cluster in the heatmap.}

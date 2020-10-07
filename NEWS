@@ -2,6 +2,7 @@ CHANGES in VERSION 0.99.5
 
 * in the clustering, considered when the size of cluster is only 1.
 * add `partition_by_kmeanspp()`.
+* `col` can be set as a vector of colors.
 
 ---------------------------------
 

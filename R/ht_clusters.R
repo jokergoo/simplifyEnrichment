@@ -6,6 +6,7 @@
 # -mat A similarity matrix.
 # -cl Cluster labels inferred from the similarity matrix, e.g. from `cluster_terms` or `binary_cut`.
 # -dend Used internally.
+# -col A vector of colors that map from 0 to the 95^th percentile of the similarity values.
 # -draw_word_cloud Whether to draw the word clouds.
 # -term The full name or the description of the corresponding GO IDs. 
 # -min_term Minimal number of functional terms in a cluster. All the clusters
@@ -34,7 +35,7 @@
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80))
 # ht_clusters(mat, cl, word_cloud_grob_param = list(max_width = 80),
 #     order_by_size = TRUE)
-ht_clusters = function(mat, cl, dend = NULL, 
+ht_clusters = function(mat, cl, dend = NULL, col = c("white", "red"),
 	draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term), 
 	term = NULL, min_term = 5, 
 	order_by_size = FALSE, cluster_slices = FALSE,
@@ -42,7 +43,8 @@ ht_clusters = function(mat, cl, dend = NULL,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
 	column_title = NULL, ht_list = NULL, use_raster = TRUE, ...) {
 
-	col_fun = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red"))
+	if(length(col) == 1) col = c("white", rgb(t(col2rgb(col)), maxColorValue = 255))
+	col_fun = colorRamp2(seq(0, quantile(mat, 0.95), length = length(col)), col)
 	if(!is.null(dend)) {
 		ht = Heatmap(mat, col = col_fun,
 			name = "Similarity", column_title = column_title,
