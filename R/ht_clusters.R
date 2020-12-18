@@ -184,17 +184,21 @@ ht_clusters = function(mat, cl, dend = NULL, col = c("white", "red"),
 		ht = ht_list + ht
 		gap = unit.c(unit(rep(2, n), "mm"), gap)
 	}
-	ht = draw(ht, main_heatmap = "Similarity", gap = gap, ...)
+	
+	ht@ht_list[[1]]@heatmap_param$post_fun = function(ht) {
 
-	decorate_heatmap_body("Similarity", {
-		grid.rect(gp = gpar(fill = NA, col = "#404040"))
-		cl = factor(cl, levels = unique(cl[od2]))
-		tbcl = table(cl)
-		ncl = length(cl)
-		x = cumsum(c(0, tbcl))/ncl
-		grid.segments(x, 0, x, 1, default.units = "npc", gp = gpar(col = "#404040"))
-		grid.segments(0, 1 - x, 1, 1 - x, default.units = "npc", gp = gpar(col = "#404040"))
-	})
+		decorate_heatmap_body("Similarity", {
+			grid.rect(gp = gpar(fill = NA, col = "#404040"))
+			cl = factor(cl, levels = unique(cl[od2]))
+			tbcl = table(cl)
+			ncl = length(cl)
+			x = cumsum(c(0, tbcl))/ncl
+			grid.segments(x, 0, x, 1, default.units = "npc", gp = gpar(col = "#404040"))
+			grid.segments(0, 1 - x, 1, 1 - x, default.units = "npc", gp = gpar(col = "#404040"))
+		})
+	}
+
+	ht = draw(ht, main_heatmap = "Similarity", gap = gap, ...)
 
 	return(invisible(ht))
 }
