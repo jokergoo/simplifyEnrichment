@@ -1,4 +1,4 @@
-CHANGES in VERSION 0.99.5
+CHANGES in VERSION 0.99.6
 
 * in the clustering, considered when the size of cluster is only 1.
 * add `partition_by_kmeanspp()`.
