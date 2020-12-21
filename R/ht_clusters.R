@@ -90,7 +90,7 @@ ht_clusters = function(mat, cl, dend = NULL, col = c("white", "red"),
 			show_row_dend = FALSE, show_column_dend = FALSE,
 			row_order = od2, column_order = od2,
 			border = "#404040", row_title = NULL,
-			use_raster = use_raster)
+			use_raster = use_raster) + NULL
 
 		if(is.null(term)) {
 			if(is.null(rownames(mat))) {
