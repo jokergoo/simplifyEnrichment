@@ -7,13 +7,29 @@ Visualize the similarity matrix and the clustering
 Visualize the similarity matrix and the clustering
 }
 \usage{
-ht_clusters(mat, cl, dend = NULL, col = c("white", "red"),
+ht_clusters(
+    mat,
+    cl,
+    dend = NULL,
+    col = c("white", "red"),
+    
+    # arguments that control the word cloud annotation
     draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term),
-    term = NULL, min_term = 5,
-    order_by_size = FALSE, cluster_slices = FALSE,
-    exclude_words = character(0), max_words = 10,
-    word_cloud_grob_param = list(), fontsize_range = c(4, 16),
-    column_title = NULL, ht_list = NULL, use_raster = TRUE, ...)
+    term = NULL,
+    min_term = 5,
+    order_by_size = FALSE,
+    cluster_slices = FALSE,
+    exclude_words = character(0),
+    max_words = 10,
+    word_cloud_grob_param = list(),
+    fontsize_range = c(4, 16),
+    bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"),
+    
+    # arguments that control the heatmaps
+    column_title = NULL,
+    ht_list = NULL,
+    use_raster = TRUE,
+    ...)
 }
 \arguments{
 
@@ -30,6 +46,7 @@ ht_clusters(mat, cl, dend = NULL, col = c("white", "red"),
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
   \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
+  \item{bg_gp}{Graphics parameters for controlling word cloud annotation background.}
   \item{column_title}{Column title for the heatmap.}
   \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}
   \item{use_raster}{Whether to write the heatmap as a raster image.}

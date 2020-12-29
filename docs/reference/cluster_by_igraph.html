@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -89,6 +89,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,12 +132,12 @@
     <p>Cluster similarity matrix by graph community detection methods</p>
     </div>
 
-    <pre class="usage"><span class='fu'>cluster_by_igraph</span>(<span class='no'>mat</span>,
-    <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"cluster_fast_greedy"</span>,
+    <pre class="usage"><span class='fu'>cluster_by_igraph</span><span class='op'>(</span><span class='va'>mat</span>,
+    method <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"cluster_fast_greedy"</span>,
     <span class='st'>"cluster_leading_eigen"</span>,
     <span class='st'>"cluster_louvain"</span>,
-    <span class='st'>"cluster_walktrap"</span>),
-    <span class='no'>...</span>)</pre>
+    <span class='st'>"cluster_walktrap"</span><span class='op'>)</span>,
+    <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -149,7 +161,7 @@
     <p>The symmetric similarity matrix can be treated as an adjacency matrix and constructed as a graph/network with the similarity values as the weight of hte edges.
 Thus, clustering the similarity matrix can be treated as detecting clusters/modules/communities from the graph.</p>
 <p>Four methods implemented in igraph package can be used here:</p>
-<dl'>
+<dl>
   <dt><code>cluster_fast_greedy</code></dt><dd><p>uses <code><a href='https://rdrr.io/pkg/igraph/man/cluster_fast_greedy.html'>cluster_fast_greedy</a></code>.</p></dd>
   <dt><code>cluster_leading_eigen</code></dt><dd><p>uses <code><a href='https://rdrr.io/pkg/igraph/man/cluster_leading_eigen.html'>cluster_leading_eigen</a></code>.</p></dd>
   <dt><code>cluster_louvain</code></dt><dd><p>uses <code><a href='https://rdrr.io/pkg/igraph/man/cluster_louvain.html'>cluster_louvain</a></code>.</p></dd>
@@ -163,7 +175,8 @@ Thus, clustering the similarity matrix can be treated as detecting clusters/modu
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># There is no example</span>
-<span class='kw'>NULL</span></div><div class='output co'>#&gt; NULL</div><div class='input'>
+<span class='cn'>NULL</span>
+</div><div class='output co'>#&gt; NULL</div><div class='input'>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -180,7 +193,7 @@ Thus, clustering the similarity matrix can be treated as detecting clusters/modu
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

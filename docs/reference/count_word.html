@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -89,6 +89,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,18 +132,14 @@
     <p>Calculate word frequency</p>
     </div>
 
-    <pre class="usage"><span class='fu'>count_word</span>(<span class='no'>go_id</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>exclude_words</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)</pre>
+    <pre class="usage"><span class='fu'>count_word</span><span class='op'>(</span><span class='va'>term</span>, exclude_words <span class='op'>=</span> <span class='cn'>NULL</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>go_id</th>
-      <td><p>A vector of GO IDs.</p></td>
-    </tr>
-    <tr>
       <th>term</th>
-      <td><p>The corresponding names or description of terms if the input are not GO terms.</p></td>
+      <td><p>A vector of description texts.</p></td>
     </tr>
     <tr>
       <th>exclude_words</th>
@@ -141,26 +149,717 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The input can be simply set with a vector of GO id to <code>go_id</code> argument that the GO names
-are automatically extracted. If the input are not GO terms, users need to provide a vector of long names/descriptions by <code>term</code> argument.</p>
-<p>If the input is GO id, the following words are excluded: <code><a href='https://rdrr.io/r/base/c.html'>c("via", "protein", "factor", "side", "type", "specific")</a></code>.
-They are analyzed by <code>simplifyEnrichment:::all_GO_word_count()</code>.</p>
-<p>The text preprocessing followings the instructions from <a href='http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need'>http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need</a> .</p>
+    <p>The text preprocessing followings the instructions from <a href='http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need'>http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need</a> .</p>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>A data frame with words and frequencies.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='no'>go_id</span> <span class='kw'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span>(<span class='fl'>500</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>count_word</span>(<span class='no'>go_id</span>))</div><div class='output co'>#&gt;                  word freq
-#&gt; regulation regulation  191
-#&gt; process       process   66
-#&gt; positive     positive   65
-#&gt; negative     negative   58
-#&gt; cell             cell   56
-#&gt; signaling   signaling   36</div><div class='input'># }
-</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>gm</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>, package <span class='op'>=</span> <span class='st'>"simplifyEnrichment"</span><span class='op'>)</span><span class='op'>)</span>
+<span class='va'>go_id</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>gm</span><span class='op'>)</span>
+<span class='va'>go_term</span> <span class='op'>=</span> <span class='fu'>AnnotationDbi</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>select</a></span><span class='op'>(</span><span class='fu'>GO.db</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/GO.db/man/GOBASE.html'>GO.db</a></span>, keys <span class='op'>=</span> <span class='va'>go_id</span>, columns <span class='op'>=</span> <span class='st'>"TERM"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>TERM</span>
+</div><div class='output co'>#&gt; <span class='message'>'select()' returned 1:1 mapping between keys and columns</span></div><div class='input'><span class='fu'>count_word</span><span class='op'>(</span><span class='va'>go_term</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;                                              word freq
+#&gt; regulation                             regulation  189
+#&gt; negative                                 negative   64
+#&gt; process                                   process   63
+#&gt; positive                                 positive   62
+#&gt; cell                                         cell   61
+#&gt; signaling                               signaling   45
+#&gt; response                                 response   44
+#&gt; pathway                                   pathway   40
+#&gt; protein                                   protein   27
+#&gt; involved                                 involved   27
+#&gt; development                           development   21
+#&gt; metabolic                               metabolic   21
+#&gt; cellular                                 cellular   20
+#&gt; differentiation                   differentiation   19
+#&gt; biosynthetic                         biosynthetic   19
+#&gt; transport                               transport   19
+#&gt; proliferation                       proliferation   18
+#&gt; receptor                                 receptor   18
+#&gt; assembly                                 assembly   17
+#&gt; catabolic                               catabolic   17
+#&gt; activity                                 activity   17
+#&gt; morphogenesis                       morphogenesis   15
+#&gt; secretion                               secretion   14
+#&gt; factor                                     factor   12
+#&gt; dna                                           dna   12
+#&gt; processing                             processing   12
+#&gt; migration                               migration   11
+#&gt; organization                         organization   11
+#&gt; membrane                                 membrane   10
+#&gt; muscle                                     muscle   10
+#&gt; activation                             activation   10
+#&gt; growth                                     growth   10
+#&gt; apoptotic                               apoptotic   10
+#&gt; via                                           via   10
+#&gt; formation                               formation    9
+#&gt; adhesion                                 adhesion    9
+#&gt; complex                                   complex    8
+#&gt; ion                                           ion    8
+#&gt; heart                                       heart    8
+#&gt; production                             production    8
+#&gt; acid                                         acid    8
+#&gt; smooth                                     smooth    7
+#&gt; rna                                           rna    7
+#&gt; endothelial                           endothelial    7
+#&gt; blood                                       blood    7
+#&gt; calcium                                   calcium    6
+#&gt; mitochondrial                       mitochondrial    6
+#&gt; transmembrane                       transmembrane    6
+#&gt; immune                                     immune    6
+#&gt; interleukin                           interleukin    6
+#&gt; stimulus                                 stimulus    6
+#&gt; homeostasis                           homeostasis    6
+#&gt; mesenchymal                           mesenchymal    6
+#&gt; neuron                                     neuron    5
+#&gt; plasma                                     plasma    5
+#&gt; transcription                       transcription    5
+#&gt; dopamine                                 dopamine    5
+#&gt; localization                         localization    5
+#&gt; meiotic                                   meiotic    5
+#&gt; epithelial                             epithelial    5
+#&gt; stem                                         stem    5
+#&gt; mitotic                                   mitotic    5
+#&gt; determination                       determination    5
+#&gt; modification                         modification    5
+#&gt; phosphorylation                   phosphorylation    4
+#&gt; export                                     export    4
+#&gt; vessel                                     vessel    4
+#&gt; rrna                                         rrna    4
+#&gt; vascular                                 vascular    4
+#&gt; specification                       specification    4
+#&gt; nodal                                       nodal    4
+#&gt; mediated                                 mediated    4
+#&gt; cellcell                                 cellcell    4
+#&gt; stress                                     stress    4
+#&gt; histone                                   histone    4
+#&gt; methylation                           methylation    4
+#&gt; signal                                     signal    4
+#&gt; cycle                                       cycle    4
+#&gt; maintenance                           maintenance    4
+#&gt; glycine                                   glycine    4
+#&gt; amyloid                                   amyloid    4
+#&gt; valve                                       valve    4
+#&gt; snrna                                       snrna    4
+#&gt; across                                     across    3
+#&gt; contraction                           contraction    3
+#&gt; intestinal                             intestinal    3
+#&gt; junction                                 junction    3
+#&gt; class                                       class    3
+#&gt; polymerase                             polymerase    3
+#&gt; repair                                     repair    3
+#&gt; death                                       death    3
+#&gt; domain                                     domain    3
+#&gt; hormone                                   hormone    3
+#&gt; peptidyllysine                     peptidyllysine    3
+#&gt; intracellular                       intracellular    3
+#&gt; metanephric                           metanephric    3
+#&gt; tubule                                     tubule    3
+#&gt; proteincoupled                     proteincoupled    3
+#&gt; amino                                       amino    3
+#&gt; cardiac                                   cardiac    3
+#&gt; inhibitory                             inhibitory    3
+#&gt; kinase                                     kinase    3
+#&gt; replication                           replication    3
+#&gt; break                                       break    3
+#&gt; doublestrand                         doublestrand    3
+#&gt; monocyte                                 monocyte    3
+#&gt; structure                               structure    3
+#&gt; gland                                       gland    3
+#&gt; bud                                           bud    3
+#&gt; precursor                               precursor    3
+#&gt; cascade                                   cascade    3
+#&gt; lipoprotein                           lipoprotein    3
+#&gt; synaptic                                 synaptic    3
+#&gt; eye                                           eye    3
+#&gt; oligomerization                   oligomerization    3
+#&gt; nucleus                                   nucleus    3
+#&gt; olfactory                               olfactory    3
+#&gt; transsynaptic                       transsynaptic    3
+#&gt; maturation                             maturation    3
+#&gt; system                                     system    3
+#&gt; sterol                                     sterol    3
+#&gt; pancreatic                             pancreatic    3
+#&gt; lipid                                       lipid    3
+#&gt; fate                                         fate    3
+#&gt; inflammatory                         inflammatory    3
+#&gt; damage                                     damage    3
+#&gt; end                                           end    3
+#&gt; postsynaptic                         postsynaptic    3
+#&gt; checkpoint                             checkpoint    3
+#&gt; mirna                                       mirna    3
+#&gt; dsrna                                       dsrna    3
+#&gt; septum                                     septum    2
+#&gt; lateral                                   lateral    2
+#&gt; neural                                     neural    2
+#&gt; antiporter                             antiporter    2
+#&gt; calciumsodium                       calciumsodium    2
+#&gt; mucus                                       mucus    2
+#&gt; abscission                             abscission    2
+#&gt; beta                                         beta    2
+#&gt; transforming                         transforming    2
+#&gt; levels                                     levels    2
+#&gt; oxygen                                     oxygen    2
+#&gt; small                                       small    2
+#&gt; lornithine                             lornithine    2
+#&gt; lymph                                       lymph    2
+#&gt; meiosis                                   meiosis    2
+#&gt; disassembly                           disassembly    2
+#&gt; kappab                                     kappab    2
+#&gt; kinasenfkappab                     kinasenfkappab    2
+#&gt; chain                                       chain    2
+#&gt; endosome                                 endosome    2
+#&gt; cortex                                     cortex    2
+#&gt; acetylcholine                       acetylcholine    2
+#&gt; steroid                                   steroid    2
+#&gt; generation                             generation    2
+#&gt; axis                                         axis    2
+#&gt; phosphate                               phosphate    2
+#&gt; host                                         host    2
+#&gt; barrier                                   barrier    2
+#&gt; tissue                                     tissue    2
+#&gt; depolarization                     depolarization    2
+#&gt; leukotriene                           leukotriene    2
+#&gt; nerve                                       nerve    2
+#&gt; distal                                     distal    2
+#&gt; integration                           integration    2
+#&gt; interferongamma                   interferongamma    2
+#&gt; endoplasmic                           endoplasmic    2
+#&gt; reticulum                               reticulum    2
+#&gt; fiber                                       fiber    2
+#&gt; collagen                                 collagen    2
+#&gt; monophosphate                       monophosphate    2
+#&gt; circulation                           circulation    2
+#&gt; remodeling                             remodeling    2
+#&gt; peptide                                   peptide    2
+#&gt; glial                                       glial    2
+#&gt; transduction                         transduction    2
+#&gt; microtubule                           microtubule    2
+#&gt; ubiquitindependent             ubiquitindependent    2
+#&gt; synapse                                   synapse    2
+#&gt; leukocyte                               leukocyte    2
+#&gt; mesoderm                                 mesoderm    2
+#&gt; mitochondrion                       mitochondrion    2
+#&gt; prostaglandin                       prostaglandin    2
+#&gt; bmp                                           bmp    2
+#&gt; duct                                         duct    2
+#&gt; lowdensity                             lowdensity    2
+#&gt; particle                                 particle    2
+#&gt; vesicle                                   vesicle    2
+#&gt; acidification                       acidification    2
+#&gt; dopaminergic                         dopaminergic    2
+#&gt; wnt                                           wnt    2
+#&gt; mature                                     mature    2
+#&gt; bulb                                         bulb    2
+#&gt; interneuron                           interneuron    2
+#&gt; transmission                         transmission    2
+#&gt; cleavage                                 cleavage    2
+#&gt; promoter                                 promoter    2
+#&gt; chemokine                               chemokine    2
+#&gt; dichotomous                           dichotomous    2
+#&gt; mammary                                   mammary    2
+#&gt; subdivision                           subdivision    2
+#&gt; terminal                                 terminal    2
+#&gt; units                                       units    2
+#&gt; type                                         type    2
+#&gt; lung                                         lung    2
+#&gt; acetylation                           acetylation    2
+#&gt; cytokinesis                           cytokinesis    2
+#&gt; ciliary                                   ciliary    2
+#&gt; transition                             transition    2
+#&gt; zone                                         zone    2
+#&gt; adenylate                               adenylate    2
+#&gt; intrinsic                               intrinsic    2
+#&gt; mediator                                 mediator    2
+#&gt; phosphatidylserine             phosphatidylserine    2
+#&gt; containing                             containing    2
+#&gt; nucleotidebinding               nucleotidebinding    2
+#&gt; granule                                   granule    2
+#&gt; pigment                                   pigment    2
+#&gt; endocytosis                           endocytosis    2
+#&gt; primary                                   primary    2
+#&gt; chemotaxis                             chemotaxis    2
+#&gt; lymphocyte                             lymphocyte    2
+#&gt; electron                                 electron    2
+#&gt; axon                                         axon    2
+#&gt; phospholipase                       phospholipase    2
+#&gt; import                                     import    2
+#&gt; testosterone                         testosterone    2
+#&gt; nephron                                   nephron    2
+#&gt; glycosylation                       glycosylation    2
+#&gt; stellate                                 stellate    2
+#&gt; polyamine                               polyamine    2
+#&gt; thymocyte                               thymocyte    2
+#&gt; cysteinetype                         cysteinetype    2
+#&gt; endopeptidase                       endopeptidase    2
+#&gt; termination                           termination    2
+#&gt; cord                                         cord    2
+#&gt; spinal                                     spinal    2
+#&gt; anterior                                 anterior    2
+#&gt; cholesterol                           cholesterol    2
+#&gt; nterminal                               nterminal    2
+#&gt; antigen                                   antigen    2
+#&gt; binding                                   binding    2
+#&gt; branching                               branching    2
+#&gt; atrial                                     atrial    1
+#&gt; eminence                                 eminence    1
+#&gt; ganglionic                             ganglionic    1
+#&gt; lamellipodium                       lamellipodium    1
+#&gt; cdp                                           cdp    1
+#&gt; niknfkappab                           niknfkappab    1
+#&gt; timing                                     timing    1
+#&gt; synaptonemal                         synaptonemal    1
+#&gt; lcysteine                               lcysteine    1
+#&gt; mediolateral                         mediolateral    1
+#&gt; plate                                       plate    1
+#&gt; regionalization                   regionalization    1
+#&gt; nad                                           nad    1
+#&gt; dadp                                         dadp    1
+#&gt; behavioral                             behavioral    1
+#&gt; pain                                         pain    1
+#&gt; midbody                                   midbody    1
+#&gt; transit                                   transit    1
+#&gt; intestine                               intestine    1
+#&gt; glycerophospholipid           glycerophospholipid    1
+#&gt; iii                                           iii    1
+#&gt; cardioblast                           cardioblast    1
+#&gt; field                                       field    1
+#&gt; midline                                   midline    1
+#&gt; activin                                   activin    1
+#&gt; incision                                 incision    1
+#&gt; lesion                                     lesion    1
+#&gt; nucleotideexcision             nucleotideexcision    1
+#&gt; histidine                               histidine    1
+#&gt; neuromuscular                       neuromuscular    1
+#&gt; cpg                                           cpg    1
+#&gt; hypomethylation                   hypomethylation    1
+#&gt; island                                     island    1
+#&gt; somatostatin                         somatostatin    1
+#&gt; expression                             expression    1
+#&gt; gene                                         gene    1
+#&gt; posttranscriptional           posttranscriptional    1
+#&gt; responseregulating             responseregulating    1
+#&gt; extrinsic                               extrinsic    1
+#&gt; receptors                               receptors    1
+#&gt; proteincontaining               proteincontaining    1
+#&gt; apoptosis                               apoptosis    1
+#&gt; execution                               execution    1
+#&gt; phase                                       phase    1
+#&gt; respiratory                           respiratory    1
+#&gt; clathrin                                 clathrin    1
+#&gt; coat                                         coat    1
+#&gt; atp                                           atp    1
+#&gt; protontransporting             protontransporting    1
+#&gt; synthase                                 synthase    1
+#&gt; elongation                             elongation    1
+#&gt; spindle                                   spindle    1
+#&gt; fumarate                                 fumarate    1
+#&gt; biotic                                     biotic    1
+#&gt; detection                               detection    1
+#&gt; cilium                                     cilium    1
+#&gt; cyclase                                   cyclase    1
+#&gt; guanylate                               guanylate    1
+#&gt; cytokinemediated                 cytokinemediated    1
+#&gt; thyroglobulin                       thyroglobulin    1
+#&gt; triiodothyronine                 triiodothyronine    1
+#&gt; thyroid                                   thyroid    1
+#&gt; base                                         base    1
+#&gt; conversion                             conversion    1
+#&gt; editing                                   editing    1
+#&gt; substitution                         substitution    1
+#&gt; associated                             associated    1
+#&gt; fucose                                     fucose    1
+#&gt; dorsalventral                       dorsalventral    1
+#&gt; hepatocyte                             hepatocyte    1
+#&gt; glucose                                   glucose    1
+#&gt; palatal                                   palatal    1
+#&gt; shelf                                       shelf    1
+#&gt; axodendritic                         axodendritic    1
+#&gt; cytoplasm                               cytoplasm    1
+#&gt; peptides                                 peptides    1
+#&gt; proteins                                 proteins    1
+#&gt; translocation                       translocation    1
+#&gt; hydroxylation                       hydroxylation    1
+#&gt; peptidylhistidine               peptidylhistidine    1
+#&gt; crotonylation                       crotonylation    1
+#&gt; establishment                       establishment    1
+#&gt; gamma                                       gamma    1
+#&gt; radiation                               radiation    1
+#&gt; lymphoid                                 lymphoid    1
+#&gt; nasopharyngealassociated nasopharyngealassociated    1
+#&gt; shelterin                               shelterin    1
+#&gt; trochlear                               trochlear    1
+#&gt; conjugation                           conjugation    1
+#&gt; isgprotein                             isgprotein    1
+#&gt; immunoglobulin                     immunoglobulin    1
+#&gt; adenosine                               adenosine    1
+#&gt; propylene                               propylene    1
+#&gt; molecules                               molecules    1
+#&gt; plasmamembrane                     plasmamembrane    1
+#&gt; transposon                             transposon    1
+#&gt; monocarboxylic                     monocarboxylic    1
+#&gt; dserine                                   dserine    1
+#&gt; sumo                                         sumo    1
+#&gt; transferase                           transferase    1
+#&gt; aerobic                                   aerobic    1
+#&gt; respiration                           respiration    1
+#&gt; amyloidbeta                           amyloidbeta    1
+#&gt; biosynthesis                         biosynthesis    1
+#&gt; glutaminyltrnagln               glutaminyltrnagln    1
+#&gt; transamidation                     transamidation    1
+#&gt; cap                                           cap    1
+#&gt; hypermethylation                 hypermethylation    1
+#&gt; methylguanosine                   methylguanosine    1
+#&gt; division                                 division    1
+#&gt; somatic                                   somatic    1
+#&gt; basic                                       basic    1
+#&gt; senescence                             senescence    1
+#&gt; network                                   network    1
+#&gt; tubular                                   tubular    1
+#&gt; fibril                                     fibril    1
+#&gt; potential                               potential    1
+#&gt; extracellular                       extracellular    1
+#&gt; necrosis                                 necrosis    1
+#&gt; tumor                                       tumor    1
+#&gt; dolichyl                                 dolichyl    1
+#&gt; klinked                                   klinked    1
+#&gt; ubiquitination                     ubiquitination    1
+#&gt; leukemia                                 leukemia    1
+#&gt; acrosome                                 acrosome    1
+#&gt; janus                                       janus    1
+#&gt; isotype                                   isotype    1
+#&gt; switching                               switching    1
+#&gt; coenzyme                                 coenzyme    1
+#&gt; glycoprotein                         glycoprotein    1
+#&gt; aluminum                                 aluminum    1
+#&gt; derived                                   derived    1
+#&gt; neurotrophic                         neurotrophic    1
+#&gt; ras                                           ras    1
+#&gt; necrotic                                 necrotic    1
+#&gt; androgen                                 androgen    1
+#&gt; benzylpenicillin                 benzylpenicillin    1
+#&gt; fork                                         fork    1
+#&gt; recombinationdependent     recombinationdependent    1
+#&gt; reciprocal                             reciprocal    1
+#&gt; recombination                       recombination    1
+#&gt; myeloid                                   myeloid    1
+#&gt; depolymerization                 depolymerization    1
+#&gt; lipoxygenase                         lipoxygenase    1
+#&gt; peptidylarginine                 peptidylarginine    1
+#&gt; bronchiole                             bronchiole    1
+#&gt; proteasomemediated             proteasomemediated    1
+#&gt; bile                                         bile    1
+#&gt; glyoxylate                             glyoxylate    1
+#&gt; transamination                     transamination    1
+#&gt; prostate                                 prostate    1
+#&gt; segment                                   segment    1
+#&gt; interference                         interference    1
+#&gt; sirna                                       sirna    1
+#&gt; fas                                           fas    1
+#&gt; prostatic                               prostatic    1
+#&gt; neurotransmission               neurotransmission    1
+#&gt; oligosaccharide                   oligosaccharide    1
+#&gt; symbiont                                 symbiont    1
+#&gt; autophagy                               autophagy    1
+#&gt; circadian                               circadian    1
+#&gt; rem                                           rem    1
+#&gt; sleep                                       sleep    1
+#&gt; sleepwake                               sleepwake    1
+#&gt; follicle                                 follicle    1
+#&gt; hair                                         hair    1
+#&gt; trabecula                               trabecula    1
+#&gt; ureter                                     ureter    1
+#&gt; perception                             perception    1
+#&gt; sensory                                   sensory    1
+#&gt; temperature                           temperature    1
+#&gt; locomotion                             locomotion    1
+#&gt; odontogenesis                       odontogenesis    1
+#&gt; nitrosative                           nitrosative    1
+#&gt; hexose                                     hexose    1
+#&gt; stressactivated                   stressactivated    1
+#&gt; inteinmediated                     inteinmediated    1
+#&gt; splicing                                 splicing    1
+#&gt; paramesonephric                   paramesonephric    1
+#&gt; renin                                       renin    1
+#&gt; stream                                     stream    1
+#&gt; clearance                               clearance    1
+#&gt; exocytosis                             exocytosis    1
+#&gt; magnesium                               magnesium    1
+#&gt; vacuolar                                 vacuolar    1
+#&gt; stat                                         stat    1
+#&gt; neutrophil                             neutrophil    1
+#&gt; midbrain                                 midbrain    1
+#&gt; glutamate                               glutamate    1
+#&gt; oxoglutarate                         oxoglutarate    1
+#&gt; glutathione                           glutathione    1
+#&gt; urea                                         urea    1
+#&gt; palate                                     palate    1
+#&gt; secondary                               secondary    1
+#&gt; ribosomal                               ribosomal    1
+#&gt; subunit                                   subunit    1
+#&gt; one                                           one    1
+#&gt; stage                                       stage    1
+#&gt; transitional                         transitional    1
+#&gt; fibroblast                             fibroblast    1
+#&gt; pseudouridine                       pseudouridine    1
+#&gt; synthesis                               synthesis    1
+#&gt; epidermal                               epidermal    1
+#&gt; endocannabinoid                   endocannabinoid    1
+#&gt; modulating                             modulating    1
+#&gt; autophagosome                       autophagosome    1
+#&gt; alcohol                                   alcohol    1
+#&gt; nuclear                                   nuclear    1
+#&gt; decarboxylation                   decarboxylation    1
+#&gt; fractalkine                           fractalkine    1
+#&gt; ameloblast                             ameloblast    1
+#&gt; family                                     family    1
+#&gt; serine                                     serine    1
+#&gt; arseniccontaining               arseniccontaining    1
+#&gt; substance                               substance    1
+#&gt; thapsigargin                         thapsigargin    1
+#&gt; lipase                                     lipase    1
+#&gt; rnamediated                           rnamediated    1
+#&gt; transposition                       transposition    1
+#&gt; location                                 location    1
+#&gt; drug                                         drug    1
+#&gt; distribution                         distribution    1
+#&gt; proteasomal                           proteasomal    1
+#&gt; skeletal                                 skeletal    1
+#&gt; induction                               induction    1
+#&gt; gastrulation                         gastrulation    1
+#&gt; fusion                                     fusion    1
+#&gt; myoblast                                 myoblast    1
+#&gt; tolllike                                 tolllike    1
+#&gt; targeting                               targeting    1
+#&gt; desensitization                   desensitization    1
+#&gt; proteolysis                           proteolysis    1
+#&gt; ureteric                                 ureteric    1
+#&gt; cold                                         cold    1
+#&gt; estrogen                                 estrogen    1
+#&gt; camptothecin                         camptothecin    1
+#&gt; endodermal                             endodermal    1
+#&gt; healing                                   healing    1
+#&gt; wound                                       wound    1
+#&gt; adrenergic                             adrenergic    1
+#&gt; cyclaseinhibiting               cyclaseinhibiting    1
+#&gt; exposure                                 exposure    1
+#&gt; surface                                   surface    1
+#&gt; uptake                                     uptake    1
+#&gt; anatomical                             anatomical    1
+#&gt; joining                                   joining    1
+#&gt; nonhomologous                       nonhomologous    1
+#&gt; guaninenmethylation           guaninenmethylation    1
+#&gt; peptidylmethionine             peptidylmethionine    1
+#&gt; innate                                     innate    1
+#&gt; lysosome                                 lysosome    1
+#&gt; neuropilin                             neuropilin    1
+#&gt; toll                                         toll    1
+#&gt; raft                                         raft    1
+#&gt; alkaloid                                 alkaloid    1
+#&gt; cobalamin                               cobalamin    1
+#&gt; concentration                       concentration    1
+#&gt; cytosolic                               cytosolic    1
+#&gt; trimethylation                     trimethylation    1
+#&gt; sadenosylhomocysteine       sadenosylhomocysteine    1
+#&gt; learning                                 learning    1
+#&gt; transporter                           transporter    1
+#&gt; carbohydrate                         carbohydrate    1
+#&gt; derivative                             derivative    1
+#&gt; exoribonuclease                   exoribonuclease    1
+#&gt; nucleobase                             nucleobase    1
+#&gt; purine                                     purine    1
+#&gt; body                                         body    1
+#&gt; divisions                               divisions    1
+#&gt; extrusion                               extrusion    1
+#&gt; polar                                       polar    1
+#&gt; fructoselysine                     fructoselysine    1
+#&gt; high                                         high    1
+#&gt; venule                                     venule    1
+#&gt; molecular                               molecular    1
+#&gt; acylchain                               acylchain    1
+#&gt; myofibril                               myofibril    1
+#&gt; cytoskeleton                         cytoskeleton    1
+#&gt; translation                           translation    1
+#&gt; viral                                       viral    1
+#&gt; subventricular                     subventricular    1
+#&gt; tangential                             tangential    1
+#&gt; intras                                     intras    1
+#&gt; angiogenesis                         angiogenesis    1
+#&gt; sprouting                               sprouting    1
+#&gt; extension                               extension    1
+#&gt; guidance                                 guidance    1
+#&gt; gamete                                     gamete    1
+#&gt; male                                         male    1
+#&gt; dactivating                           dactivating    1
+#&gt; immature                                 immature    1
+#&gt; thymus                                     thymus    1
+#&gt; fattyacylcoa                         fattyacylcoa    1
+#&gt; longchain                               longchain    1
+#&gt; tube                                         tube    1
+#&gt; molecule                                 molecule    1
+#&gt; inactivity                             inactivity    1
+#&gt; fructose                                 fructose    1
+#&gt; keratinocyte                         keratinocyte    1
+#&gt; hypotonic                               hypotonic    1
+#&gt; acetylcoa                               acetylcoa    1
+#&gt; llysine                                   llysine    1
+#&gt; saccharopine                         saccharopine    1
+#&gt; fungiform                               fungiform    1
+#&gt; papilla                                   papilla    1
+#&gt; renal                                       renal    1
+#&gt; eifalpha                                 eifalpha    1
+#&gt; gonadotropin                         gonadotropin    1
+#&gt; lumen                                       lumen    1
+#&gt; lysosomal                               lysosomal    1
+#&gt; golgi                                       golgi    1
+#&gt; peptidase                               peptidase    1
+#&gt; serinetype                             serinetype    1
+#&gt; dendritic                               dendritic    1
+#&gt; plasmacytoid                         plasmacytoid    1
+#&gt; rolling                                   rolling    1
+#&gt; tethering                               tethering    1
+#&gt; female                                     female    1
+#&gt; pressure                                 pressure    1
+#&gt; embryonic                               embryonic    1
+#&gt; hemopoiesis                           hemopoiesis    1
+#&gt; heparin                                   heparin    1
+#&gt; mast                                         mast    1
+#&gt; nlinked                                   nlinked    1
+#&gt; iremediated                           iremediated    1
+#&gt; unfolded                                 unfolded    1
+#&gt; threonine                               threonine    1
+#&gt; rts                                           rts    1
+#&gt; sitespecific                         sitespecific    1
+#&gt; proteasome                             proteasome    1
+#&gt; asymmetry                               asymmetry    1
+#&gt; leftright                               leftright    1
+#&gt; urothelial                             urothelial    1
+#&gt; metanephros                           metanephros    1
+#&gt; central                                   central    1
+#&gt; myelin                                     myelin    1
+#&gt; nervous                                   nervous    1
+#&gt; actin                                       actin    1
+#&gt; barbedend                               barbedend    1
+#&gt; capping                                   capping    1
+#&gt; filament                                 filament    1
+#&gt; camkkampk                               camkkampk    1
+#&gt; ventral                                   ventral    1
+#&gt; kidney                                     kidney    1
+#&gt; cyclaseactivating               cyclaseactivating    1
+#&gt; head                                         head    1
+#&gt; lipidation                             lipidation    1
+#&gt; digestion                               digestion    1
+#&gt; tunicamycin                           tunicamycin    1
+#&gt; dorsal                                     dorsal    1
+#&gt; identity                                 identity    1
+#&gt; motor                                       motor    1
+#&gt; mitral                                     mitral    1
+#&gt; channel                                   channel    1
+#&gt; voltagegated                         voltagegated    1
+#&gt; islet                                       islet    1
+#&gt; polypeptide                           polypeptide    1
+#&gt; lactam                                     lactam    1
+#&gt; schwann                                   schwann    1
+#&gt; hepatic                                   hepatic    1
+#&gt; udpglucuronic                       udpglucuronic    1
+#&gt; ribonucleoside                     ribonucleoside    1
+#&gt; peptidylhypusine                 peptidylhypusine    1
+#&gt; iris                                         iris    1
+#&gt; fidelity                                 fidelity    1
+#&gt; translational                       translational    1
+#&gt; monomethylation                   monomethylation    1
+#&gt; glyoxal                                   glyoxal    1
+#&gt; mineralization                     mineralization    1
+#&gt; tooth                                       tooth    1
+#&gt; acutephase                             acutephase    1
+#&gt; compartment                           compartment    1
+#&gt; pattern                                   pattern    1
+#&gt; chaperonemediated               chaperonemediated    1
+#&gt; hydrogen                                 hydrogen    1
+#&gt; peroxideinduced                   peroxideinduced    1
+#&gt; adherens                                 adherens    1
+#&gt; insulinlike                           insulinlike    1
+#&gt; glucocorticoid                     glucocorticoid    1
+#&gt; fcgamma                                   fcgamma    1
+#&gt; ribose                                     ribose    1
+#&gt; compound                                 compound    1
+#&gt; nucleobasecontaining         nucleobasecontaining    1
+#&gt; endothelin                             endothelin    1
+#&gt; coagulation                           coagulation    1
+#&gt; catalytic                               catalytic    1
+#&gt; core                                         core    1
+#&gt; telomerase                             telomerase    1
+#&gt; mrna                                         mrna    1
+#&gt; nucleartranscribed             nucleartranscribed    1
+#&gt; ruffle                                     ruffle    1
+#&gt; killer                                     killer    1
+#&gt; natural                                   natural    1
+#&gt; chemical                                 chemical    1
+#&gt; communication                       communication    1
+#&gt; coupling                                 coupling    1
+#&gt; somite                                     somite    1
+#&gt; methylcytosine                     methylcytosine    1
+#&gt; anteriorposterior               anteriorposterior    1
+#&gt; embryo                                     embryo    1
+#&gt; zygotic                                   zygotic    1
+#&gt; vacuole                                   vacuole    1
+#&gt; alpha                                       alpha    1
+#&gt; eif                                           eif    1
+#&gt; biomineral                             biomineral    1
+#&gt; rate                                         rate    1
+#&gt; deacetylation                       deacetylation    1
+#&gt; exogenous                               exogenous    1
+#&gt; mhc                                           mhc    1
+#&gt; presentation                         presentation    1
+#&gt; polysome                                 polysome    1
+#&gt; oocyte                                     oocyte    1
+#&gt; secundum                                 secundum    1
+#&gt; hindbrain                               hindbrain    1
+#&gt; sequestering                         sequestering    1
+#&gt; heterochromatin                   heterochromatin    1
+#&gt; developmental                       developmental    1
+#&gt; cellmatrix                             cellmatrix    1
+#&gt; ligase                                     ligase    1
+#&gt; chorionic                               chorionic    1
+#&gt; trophoblast                           trophoblast    1
+#&gt; iron                                         iron    1
+#&gt; cotranslational                   cotranslational    1
+#&gt; neurofibrillary                   neurofibrillary    1
+#&gt; tangle                                     tangle    1
+#&gt; tip                                           tip    1
+#&gt; integrin                                 integrin    1
+#&gt; increased                               increased    1
+#&gt; polysaccharide                     polysaccharide    1
+#&gt; immunity                                 immunity    1
+#&gt; aminoacylation                     aminoacylation    1
+#&gt; aspartyltrna                         aspartyltrna    1
+#&gt; nutrient                                 nutrient    1
+#&gt; semilunar                               semilunar    1
+#&gt; juice                                       juice    1
+#&gt; thelper                                   thelper    1
+#&gt; tricarboxylic                       tricarboxylic    1
+#&gt; cytokine                                 cytokine    1
+#&gt; sperm                                       sperm    1
+#&gt; transfer                                 transfer    1
+#&gt; kinetochore                           kinetochore    1
+#&gt; macrophage                             macrophage    1
+#&gt; arachidonic                           arachidonic    1
+#&gt; internalization                   internalization    1
+#&gt; neurotransmitter                 neurotransmitter    1
+#&gt; dnadependent                         dnadependent    1
+#&gt; initiation                             initiation    1
+#&gt; cerebral                                 cerebral    1
+#&gt; oriented                                 oriented    1
+#&gt; radially                                 radially    1
+#&gt; myristoylation                     myristoylation    1
+#&gt; polyglycylation                   polyglycylation    1
+#&gt; orthogonal                             orthogonal    1
+#&gt; vitamin                                   vitamin    1
+#&gt; visual                                     visual    1
+#&gt; coronary                                 coronary    1
+#&gt; vasculogenesis                     vasculogenesis    1</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -176,7 +875,7 @@ They are analyzed by <code>simplifyEnrichment:::all_GO_word_count()</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

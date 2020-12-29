@@ -1,3 +1,9 @@
+CHANGES in VERSION 1.1.2
+
+* add `anno_word_cloud()` function
+
+---------------------------------
+
 CHANGES in VERSION 0.99.6
 
 * in the clustering, considered when the size of cluster is only 1.

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.99.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
       </span>
     </div>
 
@@ -89,6 +89,18 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -120,10 +132,10 @@
     <p>Simplify Gene Ontology (GO) enrichment results</p>
     </div>
 
-    <pre class="usage"><span class='fu'>simplifyGO</span>(<span class='no'>mat</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"binary_cut"</span>, <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(),
-    <span class='kw'>plot</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>term</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-    <span class='kw'>column_title</span> <span class='kw'>=</span> <span class='fu'>qq</span>(<span class='st'>"@{nrow(mat)} GO terms clustered by '@{method}'"</span>),
-    <span class='kw'>ht_list</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>simplifyGO</span><span class='op'>(</span><span class='va'>mat</span>, method <span class='op'>=</span> <span class='st'>"binary_cut"</span>, control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
+    plot <span class='op'>=</span> <span class='cn'>TRUE</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    column_title <span class='op'>=</span> <span class='fu'>qq</span><span class='op'>(</span><span class='st'>"@{nrow(mat)} GO terms clustered by '@{method}'"</span><span class='op'>)</span>,
+    ht_list <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -171,7 +183,7 @@
     <p>This is basically a wrapper function that it first runs <code><a href='cluster_terms.html'>cluster_terms</a></code> to cluster
 GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> to visualize the clustering.</p>
 <p>The arguments in <code>simplifyGO</code> passed to <code><a href='ht_clusters.html'>ht_clusters</a></code> are:</p>
-<dl'>
+<dl>
   <dt><code>draw_word_cloud</code></dt><dd><p>Whether to draw the word clouds.</p></dd>
   <dt><code>min_term</code></dt><dd><p>Minimal number of GO terms in a cluster. All the clusters with size less than <code>min_term</code> are all merged into one single cluster in the heatmap.</p></dd>
   <dt><code>order_by_size</code></dt><dd><p>Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size &lt; <code>min_term</code>) is always put to the bottom of the heatmap.</p></dd>
@@ -188,9 +200,12 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>123</span>)
-<span class='no'>go_id</span> <span class='kw'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span>(<span class='fl'>500</span>)
-<span class='no'>mat</span> <span class='kw'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span>(<span class='no'>go_id</span>)</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='no'>df</span> <span class='kw'>=</span> <span class='fu'>simplifyGO</span>(<span class='no'>mat</span>, <span class='kw'>word_cloud_grob_param</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span>(<span class='kw'>max_width</span> <span class='kw'>=</span> <span class='fl'>80</span>))</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 42 clusters, used 1.448818 secs.</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>df</span>)</div><div class='output co'>#&gt;           id
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>123</span><span class='op'>)</span>
+<span class='va'>go_id</span> <span class='op'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>
+<span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span><span class='op'>(</span><span class='va'>go_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'>simplifyGO</span><span class='op'>(</span><span class='va'>mat</span>, word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>max_width <span class='op'>=</span> <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 5 clusters, used 1.384111 secs.</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           id
 #&gt; 1 GO:0098761
 #&gt; 2 GO:0010248
 #&gt; 3 GO:0031401
@@ -208,9 +223,9 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 #&gt; 1       1
 #&gt; 2       2
 #&gt; 3       3
-#&gt; 4       4
+#&gt; 4       1
 #&gt; 5       1
-#&gt; 6       5</div><div class='input'># }
+#&gt; 6       4</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -227,7 +242,7 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

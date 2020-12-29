@@ -7,7 +7,7 @@ output:
     fig_caption: true
     css: main.css
 vignette: >
-  %\VignetteIndexEntry{Simplify Functional Enrichment Results}
+  %\VignetteIndexEntry{1. Simplify Functional Enrichment Results}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
