@@ -96,7 +96,7 @@ Heatmap(mat, row_split = split,
 )
 ```
 
-The value for the first argument of `anno_word_cloud` can also be explicitly converted into a list:
+The value for the first argument of `anno_word_cloud()` can also be explicitly converted into a list:
 
 ```{r, eval = FALSE}
 align_to = split(seq_along(split), split)

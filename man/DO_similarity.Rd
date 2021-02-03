@@ -12,7 +12,7 @@ DO_similarity(do_id, measure = "Rel")
 \arguments{
 
   \item{do_id}{A vector of DO IDs.}
-  \item{measure}{Semantic measurement for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
+  \item{measure}{Semantic measure for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
 
 }
 \details{

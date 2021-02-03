@@ -121,7 +121,7 @@ cluster_terms(mat, method = "binary_cut")
 
 ## Simplify general functional enrichment results
 
-Semantic measurements can be used for the similarity of GO terms. However,
+Semantic measures can be used for the similarity of GO terms. However,
 there are still a lot of ontologies (e.g. MsigDB gene sets) that are only
 represented as a list of genes where the similarity between gene sets are
 mainly measured by gene overlap. **simplifyEnrichment** provides the
@@ -255,7 +255,7 @@ labels. Internally it is converted to numeric labels.
 There are following examples which we did for the benchmarking in the manuscript:
 
 - [Examples of simplifyEnrichment](https://simplifyenrichment.github.io/examples/).
-- [Compare different similarity measurements for functional terms](https://simplifyenrichment.github.io/compare_similarity/).
+- [Compare different similarity measures for functional terms](https://simplifyenrichment.github.io/compare_similarity/).
 - [Compare different partitioning methods in binary cut clustering](https://simplifyenrichment.github.io/test_partition_methods/).
 
 

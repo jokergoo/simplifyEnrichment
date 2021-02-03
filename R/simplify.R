@@ -32,6 +32,7 @@
 # -``fontsize_range`` The range of the font size. The value should be a numeric vector with length two.
 #       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
 #       to the maximal word frequency. The font size interlopation is linear.
+# -``bg_gp`` Graphic parameters for controlling the background of word cloud annotations.
 #
 # == value
 # A data frame with three columns: GO IDs, GO term names and cluster labels.

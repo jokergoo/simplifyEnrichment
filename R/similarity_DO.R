@@ -3,7 +3,7 @@
 #
 # == param
 # -do_id A vector of DO IDs.
-# -measure Semantic measurement for the DO similarity, pass to `DOSE::doSim`.
+# -measure Semantic measure for the DO similarity, pass to `DOSE::doSim`.
 #
 # == details
 # This function is basically a wrapper on `DOSE::doSim`.

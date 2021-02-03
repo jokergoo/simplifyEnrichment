@@ -10,7 +10,7 @@ env$semData_hash = ""
 # -ont GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified,
 #      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
-# -measure Semantic measurement for the GO similarity, pass to `GOSemSim::termSim`.
+# -measure Semantic measure for the GO similarity, pass to `GOSemSim::termSim`.
 #
 # == details
 # This function is basically a wrapper on `GOSemSim::termSim`.

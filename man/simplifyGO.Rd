@@ -39,6 +39,7 @@ The arguments in \code{\link{simplifyGO}} passed to \code{\link{ht_clusters}} ar
   \item{\code{max_words}}{Maximal number of words visualized in the word cloud.}
   \item{\code{word_cloud_grob_param}}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
   \item{\code{fontsize_range}}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
+  \item{\code{bg_gp}}{Graphic parameters for controlling the background of word cloud annotations.}
 }
 }
 \value{

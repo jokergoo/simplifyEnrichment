@@ -30,10 +30,11 @@ install_github("jokergoo/simplifyEnrichment")
 ### Vignette
 
 - [Simplify Functional Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifyEnrichment.html)
+- [Word Cloud Annotation](https://jokergoo.github.io/simplifyEnrichment/articles/word_cloud_anno.html)
 
 ### Usage
 
-As an example, we first generate a list of random GO IDs.
+As an example, I first generate a list of random GO IDs.
 
 ```r
 library(simplifyEnrichment)
@@ -56,7 +57,7 @@ simplifyGO(mat)
 ### Examples
 
 - [Examples of simplifyEnrichment](https://simplifyenrichment.github.io/examples/)
-- [Compare different similarity measurements for functional terms](https://simplifyenrichment.github.io/compare_similarity/)
+- [Compare different similarity measures for functional terms](https://simplifyenrichment.github.io/compare_similarity/)
 - [Compare different partitioning methods in binary cut clustering](https://simplifyenrichment.github.io/test_partition_methods/)
 
 ### License
