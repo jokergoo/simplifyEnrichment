@@ -1,3 +1,10 @@
+CHANGES in VERSION 1.1.4
+
+* add `export_to_shiny_app()`
+* add `simplifyGOFromMultipleLists()`
+
+--------------------------------
+
 CHANGES in VERSION 1.1.2
 
 * add `anno_word_cloud()` function

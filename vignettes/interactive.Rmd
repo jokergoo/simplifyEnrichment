@@ -1,0 +1,27 @@
+---
+title: "A Shiny app to interactively visualize clustering results"
+author: "Zuguang Gu (z.gu@dkfz.de)"
+date: '`r Sys.Date()`'
+output: 
+  rmarkdown::html_vignette:
+    fig_caption: true
+    css: main.css
+vignette: >
+  %\VignetteIndexEntry{3. A Shiny app to interactively visualize clustering results}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+The function `export_to_shiny_app()` exports the static similarity heatmap to an interactive Shiny web application.
+The usage is as follows:
+
+```{r, eval = FALSE}
+library(simplifyEnrichment)
+mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
+cl = binary_cut(mat)
+export_to_shiny_app(mat, cl)
+```
+
+The Shiny app is demonstrated in the following image:
+
+<img src="https://jokergoo.github.io/images/simplifyEnrichment-small.gif" width="100%" />

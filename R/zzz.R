@@ -14,6 +14,8 @@ This message can be suppressed by:
 ")	
 
     packageStartupMessage(msg)
+
+    ComplexHeatmap::ht_opt(save_last = TRUE)
 }
 
 

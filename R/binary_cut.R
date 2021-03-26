@@ -30,7 +30,6 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 			dend_ind = dend_ind_list[[i]]
 
 			lt = .cluster_mat(mat[mat_ind, mat_ind, drop = FALSE], value_fun, partition_fun)
-
 			lt$attr$height = length(dend_ind)
 			lt$attr$members = length(mat_ind)
 
@@ -57,7 +56,6 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 				mat_ind_list2 = c(mat_ind_list2, list(mat_ind[lt$ind1], mat_ind[lt$ind2]))
 				dend_ind_list2 = c(dend_ind_list2, list(c(dend_ind, 1), c(dend_ind, 2)))
 			}
-			
 		}
 
 		mat_ind_list = mat_ind_list2
@@ -100,6 +98,7 @@ cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam
 cluster_mat2 = function(mat, value_fun = median, partition_fun = partition_by_pam, cutoff = 0.85, return_dend = FALSE) {
 
 	dend = NULL
+	dend_env$dend = NULL
 
 	dend_ind_list = list(NULL)
 	mat_ind_list = list(seq_len(nrow(mat)))
@@ -585,7 +584,7 @@ binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
 		)
 		i = which.max(sapply(clt, function(cl) difference_score(mat, cl)))
 
-		qqcat("@{names(clt)[i]} gives the highest difference score\n")
+		# qqcat("@{names(clt)[i]} gives the highest difference score\n")
 		if(length(i) == 0) i = 1
 		return(clt[[i]])
 	}

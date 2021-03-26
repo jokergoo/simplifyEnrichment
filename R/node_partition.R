@@ -35,7 +35,12 @@ partition_by_kmeans = function(mat, n_repeats = 10) {
 #
 # This function is used to set to the ``partition_fun`` argument in `binary_cut`.
 partition_by_pam = function(mat) {
-    fit = pam(mat, 2, pamonce = 5)
+    if(nrow(mat) > 10) {
+        fit = pam(mat, 2, pamonce = 5)
+    } else {
+        fit = pam(mat, 2)
+    }
+    
     fit$clustering
 }
 

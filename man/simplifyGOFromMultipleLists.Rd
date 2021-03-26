@@ -1,0 +1,88 @@
+\name{simplifyGOFromMultipleLists}
+\alias{simplifyGOFromMultipleLists}
+\title{
+Apply simplifyGO analysis with several lists of GO IDs
+}
+\description{
+Apply simplifyGO analysis with several lists of GO IDs
+}
+\usage{
+simplifyGOFromMultipleLists(lt, filter = function(x) TRUE, default = NA,
+    heatmap_param = list(transform = function(x) x,
+    breaks = NULL, col = NULL, labels = NULL, name = "Value"
+    ),
+    method = "binary_cut", control = list(partial = TRUE),
+    min_term = NULL, verbose = TRUE, column_title = NULL, ...)
+}
+\arguments{
+
+  \item{lt}{Preferable a list of numeric vectors where each numeric vector has GO IDs as names. It also accepts other format, see Details.}
+  \item{filter}{A self-defined function for filtering GO IDs, see Details.}
+  \item{default}{The default value, see Details.}
+  \item{heatmap_param}{Parameters that control the heatmap, see Details.}
+  \item{method}{Pass to \code{\link{simplifyGO}}.}
+  \item{control}{Pass to \code{\link{simplifyGO}}.}
+  \item{min_term}{Pass to \code{\link{simplifyGO}}.}
+  \item{verbose}{Pass to \code{\link{simplifyGO}}.}
+  \item{column_title}{Pass to \code{\link{simplifyGO}}.}
+  \item{...}{Pass to \code{\link{simplifyGO}}.}
+
+}
+\details{
+The input data is preferable to be a list of nmeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
+two other formats where they will be converted to a list of numeric vectors internally:
+
+\itemize{
+  \item If \code{lt} is specified as a list of character vectors of GO IDs. Each character vector is changed to a numeric vector where all values take 1 and the original GO IDs are used as names of the vector.
+  \item If \code{lt} is a list of data frames and each data frame is from clusterProfiler analysis, the column "p.adjust" in the data frame is taken as the numeric vector.
+}
+
+Now let's assume there are \code{n} GO lists, we first construct a global matrix where columns correspond to the GO lists and rows correspond
+to the "union" of all GO IDs in the lists. The value for the ith GO ID and in the jth list are taken from the corresponding numeric vector
+in \code{lt}. If the jth vector in \code{lt} does not contain the ith GO ID, the value defined by \code{default} argument is taken there (e.g. if the numeric
+values are p-values or FDRs, \code{default} can be set to 1). Let's call this matrix as \code{M0}.
+
+Next step is to filter \code{M0} so that we only take a subset of GO IDs of interest. We define a proper function via argument \code{filter} to remove
+GO IDs that are not important for the analysis. Functions for \code{filter} is applied to every row in \code{M0} and \code{filter} function needs
+to return a logical value to decide whether to remove the current GO ID. For example, if the values in \code{lt} are p-values or FDRs, the \code{filter} function
+can be set as \code{function(x) any(x < 0.01)} so that the GO ID is kept as long as it is signfiicant in at least one list. After the filter, let's call
+the filtered matrix \code{M1}.
+
+GO IDs in \code{M1} (row names of \code{M1}) are used for clustering. A heatmap of \code{M1} is attached to the left of the GO similarity heatmap so that
+the group-specific (or list-specific) patterns can be easily observed and to correspond to GO functions.
+
+Argument \code{heatmap_param} controls several parameters for heatmap \code{M1}:
+
+\itemize{
+  \item \code{transform}: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform FDRs by \code{-log10(x)}.
+  \item \code{breaks}: break values for color interpolation.
+  \item \code{col}: The corresponding values for \code{breaks}.
+  \item \code{labels}: The corresponding labels.
+  \item \code{name}: Legend title.
+}
+}
+\examples{
+\donttest{
+# perform functional enrichment on the signatures genes from cola anlaysis 
+require(cola)
+data(golub_cola) 
+res = golub_cola["ATC:skmeans"]
+require(hu6800.db)
+x = hu6800ENTREZID
+mapped_probes = mappedkeys(x)
+id_mapping = unlist(as.list(x[mapped_probes]))
+lt = functional_enrichment(res, k = 3, id_mapping = id_mapping) # you can check the value of `lt`
+
+# a list of data frames
+simplifyGOFromMultipleLists(lt)
+
+# a list of numeric values
+lt2 = lapply(lt, function(x) structure(x$p.adjust, names = x$ID))
+simplifyGOFromMultipleLists(lt2, filter = function(x) any(x <  0.001), default = 1,
+    heatmap_param = list(transform = function(x) -log10(x), name = "FDR"))
+
+# a list of GO IDS
+lt3 = lapply(lt, function(x) x$ID[x$p.adjust < 0.001])
+simplifyGOFromMultipleLists(lt3)
+}
+}
