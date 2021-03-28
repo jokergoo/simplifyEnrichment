@@ -22,7 +22,7 @@ knitr::opts_chunk$set(
     fig.align = "center",
     dev = "jpeg"
 )
-options(width = 100)
+options(width = 80)
 ```
 
 The **simplifyEnrichment** package clusters functional terms into groups by
@@ -258,6 +258,69 @@ There are following examples which we did for the benchmarking in the manuscript
 - [Compare different similarity measures for functional terms](https://simplifyenrichment.github.io/compare_similarity/).
 - [Compare different partitioning methods in binary cut clustering](https://simplifyenrichment.github.io/test_partition_methods/).
 
+## Apply to multiple lists of GO IDs
+
+It is always very common that users have multiple lists of GO enrichment
+results (e.g. from multiple groups of genes) and they want to compare the
+significant terms between different lists, e.g. to see which biological
+functions are more specific in a certain list. There is a function
+`simplifyGOFromMultipleLists()` in the package which helps this analysis.
+
+The input data is preferable to be a list of nmeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
+two other formats where they will be converted to a list of numeric vectors internally:
+
+- If `lt` is specified as a list of character vectors of GO IDs. Each character vector is changed to a numeric vector where
+  all values take 1 and the original GO IDs are used as names of the vector.
+- If `lt` is a list of data frames and each data frame is from clusterProfiler analysis, the column "p.adjust" in the data frame is
+  taken as the numeric vector.
+
+Now let's assume there are ``n`` GO lists, we first construct a global matrix where columns correspond to the GO lists and rows correspond
+to the "union" of all GO IDs in the lists. The value for the ith GO ID and in the jth list are taken from the corresponding numeric vector
+in ``lt``. If the jth vector in ``lt`` does not contain the ith GO ID, the value defined by ``default`` argument is taken there (e.g. if the numeric
+values are p-values or FDRs, ``default`` can be set to 1). Let's call this matrix as ``M0``.
+
+Next step is to filter ``M0`` so that we only take a subset of GO IDs of interest. We define a proper function via argument ``filter`` to remove
+GO IDs that are not important for the analysis. Functions for ``filter`` is applied to every row in ``M0`` and ``filter`` function needs
+to return a logical value to decide whether to remove the current GO ID. For example, if the values in ``lt`` are p-values or FDRs, the ``filter`` function
+can be set as ``function(x) any(x < 0.01)`` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filter, let's call
+the filtered matrix ``M1``.
+
+GO IDs in ``M1`` (row names of ``M1``) are used for clustering. A heatmap of ``M1`` is attached to the left of the GO similarity heatmap so that
+the group-specific (or list-specific) patterns can be easily observed and to correspond to GO functions.
+
+Argument ``heatmap_param`` controls several parameters for heatmap ``M1``:
+
+- ``transform``: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform FDRs by ``-log10(x)``.
+- ``breaks``: break values for color interpolation.
+- ``col``: The corresponding values for ``breaks``.
+- ``labels``: The corresponding labels.
+- ``name``: Legend title.
+
+```{r, fig.width=10, fig.height = 7}
+# perform functional enrichment on the signatures genes from cola anlaysis 
+library(cola)
+data(golub_cola) 
+res = golub_cola["ATC:skmeans"]
+
+library(hu6800.db)
+x = hu6800ENTREZID
+mapped_probes = mappedkeys(x)
+id_mapping = unlist(as.list(x[mapped_probes]))
+
+lt = functional_enrichment(res, k = 3, id_mapping = id_mapping) # you can check the value of `lt`
+simplifyGOFromMultipleLists(lt)
+```
+
+```{r, eval = FALSE}
+# a list of numeric values
+lt2 = lapply(lt, function(x) structure(x$p.adjust, names = x$ID))
+simplifyGOFromMultipleLists(lt2, filter = function(x) any(x <  0.001), default = 1,
+    heatmap_param = list(transform = function(x) -log10(x), name = "FDR"))
+
+# a list of GO IDS
+lt3 = lapply(lt, function(x) x$ID[x$p.adjust < 0.001])
+simplifyGOFromMultipleLists(lt3)
+```
 
 ## Session Info
 

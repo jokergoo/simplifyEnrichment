@@ -45,6 +45,9 @@ The arguments in \code{\link{simplifyGO}} passed to \code{\link{ht_clusters}} ar
 \value{
 A data frame with three columns: GO IDs, GO term names and cluster labels.
 }
+\seealso{
+\code{\link{simplifyGOFromMultipleLists}} which performs simplifyGO analysis with multiple lists of GO IDs.
+}
 \examples{
 \donttest{
 set.seed(123)

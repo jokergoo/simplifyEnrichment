@@ -37,6 +37,9 @@
 # == value
 # A data frame with three columns: GO IDs, GO term names and cluster labels.
 #
+# == seealso
+# `simplifyGOFromMultipleLists` which performs simplifyGO analysis with multiple lists of GO IDs.
+#
 # == example
 # \donttest{
 # set.seed(123)
@@ -114,7 +117,7 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 }
 
 # == title
-# Apply simplifyGO analysis with several lists of GO IDs
+# Perform simplifyGO analysis with multiple lists of GO IDs
 #
 # == param
 # -lt Preferable a list of numeric vectors where each numeric vector has GO IDs as names. It also accepts other format, see Details.
@@ -129,7 +132,7 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # -... Pass to `simplifyGO`.
 #
 # == Details
-# The input data is preferable to be a list of nmeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
+# The input data is preferable to be a list of numeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
 # two other formats where they will be converted to a list of numeric vectors internally:
 #
 # - If ``lt`` is specified as a list of character vectors of GO IDs. Each character vector is changed to a numeric vector where

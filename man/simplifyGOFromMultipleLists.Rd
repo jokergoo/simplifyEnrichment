@@ -1,10 +1,10 @@
 \name{simplifyGOFromMultipleLists}
 \alias{simplifyGOFromMultipleLists}
 \title{
-Apply simplifyGO analysis with several lists of GO IDs
+Perform simplifyGO analysis with multiple lists of GO IDs
 }
 \description{
-Apply simplifyGO analysis with several lists of GO IDs
+Perform simplifyGO analysis with multiple lists of GO IDs
 }
 \usage{
 simplifyGOFromMultipleLists(lt, filter = function(x) TRUE, default = NA,
@@ -29,7 +29,7 @@ simplifyGOFromMultipleLists(lt, filter = function(x) TRUE, default = NA,
 
 }
 \details{
-The input data is preferable to be a list of nmeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
+The input data is preferable to be a list of numeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
 two other formats where they will be converted to a list of numeric vectors internally:
 
 \itemize{
