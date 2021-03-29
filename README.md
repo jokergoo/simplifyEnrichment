@@ -31,6 +31,7 @@ install_github("jokergoo/simplifyEnrichment")
 
 - [Simplify Functional Enrichment Results](https://jokergoo.github.io/simplifyEnrichment/articles/simplifyEnrichment.html)
 - [Word Cloud Annotation](https://jokergoo.github.io/simplifyEnrichment/articles/word_cloud_anno.html)
+- [A Shiny app to interactively visualize clustering results](https://jokergoo.github.io/simplifyEnrichment/articles/interactive.html)
 
 ### Usage
 
