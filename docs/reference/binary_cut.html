@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,6 +98,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/interactive.html">A Shiny app to interactively visualize clustering results</a>
+    </li>
+    <li>
       <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
     </li>
   </ul>
@@ -106,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/simplifyEnrichment/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -133,7 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>binary_cut</span><span class='op'>(</span><span class='va'>mat</span>, value_fun <span class='op'>=</span> <span class='va'>median</span>, partition_fun <span class='op'>=</span> <span class='va'>partition_by_pam</span>,
-    cutoff <span class='op'>=</span> <span class='fl'>0.85</span>, cache <span class='op'>=</span> <span class='cn'>FALSE</span>, try_all_partition_fun <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    cutoff <span class='op'>=</span> <span class='fl'>0.85</span>, try_all_partition_fun <span class='op'>=</span> <span class='cn'>FALSE</span>, partial <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -155,12 +158,12 @@
       <td><p>The cutoff for splitting the dendrogram.</p></td>
     </tr>
     <tr>
-      <th>cache</th>
-      <td><p>Whether the dendrogram should be cached. Internally used.</p></td>
-    </tr>
-    <tr>
       <th>try_all_partition_fun</th>
       <td><p>Different <code>partition_fun</code> gives different clusterings. If the vaule of <code>try_all_partition_fun</code> is set to <code>TRUE</code>, the similarity matrix is clustered by three partitioning method: <code><a href='partition_by_pam.html'>partition_by_pam</a></code>, <code><a href='partition_by_kmeanspp.html'>partition_by_kmeanspp</a></code> and <code><a href='partition_by_hclust.html'>partition_by_hclust</a></code>. The clustering with the highest difference score is finally selected as the final clustering.</p></td>
+    </tr>
+    <tr>
+      <th>partial</th>
+      <td><p>Whether to generate the complete clustering or the clustering stops when sub-matrices cannot be split anymore.</p></td>
     </tr>
     </table>
 

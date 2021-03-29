@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -57,6 +57,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/interactive.html">A Shiny app to interactively visualize clustering results</a>
+    </li>
+    <li>
       <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
     </li>
   </ul>
@@ -65,7 +68,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/jokergoo/simplifyEnrichment/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -79,14 +82,13 @@
 
       
 
-      </header><script src="word_cloud_anno_files/header-attrs-2.5/header-attrs.js"></script><script src="word_cloud_anno_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="word_cloud_anno_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="word_cloud_anno_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="word_cloud_anno_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Word Cloud Annotation</h1>
                         <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2020-12-29</h4>
+            <h4 class="date">2021-03-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/master/vignettes/word_cloud_anno.Rmd"><code>vignettes/word_cloud_anno.Rmd</code></a></small>
       <div class="hidden name"><code>word_cloud_anno.Rmd</code></div>
@@ -144,7 +146,7 @@
     right_annotation <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/rowAnnotation.html">rowAnnotation</a></span><span class="op">(</span>wc <span class="op">=</span> <span class="fu"><a href="../reference/anno_word_cloud.html">anno_word_cloud</a></span><span class="op">(</span><span class="va">split</span>, <span class="va">term</span><span class="op">)</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
 <p><img src="word_cloud_anno_files/figure-html/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;"></p>
-<p>The value for the first argument of <code>anno_word_cloud</code> can also be explicitly converted into a list:</p>
+<p>The value for the first argument of <code><a href="../reference/anno_word_cloud.html">anno_word_cloud()</a></code> can also be explicitly converted into a list:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">align_to</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">split</span><span class="op">)</span>, <span class="va">split</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/pkg/ComplexHeatmap/man/Heatmap.html">Heatmap</a></span><span class="op">(</span><span class="va">mat</span>, row_split <span class="op">=</span> <span class="va">split</span>, 

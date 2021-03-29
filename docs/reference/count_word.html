@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,6 +98,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/interactive.html">A Shiny app to interactively visualize clustering results</a>
+    </li>
+    <li>
       <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
     </li>
   </ul>
@@ -106,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/simplifyEnrichment/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -160,11 +163,11 @@
 <span class='va'>go_term</span> <span class='op'>=</span> <span class='fu'>AnnotationDbi</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/AnnotationDbi/man/AnnotationDb-class.html'>select</a></span><span class='op'>(</span><span class='fu'>GO.db</span><span class='fu'>::</span><span class='va'><a href='https://rdrr.io/pkg/GO.db/man/GOBASE.html'>GO.db</a></span>, keys <span class='op'>=</span> <span class='va'>go_id</span>, columns <span class='op'>=</span> <span class='st'>"TERM"</span><span class='op'>)</span><span class='op'>$</span><span class='va'>TERM</span>
 </div><div class='output co'>#&gt; <span class='message'>'select()' returned 1:1 mapping between keys and columns</span></div><div class='input'><span class='fu'>count_word</span><span class='op'>(</span><span class='va'>go_term</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;                                              word freq
-#&gt; regulation                             regulation  189
-#&gt; negative                                 negative   64
-#&gt; process                                   process   63
-#&gt; positive                                 positive   62
+#&gt; regulation                             regulation  184
 #&gt; cell                                         cell   61
+#&gt; negative                                 negative   61
+#&gt; positive                                 positive   60
+#&gt; process                                   process   59
 #&gt; signaling                               signaling   45
 #&gt; response                                 response   44
 #&gt; pathway                                   pathway   40
@@ -174,18 +177,18 @@
 #&gt; metabolic                               metabolic   21
 #&gt; cellular                                 cellular   20
 #&gt; differentiation                   differentiation   19
-#&gt; biosynthetic                         biosynthetic   19
 #&gt; transport                               transport   19
 #&gt; proliferation                       proliferation   18
 #&gt; receptor                                 receptor   18
 #&gt; assembly                                 assembly   17
 #&gt; catabolic                               catabolic   17
 #&gt; activity                                 activity   17
+#&gt; biosynthetic                         biosynthetic   15
 #&gt; morphogenesis                       morphogenesis   15
-#&gt; secretion                               secretion   14
 #&gt; factor                                     factor   12
 #&gt; dna                                           dna   12
 #&gt; processing                             processing   12
+#&gt; secretion                               secretion   11
 #&gt; migration                               migration   11
 #&gt; organization                         organization   11
 #&gt; membrane                                 membrane   10
@@ -209,7 +212,6 @@
 #&gt; mitochondrial                       mitochondrial    6
 #&gt; transmembrane                       transmembrane    6
 #&gt; immune                                     immune    6
-#&gt; interleukin                           interleukin    6
 #&gt; stimulus                                 stimulus    6
 #&gt; homeostasis                           homeostasis    6
 #&gt; mesenchymal                           mesenchymal    6
@@ -252,6 +254,7 @@
 #&gt; repair                                     repair    3
 #&gt; death                                       death    3
 #&gt; domain                                     domain    3
+#&gt; interleukin                           interleukin    3
 #&gt; hormone                                   hormone    3
 #&gt; peptidyllysine                     peptidyllysine    3
 #&gt; intracellular                       intracellular    3
@@ -325,7 +328,6 @@
 #&gt; nerve                                       nerve    2
 #&gt; distal                                     distal    2
 #&gt; integration                           integration    2
-#&gt; interferongamma                   interferongamma    2
 #&gt; endoplasmic                           endoplasmic    2
 #&gt; reticulum                               reticulum    2
 #&gt; fiber                                       fiber    2
@@ -357,7 +359,6 @@
 #&gt; transmission                         transmission    2
 #&gt; cleavage                                 cleavage    2
 #&gt; promoter                                 promoter    2
-#&gt; chemokine                               chemokine    2
 #&gt; dichotomous                           dichotomous    2
 #&gt; mammary                                   mammary    2
 #&gt; subdivision                           subdivision    2
@@ -512,6 +513,7 @@
 #&gt; cap                                           cap    1
 #&gt; hypermethylation                 hypermethylation    1
 #&gt; methylguanosine                   methylguanosine    1
+#&gt; interferongamma                   interferongamma    1
 #&gt; division                                 division    1
 #&gt; somatic                                   somatic    1
 #&gt; basic                                       basic    1
@@ -531,7 +533,6 @@
 #&gt; janus                                       janus    1
 #&gt; isotype                                   isotype    1
 #&gt; switching                               switching    1
-#&gt; coenzyme                                 coenzyme    1
 #&gt; glycoprotein                         glycoprotein    1
 #&gt; aluminum                                 aluminum    1
 #&gt; derived                                   derived    1
@@ -612,12 +613,12 @@
 #&gt; alcohol                                   alcohol    1
 #&gt; nuclear                                   nuclear    1
 #&gt; decarboxylation                   decarboxylation    1
-#&gt; fractalkine                           fractalkine    1
 #&gt; ameloblast                             ameloblast    1
 #&gt; family                                     family    1
 #&gt; serine                                     serine    1
 #&gt; arseniccontaining               arseniccontaining    1
 #&gt; substance                               substance    1
+#&gt; chemokine                               chemokine    1
 #&gt; thapsigargin                         thapsigargin    1
 #&gt; lipase                                     lipase    1
 #&gt; rnamediated                           rnamediated    1

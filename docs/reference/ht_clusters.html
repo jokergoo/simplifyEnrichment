@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,6 +98,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/interactive.html">A Shiny app to interactively visualize clustering results</a>
+    </li>
+    <li>
       <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
     </li>
   </ul>
@@ -106,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/simplifyEnrichment/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -141,7 +144,7 @@
     <span class='co'># arguments that control the word cloud annotation</span>
     draw_word_cloud <span class='op'>=</span> <span class='fu'>is_GO_id</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span> <span class='op'>||</span> <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>term</span><span class='op'>)</span>,
     term <span class='op'>=</span> <span class='cn'>NULL</span>,
-    min_term <span class='op'>=</span> <span class='fl'>5</span>,
+    min_term <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span><span class='op'>*</span><span class='fl'>0.01</span><span class='op'>)</span>,
     order_by_size <span class='op'>=</span> <span class='cn'>FALSE</span>,
     cluster_slices <span class='op'>=</span> <span class='cn'>FALSE</span>,
     exclude_words <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,

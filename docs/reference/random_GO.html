@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -98,6 +98,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
+      <a href="../articles/interactive.html">A Shiny app to interactively visualize clustering results</a>
+    </li>
+    <li>
       <a href="../articles/word_cloud_anno.html">Word Cloud Annotation</a>
     </li>
   </ul>
@@ -106,7 +109,7 @@
       <ul class="nav navbar-nav navbar-right">
         <li>
   <a href="https://github.com/jokergoo/simplifyEnrichment/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -158,26 +161,26 @@
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
 <span class='fu'>random_GO</span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   [1] "GO:0035444" "GO:0061723" "GO:1902254" "GO:0001838" "GO:0090009"
-#&gt;   [6] "GO:0000348" "GO:0044602" "GO:0007286" "GO:0061153" "GO:0021902"
-#&gt;  [11] "GO:1903547" "GO:0002191" "GO:0010040" "GO:0048596" "GO:1904251"
-#&gt;  [16] "GO:0033673" "GO:0099555" "GO:0031649" "GO:1905216" "GO:0009259"
-#&gt;  [21] "GO:1904924" "GO:0060434" "GO:0042668" "GO:1905772" "GO:2000565"
-#&gt;  [26] "GO:0021683" "GO:0042660" "GO:0031630" "GO:2000626" "GO:0032897"
-#&gt;  [31] "GO:0045198" "GO:0006572" "GO:0006311" "GO:0061196" "GO:0034142"
-#&gt;  [36] "GO:0060330" "GO:0001815" "GO:0033032" "GO:0071763" "GO:0099171"
-#&gt;  [41] "GO:0038020" "GO:0002115" "GO:0061910" "GO:0032911" "GO:0099152"
-#&gt;  [46] "GO:0035726" "GO:2001193" "GO:0045778" "GO:0097250" "GO:0071233"
-#&gt;  [51] "GO:0043006" "GO:0010817" "GO:1902857" "GO:0000957" "GO:0009098"
-#&gt;  [56] "GO:0000723" "GO:0060179" "GO:0045779" "GO:0006366" "GO:0042119"
-#&gt;  [61] "GO:0061713" "GO:0003215" "GO:0042247" "GO:0036257" "GO:0006470"
-#&gt;  [66] "GO:0045609" "GO:0007154" "GO:1904179" "GO:0006231" "GO:0006744"
-#&gt;  [71] "GO:0003283" "GO:0042048" "GO:1901388" "GO:1905143" "GO:0090344"
-#&gt;  [76] "GO:0032455" "GO:1903496" "GO:0043315" "GO:0042093" "GO:0090265"
-#&gt;  [81] "GO:0051050" "GO:0030878" "GO:0050911" "GO:0045091" "GO:0061564"
-#&gt;  [86] "GO:0090184" "GO:0006359" "GO:0010519" "GO:0097474" "GO:1903305"
-#&gt;  [91] "GO:1903815" "GO:0034243" "GO:0032720" "GO:0021757" "GO:0007162"
-#&gt;  [96] "GO:0006427" "GO:0072678" "GO:0001960" "GO:0060612" "GO:1990256"</div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt;   [1] "GO:0071899" "GO:0045585" "GO:0007063" "GO:0051036" "GO:1901731"
+#&gt;   [6] "GO:1904631" "GO:1904292" "GO:0002262" "GO:0072340" "GO:0035066"
+#&gt;  [11] "GO:1905317" "GO:0061051" "GO:0006581" "GO:0051150" "GO:0043315"
+#&gt;  [16] "GO:0008104" "GO:0040029" "GO:0060452" "GO:0009069" "GO:0070179"
+#&gt;  [21] "GO:0050942" "GO:1903798" "GO:0002331" "GO:0061508" "GO:0000726"
+#&gt;  [26] "GO:0045324" "GO:0099178" "GO:0006542" "GO:0032788" "GO:0036257"
+#&gt;  [31] "GO:0033189" "GO:1902459" "GO:0075523" "GO:0006679" "GO:0007080"
+#&gt;  [36] "GO:0043012" "GO:0019243" "GO:1900163" "GO:0044351" "GO:0048245"
+#&gt;  [41] "GO:0061537" "GO:0006270" "GO:0009756" "GO:0000023" "GO:0014886"
+#&gt;  [46] "GO:0032764" "GO:0035352" "GO:0006577" "GO:2000525" "GO:1902747"
+#&gt;  [51] "GO:0071466" "GO:0031441" "GO:0051023" "GO:1904947" "GO:0042474"
+#&gt;  [56] "GO:0042311" "GO:0019673" "GO:0070126" "GO:0051881" "GO:0006312"
+#&gt;  [61] "GO:1901841" "GO:0090647" "GO:0060488" "GO:0032535" "GO:1902512"
+#&gt;  [66] "GO:0002377" "GO:0006597" "GO:0015819" "GO:0031408" "GO:0002541"
+#&gt;  [71] "GO:0046031" "GO:0006984" "GO:1990253" "GO:0016488" "GO:0060667"
+#&gt;  [76] "GO:0006335" "GO:0016101" "GO:2000330" "GO:0098736" "GO:0061756"
+#&gt;  [81] "GO:2000659" "GO:0042754" "GO:0042274" "GO:0007518" "GO:0001798"
+#&gt;  [86] "GO:2000065" "GO:0048378" "GO:1990182" "GO:0070914" "GO:0070286"
+#&gt;  [91] "GO:0032455" "GO:0099564" "GO:0007339" "GO:0035544" "GO:0050999"
+#&gt;  [96] "GO:0008064" "GO:0021562" "GO:2000650" "GO:0051791" "GO:0043584"</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
