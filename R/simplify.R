@@ -120,10 +120,13 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # Perform simplifyGO analysis with multiple lists of GO IDs
 #
 # == param
-# -lt Preferable a list of numeric vectors where each numeric vector has GO IDs as names. It also accepts other format, see Details.
-# -filter A self-defined function for filtering GO IDs, see Details.
-# -default The default value, see Details.
-# -heatmap_param Parameters that control the heatmap, see Details.
+# -lt A data frame, a list of numeric vectors (e.g. adjusted p-values) where each numeric vector has GO IDs as names, or a list of GO IDs.
+# -go_id_column Column index of GO ID if ``lt`` contains a list of data frames.
+# -padj_column Column index of adjusted p-values if ``lt`` contains a list of data frames.
+# -padj_cutoff Cut off for adjusted p-values
+# -filter A self-defined function for filtering GO IDs. By default it requires GO IDs should be significant in at least one list.
+# -default The default value for the adjusted p-values. See Details.
+# -heatmap_param Parameters for controlling the heatmap, see Details.
 # -method Pass to `simplifyGO`.
 # -control Pass to `simplifyGO`.
 # -min_term Pass to `simplifyGO`.
@@ -132,31 +135,34 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # -... Pass to `simplifyGO`.
 #
 # == Details
-# The input data is preferable to be a list of numeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
-# two other formats where they will be converted to a list of numeric vectors internally:
+# The input data can have three types of formats:
 #
-# - If ``lt`` is specified as a list of character vectors of GO IDs. Each character vector is changed to a numeric vector where
+# - A list of numeric vectors of adjusted p-values where each vector has the GO IDs as names.
+# - A data frame. The column of the GO IDs can be specified with ``go_id_column`` argument and the column of the adjusted p-values can be
+#      specified with ``padj_column`` argument. If these columns are not specified, they are automatically identified. The GO ID column
+#      is found by checking whether a column contains all GO IDs. The adjusted p-value column is found by comparing the column names of the 
+#      data frame to see whether it might be a column for adjusted p-values. These two columns are used to construct a numeric vector
+#      with GO IDs as names.
+# - A list of character vectors of GO IDs. In this case, each character vector is changed to a numeric vector where
 #   all values take 1 and the original GO IDs are used as names of the vector.
-# - If ``lt`` is a list of data frames and each data frame is from clusterProfiler analysis, the column "p.adjust" in the data frame is
-#   taken as the numeric vector.
 #
-# Now let's assume there are ``n`` GO lists, we first construct a global matrix where columns correspond to the GO lists and rows correspond
+# Now let's assume there are ``n`` GO lists, we first construct a global matrix where columns correspond to the ``n`` GO lists and rows correspond
 # to the "union" of all GO IDs in the lists. The value for the ith GO ID and in the jth list are taken from the corresponding numeric vector
-# in ``lt``. If the jth vector in ``lt`` does not contain the ith GO ID, the value defined by ``default`` argument is taken there (e.g. if the numeric
-# values are p-values or FDRs, ``default`` can be set to 1). Let's call this matrix as ``M0``.
+# in ``lt``. If the jth vector in ``lt`` does not contain the ith GO ID, the value defined by ``default`` argument is taken there (e.g. in most cases the numeric
+# values are adjusted p-values, ``default`` is set to 1). Let's call this matrix as ``M0``.
 #
 # Next step is to filter ``M0`` so that we only take a subset of GO IDs of interest. We define a proper function via argument ``filter`` to remove
 # GO IDs that are not important for the analysis. Functions for ``filter`` is applied to every row in ``M0`` and ``filter`` function needs
-# to return a logical value to decide whether to remove the current GO ID. For example, if the values in ``lt`` are p-values or FDRs, the ``filter`` function
-# can be set as ``function(x) any(x < 0.01)`` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filter, let's call
+# to return a logical value to decide whether to remove the current GO ID. For example, if the values in ``lt`` are adjusted p-values, the ``filter`` function
+# can be set as ``function(x) any(x < padj_cutoff)`` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filter, let's call
 # the filtered matrix ``M1``.
 #
 # GO IDs in ``M1`` (row names of ``M1``) are used for clustering. A heatmap of ``M1`` is attached to the left of the GO similarity heatmap so that
-# the group-specific (or list-specific) patterns can be easily observed and to correspond to GO functions.
+# the group-specific (or list-specific) patterns can be easily observed and to corresponded to GO functions.
 #
 # Argument ``heatmap_param`` controls several parameters for heatmap ``M1``:
 #
-# - ``transform``: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform FDRs by ``-log10(x)``.
+# - ``transform``: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform adjusted p-values by ``-log10(x)``.
 # - ``breaks``: break values for color interpolation.
 # - ``col``: The corresponding values for ``breaks``.
 # - ``labels``: The corresponding labels.
@@ -175,40 +181,76 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # lt = functional_enrichment(res, k = 3, id_mapping = id_mapping) # you can check the value of `lt`
 #
 # # a list of data frames
-# simplifyGOFromMultipleLists(lt)
+# simplifyGOFromMultipleLists(lt, padj_cutoff = 0.001)
 #
 # # a list of numeric values
 # lt2 = lapply(lt, function(x) structure(x$p.adjust, names = x$ID))
-# simplifyGOFromMultipleLists(lt2, filter = function(x) any(x <  0.001), default = 1,
-#     heatmap_param = list(transform = function(x) -log10(x), name = "FDR"))
+# simplifyGOFromMultipleLists(lt2, padj_cutoff = 0.001)
 #
 # # a list of GO IDS
 # lt3 = lapply(lt, function(x) x$ID[x$p.adjust < 0.001])
 # simplifyGOFromMultipleLists(lt3)
 # }
-simplifyGOFromMultipleLists = function(lt, filter = function(x) TRUE, default = NA, 
-	heatmap_param = list(transform = function(x) x, 
-		breaks = NULL, col = NULL, labels = NULL, name = "Value"
-	), 
+simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NULL, padj_cutoff = 1e-2,
+	filter = function(x) any(x < padj_cutoff), default = 1, 
+	heatmap_param = list(NULL), 
 	method = "binary_cut", control = list(partial = TRUE), 
 	min_term = NULL, verbose = TRUE, column_title = NULL, ...) {
 
 	n = length(lt)
 
 	if(is.data.frame(lt[[1]])) {
-		if(identical(colnames(lt[[1]])[1:4], c("ID", "Description", "GeneRatio", "BgRatio"))) {
-			lt = lapply(lt, function(x) structure(x$p.adjust, names = rownames(x)))
-			return(simplifyGOFromMultipleLists(lt, filter = function(x) any(x < 1e-3), default = 1, 
-				heatmap_param = list(transform = function(x) -log10(x), breaks = c(1, 1e-3, 1e-6), labels = gt_render(c("1", "1x10<sup>-3</sup>", "1x10<sup>-6</sup>")),
-					col = c("green", "white", "red"), name = "FDR"), ...))
+
+		if(is.null(go_id_column)) {
+			go_id_column = which(sapply(lt[[1]], function(x) all(grepl("^GO:\\d+$", x))))[1]
+			if(length(go_id_column) == 0) {
+				if(!is.null(rownames(lt[[1]]))) {
+					go_id_column = rownames
+					if(is.null(rownames(lt[[1]]))) {
+						stop_wrap("Cannot find the GO ID column in the data frames. Please explicitly set argument `go_id_column`.")
+					}
+					if(verbose) {
+						qqcat("Use row names of the data frame as `go_id_column`.\n")
+					}
+				} else {
+					stop_wrap("Cannot find the GO ID column in the data frames. Please explicitly set argument `go_id_column`.")
+				}
+			} else {
+				if(verbose) {
+					qqcat("Use column '@{colnames(lt[[1]])[go_id_column]}' as `go_id_column`.\n")
+				}
+			}
 		}
+		if(is.null(padj_column)) {
+			cn = colnames(lt[[1]])
+			ind = test_padj_column(cn)
+			if(length(ind)) {
+				padj_column = ind
+				if(verbose) {
+					qqcat("Use column '@{colnames(lt[[1]])[padj_column]}' as `padj_column`.\n")
+				}
+			} else {
+				stop_wrap("Cannot find the column the contains adjusted p-values in the data frames. Please explicitly set argument `padj_column`.")
+			}
+		}
+
+		lt = lapply(lt, function(x) {
+			if(is.function(go_id_column)) {
+				structure(x[, padj_column], names = go_id_column(x))
+			} else {
+				structure(x[, padj_column], names = x[, go_id_column])
+			}
+		})
+		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, heatmap_param = heatmap_param, method = method, 
+			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
+		
 	} else if(is.character(lt[[1]])) {
 		lt = lapply(lt, function(x) structure(rep(1, length(x)), names = x))
-		return(simplifyGOFromMultipleLists(lt, default = 0, 
-			heatmap_param = list(breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")), ...))
+		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE,
+			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")), ...))
 	}
 
-	heatmap_param2 = list(transform = function(x) x, 
+	heatmap_param2 = list(transform = NULL, 
 		breaks = NULL, col = NULL, labels = NULL, name = NULL
 	)
 	for(nm in names(heatmap_param)) {
@@ -216,6 +258,7 @@ simplifyGOFromMultipleLists = function(lt, filter = function(x) TRUE, default = 
 	}
 
 	transform = heatmap_param2$transform
+	if(is.null(transform)) transform = function(x) -log10(x)
 	breaks = heatmap_param2$breaks
 	col = heatmap_param2$col
 	labels = heatmap_param2$labels
@@ -223,11 +266,14 @@ simplifyGOFromMultipleLists = function(lt, filter = function(x) TRUE, default = 
 	if(is.null(name)) name = ""
 
 	if(is.null(breaks) && is.null(col)) {
-		if(is_p_value(unlist(lt))) {
-			breaks = c(1, 1e-2, 1e-4)
-			transform = function(x) -log10(x)
-			labels = gt_render(c("1", "1x10<sup>-2</sup>", "1x10<sup>-4</sup>"))
-			col = c("green", "white", "red")
+		digit = ceiling(-log10(padj_cutoff))
+		base = padj_cutoff*10^digit
+		breaks = c(1, padj_cutoff, base*10^(-digit*2))
+		col = c("green", "white", "red")
+		labels = gt_render(c("1", qq("@{base}x10<sup>-@{digit}</sup>"), qq("@{base}x10<sup>-@{digit*2}</sup>")))
+	} else if(!is.null(breaks) && !is.null(col)) {
+		if(length(breaks) != length(col)) {
+			stop_wrap("Length of `breaks` must be the same as the length of `col`.")
 		}
 	}
 
@@ -307,4 +353,15 @@ is_p_value = function(x) {
 	} else {
 		FALSE
 	}
+}
+
+test_padj_column = function(cn) {
+	test_cn = c("p.adjust", "p_adjust", "padjust", "padj", "fdr", "FDR", "BH", "p.value", "p-value", "pvalue", "p_value")
+	for(x in test_cn) {
+		ind = which(cn %in% x)
+		if(length(ind)) {
+			return(ind[1])
+		}
+	}
+	return(NULL)
 }

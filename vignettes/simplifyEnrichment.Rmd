@@ -264,37 +264,25 @@ It is always very common that users have multiple lists of GO enrichment
 results (e.g. from multiple groups of genes) and they want to compare the
 significant terms between different lists, e.g. to see which biological
 functions are more specific in a certain list. There is a function
-`simplifyGOFromMultipleLists()` in the package which helps this analysis.
+`simplifyGOFromMultipleLists()` in the package which helps this type of analysis.
 
-The input data is preferable to be a list of nmeric vectors where each numeric vector has GO IDs as names. Nevertheless, it also allows
-two other formats where they will be converted to a list of numeric vectors internally:
+The input data for `simplifyGOFromMultipleLists()` (with the argument `lt`) can have three types of formats:
 
-- If `lt` is specified as a list of character vectors of GO IDs. Each character vector is changed to a numeric vector where
-  all values take 1 and the original GO IDs are used as names of the vector.
-- If `lt` is a list of data frames and each data frame is from clusterProfiler analysis, the column "p.adjust" in the data frame is
-  taken as the numeric vector.
+- A list of numeric vectors of adjusted p-values where each vector has the GO IDs as names.
+- A data frame. The column of the GO IDs can be specified with ``go_id_column`` argument and the column of the adjusted p-values can be
+      specified with ``padj_column`` argument. If the two columns are not specified, they are automatically identified. The GO ID column
+      is found by checking whether a column contains all GO IDs. The adjusted p-value column is found by comparing the column names of the 
+      data frame to see whether it might be a column for adjusted p-values. These two columns are used to construct a numeric vector
+      with GO IDs as names.
+ - A list of character vectors of GO IDs. In this case, each character vector is changed to a numeric vector where
+   all values take 1 and the original GO IDs are used as names of the vector.
 
-Now let's assume there are ``n`` GO lists, we first construct a global matrix where columns correspond to the GO lists and rows correspond
-to the "union" of all GO IDs in the lists. The value for the ith GO ID and in the jth list are taken from the corresponding numeric vector
-in ``lt``. If the jth vector in ``lt`` does not contain the ith GO ID, the value defined by ``default`` argument is taken there (e.g. if the numeric
-values are p-values or FDRs, ``default`` can be set to 1). Let's call this matrix as ``M0``.
+If the GO enrichment results is directly from upstream analysis, e.g. the package **clusterProfiler** or other similar packages, the results are
+most probably represented as a list of data frames, thus, we first demonstrate the usage on a list of data frames.
 
-Next step is to filter ``M0`` so that we only take a subset of GO IDs of interest. We define a proper function via argument ``filter`` to remove
-GO IDs that are not important for the analysis. Functions for ``filter`` is applied to every row in ``M0`` and ``filter`` function needs
-to return a logical value to decide whether to remove the current GO ID. For example, if the values in ``lt`` are p-values or FDRs, the ``filter`` function
-can be set as ``function(x) any(x < 0.01)`` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filter, let's call
-the filtered matrix ``M1``.
-
-GO IDs in ``M1`` (row names of ``M1``) are used for clustering. A heatmap of ``M1`` is attached to the left of the GO similarity heatmap so that
-the group-specific (or list-specific) patterns can be easily observed and to correspond to GO functions.
-
-Argument ``heatmap_param`` controls several parameters for heatmap ``M1``:
-
-- ``transform``: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform FDRs by ``-log10(x)``.
-- ``breaks``: break values for color interpolation.
-- ``col``: The corresponding values for ``breaks``.
-- ``labels``: The corresponding labels.
-- ``name``: Legend title.
+The function `functional_enrichment()` in **cola** package applies functional
+enrichment on different groups of signature genes from consensus clustering.
+The function internally uses **clusterProfiler** and returns a list of data frames:
 
 ```{r, fig.width=10, fig.height = 7}
 # perform functional enrichment on the signatures genes from cola anlaysis 
@@ -307,20 +295,56 @@ x = hu6800ENTREZID
 mapped_probes = mappedkeys(x)
 id_mapping = unlist(as.list(x[mapped_probes]))
 
-lt = functional_enrichment(res, k = 3, id_mapping = id_mapping) # you can check the value of `lt`
-simplifyGOFromMultipleLists(lt)
+lt = functional_enrichment(res, k = 3, id_mapping = id_mapping)
+names(lt)
+head(lt[[1]][, 1:7])
 ```
 
-```{r, eval = FALSE}
-# a list of numeric values
-lt2 = lapply(lt, function(x) structure(x$p.adjust, names = x$ID))
-simplifyGOFromMultipleLists(lt2, filter = function(x) any(x <  0.001), default = 1,
-    heatmap_param = list(transform = function(x) -log10(x), name = "FDR"))
+By default, `simplifyGOFromMultipleLists()` automatically identifies the columns that contain GO IDs and adjusted p-values, so here we directly
+send `lt` to `simplifyGOFromMultipleLists()`. We additionally set `padj_cutoff` to 0.001 because under the default cutoff 0.01, there are too many
+GO IDs and to save the running time, we set a more strict cutoff.
 
-# a list of GO IDS
+```{r, fig.width=10, fig.height = 7, out.width = "100%"}
+simplifyGOFromMultipleLists(lt, padj_cutoff = 0.001)
+```
+
+Next we demonstrate two other data types for `simplifyGOFromMultipleLists()`. Both usages are straightforward. The first is a list of numeric vectors:
+
+```{r, eval = FALSE}
+lt2 = lapply(lt, function(x) structure(x$p.adjust, names = x$ID))
+simplifyGOFromMultipleLists(lt2, padj_cutoff = 0.001)
+```
+
+And the second is a list of character vectors of GO IDs:
+
+```{r, eval = FALSE}
 lt3 = lapply(lt, function(x) x$ID[x$p.adjust < 0.001])
 simplifyGOFromMultipleLists(lt3)
 ```
+
+The process of this analysis is as follows.
+Let's assume there are $n$ GO lists, we first construct a global matrix where columns correspond to the $n$ GO lists and rows correspond
+to the "union" of all GO IDs in the $n$ lists. The value for the i<sup>th</sup> GO ID and in the j<sup>th</sup> list are taken from the corresponding numeric vector
+in `lt`. If the j<sup>th</sup> vector in `lt` does not contain the i<sup>th</sup> GO ID, the value defined by `default` argument is taken there (e.g. in most cases the numeric
+values are adjusted p-values, `default` is set to 1). Let's call this matrix as $M_0$.
+
+Next step is to filter $M_0$ so that we only take a subset of GO IDs of interest. We define a proper function via argument `filter` to remove
+GO IDs that are not important for the analysis. Functions for `filter` is applied to every row in $M_0$ and `filter` function needs
+to return a logical value to decide whether to remove the current GO ID. For example, if the values in `lt` are adjusted p-values, the `filter` function
+can be set as `function(x) any(x < padj_cutoff)` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filtering, let's call
+the filtered matrix $M_1$.
+
+GO IDs in $M_1$ (row names of $M_1$) are used for clustering. A heatmap of $M_1$ is attached to the left of the GO similarity heatmap so that
+the group-specific (or list-specific) patterns can be easily observed and to corresponded to GO functions.
+
+Argument `heatmap_param` controls several parameters for heatmap $M_1$:
+
+- `transform`: A self-defined function to transform the data for heatmap visualization. The most typical case is to transform adjusted p-values by `-log10(x)`.
+- `breaks`: Break values for color interpolation.
+- `col`: The corresponding values for `breaks`.
+- `labels`: The corresponding labels for legend.
+- `name`: Legend title.
+
 
 ## Session Info
 
