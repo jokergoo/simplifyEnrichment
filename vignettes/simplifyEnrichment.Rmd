@@ -326,11 +326,11 @@ The process of this analysis is as follows.
 Let's assume there are $n$ GO lists, we first construct a global matrix where columns correspond to the $n$ GO lists and rows correspond
 to the "union" of all GO IDs in the $n$ lists. The value for the i<sup>th</sup> GO ID and in the j<sup>th</sup> list are taken from the corresponding numeric vector
 in `lt`. If the j<sup>th</sup> vector in `lt` does not contain the i<sup>th</sup> GO ID, the value defined by `default` argument is taken there (e.g. in most cases the numeric
-values are adjusted p-values, `default` is set to 1). Let's call this matrix as $M_0$.
+values are adjusted p-values, thus `default` is set to 1). Let's call this matrix as $M_0$.
 
 Next step is to filter $M_0$ so that we only take a subset of GO IDs of interest. We define a proper function via argument `filter` to remove
-GO IDs that are not important for the analysis. Functions for `filter` is applied to every row in $M_0$ and `filter` function needs
-to return a logical value to decide whether to remove the current GO ID. For example, if the values in `lt` are adjusted p-values, the `filter` function
+GO IDs that are not important for the analysis. Function for `filter` is applied to every row in $M_0$ and `filter` function needs
+to return a logical value to decide whether to keep or remove the current GO ID. For example, if the values in `lt` are adjusted p-values, the `filter` function
 can be set as `function(x) any(x < padj_cutoff)` so that the GO ID is kept as long as it is signfiicant in at least one list. After the filtering, let's call
 the filtered matrix $M_1$.
 

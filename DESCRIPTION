@@ -1,7 +1,7 @@
 Package: simplifyEnrichment
 Type: Package
 Title: Simplify Functional Enrichment Results
-Version: 1.1.4.9005
+Version: 1.1.4.9006
 Date: 2021-3-29
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
