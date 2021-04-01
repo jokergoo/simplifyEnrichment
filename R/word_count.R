@@ -348,7 +348,7 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 
 	keywords = lapply(term, function(desc) {
 		suppressMessages(suppressWarnings(df <- count_word(term = desc, exclude_words = exclude_words)))
-		df = df[df$freq > 1, , drop = FALSE]
+		# df = df[df$freq > 1, , drop = FALSE]
 		if(nrow(df) > max_words) {
 			df = df[order(df$freq, decreasing = TRUE)[seq_len(max_words)], ]
 		}
