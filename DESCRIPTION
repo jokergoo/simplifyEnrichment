@@ -1,8 +1,8 @@
 Package: simplifyEnrichment
 Type: Package
 Title: Simplify Functional Enrichment Results
-Version: 1.1.4.9008
-Date: 2021-4-1
+Version: 1.1.4.9009
+Date: 2021-4-4
 Author: Zuguang Gu
 Maintainer: Zuguang Gu <z.gu@dkfz.de>
 Depends: R (>= 3.6.0), BiocGenerics, grid

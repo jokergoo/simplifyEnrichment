@@ -18,7 +18,6 @@ ht_clusters(
     term = NULL,
     min_term = round(nrow(mat)*0.01),
     order_by_size = FALSE,
-    cluster_slices = FALSE,
     exclude_words = character(0),
     max_words = 10,
     word_cloud_grob_param = list(),
@@ -29,6 +28,7 @@ ht_clusters(
     column_title = NULL,
     ht_list = NULL,
     use_raster = TRUE,
+    run_draw = TRUE,
     ...)
 }
 \arguments{
@@ -41,7 +41,6 @@ ht_clusters(
   \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{min_term}{Minimal number of functional terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one separated cluster in the heatmap.}
   \item{order_by_size}{Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size < \code{min_term}) is always put to the bottom of the heatmap.}
-  \item{cluster_slices}{Whether to cluster slices.}
   \item{exclude_words}{Words that are excluded in the word cloud.}
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
@@ -50,6 +49,7 @@ ht_clusters(
   \item{column_title}{Column title for the heatmap.}
   \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}
   \item{use_raster}{Whether to write the heatmap as a raster image.}
+  \item{run_draw}{Internally used.}
   \item{...}{Other arguments passed to \code{\link[ComplexHeatmap:draw-HeatmapList-method]{draw,HeatmapList-method}}.}
 
 }

@@ -13,7 +13,6 @@
 #     with size less than ``min_term`` are all merged into one separated cluster in the heatmap.
 # -order_by_size Whether to reorder clusters by their sizes. The cluster
 #      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
-# -cluster_slices Whether to cluster slices.
 # -exclude_words Words that are excluded in the word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
 # -word_cloud_grob_param A list of graphic parameters passed to `word_cloud_grob`.
@@ -24,6 +23,7 @@
 # -column_title Column title for the heatmap.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
 # -use_raster Whether to write the heatmap as a raster image.
+# -run_draw Internally used.
 # -... Other arguments passed to `ComplexHeatmap::draw,HeatmapList-method`.
 #
 # == value
@@ -47,7 +47,6 @@ ht_clusters = function(
 	term = NULL, 
 	min_term = round(nrow(mat)*0.01), 
 	order_by_size = FALSE, 
-	cluster_slices = FALSE,
 	exclude_words = character(0), 
 	max_words = 10,
 	word_cloud_grob_param = list(), 
@@ -58,6 +57,7 @@ ht_clusters = function(
 	column_title = NULL, 
 	ht_list = NULL, 
 	use_raster = TRUE, 
+	run_draw = TRUE,
 	...) {
 
 	if(length(col) == 1) col = c("white", rgb(t(col2rgb(col)), maxColorValue = 255))
@@ -172,8 +172,9 @@ ht_clusters = function(
 		})
 	}
 
-	ht = draw(ht, main_heatmap = "Similarity", gap = gap, ...)
-
+	if(run_draw) {
+		ht = draw(ht, main_heatmap = "Similarity", gap = gap, ...)
+	}
 	return(invisible(ht))
 }
 

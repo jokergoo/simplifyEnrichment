@@ -93,14 +93,16 @@ is_GO_id = function(x) {
 all_GO_word_count = function() {
 	all_go = as.list(GO.db::GOTERM)
 
-	ontology = vapply(all_go, slot, "Ontology", "a")
-	term = vapply(all_go, slot, "Term", "a")
+	ontology = sapply(all_go, slot, "Ontology")
+	term = sapply(all_go, slot, "Term")
+	l = ontology %in% c("BP", "CC", "MF")
+	ontology = ontology[l]
+	term = term[l]
 
 	lt = tapply(term, ontology, function(x) {
 		df = count_word(term = x)
-		df = df[order(df$freq, decreasing = TRUE)[seq_len(min(50, nrow(df)))], ]
+		structure(df[, 2], names = df[, 1])
 	})
-	lt[c("BP", "CC", "MF")]
 }
 
 GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
