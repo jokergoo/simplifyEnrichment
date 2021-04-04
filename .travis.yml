@@ -10,4 +10,4 @@ repos:
 r_github_packages:
   - jokergoo/ComplexHeatmap
 env:
-  - _R_CHECK_FORCE_SUGGESTS_=false
+  - _R_CHECK_FORCE_SUGGESTS_=FALSE

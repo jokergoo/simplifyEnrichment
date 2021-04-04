@@ -105,7 +105,7 @@ export_to_shiny_app = function(mat, cl = binary_cut(mat)) {
 	            v = mat[go_id1, go_id2]
 	            col = col_fun(v)
 
-	            HTML(qq(
+	            shiny::HTML(qq(
 "<b>GO similarity</b>
 <p>@{sprintf('%.3f', v)}  <span style='background-color:@{col};width=10px;'>&nbsp;&nbsp;&nbsp;&nbsp;</span></p>
 <b>Row GO ID</b>
@@ -127,7 +127,7 @@ export_to_shiny_app = function(mat, cl = binary_cut(mat)) {
 	           		go_id = union(go_id1, go_id2)
 
 		            go_text = qq("<p><a href='http://amigo.geneontology.org/amigo/term/@{go_id}' target='_blank'>@{go_id}</a>: @{get_go_term(go_id)}</p>\n")
-		            HTML(qq(
+		            shiny::HTML(qq(
 "<b>A list of @{length(go_id)} GO IDs</b>
 @{go_text}"))
 		        }
@@ -140,7 +140,7 @@ export_to_shiny_app = function(mat, cl = binary_cut(mat)) {
 
 	server = function(input, output, session) {
 
-		observeEvent(input$update, {
+		shiny::observeEvent(input$update, {
 
 			min_term = input$min_term
 			order_by_size = ifelse(input$order_by_size == "1", TRUE, FALSE)
