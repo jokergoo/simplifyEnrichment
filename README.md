@@ -9,6 +9,9 @@
 - A new method (binary cut) is proposed to efficiently cluster functional terms (_e.g._ GO terms) into groups from the semantic similarity matrix.
 - Summaries of functional terms in each cluster are visualized by word clouds.
 
+### Citation
+
+Zuguang Gu, et al., simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results, 2021 bioRxiv. doi: https://doi.org/10.1101/2020.10.27.312116
 
 ### Install
 
