@@ -23,17 +23,11 @@ env$semData_hash = ""
 # go_id = random_GO(100)
 # mat = GO_similarity(go_id)
 # }
-GO_similarity = function(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel") {
+GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel") {
 
-	if(missing(ont)) {
-		
+	if(is.null(ont)) {
 		ont = guess_ont(go_id, db)
-
-		if(is.null(ont)) {
-			stop("You need to specify the ontology by `ont`.")
-		} else {
-			message(qq("You haven't provided value for `ont`, guess it as `@{ont}`."))
-		}
+		message(qq("You haven't provided value for `ont`, guess it as `@{ont}`."))
 	}
 
 	hash = digest::digest(list(ont = ont, db = db))

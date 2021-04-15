@@ -9,6 +9,7 @@ Perform simplifyGO analysis with multiple lists of GO IDs
 \usage{
 simplifyGOFromMultipleLists(lt, go_id_column = NULL, padj_column = NULL, padj_cutoff = 1e-2,
     filter = function(x) any(x < padj_cutoff), default = 1,
+    ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
     heatmap_param = list(NULL),
     method = "binary_cut", control = list(partial = TRUE),
     min_term = NULL, verbose = TRUE, column_title = NULL, ...)
@@ -21,6 +22,9 @@ simplifyGOFromMultipleLists(lt, go_id_column = NULL, padj_column = NULL, padj_cu
   \item{padj_cutoff}{Cut off for adjusted p-values}
   \item{filter}{A self-defined function for filtering GO IDs. By default it requires GO IDs should be significant in at least one list.}
   \item{default}{The default value for the adjusted p-values. See Details.}
+  \item{ont}{GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified, the function automatically identifies it by random sampling 10 IDs from \code{go_id} (see \code{\link{guess_ont}}).}
+  \item{db}{Annotation database. It should be from \url{https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb}}
+  \item{measure}{Semantic measure for the GO similarity, pass to \code{\link[GOSemSim]{termSim}}.}
   \item{heatmap_param}{Parameters for controlling the heatmap, see Details.}
   \item{method}{Pass to \code{\link{simplifyGO}}.}
   \item{control}{Pass to \code{\link{simplifyGO}}.}

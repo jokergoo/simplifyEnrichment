@@ -7,7 +7,7 @@ Calculate Gene Ontology (GO) semantic similarity matrix
 Calculate Gene Ontology (GO) semantic similarity matrix
 }
 \usage{
-GO_similarity(go_id, ont, db = 'org.Hs.eg.db', measure = "Rel")
+GO_similarity(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel")
 }
 \arguments{
 

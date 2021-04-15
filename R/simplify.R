@@ -126,6 +126,10 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # -padj_cutoff Cut off for adjusted p-values
 # -filter A self-defined function for filtering GO IDs. By default it requires GO IDs should be significant in at least one list.
 # -default The default value for the adjusted p-values. See Details.
+# -ont GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified,
+#      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
+# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
+# -measure Semantic measure for the GO similarity, pass to `GOSemSim::termSim`.
 # -heatmap_param Parameters for controlling the heatmap, see Details.
 # -method Pass to `simplifyGO`.
 # -control Pass to `simplifyGO`.
@@ -193,6 +197,7 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # }
 simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NULL, padj_cutoff = 1e-2,
 	filter = function(x) any(x < padj_cutoff), default = 1, 
+	ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
 	heatmap_param = list(NULL), 
 	method = "binary_cut", control = list(partial = TRUE), 
 	min_term = NULL, verbose = TRUE, column_title = NULL, ...) {
@@ -334,7 +339,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NU
 		width = unit(0.5, "cm")*n, use_raster = TRUE)
 
 	all_go_id = rownames(m)
-	sim_mat = GO_similarity(all_go_id)
+	sim_mat = GO_similarity(all_go_id, ont = ont, db = db, measure = measure)
 
 	if(is.null(min_term)) min_term = round(nrow(sim_mat)*0.02)
 	if(is.null(column_title)) column_title = qq("@{length(all_go_id)} GO terms clustered by '@{method}'")
