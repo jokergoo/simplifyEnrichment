@@ -177,12 +177,8 @@ In the barplots, the three metrics are defined as follows:
 2. **Number of clusters**: For each clustering, there are two numbers: the
    number of total clusters and the number of clusters with size >= 5 (only
    the big clusters).
-3. **Block mean**: The mean similarity values of the blocks in the similarity
-   heatmap. Similar denotation as difference score, for term $i$ and $j$ where
-   $i$ can be the same as $j$ (values on the diagonal are also used), the
-   similarity value $x_{i,j}$ is saved to the vector $\mathbf{x_3}$ only when
-   term $i$ and $j$ are in a same cluster. The block mean is the mean value
-   over $\mathbf{x_3}$.
+3. **Block mean**: Mean similarity values of the diagonal blocks in the similarity 
+   heatmap. Using the same convention as for the difference score, the block mean is the mean value of $\mathbf{x_1}$.
 
 ```{r, fig.width = 10, fig.height = 7}
 compare_clustering_methods(mat)

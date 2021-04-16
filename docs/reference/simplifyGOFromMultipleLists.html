@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -137,6 +137,7 @@
 
     <pre class="usage"><span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt</span>, go_id_column <span class='op'>=</span> <span class='cn'>NULL</span>, padj_column <span class='op'>=</span> <span class='cn'>NULL</span>, padj_cutoff <span class='op'>=</span> <span class='fl'>1e-2</span>,
     filter <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/any.html'>any</a></span><span class='op'>(</span><span class='va'>x</span> <span class='op'>&lt;</span> <span class='va'>padj_cutoff</span><span class='op'>)</span>, default <span class='op'>=</span> <span class='fl'>1</span>,
+    ont <span class='op'>=</span> <span class='cn'>NULL</span>, db <span class='op'>=</span> <span class='st'>'org.Hs.eg.db'</span>, measure <span class='op'>=</span> <span class='st'>"Rel"</span>,
     heatmap_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='cn'>NULL</span><span class='op'>)</span>,
     method <span class='op'>=</span> <span class='st'>"binary_cut"</span>, control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>partial <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>,
     min_term <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, column_title <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
@@ -167,6 +168,18 @@
     <tr>
       <th>default</th>
       <td><p>The default value for the adjusted p-values. See Details.</p></td>
+    </tr>
+    <tr>
+      <th>ont</th>
+      <td><p>GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified, the function automatically identifies it by random sampling 10 IDs from <code>go_id</code> (see <code><a href='guess_ont.html'>guess_ont</a></code>).</p></td>
+    </tr>
+    <tr>
+      <th>db</th>
+      <td><p>Annotation database. It should be from <a href='https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb'>https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb</a></p></td>
+    </tr>
+    <tr>
+      <th>measure</th>
+      <td><p>Semantic measure for the GO similarity, pass to <code><a href='https://rdrr.io/pkg/GOSemSim/man/termSim.html'>termSim</a></code>.</p></td>
     </tr>
     <tr>
       <th>heatmap_param</th>
@@ -233,7 +246,7 @@ the group-specific (or list-specific) patterns can be easily observed and to cor
 <span class='co'># perform functional enrichment on the signatures genes from cola anlaysis </span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jokergoo/cola'>cola</a></span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: cola</span></div><div class='output co'>#&gt; <span class='message'>========================================</span>
-#&gt; <span class='message'>cola version 1.9.0.1016</span>
+#&gt; <span class='message'>cola version 1.9.0.9018</span>
 #&gt; <span class='message'>Bioconductor page: http://bioconductor.org/packages/cola/</span>
 #&gt; <span class='message'>Github page: https://github.com/jokergoo/cola</span>
 #&gt; <span class='message'>Documentation: https://jokergoo.github.io/cola/</span>
@@ -268,15 +281,15 @@ the group-specific (or list-specific) patterns can be easily observed and to cor
 <span class='co'># a list of data frames</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt</span>, padj_cutoff <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Use column 'ID' as `go_id_column`.
-#&gt; Use column 'p.adjust' as `padj_column`.</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: gridtext</span></div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.996567 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; Use column 'p.adjust' as `padj_column`.</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: gridtext</span></div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.9628239 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># a list of numeric values</span>
 <span class='va'>lt2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>lt</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>p.adjust</span>, names <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>ID</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt2</span>, padj_cutoff <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.9934809 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.963834 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># a list of GO IDS</span>
 <span class='va'>lt3</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>lt</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>ID</span><span class='op'>[</span><span class='va'>x</span><span class='op'>$</span><span class='va'>p.adjust</span> <span class='op'>&lt;</span> <span class='fl'>0.001</span><span class='op'>]</span><span class='op'>)</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 861/861 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.908818 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; 861/861 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.874691 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -146,7 +146,6 @@
     term <span class='op'>=</span> <span class='cn'>NULL</span>,
     min_term <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span><span class='op'>*</span><span class='fl'>0.01</span><span class='op'>)</span>,
     order_by_size <span class='op'>=</span> <span class='cn'>FALSE</span>,
-    cluster_slices <span class='op'>=</span> <span class='cn'>FALSE</span>,
     exclude_words <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>character</a></span><span class='op'>(</span><span class='fl'>0</span><span class='op'>)</span>,
     max_words <span class='op'>=</span> <span class='fl'>10</span>,
     word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
@@ -157,6 +156,7 @@
     column_title <span class='op'>=</span> <span class='cn'>NULL</span>,
     ht_list <span class='op'>=</span> <span class='cn'>NULL</span>,
     use_raster <span class='op'>=</span> <span class='cn'>TRUE</span>,
+    run_draw <span class='op'>=</span> <span class='cn'>TRUE</span>,
     <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -195,10 +195,6 @@
       <td><p>Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size &lt; <code>min_term</code>) is always put to the bottom of the heatmap.</p></td>
     </tr>
     <tr>
-      <th>cluster_slices</th>
-      <td><p>Whether to cluster slices.</p></td>
-    </tr>
-    <tr>
       <th>exclude_words</th>
       <td><p>Words that are excluded in the word cloud.</p></td>
     </tr>
@@ -229,6 +225,10 @@
     <tr>
       <th>use_raster</th>
       <td><p>Whether to write the heatmap as a raster image.</p></td>
+    </tr>
+    <tr>
+      <th>run_draw</th>
+      <td><p>Internally used.</p></td>
     </tr>
     <tr>
       <th>...</th>

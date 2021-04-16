@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.4.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
       </span>
     </div>
 
@@ -196,26 +196,26 @@
 <span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
     package <span class='op'>=</span> <span class='st'>"simplifyEnrichment"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>compare_clustering_methods</span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 0.9059761 secs.
-#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 3.550738 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.1377971 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 0.479248 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.173533 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.06257701 secs.
-#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.2325771 secs.
-#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.05866504 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.2246361 secs.
-#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 1.981292 secs.</div><div class='img'><img src='compare_clustering_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_clustering_methods</span><span class='op'>(</span><span class='va'>mat</span>, plot_type <span class='op'>=</span> <span class='st'>"heatmap"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 0.932358 secs.
-#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 3.267643 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.1589811 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 0.4682629 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.1746161 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.06367111 secs.
-#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.2351241 secs.
-#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.056499 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.2404039 secs.
-#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 2.281958 secs.</div><div class='img'><img src='compare_clustering_methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 0.8463531 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 3.180219 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.1369441 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 0.4699709 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.1674678 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.39766 secs.
+#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.2361381 secs.
+#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.05693007 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.221807 secs.
+#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 1.952941 secs.</div><div class='img'><img src='compare_clustering_methods-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>compare_clustering_methods</span><span class='op'>(</span><span class='va'>mat</span>, plot_type <span class='op'>=</span> <span class='st'>"heatmap"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 43 clusters, used 0.795332 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 18 clusters, used 3.087361 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 58 clusters, used 0.1364391 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 39 clusters, used 0.4592068 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 13 clusters, used 0.172581 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 29 clusters, used 0.05868912 secs.
+#&gt; Cluster 500 terms by 'leading_eigen'... 30 clusters, used 0.2194998 secs.
+#&gt; Cluster 500 terms by 'louvain'... 29 clusters, used 0.08828497 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 26 clusters, used 0.225198 secs.
+#&gt; Cluster 500 terms by 'MCL'... 28 clusters, used 1.94868 secs.</div><div class='img'><img src='compare_clustering_methods-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
