@@ -1,7 +1,7 @@
 Package: simplifyEnrichment
 Type: Package
 Title: Simplify Functional Enrichment Results
-Version: 1.1.5
+Version: 1.1.6
 Date: 2021-4-16
 Authors@R: person("Zuguang", "Gu", email = "z.gu@dkfz.de", role = c("aut", "cre"),
                   comment = c('ORCID'="0000-0002-7395-8709"))
@@ -48,7 +48,8 @@ Suggests: knitr,
           shiny,
           shinydashboard,
           cola,
-          hu6800.db
+          hu6800.db,
+          rmarkdown
 Description: A new clustering algorithm, binary cut, for clustering similarity matrices of functional terms
          is implemeted in this package. It also provideds functionalities for visualizing, summarizing and comparing the clusterings.
 biocViews: Software, Visualization, GO, Clustering, GeneSetEnrichment
