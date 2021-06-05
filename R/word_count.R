@@ -37,7 +37,7 @@ count_word = function(term,
 
 	# Load the text as a corpus
 	suppressWarnings({
-		docs = Corpus(VectorSource(term))
+		docs = VCorpus(VectorSource(term))
 		# Convert the text to lower case
 		docs = tm_map(docs, content_transformer(transform_case))
 		if (remove_numbers) {
@@ -67,7 +67,7 @@ count_word = function(term,
 				tokenize = tokenizer,
 				stemming = stemming,
 				dictionary = dictionary,
-				# letter case transformtion is handled earlier (above), let's not overwrite the results
+				# letter case transformation is handled earlier (above), let's not overwrite the results
 				tolower = FALSE
 			)
 		)
