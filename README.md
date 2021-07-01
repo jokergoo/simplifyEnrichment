@@ -1,6 +1,6 @@
 # Simplify Functional Enrichment Results
 
-[![Build Status](https://travis-ci.org/jokergoo/simplifyEnrichment.svg)](https://travis-ci.org/jokergoo/simplifyEnrichment)
+[![R-CMD-check](https://github.com/jokergoo/simplifyEnrichment/workflows/R-CMD-check/badge.svg)](https://github.com/jokergoo/simplifyEnrichment/actions)
 [![bioc](http://www.bioconductor.org/shields/downloads/devel/simplifyEnrichment.svg)](https://bioconductor.org/packages/stats/bioc/simplifyEnrichment/) 
 [![bioc](http://www.bioconductor.org/shields/years-in-bioc/simplifyEnrichment.svg)](http://bioconductor.org/packages/devel/bioc/html/simplifyEnrichment.html)
 

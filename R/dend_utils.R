@@ -85,7 +85,12 @@ dend_node_apply = function(dend, fun) {
 			}
 		}
 
-		n = length(dend)
+		if(is.null(index)) {
+			n = length(dend)
+		
+		} else {
+			n = length(dend[[index]])
+		}
 		for(i in seq_len(n)) {
 			.do(dend, fun, c(index, i))
 		}

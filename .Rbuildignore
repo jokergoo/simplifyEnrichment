@@ -13,3 +13,4 @@ revdep/
 ^pkgdown$
 build_pkg_site.R
 tests_not_run
+^\.github$
