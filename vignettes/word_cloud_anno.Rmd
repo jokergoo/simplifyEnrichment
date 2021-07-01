@@ -7,7 +7,7 @@ output:
     fig_caption: true
     css: main.css
 vignette: >
-  %\VignetteIndexEntry{2. Word Cloud Annotation}
+  %\VignetteIndexEntry{Word Cloud Annotation}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
