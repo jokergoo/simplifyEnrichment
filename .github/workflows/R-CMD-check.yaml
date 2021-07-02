@@ -69,6 +69,8 @@ jobs:
       - name: Install dependencies
         run: |
           setRepositories(ind = 1:5)
+          install.packages("BiocManager")
+          BiocManager::install(c('GOSemSim', 'GO.db', 'org.Hs.eg.db', 'AnnotationDbi', 'clusterProfiler', 'DOSE', 'DO.db', 'reactome.db', 'InteractiveComplexHeatmap', 'cola', 'hu6800.db'))
           remotes::install_deps(dependencies = TRUE)
           remotes::install_cran("rcmdcheck")
         shell: Rscript {0}
