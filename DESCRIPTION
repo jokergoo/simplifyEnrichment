@@ -50,7 +50,8 @@ Suggests: knitr,
           cola,
           hu6800.db,
           rmarkdown,
-          genefilter
+          genefilter,
+          gridtext
 Description: A new clustering algorithm, binary cut, for clustering similarity matrices of functional terms
          is implemeted in this package. It also provideds functionalities for visualizing, summarizing and comparing the clusterings.
 biocViews: Software, Visualization, GO, Clustering, GeneSetEnrichment
