@@ -5,6 +5,15 @@
 # == param
 # -term A vector of description texts.
 # -exclude_words The words that should be excluded.
+# -stop_words The stop words that should be be removed.
+# -min_word_length Minimum length of the word to be counted.
+# -tokenizer The tokenizer function, one of the values accepted by ``tm::termFreq``.
+# -transform_case The function normalizing lettercase of the words.
+# -remove_numbers Whether to remove numbers.
+# -remove_punctuation Whether to remove punctuation.
+# -custom_transformer Custom function that transforms words.
+# -stemming Whether to only keep the roots of inflected words.
+# -dictionary A vector of words to be counted (if given all other words will be excluded).
 #
 # == details
 # The text preprocessing followings the instructions from http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need .
@@ -17,28 +26,51 @@
 # go_id = rownames(gm)
 # go_term = AnnotationDbi::select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
 # count_word(go_term)
-count_word = function(term, exclude_words = NULL) {
+count_word = function(term,
+	exclude_words = NULL, stop_words = stopwords(),
+	min_word_length = 1, tokenizer = 'words', transform_case = tolower,
+	remove_numbers = TRUE, remove_punctuation = TRUE, custom_transformer = NULL,
+	stemming = FALSE, dictionary = NULL
+) {
 	
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
 	# Load the text as a corpus
 	suppressWarnings({
-		docs = Corpus(VectorSource(term))
+		docs = VCorpus(VectorSource(term))
 		# Convert the text to lower case
-		docs = tm_map(docs, content_transformer(tolower))
-		# Remove numbers
-		docs = tm_map(docs, removeNumbers)
-		# Remove stopwords for the language 
-		docs = tm_map(docs, removeWords, stopwords())
-		# Remove punctuations
-		docs = tm_map(docs, removePunctuation)
+		docs = tm_map(docs, content_transformer(transform_case))
+		if (remove_numbers) {
+			# Remove numbers
+			docs = tm_map(docs, removeNumbers)
+		}
+		# Remove stopwords for the language
+		docs = tm_map(docs, removeWords, stop_words)
+		if (remove_punctuation) {
+			# Remove punctuations
+			docs = tm_map(docs, removePunctuation)
+		}
 		# Eliminate extra white spaces
 		docs = tm_map(docs, stripWhitespace)
 		# Remove your own stopwords
 		docs = tm_map(docs, removeWords, exclude_words)
-		
+		# Apply any user-provided transformer
+		if (!is.null(custom_transformer)) {
+			docs = tm_map(docs, content_transformer(custom_transformer))
+		}
+
 		# Create term-document matrix
-		tdm = TermDocumentMatrix(docs)
+		tdm = TermDocumentMatrix(
+			docs,
+			control = list(
+				wordLengths = c(min_word_length, Inf),
+				tokenize = tokenizer,
+				stemming = stemming,
+				dictionary = dictionary,
+				# letter case transformation is handled earlier (above), let's not overwrite the results
+				tolower = FALSE
+			)
+		)
 	})
 
 	v = sort(slam::row_sums(tdm), decreasing = TRUE)
@@ -290,12 +322,17 @@ heightDetails.word_cloud = function(x) {
 #       to the maximal word frequency. The font size interlopation is linear.
 # -bg_gp Graphics parameters for controlling the background.
 # -side Side of the annotation relative to the heatmap.
+# -count_words_param A list of parameters passed to `count_words`.
 # -... Other parameters.
 #
 # == details
 # The word cloud annotation is constructed by `ComplexHeatmap::anno_link`.
 #
 # If the annotation is failed to construct or no keyword is found, the function returns a `ComplexHeatmap::anno_empty` with 1px width.
+#
+# English stop words, punctuation and numbers are removed by default when counting words. As specific stop words might
+# coincide with gene or pathway names, and numbers in genes names might be meaningful it is recommended to adjust this
+# behaviour by passing appropriate arguments to the `count_words` function using `count_words_param`.
 #
 # == example
 # gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
@@ -313,8 +350,9 @@ heightDetails.word_cloud = function(x) {
 # 	right_annotation = rowAnnotation(foo = anno_word_cloud(align_to, term)))
 #
 anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
-	word_cloud_grob_param = list(), fontsize_range = c(4, 16), 
-	bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"), ...) {
+	word_cloud_grob_param = list(), fontsize_range = c(4, 16),
+	bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
+	count_words_param = list(), ...) {
 
 	if(is.atomic(align_to) && is.list(term)) {
 		align_to = split(seq_along(align_to), align_to)
@@ -349,7 +387,8 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 	}
 
 	keywords = lapply(term, function(desc) {
-		suppressMessages(suppressWarnings(df <- count_word(term = desc, exclude_words = exclude_words)))
+		combined_count_params = c(list(term = desc, exclude_words = exclude_words), count_words_param)
+		suppressMessages(suppressWarnings(df <- do.call(count_word, combined_count_params)))
 		# df = df[df$freq > 1, , drop = FALSE]
 		if(nrow(df) > max_words) {
 			df = df[order(df$freq, decreasing = TRUE)[seq_len(max_words)], ]
