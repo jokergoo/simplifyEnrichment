@@ -43,7 +43,7 @@ ht_clusters = function(
 	col = c("white", "red"),
 
 	# arguments that control the word cloud annotation
-	draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term), 
+	draw_word_cloud = TRUE, 
 	term = NULL, 
 	min_term = round(nrow(mat)*0.01), 
 	order_by_size = FALSE, 
@@ -61,7 +61,7 @@ ht_clusters = function(
 	...) {
 
 	if(length(col) == 1) col = c("white", rgb(t(col2rgb(col)), maxColorValue = 255))
-	col_fun = colorRamp2(seq(0, quantile(mat, 0.95), length = length(col)), col)
+	col_fun = colorRamp2(seq(0, quantile(mat[mat > 0], 0.975), length = length(col)), col)
 	if(!is.null(dend)) {
 		ht = Heatmap(mat, col = col_fun,
 			name = "Similarity", column_title = column_title,
@@ -135,7 +135,7 @@ ht_clusters = function(
 			if(!is.null(term)) term = term[names(term) != 0]
 
 			if(length(align_to)) {
-				ht = ht + rowAnnotation(keywords = anno_word_cloud_from_GO(align_to, go_id, term,
+				ht = ht + rowAnnotation(keywords = anno_word_cloud_from_GO(align_to, go_id = go_id, term = term,
 					exclude_words = exclude_words, max_words = max_words, word_cloud_grob_param = word_cloud_grob_param, 
 					fontsize_range = fontsize_range, bg_gp = bg_gp))
 			} else {

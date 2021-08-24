@@ -49,7 +49,7 @@
 # head(df)
 # }
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
-	plot = TRUE, term = NULL, verbose = TRUE, 
+	plot = TRUE, term = "TERM", verbose = TRUE, 
 	column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
 	ht_list = NULL, ...) {
 
@@ -66,14 +66,30 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 	go_id = rownames(mat)
 
 	if(!all(grepl("^GO:\\d+$", go_id))) {
-		stop_wrap("Please ensure GO IDs are the row names of the similarity matrix and should be matched to '^GO:\\d+$'.")
+		stop_wrap("Please ensure GO IDs are the row names of the similarity matrix and should be matched to '^GO:\\\\d+$'.")
 	}
 
-	if(is.null(term)) {
-		suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
+	if(is.null(term)) term = "term"
+
+	if(length(term) == 1) {
+		term = tolower(term)
+
+		if(term == "term") {
+			suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
+			term_type = "term"
+		} else if(term == "definition") {
+			suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "DEFINITION")$DEFINITION)
+			term_type = "definition"
+		} else if(term == "gene_description" || term == "gene description") {
+			ont = guess_ont(go_id)
+			term = get_gene_desc_from_GO(go_id, ont)
+			term_type = "gene_description"
+		}
+	} else {
+		term_type = "text"
 	}
 
-	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
+	if(plot) ht_clusters(mat, cl, term = term, term_type = term_type, column_title = column_title, ht_list = ht_list, ...)
 
 	return(invisible(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE)))
 }
@@ -106,8 +122,33 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 	if(is.null(term_id)) {
 		term_id = paste0("row_", 1:nrow(mat))
 	}
+
+	term_type = ""
+	if(is.null(term)) {
+		if(is_GO_id(term_id)) {
+			term = get_gene_desc_from_GO(term_id)
+			term_type = "gene_description"
+		} else {
+			db = guess_pathway_database(term_id)
+			if(!is.null(db)) {
+				if(db == "kegg") {
+					term = get_gene_desc_from_KEGG(term_id)
+					term_type = "gene_description"
+				} else if(db == "reactome") {
+					term = get_gene_desc_from_Reactome(term_id)
+					term_type = "gene_description"
+				} else if(db == "panther") {
+					term = get_gene_desc_from_PANTHER(term_id)
+					term_type = "gene_description"
+				} else if(db == "pathbank") {
+					term = get_gene_desc_from_PathBank(term_id)
+					term_type = "gene_description"
+				}
+			}
+		}
+	}
 	
-	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
+	if(plot) ht_clusters(mat, cl, term = term, term_type = term_type, column_title = column_title, ht_list = ht_list, ...)
 
 	if(is.null(term)) {
 		return(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE))
@@ -256,7 +297,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NU
 	}
 
 	heatmap_param2 = list(transform = NULL, 
-		breaks = NULL, col = NULL, labels = NULL, name = NULL
+		breaks = NULL, col = NULL, labels = NULL, name = "padj"
 	)
 	for(nm in names(heatmap_param)) {
 		heatmap_param2[[nm]] = heatmap_param[[nm]]

@@ -112,7 +112,7 @@ cmp_make_plot = function(mat, clt, plot_type = c("mixed", "heatmap"), nrow = 3) 
 		clt2 = lapply(clt2, function(x) as.character(relabel_class(x, ref_class, return_map = FALSE)))
 		clt2 = as.data.frame(clt2)
 
-		ht1 = Heatmap(mat, col = colorRamp2(c(0, quantile(mat, 0.95)), c("white", "red")),
+		ht1 = Heatmap(mat, col = colorRamp2(c(0, quantile(mat, 0.975)), c("white", "red")),
 			name = "Similarity",
 			show_row_names = FALSE, show_column_names = FALSE, 
 			# cluster_rows = dend, cluster_columns = dend,

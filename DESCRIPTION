@@ -24,7 +24,8 @@ Imports: GOSemSim,
          utils,
          proxyC,
          Matrix,
-         cluster (>= 1.14.2)
+         cluster (>= 1.14.2),
+         colorspace
 Suggests: knitr,
           ggplot2,
           cowplot,

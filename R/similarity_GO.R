@@ -27,6 +27,9 @@ GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel"
 
 	if(is.null(ont)) {
 		ont = guess_ont(go_id, db)
+		if(is.null(ont)) {
+			stop_wrap("Cannot determine which GO ontology (BP/CC/MF) you are using. Please manualy set `ont` argument.")
+		}
 		message(qq("You haven't provided value for `ont`, guess it as `@{ont}`."))
 	}
 

@@ -107,6 +107,12 @@ all_GO_word_count = function() {
 
 GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 
+all_gene_desc_word_count = function() {
+	# tb = readRDS(system.file("extdata", "refseq_gene_desc_human.rds", package = "simplifyEnrichment"))
+	tb = readRDS("~/project/development/simplifyEnrichment/inst/extdata/refseq_gene_desc_human.rds")
+	count_word(tb[, 2])
+}
+
 # == title
 # A simple grob for the word cloud
 #
@@ -161,10 +167,19 @@ word_cloud_grob = function(text, fontsize,
 	if(length(text) != length(fontsize)) {
 		stop_wrap("`text` and `fontsize` should the same length.")
 	}
+
+	if(is.character(col) || is.numeric(col)) {
+		if(length(col) == 1) col = rep(col, n)
+	} else if(is.function(col)) {
+		col = col(fontsize)
+	} else {
+		stop_wrap("`col` can only be a function or a character vector.")
+	}
 	
 	od = order(fontsize, decreasing = TRUE)
 	text = text[od]
 	fontsize = fontsize[od]
+	col = col[od]
 
 	# if(Sys.info()["sysname"] == "Darwin" && dev.interactive()) {
 	# 	ComplexHeatmap:::dev.null()
@@ -215,26 +230,17 @@ word_cloud_grob = function(text, fontsize,
 		}
 	}
 
-	if(is.character(col) || is.numeric(col)) {
-		if(length(col) == 1) col = rep(col, n)
-		col_fun = function(fontsize) return(col)
-	} else if(is.function(col)) {
-		col_fun = col
-	} else {
-		stop_wrap("`col` can only be a function or a character vector.")
-	}
-
 	if(test) {
 		gl = gList(
 			rectGrob(),
-			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(fontsize)), 
+			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col), 
 				default.units = "mm", just = c(0, 0)),
 			rectGrob(x = x, y = y, width = text_width, height = text_height, default.units = "mm", just = c(0, 0))
 
 		)
 	} else {
 		gl = gList(
-			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col_fun(fontsize)), 
+			textGrob(text, x = x, y = y, gp = gpar(fontsize = fontsize, col = col), 
 				default.units = "mm", just = c(0, 0))
 		)
 	}
@@ -370,6 +376,19 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 		}
 	}
 
+	all_keywords = unique(unlist(lapply(keywords, function(x) x[, 1])))
+	all_keywords_col = circlize::rand_color(length(all_keywords), luminosity = "dark")
+	i_try = 1
+	while(1) {
+		hsv = coords(as(hex2RGB(all_keywords_col), "HSV"))
+		l = hsv[, 3] > 0.85 | (hsv[, 1] > 40 & hsv[, 1] < 65)
+		if(!any(l)) break
+		i_try = i_try + 1
+		if(i_try > 50) break
+		all_keywords_col[l] = circlize::rand_color(sum(l), luminosity = "dark")
+	}
+	all_keywords_col = structure(all_keywords_col, names = all_keywords)
+
 	word_cloud_grob_param = word_cloud_grob_param[setdiff(names(word_cloud_grob_param), c("text", "fontsize"))]
 	ComplexHeatmap:::dev.null()
 	oe = try({
@@ -377,6 +396,10 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 			kw = rev(keywords[[nm]][, 1])
 			freq = rev(keywords[[nm]][, 2])
 			fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
+
+			if(!"col" %in% names(word_cloud_grob_param)) {
+				word_cloud_grob_param$col = function(fs) all_keywords_col[kw]
+			}
 
 			lt = c(list(text = kw, fontsize = fontsize), word_cloud_grob_param)
 			do.call(word_cloud_grob, lt)
@@ -438,7 +461,8 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 # -exclude_words The words excluced for construcing word cloud. Some words are internally exclucded: ``c("via", "protein", "factor", "side", "type", "specific")``.
 # -... All other arguments passed to `anno_word_cloud`.
 #
-anno_word_cloud_from_GO = function(align_to, go_id, term = NULL, exclude_words = NULL, ...) {
+anno_word_cloud_from_GO = function(align_to, go_id, text_by = c("term", "definition", "gene_description"),
+	term = NULL, exclude_words = NULL, ...) {
 	if(is.null(term)) {
 		if(is.atomic(align_to) && is.list(go_id)) {
 			align_to = split(seq_along(align_to), align_to)
@@ -474,7 +498,14 @@ anno_word_cloud_from_GO = function(align_to, go_id, term = NULL, exclude_words =
 
 		term = lapply(go_id, function(x) {
 			if(is_GO_id(x[1])) {
-				suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "TERM")$TERM)
+				text_by = match.arg(text_by)[1]
+				if(text_by == "term") {
+					suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "TERM")$TERM)
+				} else if(text_by == "definition") {
+					suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "DEFINITION")$DEFINITION)
+				} else if(text_by == "gene_description") {
+					t = get_gene_desc_from_GO(x)
+				}
 			} else {
 				stop_wrap("Cannot automatically retrieve the term names by the input ID, please set values for `term` argument manually.")
 			}

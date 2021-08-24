@@ -60,57 +60,57 @@ random_DO = function(n) {
 }
 
 
-# # == title
-# # Calculate MeSH similarity matrix
-# #
-# # == param
-# # -mesh_id A vector of MeSH IDs.
-# # -measure Measurement for the MeSH similarity, pass to `meshes::meshSim`.
-# #
-# # == details
-# # This function is basically a wrapper on `meshes::meshSim`.
-# #
-# # == value
-# # A symmetric matrix.
-# #
-# # == example
-# # \donttest{
-# # mesh_id = random_mesh(10)
-# # mesh_similarity(mesh_id)
-# # }
-# mesh_similarity = function(mesh_id, measure = "Rel") {
-# 	if(!requireNamespace("meshes")) {
-# 		stop_wrap("'meshes' package should be installed.")
-# 	}
-
-# 	mesh_sim = meshes::meshSim(mesh_id, mesh_id, measure = measure)
-# 	mesh_sim[is.na(mesh_sim)] = 0
-
-# 	mesh_sim[lower.tri(mesh_sim)]  = t(mesh_sim)[lower.tri(mesh_sim)]
-# 	diag(mesh_sim) = 1
-
-# 	attr(mesh_sim, "measure") = measure
-# 	attr(mesh_sim, "ontology") = "mesh"
-# 	return(mesh_sim)
+# == title
+# Calculate MeSH similarity matrix
+#
+# == param
+# -mesh_id A vector of MeSH IDs.
+# -measure Measurement for the MeSH similarity, pass to `meshes::meshSim`.
+#
+# == details
+# This function is basically a wrapper on `meshes::meshSim`.
+#
+# == value
+# A symmetric matrix.
+#
+# == example
+# \donttest{
+# mesh_id = random_mesh(10)
+# mesh_similarity(mesh_id)
 # }
+mesh_similarity = function(mesh_id, measure = "Rel") {
+	if(!requireNamespace("meshes")) {
+		stop_wrap("'meshes' package should be installed.")
+	}
 
-# # == title
-# # Generate random MeSH IDs
-# #
-# # == param
-# # -n Number of MeSH IDs.
-# #
-# # == value
-# # A vector of MeSH IDs.
-# #
-# # == example
-# # \donttest{
-# # random_mesh(10)
-# # }
-# random_mesh = function(n) {
-# 	if(!requireNamespace("MeSH.db")) {
-# 		stop_wrap("'MeSH.db' package should be installed.")
-# 	}
-# 	all_mesh_id = keys(MeSH.db::MeSH.db, keytype = "MESHID")
-# 	sample(all_mesh_id, min(n, length(all_mesh_id)))
+	mesh_sim = meshes::meshSim(mesh_id, mesh_id, measure = measure)
+	mesh_sim[is.na(mesh_sim)] = 0
+
+	mesh_sim[lower.tri(mesh_sim)]  = t(mesh_sim)[lower.tri(mesh_sim)]
+	diag(mesh_sim) = 1
+
+	attr(mesh_sim, "measure") = measure
+	attr(mesh_sim, "ontology") = "mesh"
+	return(mesh_sim)
+}
+
+# == title
+# Generate random MeSH IDs
+#
+# == param
+# -n Number of MeSH IDs.
+#
+# == value
+# A vector of MeSH IDs.
+#
+# == example
+# \donttest{
+# random_mesh(10)
 # }
+random_mesh = function(n) {
+	if(!requireNamespace("MeSH.db")) {
+		stop_wrap("'MeSH.db' package should be installed.")
+	}
+	all_mesh_id = keys(MeSH.db::MeSH.db, keytype = "MESHID")
+	sample(all_mesh_id, min(n, length(all_mesh_id)))
+}
