@@ -80,7 +80,7 @@ into 10 groups by rows.
 ```{r, fig.width = 7, fig.height = 4}
 library(tm)
 data(crude)
-term = lapply(content(crude), as.character)[1:10]
+term = lapply(crude$content, function(x) x$content)[1:10]
 mat = matrix(rnorm(100*10), nrow = 100)
 
 split = sample(letters[1:10], 100, replace = TRUE)

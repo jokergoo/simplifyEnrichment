@@ -89,7 +89,7 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 		term_type = "text"
 	}
 
-	if(plot) ht_clusters(mat, cl, term = term, term_type = term_type, column_title = column_title, ht_list = ht_list, ...)
+	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
 
 	return(invisible(data.frame(id = go_id, term = term, cluster = cl, stringsAsFactors = FALSE)))
 }
@@ -287,12 +287,12 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NU
 				structure(x[, padj_column], names = x[, go_id_column])
 			}
 		})
-		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, heatmap_param = heatmap_param, method = method, 
+		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, ont = ont, db = db, measure = measure, heatmap_param = heatmap_param, method = method, 
 			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 		
 	} else if(is.character(lt[[1]])) {
 		lt = lapply(lt, function(x) structure(rep(1, length(x)), names = x))
-		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE,
+		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE, ont = ont, db = db, measure = measure,
 			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")), ...))
 	}
 
@@ -369,19 +369,21 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NU
 		}
 	}
 
+	all_go_id = rownames(m)
+	sim_mat = GO_similarity(all_go_id, ont = ont, db = db, measure = measure)
+	all_go_id = rownames(sim_mat)  # some GO ids might be removed
+
 	heatmap_legend_param = list()
 	heatmap_legend_param$at = transform(breaks)
 	heatmap_legend_param$labels = if(is.null(labels)) breaks else labels
 	heatmap_legend_param$title = name
-	ht = Heatmap(m, col = col, name = if(name == "") NULL else name,
+	ht = Heatmap(m[all_go_id, , drop = FALSE], col = col, name = if(name == "") NULL else name,
 		show_row_names = FALSE, cluster_columns = FALSE,
 		border = "black",
 		heatmap_legend_param = heatmap_legend_param,
 		width = unit(0.5, "cm")*n, use_raster = TRUE)
 
-	all_go_id = rownames(m)
-	sim_mat = GO_similarity(all_go_id, ont = ont, db = db, measure = measure)
-
+	
 	if(is.null(min_term)) min_term = round(nrow(sim_mat)*0.02)
 	if(is.null(column_title)) column_title = qq("@{length(all_go_id)} GO terms clustered by '@{method}'")
 	

@@ -7,12 +7,25 @@ Calculate word frequency
 Calculate word frequency
 }
 \usage{
-count_word(term, exclude_words = NULL)
+count_word(term,
+    exclude_words = NULL, stop_words = stopwords(),
+    min_word_length = 1, tokenizer = 'words', transform_case = tolower,
+    remove_numbers = TRUE, remove_punctuation = TRUE, custom_transformer = NULL,
+    stemming = FALSE, dictionary = NULL)
 }
 \arguments{
 
   \item{term}{A vector of description texts.}
   \item{exclude_words}{The words that should be excluded.}
+  \item{stop_words}{The stop words that should be be removed.}
+  \item{min_word_length}{Minimum length of the word to be counted.}
+  \item{tokenizer}{The tokenizer function, one of the values accepted by \code{tm::termFreq}.}
+  \item{transform_case}{The function normalizing lettercase of the words.}
+  \item{remove_numbers}{Whether to remove numbers.}
+  \item{remove_punctuation}{Whether to remove punctuation.}
+  \item{custom_transformer}{Custom function that transforms words.}
+  \item{stemming}{Whether to only keep the roots of inflected words.}
+  \item{dictionary}{A vector of words to be counted (if given all other words will be excluded).}
 
 }
 \details{

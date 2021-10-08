@@ -9,7 +9,8 @@ Word cloud annotations
 \usage{
 anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
     word_cloud_grob_param = list(), fontsize_range = c(4, 16),
-    bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"), ...)
+    bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
+    count_words_param = list(), ...)
 }
 \arguments{
 
@@ -21,6 +22,7 @@ anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
   \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
   \item{bg_gp}{Graphics parameters for controlling the background.}
   \item{side}{Side of the annotation relative to the heatmap.}
+  \item{count_words_param}{A list of parameters passed to \code{\link{count_words}}.}
   \item{...}{Other parameters.}
 
 }
@@ -28,6 +30,10 @@ anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
 The word cloud annotation is constructed by \code{\link[ComplexHeatmap]{anno_link}}.
 
 If the annotation is failed to construct or no keyword is found, the function returns a \code{\link[ComplexHeatmap]{anno_empty}} with 1px width.
+
+English stop words, punctuation and numbers are removed by default when counting words. As specific stop words might
+coincide with gene or pathway names, and numbers in genes names might be meaningful it is recommended to adjust this
+behaviour by passing appropriate arguments to the \code{\link{count_words}} function using \code{\link{count_words_param}}.
 }
 \examples{
 gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))

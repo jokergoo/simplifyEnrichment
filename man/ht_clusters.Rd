@@ -14,7 +14,7 @@ ht_clusters(
     col = c("white", "red"),
     
     # arguments that control the word cloud annotation
-    draw_word_cloud = is_GO_id(rownames(mat)[1]) || !is.null(term),
+    draw_word_cloud = TRUE,
     term = NULL,
     min_term = round(nrow(mat)*0.01),
     order_by_size = FALSE,

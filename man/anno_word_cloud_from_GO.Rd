@@ -7,7 +7,8 @@ Word cloud annotations from GO
 Word cloud annotations from GO
 }
 \usage{
-anno_word_cloud_from_GO(align_to, go_id, term = NULL, exclude_words = NULL, ...)
+anno_word_cloud_from_GO(align_to, go_id, text_by = c("term", "definition", "gene_description"),
+    term = NULL, exclude_words = NULL, ...)
 }
 \arguments{
 

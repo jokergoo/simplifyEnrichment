@@ -30,8 +30,7 @@ count_word = function(term,
 	exclude_words = NULL, stop_words = stopwords(),
 	min_word_length = 1, tokenizer = 'words', transform_case = tolower,
 	remove_numbers = TRUE, remove_punctuation = TRUE, custom_transformer = NULL,
-	stemming = FALSE, dictionary = NULL
-) {
+	stemming = FALSE, dictionary = NULL) {
 	
 	# http://www.sthda.com/english/wiki/word-cloud-generator-in-r-one-killer-function-to-do-everything-you-need
 
@@ -200,6 +199,8 @@ word_cloud_grob = function(text, fontsize,
 		stop_wrap("`text` and `fontsize` should the same length.")
 	}
 
+	n = length(text)
+
 	if(is.character(col) || is.numeric(col)) {
 		if(length(col) == 1) col = rep(col, n)
 	} else if(is.function(col)) {
@@ -218,7 +219,6 @@ word_cloud_grob = function(text, fontsize,
 	# 	on.exit(ComplexHeatmap:::dev.off2())
 	# }
 
-	n = length(text)
 	text_gb_lt = lapply(seq_len(n), function(i) textGrob(text[i], gp = gpar(fontsize = fontsize[i])))
 	text_width = vapply(text_gb_lt, function(gb) convertWidth(grobWidth(gb), "mm", valueOnly = TRUE), 0)
 	text_height = vapply(text_gb_lt, function(gb) convertHeight(grobHeight(gb), "mm", valueOnly = TRUE), 0)
@@ -535,9 +535,10 @@ anno_word_cloud_from_GO = function(align_to, go_id, text_by = c("term", "definit
 			align_to = split(seq_along(align_to), align_to)
 		}
 
+		text_by = match.arg(text_by)[1]
+
 		term = lapply(go_id, function(x) {
 			if(is_GO_id(x[1])) {
-				text_by = match.arg(text_by)[1]
 				if(text_by == "term") {
 					suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "TERM")$TERM)
 				} else if(text_by == "definition") {
