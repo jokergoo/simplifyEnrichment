@@ -54,7 +54,7 @@ GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel"
 	go_sim[lower.tri(go_sim)]  = t(go_sim)[lower.tri(go_sim)]
 
 	attr(go_sim, "measure") = measure
-	attr(go_sim, "ontology") = "GO"
+	attr(go_sim, "ontology") = paste0("GO:", ont)
 	return(go_sim)
 }
 

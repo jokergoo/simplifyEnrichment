@@ -83,3 +83,7 @@ check_pkg = function(pkg, bioc = FALSE) {
 }
 
 
+is_GO_id = function(x) {
+    grepl("^GO:[0-9]+$", x)
+}
+

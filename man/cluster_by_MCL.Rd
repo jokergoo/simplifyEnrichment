@@ -7,7 +7,7 @@ Cluster similarity matrix by MCL
 Cluster similarity matrix by MCL
 }
 \usage{
-cluster_by_MCL(mat, addLoops = FALSE, ...)
+cluster_by_MCL(mat, addLoops = TRUE, ...)
 }
 \arguments{
 

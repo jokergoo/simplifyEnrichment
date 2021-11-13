@@ -14,6 +14,7 @@ The default methods are:
 
 \describe{
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
+  \item{\code{pam}}{see \code{\link{cluster_by_pam}}.}
   \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
   \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}

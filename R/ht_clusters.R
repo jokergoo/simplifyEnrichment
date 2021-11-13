@@ -8,17 +8,18 @@
 # -dend Used internally.
 # -col A vector of colors that map from 0 to the 95^th percentile of the similarity values.
 # -draw_word_cloud Whether to draw the word clouds.
-# -term The full name or the description of the corresponding GO IDs. 
 # -min_term Minimal number of functional terms in a cluster. All the clusters
 #     with size less than ``min_term`` are all merged into one separated cluster in the heatmap.
 # -order_by_size Whether to reorder clusters by their sizes. The cluster
 #      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
+# -stat Type of value for mapping to the font size of keywords in the word clouds. There are two options:
+#       "count": simply number of keywords; "pvalue": enrichment on keywords is performed (by fisher's exact test) and -log10(pvalue) is used to map to font sizes.
+# -min_stat Minimal value for ``stat`` for selecting keywords.
 # -exclude_words Words that are excluded in the word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
 # -word_cloud_grob_param A list of graphic parameters passed to `word_cloud_grob`.
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
-#       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
-#       to the maximal word frequency. The font size interlopation is linear.
+#       The font size interpolation is linear.
 # -bg_gp Graphics parameters for controlling word cloud annotation background.
 # -column_title Column title for the heatmap.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
@@ -44,9 +45,10 @@ ht_clusters = function(
 
 	# arguments that control the word cloud annotation
 	draw_word_cloud = TRUE, 
-	term = NULL, 
 	min_term = round(nrow(mat)*0.01), 
 	order_by_size = FALSE, 
+	stat = "pvalue", 
+	min_stat = ifelse(stat == "count", 5, 0.05),
 	exclude_words = character(0), 
 	max_words = 10,
 	word_cloud_grob_param = list(), 
@@ -109,33 +111,23 @@ ht_clusters = function(
 			border = "#404040", row_title = NULL,
 			use_raster = use_raster) + NULL
 
-		if(is.null(term)) {
-			if(is.null(rownames(mat))) {
-				draw_word_cloud = FALSE
-			} else if(!grepl("^GO:[0-9]+$", rownames(mat)[1])) {
-				draw_word_cloud = FALSE
-			}
+		if(is.null(rownames(mat))) {
+			draw_word_cloud = FALSE
+		} else if(!grepl("^GO:[0-9]+$", rownames(mat)[1]) & draw_word_cloud) {
+			draw_word_cloud = FALSE
 		}
-
+		
 		if(draw_word_cloud) {
 			go_id = rownames(mat)
 
-			if(!is.null(term)) {
-				if(length(term) != length(go_id)) {
-					stop_wrap("Length of `term` should be the same as the nrow of `mat`.")
-				}
-			}
-
 			align_to = split(seq_along(cl), cl)
 			go_id = split(go_id, cl)
-			if(!is.null(term)) term = split(term, cl)
 
 			align_to = align_to[names(align_to) != "0"]
 			go_id = go_id[names(go_id) != "0"]
-			if(!is.null(term)) term = term[names(term) != 0]
 
 			if(length(align_to)) {
-				ht = ht + rowAnnotation(keywords = anno_word_cloud_from_GO(align_to, go_id = go_id, term = term,
+				ht = ht + rowAnnotation(keywords = anno_word_cloud_from_GO(align_to, go_id = go_id, stat = stat, min_stat = min_stat,
 					exclude_words = exclude_words, max_words = max_words, word_cloud_grob_param = word_cloud_grob_param, 
 					fontsize_range = fontsize_range, bg_gp = bg_gp))
 			} else {

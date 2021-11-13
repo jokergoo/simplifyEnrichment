@@ -1,3 +1,10 @@
+CHANGES in VERSION 1.5.1
+
+* word cloud supports perform enrichment on keywords
+* value_fun in binary_cut() now takes 1-AUC as default
+
+--------------------------------
+
 CHANGES in VERSION 1.1.4
 
 * add `export_to_shiny_app()`

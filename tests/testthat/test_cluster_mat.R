@@ -1,7 +1,7 @@
 
 
 ##### old implementation
-cluster_mat_old = function(mat, value_fun = median, partition_fun = partition_by_pam,
+cluster_mat_old = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam,
 	cutoff = 0.85) {
 
 	env = new.env()

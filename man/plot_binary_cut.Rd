@@ -7,7 +7,7 @@ Visualize the process of binary cut
 Visualize the process of binary cut
 }
 \usage{
-plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
+plot_binary_cut(mat, value_fun = area_above_ecdf, cutoff = 0.85,
     partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
     depth = NULL, show_heatmap_legend = TRUE, ...)
 }
@@ -19,16 +19,15 @@ plot_binary_cut(mat, value_fun = median, cutoff = 0.85,
   \item{partition_fun}{A function to split each node into two groups. Pre-defined functions in this package are \code{\link{partition_by_kmeanspp}}, \code{\link{partition_by_pam}} and \code{\link{partition_by_hclust}}.}
   \item{dend}{A dendrogram object, used internally.}
   \item{depth}{Depth of the recursive binary cut process.}
-  \item{dend_width}{Width of the dendrogram.}
+  \item{dend_width}{Width of the dendrogram on the plot.}
   \item{show_heatmap_legend}{Whether to show the heatmap legend.}
   \item{...}{Other arguments.}
 
 }
 \details{
-After the functions which performs clustering are executed, such as \code{\link{simplifyGO}} or
+After the functions which perform clustering are executed, such as \code{\link{simplifyGO}} or
 \code{\link{binary_cut}}, the dendrogram is temporarily saved and \code{\link{plot_binary_cut}} directly
-uses this dendrogram. So, if the partition function brings randomness, it makes sure
-the clustering is the same as the one made by e.g. \code{\link{simplifyGO}}.
+uses this dendrogram.
 }
 \examples{
 \donttest{

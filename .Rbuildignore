@@ -14,3 +14,10 @@ revdep/
 build_pkg_site.R
 tests_not_run
 ^\.github$
+
+foo.R
+gene_desc.R
+similarity_pathway.R
+pathway*
+gene_desc_black_list.txt
+refseq_gene_desc_human.rds

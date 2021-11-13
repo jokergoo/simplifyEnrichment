@@ -22,6 +22,7 @@ The function compares following default clustering methods by default:
 
 \describe{
   \item{\code{kmeans}}{see \code{\link{cluster_by_kmeans}}.}
+  \item{\code{pam}}{see \code{\link{cluster_by_pam}}.}
   \item{\code{dynamicTreeCut}}{see \code{\link{cluster_by_dynamicTreeCut}}.}
   \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}. By default it is not included.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}

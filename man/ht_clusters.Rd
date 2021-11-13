@@ -15,9 +15,10 @@ ht_clusters(
     
     # arguments that control the word cloud annotation
     draw_word_cloud = TRUE,
-    term = NULL,
     min_term = round(nrow(mat)*0.01),
     order_by_size = FALSE,
+    stat = "pvalue",
+    min_stat = ifelse(stat == "count", 5, 0.05),
     exclude_words = character(0),
     max_words = 10,
     word_cloud_grob_param = list(),
@@ -38,13 +39,14 @@ ht_clusters(
   \item{dend}{Used internally.}
   \item{col}{A vector of colors that map from 0 to the 95^th percentile of the similarity values.}
   \item{draw_word_cloud}{Whether to draw the word clouds.}
-  \item{term}{The full name or the description of the corresponding GO IDs. }
   \item{min_term}{Minimal number of functional terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one separated cluster in the heatmap.}
   \item{order_by_size}{Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size < \code{min_term}) is always put to the bottom of the heatmap.}
+  \item{stat}{Type of value for mapping to the font size of keywords in the word clouds. There are two options: "count": simply number of keywords; "pvalue": enrichment on keywords is performed (by fisher's exact test) and -log10(pvalue) is used to map to font sizes.}
+  \item{min_stat}{Minimal value for \code{stat} for selecting keywords.}
   \item{exclude_words}{Words that are excluded in the word cloud.}
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}
-  \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
+  \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The font size interpolation is linear.}
   \item{bg_gp}{Graphics parameters for controlling word cloud annotation background.}
   \item{column_title}{Column title for the heatmap.}
   \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}

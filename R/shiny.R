@@ -7,9 +7,10 @@
 # -cl Cluster labels inferred from the similarity matrix, e.g. from `cluster_terms` or `binary_cut`.
 #
 # == example
-# mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
-# cl = binary_cut(mat)
 # if(interactive()) {
+#     mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", 
+#         package = "simplifyEnrichment"))
+#     cl = binary_cut(mat)
 #     export_to_shiny_app(mat, cl)
 # }
 export_to_shiny_app = function(mat, cl = binary_cut(mat)) {

@@ -16,9 +16,10 @@ export_to_shiny_app(mat, cl = binary_cut(mat))
 
 }
 \examples{
-mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
-cl = binary_cut(mat)
 if(interactive()) {
+    mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", 
+        package = "simplifyEnrichment"))
+    cl = binary_cut(mat)
     export_to_shiny_app(mat, cl)
 }
 }

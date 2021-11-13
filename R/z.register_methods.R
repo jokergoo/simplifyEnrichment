@@ -121,6 +121,7 @@ remove_clustering_methods = function(method) {
 register_clustering_methods(
 	binary_cut = function(mat, ...) binary_cut(mat, ...),
 	kmeans = function(mat, ...) cluster_by_kmeans(mat, ...),
+	pam = function(mat, ...) cluster_by_pam(mat, ...),
 	dynamicTreeCut = function(mat, ...) cluster_by_dynamicTreeCut(mat, ...),
 	mclust = function(mat, ...) cluster_by_mclust(mat, ...),
 	apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),
@@ -139,6 +140,7 @@ register_clustering_methods(
 # The default methods are:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
+# -``pam`` see `cluster_by_pam`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
@@ -163,6 +165,7 @@ reset_clustering_methods = function() {
 	remove_clustering_methods(all_clustering_methods())
 	register_clustering_methods(
 		kmeans = function(mat, ...) cluster_by_kmeans(mat, ...),
+		pam = function(mat, ...) cluster_by_pam(mat, ...),
 		dynamicTreeCut = function(mat, ...) cluster_by_dynamicTreeCut(mat, ...),
 		mclust = function(mat, ...) cluster_by_mclust(mat, ...),
 		apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),

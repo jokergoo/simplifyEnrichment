@@ -7,7 +7,7 @@ Cluster functional terms by recursively binary cutting the similarity matrix
 Cluster functional terms by recursively binary cutting the similarity matrix
 }
 \usage{
-binary_cut(mat, value_fun = median, partition_fun = partition_by_pam,
+binary_cut(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam,
     cutoff = 0.85, try_all_partition_fun = FALSE, partial = FALSE)
 }
 \arguments{

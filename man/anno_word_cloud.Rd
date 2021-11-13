@@ -19,7 +19,7 @@ anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
   \item{exclude_words}{The words excluced for construcing word cloud.}
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphics parameters passed to \code{\link{word_cloud_grob}}.}
-  \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped to the maximal word frequency. The font size interlopation is linear.}
+  \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The font size interpolation is linear.}
   \item{bg_gp}{Graphics parameters for controlling the background.}
   \item{side}{Side of the annotation relative to the heatmap.}
   \item{count_words_param}{A list of parameters passed to \code{\link{count_words}}.}
@@ -33,7 +33,7 @@ If the annotation is failed to construct or no keyword is found, the function re
 
 English stop words, punctuation and numbers are removed by default when counting words. As specific stop words might
 coincide with gene or pathway names, and numbers in genes names might be meaningful it is recommended to adjust this
-behaviour by passing appropriate arguments to the \code{\link{count_words}} function using \code{\link{count_words_param}}.
+behaviour by passing appropriate arguments to the \code{\link{count_words}} function using \code{count_words_param}.
 }
 \examples{
 gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))

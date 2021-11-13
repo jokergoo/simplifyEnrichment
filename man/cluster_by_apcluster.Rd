@@ -12,8 +12,8 @@ cluster_by_apcluster(mat, s = apcluster::negDistMat(r = 2), ...)
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{s}{Passed to the \code{s} argument in \code{\link[apcluster]{apcluster}}.}
-  \item{...}{Other arguments passed to \code{\link[apcluster]{apcluster}}.}
+  \item{s}{Passed to the \code{s} argument in \code{\link[apcluster:apcluster-methods]{apcluster}}.}
+  \item{...}{Other arguments passed to \code{\link[apcluster:apcluster-methods]{apcluster}}.}
 
 }
 \value{

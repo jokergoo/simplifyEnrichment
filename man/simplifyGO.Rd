@@ -8,8 +8,7 @@ Simplify Gene Ontology (GO) enrichment results
 }
 \usage{
 simplifyGO(mat, method = "binary_cut", control = list(),
-    plot = TRUE, term = "TERM", verbose = TRUE,
-    column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
+    plot = TRUE, verbose = TRUE, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
     ht_list = NULL, ...)
 }
 \arguments{
@@ -18,7 +17,6 @@ simplifyGO(mat, method = "binary_cut", control = list(),
   \item{method}{Method for clustering the matrix. See \code{\link{cluster_terms}}.}
   \item{control}{A list of parameters for controlling the clustering method, passed to \code{\link{cluster_terms}}.}
   \item{plot}{Whether to make the heatmap.}
-  \item{term}{The full name or the description of the corresponding GO IDs. The values are automatically extracted if it is not provided.}
   \item{column_title}{Column title for the heatmap.}
   \item{verbose}{Whether to print messages.}
   \item{ht_list}{A list of additional heatmaps added to the left of the similarity heatmap.}
@@ -35,6 +33,7 @@ The arguments in \code{\link{simplifyGO}} passed to \code{\link{ht_clusters}} ar
   \item{\code{draw_word_cloud}}{Whether to draw the word clouds.}
   \item{\code{min_term}}{Minimal number of GO terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one single cluster in the heatmap.}
   \item{\code{order_by_size}}{Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size < \code{min_term}) is always put to the bottom of the heatmap.}
+  \item{\code{stat}}{What values of keywords are used to map to font sizes in the word clouds.}
   \item{\code{exclude_words}}{Words that are excluded in the word cloud.}
   \item{\code{max_words}}{Maximal number of words visualized in the word cloud.}
   \item{\code{word_cloud_grob_param}}{A list of graphic parameters passed to \code{\link{word_cloud_grob}}.}

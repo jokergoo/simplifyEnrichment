@@ -25,8 +25,8 @@
 # gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
 # go_id = rownames(gm)
 # go_term = AnnotationDbi::select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM
-# count_word(go_term)
-count_word = function(term,
+# count_words(go_term)
+count_words = function(term,
 	exclude_words = NULL, stop_words = stopwords(),
 	min_word_length = 1, tokenizer = 'words', transform_case = tolower,
 	remove_numbers = TRUE, remove_punctuation = TRUE, custom_transformer = NULL,
@@ -77,72 +77,6 @@ count_word = function(term,
 	d
 }
 
-# == title
-# Calculate word frequency From GO
-#
-# == param
-# -go_id A vector of GO IDs.
-# -term The corresponding names or description of terms if the input are not GO terms.
-# -exclude_words The words that should be excluded.
-#
-# == details
-# The input can be simply set with a vector of GO id to ``go_id`` argument so that the GO names
-# are automatically extracted. Users can also provide a vector of long names/descriptions by ``term`` argument.
-#
-# If the input is GO id, the following words are excluded: ``c("via", "protein", "factor", "side", "type", "specific")``.
-# They are analyzed by ``simplifyEnrichment:::all_GO_word_count()``.
-#
-# == value
-# A data frame with words and frequencies.
-#
-# == seealso
-# `count_word`
-#
-# == example
-# gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
-# go_id = rownames(gm)
-# head(count_word_from_GO(go_id))
-count_word_from_GO = function(go_id, term = NULL, exclude_words = NULL) {
-	if(is.null(term)) {
-		if(is_GO_id(go_id[1])) {
-			suppressMessages(term <- select(GO.db::GO.db, keys = go_id, columns = "TERM")$TERM)
-		} else {
-			stop_wrap("Cannot automatically retrieve the term names by the input ID, please set values for `term` argument manually.")
-		}
-	}
-	exclude_words = c(exclude_words, GO_EXCLUDE_WORDS)
-
-	count_word(term = term, exclude_words = exclude_words)
-}
-
-is_GO_id = function(x) {
-	grepl("^GO:[0-9]+$", x)
-}
-
-
-# generate excluded words that are too general
-all_GO_word_count = function() {
-	all_go = as.list(GO.db::GOTERM)
-
-	ontology = sapply(all_go, slot, "Ontology")
-	term = sapply(all_go, slot, "Term")
-	l = ontology %in% c("BP", "CC", "MF")
-	ontology = ontology[l]
-	term = term[l]
-
-	lt = tapply(term, ontology, function(x) {
-		df = count_word(term = x)
-		structure(df[, 2], names = df[, 1])
-	})
-}
-
-GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
-
-all_gene_desc_word_count = function() {
-	# tb = readRDS(system.file("extdata", "refseq_gene_desc_human.rds", package = "simplifyEnrichment"))
-	tb = readRDS("~/project/development/simplifyEnrichment/inst/extdata/refseq_gene_desc_human.rds")
-	count_word(tb[, 2])
-}
 
 # == title
 # A simple grob for the word cloud
@@ -324,8 +258,7 @@ heightDetails.word_cloud = function(x) {
 # -max_words Maximal number of words visualized in the word cloud.
 # -word_cloud_grob_param A list of graphics parameters passed to `word_cloud_grob`.
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
-#       The minimal font size is mapped to word frequency value of 1 and the maximal font size is mapped
-#       to the maximal word frequency. The font size interlopation is linear.
+#       The font size interpolation is linear.
 # -bg_gp Graphics parameters for controlling the background.
 # -side Side of the annotation relative to the heatmap.
 # -count_words_param A list of parameters passed to `count_words`.
@@ -338,7 +271,7 @@ heightDetails.word_cloud = function(x) {
 #
 # English stop words, punctuation and numbers are removed by default when counting words. As specific stop words might
 # coincide with gene or pathway names, and numbers in genes names might be meaningful it is recommended to adjust this
-# behaviour by passing appropriate arguments to the `count_words` function using `count_words_param`.
+# behaviour by passing appropriate arguments to the `count_words` function using ``count_words_param``.
 #
 # == example
 # gm = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds", package = "simplifyEnrichment"))
@@ -392,15 +325,44 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 		align_to = split(seq_along(align_to), align_to)
 	}
 
-	keywords = lapply(term, function(desc) {
-		combined_count_params = c(list(term = desc, exclude_words = exclude_words), count_words_param)
-		suppressMessages(suppressWarnings(df <- do.call(count_word, combined_count_params)))
-		# df = df[df$freq > 1, , drop = FALSE]
-		if(nrow(df) > max_words) {
-			df = df[order(df$freq, decreasing = TRUE)[seq_len(max_words)], ]
+	flag = 0
+	if(is.list(term)) {
+		is_term_a_data_frame = sapply(term, is.data.frame)
+		if(any(is_term_a_data_frame)) {
+			if(!all(is_term_a_data_frame)) {
+				stop_wrap("Elements in `term` should all be data.frames")
+			}
+
+			sapply(term, function(x) {
+				if(ncol(x) < 2) {
+					stop_wrap("Data frame in `term` should have more than one column.")
+				}
+				if(!any(sapply(x[, -1, drop = FALSE], is.numeric))) {
+					stop_wrap("There should be a numeric column in the data frame.")
+				}
+			})
+			flag = 1
 		}
-		df
-	})
+	}
+
+	if(flag) {
+		keywords = lapply(term, function(df) {
+			if(nrow(df) > max_words) {
+				df = df[order(df[, 2], decreasing = TRUE)[seq_len(max_words)], ]
+			}
+			df
+		})
+	} else {
+		keywords = lapply(term, function(desc) {
+			combined_count_params = c(list(term = desc, exclude_words = exclude_words), count_words_param)
+			suppressMessages(suppressWarnings(df <- do.call(count_words, combined_count_params)))
+			# df = df[df$freq > 1, , drop = FALSE]
+			if(nrow(df) > max_words) {
+				df = df[order(df$freq, decreasing = TRUE)[seq_len(max_words)], ]
+			}
+			df
+		})
+	}
 	keywords = keywords[vapply(keywords, nrow, 0) > 0]
 
 	align_to = align_to[names(keywords)]
@@ -496,12 +458,17 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 # -go_id The value should be in the same format as ``align_to``. If ``go_id`` is a vector, it should have the
 #       same length as ``align_to``, and if ``go_id`` is a list, note, e.g. ``length(go_id[[1]])`` is not necessarily equal to ``length(align_to[[1]]``.
 #       If ``align_to`` is a categorical vector and ``go_id`` is a list, names of ``go_id`` should have overlap to the levels in ``align_to``.
+# -min_stat Minimal value for ``stat`` for selecting keywords.
+# -stat What type of value to map to font sizes of the keywords. There are two possible values. "pvalue": enrichment is applied to keywords and -log10(p-value)
+#       is used to map to font size; "count": simply word frequency of keywords.
 # -term Alternatively the GO description can be set via the ``term`` argument. The same format as in `anno_word_cloud`.
 # -exclude_words The words excluced for construcing word cloud. Some words are internally exclucded: ``c("via", "protein", "factor", "side", "type", "specific")``.
 # -... All other arguments passed to `anno_word_cloud`.
 #
-anno_word_cloud_from_GO = function(align_to, go_id, text_by = c("term", "definition", "gene_description"),
+anno_word_cloud_from_GO = function(align_to, go_id, stat = c("pvalue", "count"), 
+	min_stat = ifelse(stat == "count", 5, 0.05),
 	term = NULL, exclude_words = NULL, ...) {
+
 	if(is.null(term)) {
 		if(is.atomic(align_to) && is.list(go_id)) {
 			align_to = split(seq_along(align_to), align_to)
@@ -535,21 +502,29 @@ anno_word_cloud_from_GO = function(align_to, go_id, text_by = c("term", "definit
 			align_to = split(seq_along(align_to), align_to)
 		}
 
-		text_by = match.arg(text_by)[1]
+		stat = match.arg(stat)[1]
+		if(is.null(env$tdm_GO)) {
+			# env$tdm_GO = readRDS("~/project/development/simplifyEnrichment/inst/extdata/tdm_GO.rds")
+			env$tdm_GO = readRDS(system.file("extdata", "tdm_GO.rds", package = "simplifyEnrichment"))
+		}
 
+		if(stat == "pvalue") qqcat("Perform keywords enrichment for @{length(go_id)} GO lists...\n")
 		term = lapply(go_id, function(x) {
 			if(is_GO_id(x[1])) {
-				if(text_by == "term") {
-					suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "TERM")$TERM)
-				} else if(text_by == "definition") {
-					suppressMessages(t <- select(GO.db::GO.db, keys = x, columns = "DEFINITION")$DEFINITION)
-				} else if(text_by == "gene_description") {
-					t = get_gene_desc_from_GO(x)
+				
+				if(stat == "count") {
+					v = row_means(env$tdm_GO[, x])
+					v = v[v >= min_stat]
+					data.frame(names(v), v)
+				} else if(stat == "pvalue") {
+					df = keywords_enrichment(x, env$tdm_GO)
+					df = df[df$p <= min_stat, , drop = FALSE]
+					data.frame(df[, 1], -log10(df$p))
 				}
 			} else {
 				stop_wrap("Cannot automatically retrieve the term names by the input ID, please set values for `term` argument manually.")
 			}
-			t
+			
 		})
 	} 
 

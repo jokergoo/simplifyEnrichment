@@ -12,6 +12,7 @@
 # The function compares following default clustering methods by default:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
+# -``pam`` see `cluster_by_pam`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`. By default it is not included.
 # -``apcluster`` see `cluster_by_apcluster`.
@@ -283,6 +284,7 @@ cmp_calc_stats = function(mat, clt) {
 # The function compares following clustering methods by default:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
+# -``pam`` see `cluster_by_pam`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`. By default it is not included.
 # -``apcluster`` see `cluster_by_apcluster`.

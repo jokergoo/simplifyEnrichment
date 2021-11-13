@@ -5,11 +5,29 @@ dend_max_depth = function(dend) {
 	})))
 }
 
+# == title
+# Area above the eCDF curve
+#
+# == param
+# -x A vector of similarity values.
+#
+# == details
+# Denote F(x) as the eCDF (empirical Cumulative Distribution Function) of the similarity vector ``x``, this function calculates
+# the area above the eCDF curve, which is 1 - \\int_0^1 F(x)dx.
+#
+# == value
+# A numeric value.
+area_above_ecdf = function(x) { 
+	f = ecdf(x)
+	i = 1:100/100
+	1 - sum(1/100*f(i))
+}
+
 # cluster the similarity matrix and assign scores to nodes
 # two scores attached to each ndoe
 # - score: the original score
 # - score2: the score which have checked the children nodes' scores
-cluster_mat = function(mat, value_fun = median, partition_fun = partition_by_pam, cutoff = 0.85) {
+cluster_mat = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam, cutoff = 0.85) {
 
 	dend = NULL
 
@@ -460,15 +478,14 @@ dend_env = new.env()
 #                in this package are `partition_by_kmeanspp`, `partition_by_pam` and `partition_by_hclust`.
 # -dend A dendrogram object, used internally.
 # -depth Depth of the recursive binary cut process.
-# -dend_width Width of the dendrogram.
+# -dend_width Width of the dendrogram on the plot.
 # -show_heatmap_legend Whether to show the heatmap legend.
 # -... Other arguments.
 #
 # == details
-# After the functions which performs clustering are executed, such as `simplifyGO` or
+# After the functions which perform clustering are executed, such as `simplifyGO` or
 # `binary_cut`, the dendrogram is temporarily saved and `plot_binary_cut` directly
-# uses this dendrogram. So, if the partition function brings randomness, it makes sure
-# the clustering is the same as the one made by e.g. `simplifyGO`.
+# uses this dendrogram.
 #
 # == example
 # \donttest{
@@ -478,7 +495,7 @@ dend_env = new.env()
 # plot_binary_cut(mat, depth = 2)
 # plot_binary_cut(mat)
 # }
-plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85, 
+plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85, 
 	partition_fun = partition_by_pam, dend = NULL, dend_width = unit(3, "cm"),
 	depth = NULL, show_heatmap_legend = TRUE, ...) {
 
@@ -570,7 +587,7 @@ plot_binary_cut = function(mat, value_fun = median, cutoff = 0.85,
 # mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
-binary_cut = function(mat, value_fun = median, partition_fun = partition_by_pam,
+binary_cut = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam,
 	cutoff = 0.85, try_all_partition_fun = FALSE, partial = FALSE) {
 
 	if(try_all_partition_fun) {

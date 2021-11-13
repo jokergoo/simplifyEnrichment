@@ -7,13 +7,16 @@ Word cloud annotations from GO
 Word cloud annotations from GO
 }
 \usage{
-anno_word_cloud_from_GO(align_to, go_id, text_by = c("term", "definition", "gene_description"),
+anno_word_cloud_from_GO(align_to, go_id, stat = c("pvalue", "count"),
+    min_stat = ifelse(stat == "count", 5, 0.05),
     term = NULL, exclude_words = NULL, ...)
 }
 \arguments{
 
   \item{align_to}{The same format as in \code{\link{anno_word_cloud}}.}
   \item{go_id}{The value should be in the same format as \code{align_to}. If \code{go_id} is a vector, it should have the same length as \code{align_to}, and if \code{go_id} is a list, note, e.g. \code{length(go_id[[1]])} is not necessarily equal to \code{length(align_to[[1]]}. If \code{align_to} is a categorical vector and \code{go_id} is a list, names of \code{go_id} should have overlap to the levels in \code{align_to}.}
+  \item{min_stat}{Minimal value for \code{stat} for selecting keywords.}
+  \item{stat}{What type of value to map to font sizes of the keywords. There are two possible values. "pvalue": enrichment is applied to keywords and -log10(p-value) is used to map to font size; "count": simply word frequency of keywords.}
   \item{term}{Alternatively the GO description can be set via the \code{term} argument. The same format as in \code{\link{anno_word_cloud}}.}
   \item{exclude_words}{The words excluced for construcing word cloud. Some words are internally exclucded: \code{c("via", "protein", "factor", "side", "type", "specific")}.}
   \item{...}{All other arguments passed to \code{\link{anno_word_cloud}}.}

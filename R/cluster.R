@@ -13,6 +13,7 @@
 # The following methods are the default:
 #
 # -``kmeans`` see `cluster_by_kmeans`.
+# -``pam`` see `cluster_by_pam`.
 # -``dynamicTreeCut`` see `cluster_by_dynamicTreeCut`.
 # -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
@@ -120,6 +121,29 @@ cluster_by_kmeans = function(mat, max_k = max(2, min(round(nrow(mat)/5), 100)), 
 	best_km = min(elbow_finder(2:max_k, wss)[1], knee_finder(2:max_k, wss)[1])
 
 	cl[[best_km - 1]]
+}
+
+
+# == title
+# Cluster similarity matrix by pam clustering
+#
+# == param
+# -mat The similarity matrix.
+# -max_k maximal k for pam clustering.
+# -... Other arguments passed to `fpc::pamk`.
+#
+# == details
+# PAM is applied by `fpc::pamk` which can automatically select the best k.
+#
+# == value
+# A vector of cluster labels (in numeric).
+#
+cluster_by_pam = function(mat, max_k = max(2, min(round(nrow(mat)/10), 100)), ...) {
+
+	check_pkg("fpc", bioc = FALSE)
+
+	best = fpc::pamk(mat, krange = 2:max_k, ...)
+	best$pamobject$clustering
 }
 
 # https://stackoverflow.com/questions/2018178/finding-the-best-trade-off-point-on-a-curve
@@ -291,7 +315,7 @@ cluster_by_hdbscan = function(mat, minPts = 5, ...) {
 # == value
 # A vector of cluster labels (in numeric).
 #
-cluster_by_MCL = function(mat, addLoops = FALSE, ...) {
+cluster_by_MCL = function(mat, addLoops = TRUE, ...) {
 	
 	check_pkg("MCL", bioc = FALSE)
 
