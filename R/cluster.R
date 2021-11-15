@@ -18,7 +18,6 @@
 # -``mclust`` see `cluster_by_mclust`.
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``hdbscan`` see `cluster_by_hdbscan`.
-# -``fast_greedy`` see `cluster_by_igraph`.
 # -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.

@@ -85,7 +85,6 @@ register_clustering_methods = function(...) {
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
-# -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 # -``MCL`` see `cluster_by_MCL`.
@@ -127,7 +126,6 @@ register_clustering_methods(
 	apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),
 	hdbscan = function(mat, ...) cluster_by_hdbscan(mat, ...),
 	fast_greedy = function(mat, ...) cluster_by_igraph(mat, method = "cluster_fast_greedy", ...),
-	leading_eigen = function(mat, ...) cluster_by_igraph(mat, method = "cluster_leading_eigen", ...),
 	louvain = function(mat, ...) cluster_by_igraph(mat, method = "cluster_louvain", ...),
 	walktrap = function(mat, ...) cluster_by_igraph(mat, method = "cluster_walktrap", ...),
 	MCL = function(mat, ...) cluster_by_MCL(mat, ...)
@@ -146,7 +144,6 @@ register_clustering_methods(
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
-# -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 # -``MCL`` see `cluster_by_MCL`.
@@ -171,7 +168,6 @@ reset_clustering_methods = function() {
 		apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),
 		hdbscan = function(mat, ...) cluster_by_hdbscan(mat, ...),
 		fast_greedy = function(mat, ...) cluster_by_igraph(mat, method = "cluster_fast_greedy", ...),
-		leading_eigen = function(mat, ...) cluster_by_igraph(mat, method = "cluster_leading_eigen", ...),
 		louvain = function(mat, ...) cluster_by_igraph(mat, method = "cluster_louvain", ...),
 		walktrap = function(mat, ...) cluster_by_igraph(mat, method = "cluster_walktrap", ...),
 		MCL = function(mat, ...) cluster_by_MCL(mat, ...),

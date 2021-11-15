@@ -29,7 +29,6 @@ The following methods are the default:
   \item{\code{mclust}}{see \code{\link{cluster_by_mclust}}.}
   \item{\code{apcluster}}{see \code{\link{cluster_by_apcluster}}.}
   \item{\code{hdbscan}}{see \code{\link{cluster_by_hdbscan}}.}
-  \item{\code{fast_greedy}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{leading_eigen}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{louvain}}{see \code{\link{cluster_by_igraph}}.}
   \item{\code{walktrap}}{see \code{\link{cluster_by_igraph}}.}
