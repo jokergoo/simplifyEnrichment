@@ -81,7 +81,7 @@ keywords_enrichment = function(term_id, tdm, min_bg = 5, min_set = 2) {
 	n_bg = numeric(n)
 	p = numeric(n)
 	for(i in seq_len(n)) {
-		if(interactive()) {
+		if(interactive() && se_opt$verbose) {
 			if(i %% 100 == 0 || i == n) {
 				cat(strrep("\r", 100))
 				qqcat("keyword enrichment, @{i}/@{n}...")
@@ -102,7 +102,7 @@ keywords_enrichment = function(term_id, tdm, min_bg = 5, min_set = 2) {
 		p[i] = fisher.test(cbind(c(s11, s21), c(s12, s22)), alternative = "greater")$p.value
 
 	}
-	if(interactive()) {
+	if(interactive() && se_opt$verbose) {
 		cat("\n")
 	}
 

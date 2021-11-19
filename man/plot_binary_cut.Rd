@@ -14,7 +14,7 @@ plot_binary_cut(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 \arguments{
 
   \item{mat}{The similarity matrix.}
-  \item{value_fun}{Value function to calculate the score for each node in the dendrogram.}
+  \item{value_fun}{A function that calculates the scores for the four submatrices on a node.}
   \item{cutoff}{The cutoff for splitting the dendrogram.}
   \item{partition_fun}{A function to split each node into two groups. Pre-defined functions in this package are \code{\link{partition_by_kmeanspp}}, \code{\link{partition_by_pam}} and \code{\link{partition_by_hclust}}.}
   \item{dend}{A dendrogram object, used internally.}

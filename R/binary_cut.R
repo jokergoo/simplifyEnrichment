@@ -472,7 +472,7 @@ dend_env = new.env()
 #
 # == param
 # -mat The similarity matrix.
-# -value_fun Value function to calculate the score for each node in the dendrogram.
+# -value_fun A function that calculates the scores for the four submatrices on a node.
 # -cutoff The cutoff for splitting the dendrogram.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
 #                in this package are `partition_by_kmeanspp`, `partition_by_pam` and `partition_by_hclust`.
@@ -569,7 +569,7 @@ plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 #
 # == param
 # -mat A similarity matrix.
-# -value_fun Value function to calculate the score for each node in the dendrogram.
+# -value_fun A function that calculates the scores for the four submatrices on a node.
 # -partition_fun A function to split each node into two groups. Pre-defined functions
 #                in this package are `partition_by_kmeanspp`, `partition_by_pam`  and `partition_by_hclust`.
 # -cutoff The cutoff for splitting the dendrogram.

@@ -32,7 +32,7 @@ terms in each cluster. In this vignette, I will demonstrate a general function
 **ComplexHeatmap** package.
 
 The `anno_word_cloud()` function basically a wrapper of two components: 1.
-constructing the word cloud (with `count_word()` and `word_cloud_grob()`) and
+constructing the word cloud (`word_cloud_grob()`) and
 2. constructing an annotation (with `ComplexHeatmap::anno_link()`) that can be
 used in `rowAnnotation()` function.
 
@@ -42,7 +42,7 @@ defines how to align the annotation to the heatmap. Similar as in
 indices where each index vector in the list corresponds to a word cloud. The
 value of `align_to` can also be a categorical vector where rows with the same
 level correspond to a same word cloud. If `align_to` is a categorical vector
-and `term` is a list, names of `term` should have overlap to the levels in
+and `term` is a list, names of `term` should overlap to the levels in
 `align_to`. When `align_to` is set as a categorical vector, normally the same
 value is set to `row_split` in the main heatmap so that each row slice can
 correspond to a word cloud. `term` defines the description texts used for
@@ -63,16 +63,6 @@ Other arguments in `anno_word_cloud()` are straightforward to understand:
 - `fontsize_range`: Range of the font size. The value is a vector of length two.
 - `bg_gp`: Graphic parameters for controlling the background.
 - `side`: Side of the annotation relative to the heatmap. The value should be either "right" or "left".
-
-Specifically for GO terms, users do not need to provide the full GO
-descriptions, instead, they can only provide the GO IDs and the descriptions
-will be automatically extracted internally. In this case, users can use the
-helper function `anno_word_cloud_from_GO()` and set the GO ID list via the
-`go_id` argument. The format of `go_id` is similar as `term` in
-`anno_word_cloud()`, either a list of GO IDs or as a vector. Again note,
-if `go_id` is a list, e.g. `length(go_id[[1]])` is not necessarily equal to
-`length(align_to[[1]]`.
-
 
 In the first example, I generate 10 word clouds and attach to the heatmap which is split
 into 10 groups by rows.
@@ -114,7 +104,36 @@ Heatmap(mat, row_split = split, row_dend_side = "right", row_title_side = "right
 )
 ```
 
-The second example is more specific to GO terms. The following example visualizes an gene expression
+In previous examples, font sizes are mapped to word frequencies. To make it more general, `term` can be set to a list
+of "keywords data frames" where each data frame has two columns: a column for keywords and a column for numeric values that will
+be mapped to font sizes of keywords.
+
+
+```{r, fig.width = 7, fig.height = 4}
+term = lapply(letters[1:10], function(x) {
+	data.frame(LETTERS[1:10], 1:10)
+})
+names(term) = letters[1:10]
+Heatmap(mat, row_split = split, 
+	right_annotation = rowAnnotation(wc = anno_word_cloud(split, term))
+)
+```
+
+
+Specifically for GO terms, users do not need to provide the full GO
+descriptions, instead, they can only provide the GO IDs and the descriptions
+will be automatically extracted internally. In this case, users can use the
+helper function `anno_word_cloud_from_GO()` and set the GO ID list via the
+`go_id` argument. The format of `go_id` is similar as `term` in
+`anno_word_cloud()`, either a list of GO IDs or as a vector. Again note,
+if `go_id` is a list, e.g. `length(go_id[[1]])` is not necessarily equal to
+`length(align_to[[1]]`.
+
+To make the word clouds more meaningful, additionally enrichment via Fisher's Exact test
+is applied on keywords compared to background GO vocabulary. The significance of enrichment
+corresponds to the keyword font size.
+
+The next example visualizes an gene expression
 matrix where rows are split into three groups by k-means clustering. GO enrichment analysis was applied
 to the genes in the three groups separately. Variable `km` contains the k-means classification. `go_list`
 contains list of IDs of significant GO terms.
@@ -143,17 +162,15 @@ Heatmap(t(scale(t(sig_mat))), name = "z-score",
 rowAnnotation(go = anno_word_cloud_from_GO(km, go_list, max_words = 30))
 ```
 
-It seems the major keywords are very similar in the four groups, these words can be excluded:
-
+Note you can still set `stat = "count"` to map word frequency to the font size of keywords.
 
 ```{r, fig.width = 7, fig.height = 4}
-library(circlize)
 Heatmap(t(scale(t(sig_mat))), name = "z-score",
 	col = colorRamp2(c(-2, 0, 2), c("green", "white", "red")),
 	show_row_names = FALSE, show_column_names = FALSE, 
 	row_title = NULL, column_title = NULL,
 	show_row_dend = FALSE, show_column_dend = FALSE,
 	row_split = km) +
-rowAnnotation(go = anno_word_cloud_from_GO(km, go_list, max_words = 20,
-	exclude_words = c("regulation", "process", "response", "positive", "cell")))
+rowAnnotation(go = anno_word_cloud_from_GO(km, go_list, max_words = 30, stat = "count"))
 ```
+

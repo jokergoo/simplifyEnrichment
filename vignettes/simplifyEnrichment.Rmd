@@ -79,10 +79,13 @@ df = simplifyGO(mat)
 ```
 
 On the right side of the heatmap there are the word cloud annotations which
-summarize the functions with keywords in every GO cluster. Note there is no
-word cloud for the cluster that is merged from small clusters (size < 5).
+summarize the functions with keywords in every GO cluster. Additionally, enrichment
+is done on keywords compared to GO background vocabulary and the significance corresponds
+to the font size of the keywords.
 
-The returned variable `df` is a data frame with GO IDs, GO terms and the
+Note there is no word cloud for the cluster that is merged from small clusters (size < 5).
+
+The returned variable `df` is a data frame with GO IDs and the
 cluster labels:
 
 ```{r}

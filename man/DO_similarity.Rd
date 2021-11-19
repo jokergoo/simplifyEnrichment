@@ -7,12 +7,13 @@ Calculate Disease Ontology (DO) semantic similarity matrix
 Calculate Disease Ontology (DO) semantic similarity matrix
 }
 \usage{
-DO_similarity(do_id, measure = "Rel")
+DO_similarity(do_id, measure = "Rel", remove_orphan_terms = FALSE)
 }
 \arguments{
 
   \item{do_id}{A vector of DO IDs.}
   \item{measure}{Semantic measure for the DO similarity, pass to \code{\link[DOSE]{doSim}}.}
+  \item{remove_orphan_terms}{Whether to remove terms that have zero similarity to all other terms?}
 
 }
 \details{

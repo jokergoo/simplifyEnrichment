@@ -18,7 +18,6 @@
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
-# -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 # -``MCL`` see `cluster_by_MCL`.
@@ -290,7 +289,6 @@ cmp_calc_stats = function(mat, clt) {
 # -``apcluster`` see `cluster_by_apcluster`.
 # -``hdbscan`` see `cluster_by_hdbscan`.
 # -``fast_greedy`` see `cluster_by_igraph`.
-# -``leading_eigen`` see `cluster_by_igraph`.
 # -``louvain`` see `cluster_by_igraph`.
 # -``walktrap`` see `cluster_by_igraph`.
 # -``MCL`` see `cluster_by_MCL`.

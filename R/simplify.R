@@ -34,7 +34,7 @@
 # -``bg_gp`` Graphic parameters for controlling the background of word cloud annotations.
 #
 # == value
-# A data frame with three columns: GO IDs, GO term names and cluster labels.
+# A data frame with two columns: GO IDs and cluster labels.
 #
 # == seealso
 # `simplifyGOFromMultipleLists` which performs simplifyGO analysis with multiple lists of GO IDs.

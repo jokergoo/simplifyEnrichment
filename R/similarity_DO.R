@@ -4,6 +4,7 @@
 # == param
 # -do_id A vector of DO IDs.
 # -measure Semantic measure for the DO similarity, pass to `DOSE::doSim`.
+# -remove_orphan_terms Whether to remove terms that have zero similarity to all other terms?
 #
 # == details
 # This function is basically a wrapper on `DOSE::doSim`.
@@ -17,7 +18,7 @@
 # do_id = random_DO(10)
 # DO_similarity(do_id)
 # }
-DO_similarity = function(do_id, measure = "Rel") {
+DO_similarity = function(do_id, measure = "Rel", remove_orphan_terms = FALSE) {
 
 	check_pkg("DOSE", bioc = FALSE)
 
@@ -29,6 +30,16 @@ DO_similarity = function(do_id, measure = "Rel") {
 	do_sim[is.na(do_sim)] = 0
 
 	do_sim[lower.tri(do_sim)]  = t(do_sim)[lower.tri(do_sim)]
+
+	if(remove_orphan_terms) {
+		do_sim_tmp = do_sim
+		diag(do_sim_tmp) = 0
+		l = rowSums(do_sim_tmp) == 0
+		if(any(l)) {
+			message(qq("@{sum(l)} DO term@{ifelse(sum(l) == 1, ' is', 's are')} removed because @{ifelse(sum(l) == 1, 'it has', 'they have')} zero similarity to all other terms."))
+			do_sim = do_sim[l, l, drop = FALSE]
+		}
+	}
 
 	attr(do_sim, "measure") = measure
 	attr(do_sim, "ontology") = "DO"

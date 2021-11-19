@@ -17,7 +17,7 @@ partition_by_kmeans(mat, n_repeats = 10)
 }
 \details{
 Since k-means clustering brings randomness, this function performs
-k-means clustering several times and uses the final consensus partitioning.
+k-means clustering several times (controlled by \code{n_repeats}) and uses the final consensus partitioning.
 
 This function is used to set to the \code{partition_fun} argument in \code{\link{binary_cut}}.
 }

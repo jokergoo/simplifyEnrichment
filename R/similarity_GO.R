@@ -11,6 +11,7 @@ env$semData_hash = ""
 #      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
 # -measure Semantic measure for the GO similarity, pass to `GOSemSim::termSim`.
+# -remove_orphan_terms Whether to remove terms that have zero similarity to all other terms?
 #
 # == details
 # This function is basically a wrapper on `GOSemSim::termSim`.
@@ -23,7 +24,8 @@ env$semData_hash = ""
 # go_id = random_GO(100)
 # mat = GO_similarity(go_id)
 # }
-GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel") {
+GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
+	remove_orphan_terms = FALSE) {
 
 	if(is.null(ont)) {
 		ont = guess_ont(go_id, db)
@@ -44,7 +46,7 @@ GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel"
 	go_removed = setdiff(go_id, Lkeys(getFromNamespace("getAncestors", "GOSemSim")(semData@ont)))
 
 	if(length(go_removed)) {
-		message(qq("@{length(go_removed)}/@{length(go_id)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
+		message(qq("@{length(go_removed)}/@{length(go_id)} GO term@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
 	}
 	go_id = setdiff(go_id, go_removed)
 	# go_sim = calc_similarity(go_id, measure = measure, semData = semData, mc.cores = mc.cores)
@@ -52,6 +54,16 @@ GO_similarity = function(go_id, ont = NULL, db = 'org.Hs.eg.db', measure = "Rel"
 	go_sim[is.na(go_sim)] = 0
 
 	go_sim[lower.tri(go_sim)]  = t(go_sim)[lower.tri(go_sim)]
+
+	if(remove_orphan_terms) {
+		go_sim_tmp = go_sim
+		diag(go_sim_tmp) = 0
+		l = rowSums(go_sim_tmp) == 0
+		if(any(l)) {
+			message(qq("@{sum(l)} GO term@{ifelse(sum(l) == 1, ' is', 's are')} removed because @{ifelse(sum(l) == 1, 'it has', 'they have')} zero similarity to all other terms."))
+			go_sim = go_sim[l, l, drop = FALSE]
+		}
+	}
 
 	attr(go_sim, "measure") = measure
 	attr(go_sim, "ontology") = paste0("GO:", ont)
@@ -75,7 +87,7 @@ calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 	go_removed = setdiff(go_id, Lkeys(getFromNamespace("getAncestors", "GOSemSim")(semData@ont)))
 
 	if(length(go_removed)) {
-		message(qq("@{length(go_removed)}/@{length(go_id)} GO ID@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
+		message(qq("@{length(go_removed)}/@{length(go_id)} GO term@{ifelse(length(go_removed) == 1, ' is', 's are')} removed."))
 	}
 	go_id = setdiff(go_id, go_removed)
 	

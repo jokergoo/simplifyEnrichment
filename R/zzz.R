@@ -19,7 +19,4 @@ This message can be suppressed by:
 }
 
 
-se_opt = list("verbose" = TRUE)
-
-
 GO_global_word_freq = readRDS(system.file("extdata", "GO_global_word_freq.rds", package = "simplifyEnrichment"))

@@ -254,6 +254,8 @@ heightDetails.word_cloud = function(x) {
 #          is a list, ``term`` should also be a list. In this case, the length of vectors in ``term`` is not necessarily the same
 #          as in ``align_to``. E.g. ``length(term[[1]])`` is not necessarily equal to ``length(align_to[[1]]``. If ``align_to``
 #          is a categorical vector, ``term`` should also be a character vector with the same length as ``align_to``.
+#          To make it more genrall, when ``align_to`` is a list, ``term`` can also be a list of data frames where the first column contains 
+#          keywords and the second column contains numeric values that will be mapped to font sizes in the word clouds.
 # -exclude_words The words excluced for construcing word cloud.
 # -max_words Maximal number of words visualized in the word cloud.
 # -word_cloud_grob_param A list of graphics parameters passed to `word_cloud_grob`.
@@ -445,9 +447,10 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 	    popViewport()
 	}
 
-	anno_link(align_to = align_to, which = "row", panel_fun = panel_fun, 
+	anno = anno_link(align_to = align_to, which = "row", panel_fun = panel_fun, 
     	size = gbl_h, gap = unit(2, "mm"), width = gbl_w + unit(5, "mm"),
     	link_gp = bg_gp, internal_line = FALSE, side = side, ...)
+	anno
 }
 
 # == title
@@ -513,7 +516,7 @@ anno_word_cloud_from_GO = function(align_to, go_id, stat = c("pvalue", "count"),
 			if(is_GO_id(x[1])) {
 				
 				if(stat == "count") {
-					v = row_means(env$tdm_GO[, x])
+					v = row_sums(env$tdm_GO[, intersect(x, colnames(env$tdm_GO))])
 					v = v[v >= min_stat]
 					data.frame(names(v), v)
 				} else if(stat == "pvalue") {
