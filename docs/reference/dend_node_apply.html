@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -179,9 +179,9 @@ it is possible to get information of its child nodes and parent nodes.</p>
 <span class='va'>dend</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/dendrogram.html'>as.dendrogram</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/hclust.html'>hclust</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/dist.html'>dist</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='co'># number of members on every node</span>
 <span class='fu'>dend_node_apply</span><span class='op'>(</span><span class='va'>dend</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>d</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>d</span>, <span class='st'>"members"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 10  1  9  4  2  1  1  2  1  1  5  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
+</div><div class='output co'>#&gt;  [1] 10  1  9  2  1  1  7  4  2  1  1  2  1  1  3  1  2  1  1</div><div class='input'><span class='co'># the depth on every node</span>
 <span class='fu'>dend_node_apply</span><span class='op'>(</span><span class='va'>dend</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>d</span>, <span class='va'>index</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>index</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;  [1] 0 1 1 2 3 4 4 3 4 4 2 3 4 4 3 4 4 5 5</div></pre>
+</div><div class='output co'>#&gt;  [1] 0 1 1 2 3 3 2 3 4 5 5 4 5 5 3 4 4 5 5</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -246,7 +246,7 @@ the group-specific (or list-specific) patterns can be easily observed and to cor
 <span class='co'># perform functional enrichment on the signatures genes from cola anlaysis </span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>require</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/jokergoo/cola'>cola</a></span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>Loading required package: cola</span></div><div class='output co'>#&gt; <span class='message'>========================================</span>
-#&gt; <span class='message'>cola version 1.9.0.9018</span>
+#&gt; <span class='message'>cola version 1.9.4</span>
 #&gt; <span class='message'>Bioconductor page: http://bioconductor.org/packages/cola/</span>
 #&gt; <span class='message'>Github page: https://github.com/jokergoo/cola</span>
 #&gt; <span class='message'>Documentation: https://jokergoo.github.io/cola/</span>
@@ -254,7 +254,7 @@ the group-specific (or list-specific) patterns can be easily observed and to cor
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>If you use it in published research, please cite:</span>
 #&gt; <span class='message'>Gu, Z. cola: an R/Bioconductor package for consensus partitioning </span>
-#&gt; <span class='message'>  through a general framework. Nucleic Acids Research 2020.</span>
+#&gt; <span class='message'>  through a general framework. Nucleic Acids Research 2021.</span>
 #&gt; <span class='message'></span>
 #&gt; <span class='message'>This message can be suppressed by:</span>
 #&gt; <span class='message'>  suppressPackageStartupMessages(library(cola))</span>
@@ -265,31 +265,31 @@ the group-specific (or list-specific) patterns can be easily observed and to cor
 <span class='va'>mapped_probes</span> <span class='op'>=</span> <span class='fu'>mappedkeys</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='va'>id_mapping</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/list.html'>as.list</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>[</span><span class='va'>mapped_probes</span><span class='op'>]</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>lt</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/pkg/cola/man/functional_enrichment-dispatch.html'>functional_enrichment</a></span><span class='op'>(</span><span class='va'>res</span>, k <span class='op'>=</span> <span class='fl'>3</span>, id_mapping <span class='op'>=</span> <span class='va'>id_mapping</span><span class='op'>)</span> <span class='co'># you can check the value of `lt`</span>
-</div><div class='output co'>#&gt; - 2076/4116 significant genes are taken from 3-group comparisons
-#&gt; - on k-means group 1/4, 444 genes
-#&gt;   - 356/444 (80.2%) genes left after id mapping
+</div><div class='output co'>#&gt; - 2050/4116 significant genes are taken from 3-group comparisons
+#&gt; - on k-means group 1/3, 827 genes
+#&gt;   - 651/827 (78.7%) genes left after id mapping
 #&gt;   - gene set enrichment, GO:BP
-#&gt; - on k-means group 2/4, 882 genes
-#&gt;   - 782/882 (88.7%) genes left after id mapping
+#&gt; - on k-means group 2/3, 359 genes
+#&gt;   - 317/359 (88.3%) genes left after id mapping
 #&gt;   - gene set enrichment, GO:BP
-#&gt; - on k-means group 3/4, 403 genes
-#&gt;   - 318/403 (78.9%) genes left after id mapping
-#&gt;   - gene set enrichment, GO:BP
-#&gt; - on k-means group 4/4, 347 genes
-#&gt;   - 297/347 (85.6%) genes left after id mapping
+#&gt; - on k-means group 3/3, 864 genes
+#&gt;   - 786/864 (91%) genes left after id mapping
 #&gt;   - gene set enrichment, GO:BP</div><div class='input'>
 <span class='co'># a list of data frames</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt</span>, padj_cutoff <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Use column 'ID' as `go_id_column`.
-#&gt; Use column 'p.adjust' as `padj_column`.</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: gridtext</span></div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.9628239 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-1.png' alt='' width='700' height='433' /></div><div class='input'>
+#&gt; Use column 'p.adjust' as `padj_column`.</div><div class='output co'>#&gt; <span class='message'>Loading required namespace: gridtext</span></div><div class='output co'>#&gt; 927/6316 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 927 terms by 'binary_cut'... 29 clusters, used 1.871094 secs.
+#&gt; Perform keywords enrichment for 8 GO lists...</div><div class='img'><img src='simplifyGOFromMultipleLists-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># a list of numeric values</span>
 <span class='va'>lt2</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>lt</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/structure.html'>structure</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>p.adjust</span>, names <span class='op'>=</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>ID</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt2</span>, padj_cutoff <span class='op'>=</span> <span class='fl'>0.001</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 861/6488 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.963834 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-2.png' alt='' width='700' height='433' /></div><div class='input'>
+</div><div class='output co'>#&gt; 927/6316 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 927 terms by 'binary_cut'... 29 clusters, used 2.616816 secs.
+#&gt; Perform keywords enrichment for 8 GO lists...</div><div class='img'><img src='simplifyGOFromMultipleLists-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># a list of GO IDS</span>
 <span class='va'>lt3</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='va'>lt</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span><span class='op'>$</span><span class='va'>ID</span><span class='op'>[</span><span class='va'>x</span><span class='op'>$</span><span class='va'>p.adjust</span> <span class='op'>&lt;</span> <span class='fl'>0.001</span><span class='op'>]</span><span class='op'>)</span>
 <span class='fu'>simplifyGOFromMultipleLists</span><span class='op'>(</span><span class='va'>lt3</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 861/861 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 861 terms by 'binary_cut'... 35 clusters, used 0.874691 secs.</div><div class='img'><img src='simplifyGOFromMultipleLists-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; 927/927 GO IDs left for clustering.</div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='output co'>#&gt; Cluster 927 terms by 'binary_cut'... 29 clusters, used 1.87644 secs.
+#&gt; Perform keywords enrichment for 8 GO lists...</div><div class='img'><img src='simplifyGOFromMultipleLists-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

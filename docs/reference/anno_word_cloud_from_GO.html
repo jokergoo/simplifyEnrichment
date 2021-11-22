@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -135,7 +135,9 @@
     <p>Word cloud annotations from GO</p>
     </div>
 
-    <pre class="usage"><span class='fu'>anno_word_cloud_from_GO</span><span class='op'>(</span><span class='va'>align_to</span>, <span class='va'>go_id</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, exclude_words <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>anno_word_cloud_from_GO</span><span class='op'>(</span><span class='va'>align_to</span>, <span class='va'>go_id</span>, stat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"pvalue"</span>, <span class='st'>"count"</span><span class='op'>)</span>,
+    min_stat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/ifelse.html'>ifelse</a></span><span class='op'>(</span><span class='va'>stat</span> <span class='op'>==</span> <span class='st'>"count"</span>, <span class='fl'>5</span>, <span class='fl'>0.05</span><span class='op'>)</span>,
+    term <span class='op'>=</span> <span class='cn'>NULL</span>, exclude_words <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -147,6 +149,14 @@
     <tr>
       <th>go_id</th>
       <td><p>The value should be in the same format as <code>align_to</code>. If <code>go_id</code> is a vector, it should have the same length as <code>align_to</code>, and if <code>go_id</code> is a list, note, e.g. <code><a href='https://rdrr.io/r/base/length.html'>length(go_id[[1]])</a></code> is not necessarily equal to <code>length(align_to[[1]]</code>. If <code>align_to</code> is a categorical vector and <code>go_id</code> is a list, names of <code>go_id</code> should have overlap to the levels in <code>align_to</code>.</p></td>
+    </tr>
+    <tr>
+      <th>min_stat</th>
+      <td><p>Minimal value for <code>stat</code> for selecting keywords.</p></td>
+    </tr>
+    <tr>
+      <th>stat</th>
+      <td><p>What type of value to map to font sizes of the keywords. There are two possible values. "pvalue": enrichment is applied to keywords and -log10(p-value) is used to map to font size; "count": simply word frequency of keywords.</p></td>
     </tr>
     <tr>
       <th>term</th>

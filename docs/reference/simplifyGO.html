@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -136,8 +136,7 @@
     </div>
 
     <pre class="usage"><span class='fu'>simplifyGO</span><span class='op'>(</span><span class='va'>mat</span>, method <span class='op'>=</span> <span class='st'>"binary_cut"</span>, control <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>,
-    plot <span class='op'>=</span> <span class='cn'>TRUE</span>, term <span class='op'>=</span> <span class='cn'>NULL</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
-    column_title <span class='op'>=</span> <span class='fu'>qq</span><span class='op'>(</span><span class='st'>"@{nrow(mat)} GO terms clustered by '@{method}'"</span><span class='op'>)</span>,
+    plot <span class='op'>=</span> <span class='cn'>TRUE</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, column_title <span class='op'>=</span> <span class='fu'>qq</span><span class='op'>(</span><span class='st'>"@{nrow(mat)} GO terms clustered by '@{method}'"</span><span class='op'>)</span>,
     ht_list <span class='op'>=</span> <span class='cn'>NULL</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -158,10 +157,6 @@
     <tr>
       <th>plot</th>
       <td><p>Whether to make the heatmap.</p></td>
-    </tr>
-    <tr>
-      <th>term</th>
-      <td><p>The full name or the description of the corresponding GO IDs. The values are automatically extracted if it is not provided.</p></td>
     </tr>
     <tr>
       <th>column_title</th>
@@ -190,6 +185,7 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
   <dt><code>draw_word_cloud</code></dt><dd><p>Whether to draw the word clouds.</p></dd>
   <dt><code>min_term</code></dt><dd><p>Minimal number of GO terms in a cluster. All the clusters with size less than <code>min_term</code> are all merged into one single cluster in the heatmap.</p></dd>
   <dt><code>order_by_size</code></dt><dd><p>Whether to reorder GO clusters by their sizes. The cluster that is merged from small clusters (size &lt; <code>min_term</code>) is always put to the bottom of the heatmap.</p></dd>
+  <dt><code>stat</code></dt><dd><p>What values of keywords are used to map to font sizes in the word clouds.</p></dd>
   <dt><code>exclude_words</code></dt><dd><p>Words that are excluded in the word cloud.</p></dd>
   <dt><code>max_words</code></dt><dd><p>Maximal number of words visualized in the word cloud.</p></dd>
   <dt><code>word_cloud_grob_param</code></dt><dd><p>A list of graphic parameters passed to <code><a href='word_cloud_grob.html'>word_cloud_grob</a></code>.</p></dd>
@@ -200,7 +196,7 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A data frame with three columns: GO IDs, GO term names and cluster labels.</p>
+    <p>A data frame with two columns: GO IDs and cluster labels.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='simplifyGOFromMultipleLists.html'>simplifyGOFromMultipleLists</a></code> which performs simplifyGO analysis with multiple lists of GO IDs.</p></div>
@@ -211,28 +207,15 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 <span class='va'>go_id</span> <span class='op'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>
 <span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span><span class='op'>(</span><span class='va'>go_id</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'>simplifyGO</span><span class='op'>(</span><span class='va'>mat</span>, word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>max_width <span class='op'>=</span> <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 20 clusters, used 0.774152 secs.</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;           id
-#&gt; 1 GO:0010046
-#&gt; 2 GO:0006977
-#&gt; 3 GO:0072579
-#&gt; 4 GO:1990182
-#&gt; 5 GO:0043380
-#&gt; 6 GO:0051402
-#&gt;                                                                                            term
-#&gt; 1                                                                         response to mycotoxin
-#&gt; 2 DNA damage response, signal transduction by p53 class mediator resulting in cell cycle arrest
-#&gt; 3                                                                   glycine receptor clustering
-#&gt; 4                                                                            exosomal secretion
-#&gt; 5                                                   regulation of memory T cell differentiation
-#&gt; 6                                                                      neuron apoptotic process
-#&gt;   cluster
-#&gt; 1       1
-#&gt; 2       1
-#&gt; 3       2
-#&gt; 4       2
-#&gt; 5       3
-#&gt; 6       4</div><div class='input'><span class='co'># }</span>
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 20 clusters, used 0.9653449 secs.
+#&gt; Perform keywords enrichment for 9 GO lists...</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;           id cluster
+#&gt; 1 GO:0045823       1
+#&gt; 2 GO:1990036       2
+#&gt; 3 GO:0050747       3
+#&gt; 4 GO:0099577       3
+#&gt; 5 GO:0002902       4
+#&gt; 6 GO:0071874       5</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

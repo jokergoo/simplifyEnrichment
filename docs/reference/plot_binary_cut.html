@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
       </span>
     </div>
 
@@ -135,7 +135,7 @@
     <p>Visualize the process of binary cut</p>
     </div>
 
-    <pre class="usage"><span class='fu'>plot_binary_cut</span><span class='op'>(</span><span class='va'>mat</span>, value_fun <span class='op'>=</span> <span class='va'>median</span>, cutoff <span class='op'>=</span> <span class='fl'>0.85</span>,
+    <pre class="usage"><span class='fu'>plot_binary_cut</span><span class='op'>(</span><span class='va'>mat</span>, value_fun <span class='op'>=</span> <span class='va'>area_above_ecdf</span>, cutoff <span class='op'>=</span> <span class='fl'>0.85</span>,
     partition_fun <span class='op'>=</span> <span class='va'>partition_by_pam</span>, dend <span class='op'>=</span> <span class='cn'>NULL</span>, dend_width <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>3</span>, <span class='st'>"cm"</span><span class='op'>)</span>,
     depth <span class='op'>=</span> <span class='cn'>NULL</span>, show_heatmap_legend <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
@@ -148,7 +148,7 @@
     </tr>
     <tr>
       <th>value_fun</th>
-      <td><p>Value function to calculate the score for each node in the dendrogram.</p></td>
+      <td><p>A function that calculates the scores for the four submatrices on a node.</p></td>
     </tr>
     <tr>
       <th>cutoff</th>
@@ -168,7 +168,7 @@
     </tr>
     <tr>
       <th>dend_width</th>
-      <td><p>Width of the dendrogram.</p></td>
+      <td><p>Width of the dendrogram on the plot.</p></td>
     </tr>
     <tr>
       <th>show_heatmap_legend</th>
@@ -182,10 +182,9 @@
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>After the functions which performs clustering are executed, such as <code><a href='simplifyGO.html'>simplifyGO</a></code> or
+    <p>After the functions which perform clustering are executed, such as <code><a href='simplifyGO.html'>simplifyGO</a></code> or
 <code><a href='binary_cut.html'>binary_cut</a></code>, the dendrogram is temporarily saved and <code>plot_binary_cut</code> directly
-uses this dendrogram. So, if the partition function brings randomness, it makes sure
-the clustering is the same as the one made by e.g. <code><a href='simplifyGO.html'>simplifyGO</a></code>.</p>
+uses this dendrogram.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
