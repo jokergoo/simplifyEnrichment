@@ -10,7 +10,7 @@ A simple grob for the word cloud
 word_cloud_grob(text, fontsize,
     line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(80, "mm"),
     col = function(fs) circlize::rand_color(length(fs), luminosity = "dark"),
-    test = FALSE)
+    add_new_line = FALSE, test = FALSE)
 }
 \arguments{
 
@@ -20,6 +20,7 @@ word_cloud_grob(text, fontsize,
   \item{word_space}{Space between words. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm.}
   \item{max_width}{The maximal width of the viewport to put the word cloud. The value can be a \code{\link[grid]{unit}} object or a numeric scalar which is measured in mm. Note this might be larger than the final width of the returned grob object.}
   \item{col}{Colors for the words. The value can be a vector, in numeric or character, which should have the same length as \code{text}. Or it is a self-defined function that takes the font size vector as  the only argument. The function should return a color vector. See Examples.}
+  \item{add_new_line}{Whether to add new line after every word? If \code{TRUE}, each word will be in a separated line.}
   \item{test}{Internally used. It basically adds borders to the words and the viewport.}
 
 }

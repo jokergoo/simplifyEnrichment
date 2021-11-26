@@ -136,9 +136,9 @@
     </div>
 
     <pre class="usage"><span class='fu'>anno_word_cloud</span><span class='op'>(</span><span class='va'>align_to</span>, <span class='va'>term</span>, exclude_words <span class='op'>=</span> <span class='cn'>NULL</span>, max_words <span class='op'>=</span> <span class='fl'>10</span>,
-    word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, fontsize_range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>16</span><span class='op'>)</span>,
+    word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, fontsize_range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>4</span>, <span class='fl'>16</span><span class='op'>)</span>, value_range <span class='op'>=</span> <span class='cn'>NULL</span>,
     bg_gp <span class='op'>=</span> <span class='fu'>gpar</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"#DDDDDD"</span>, col <span class='op'>=</span> <span class='st'>"#AAAAAA"</span><span class='op'>)</span>, side <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"right"</span>, <span class='st'>"left"</span><span class='op'>)</span>,
-    count_words_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    add_new_line <span class='op'>=</span> <span class='cn'>FALSE</span>, count_words_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -168,12 +168,20 @@
       <td><p>The range of the font size. The value should be a numeric vector with length two. The font size interpolation is linear.</p></td>
     </tr>
     <tr>
+      <th>value_range</th>
+      <td><p>The range of values to map to font sizes.</p></td>
+    </tr>
+    <tr>
       <th>bg_gp</th>
       <td><p>Graphics parameters for controlling the background.</p></td>
     </tr>
     <tr>
       <th>side</th>
       <td><p>Side of the annotation relative to the heatmap.</p></td>
+    </tr>
+    <tr>
+      <th>add_new_line</th>
+      <td><p>Whether to add new line after every word? If <code>TRUE</code>, each word will be in a separated line.</p></td>
     </tr>
     <tr>
       <th>count_words_param</th>

@@ -138,7 +138,7 @@
     <pre class="usage"><span class='fu'>word_cloud_grob</span><span class='op'>(</span><span class='va'>text</span>, <span class='va'>fontsize</span>,
     line_space <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>4</span>, <span class='st'>"pt"</span><span class='op'>)</span>, word_space <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>4</span>, <span class='st'>"pt"</span><span class='op'>)</span>, max_width <span class='op'>=</span> <span class='fu'>unit</span><span class='op'>(</span><span class='fl'>80</span>, <span class='st'>"mm"</span><span class='op'>)</span>,
     col <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>fs</span><span class='op'>)</span> <span class='fu'>circlize</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/circlize/man/rand_color.html'>rand_color</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>fs</span><span class='op'>)</span>, luminosity <span class='op'>=</span> <span class='st'>"dark"</span><span class='op'>)</span>,
-    test <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    add_new_line <span class='op'>=</span> <span class='cn'>FALSE</span>, test <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -166,6 +166,10 @@
     <tr>
       <th>col</th>
       <td><p>Colors for the words. The value can be a vector, in numeric or character, which should have the same length as <code>text</code>. Or it is a self-defined function that takes the font size vector as  the only argument. The function should return a color vector. See Examples.</p></td>
+    </tr>
+    <tr>
+      <th>add_new_line</th>
+      <td><p>Whether to add new line after every word? If <code>TRUE</code>, each word will be in a separated line.</p></td>
     </tr>
     <tr>
       <th>test</th>

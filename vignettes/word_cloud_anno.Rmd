@@ -174,3 +174,38 @@ Heatmap(t(scale(t(sig_mat))), name = "z-score",
 rowAnnotation(go = anno_word_cloud_from_GO(km, go_list, max_words = 30, stat = "count"))
 ```
 
+
+Now there might be users who want to say: I don't actually need the word
+clouds, while I simply want to list key pathways in each cluster. This can be treated as a special case 
+of word cloud where each word (or in general "a phrase as a word") has value of 1 associated. Users need
+to specify several more arguments in `anno_word_cloud()`, as shown in the following example. Here `add_new_line`
+controls whether to list each sentence in separated lines. `value_range` and `fontsize_range` controls the 
+size of the text. Note the defaults of these two arguments work well when font sizes are mapped to word
+frequencies or significance from keywords enrichment, but if the values are of other types, you might need
+to manually reset them.
+
+```{r, fig.width = 7, fig.height = 4}
+mat = matrix(rnorm(100*10), nrow = 100)
+split = sample(letters[1:5], 100, replace = TRUE)
+term = lapply(letters[1:5], function(x) {
+    data.frame(c("This is the first sentence.", "This is the second sentence."), c(1, 1))
+})
+names(term) = letters[1:5]
+Heatmap(mat, row_split = split, 
+    right_annotation = rowAnnotation(wc = anno_word_cloud(split, term,
+    	add_new_line = TRUE, value_range = c(1, 1), fontsize_range = c(10, 10)))
+)
+```
+
+The sentences can also have different font size, just set values in the second column of the data frames in `term`:
+
+```{r, fig.width = 7, fig.height = 4}
+term = lapply(letters[1:5], function(x) {
+    data.frame(c("This is the first sentence.", "This is the second sentence."), c(1, 2))
+})
+names(term) = letters[1:5]
+Heatmap(mat, row_split = split, 
+    right_annotation = rowAnnotation(wc = anno_word_cloud(split, term,
+    	add_new_line = TRUE, value_range = c(1, 2), fontsize_range = c(8, 12)))
+)
+```

@@ -91,6 +91,7 @@ count_words = function(term,
 # -col Colors for the words. The value can be a vector, in numeric or character, which should have the same
 #      length as ``text``. Or it is a self-defined function that takes the font size vector as 
 #      the only argument. The function should return a color vector. See Examples.
+# -add_new_line Whether to add new line after every word? If ``TRUE``, each word will be in a separated line.
 # -test Internally used. It basically adds borders to the words and the viewport.
 #
 # == value
@@ -127,7 +128,7 @@ count_words = function(term,
 word_cloud_grob = function(text, fontsize, 
 	line_space = unit(4, "pt"), word_space = unit(4, "pt"), max_width = unit(80, "mm"), 
 	col = function(fs) circlize::rand_color(length(fs), luminosity = "dark"),
-	test = FALSE) { # width in mm
+	add_new_line = FALSE, test = FALSE) { # width in mm
 
 	if(length(text) != length(fontsize)) {
 		stop_wrap("`text` and `fontsize` should the same length.")
@@ -180,7 +181,7 @@ word_cloud_grob = function(text, fontsize,
 
 	for(i in seq_len(n)[-1]) {
 		# the next text can be put on the same line
-		if(current_line_width + text_width[i] <= max_width) {
+		if(current_line_width + text_width[i] <= max_width && !add_new_line) {
 			x[i] = current_line_width + word_space
 			y[i] = y[i-1] # same as previous one
 			current_line_width = x[i] + text_width[i]
@@ -261,8 +262,10 @@ heightDetails.word_cloud = function(x) {
 # -word_cloud_grob_param A list of graphics parameters passed to `word_cloud_grob`.
 # -fontsize_range The range of the font size. The value should be a numeric vector with length two.
 #       The font size interpolation is linear.
+# -value_range The range of values to map to font sizes.
 # -bg_gp Graphics parameters for controlling the background.
 # -side Side of the annotation relative to the heatmap.
+# -add_new_line Whether to add new line after every word? If ``TRUE``, each word will be in a separated line.
 # -count_words_param A list of parameters passed to `count_words`.
 # -... Other parameters.
 #
@@ -291,9 +294,9 @@ heightDetails.word_cloud = function(x) {
 # 	right_annotation = rowAnnotation(foo = anno_word_cloud(align_to, term)))
 #
 anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
-	word_cloud_grob_param = list(), fontsize_range = c(4, 16),
+	word_cloud_grob_param = list(), fontsize_range = c(4, 16), value_range = NULL,
 	bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
-	count_words_param = list(), ...) {
+	add_new_line = FALSE, count_words_param = list(), ...) {
 
 	if(is.atomic(align_to) && is.list(term)) {
 		align_to = split(seq_along(align_to), align_to)
@@ -398,13 +401,17 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 		gbl <- lapply(names(align_to), function(nm) {
 			kw = rev(keywords[[nm]][, 1])
 			freq = rev(keywords[[nm]][, 2])
-			fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
+			if(is.null(value_range)) {
+				fontsize = scale_fontsize(freq, rg = c(1, max(10, freq)), fs = fontsize_range)
+			} else {
+				fontsize = scale_fontsize(freq, rg = value_range, fs = fontsize_range)
+			}
 
 			if(!"col" %in% names(word_cloud_grob_param)) {
 				word_cloud_grob_param$col = function(fs) all_keywords_col[kw]
 			}
 
-			lt = c(list(text = kw, fontsize = fontsize), word_cloud_grob_param)
+			lt = c(list(text = kw, fontsize = fontsize, add_new_line = add_new_line), word_cloud_grob_param)
 			do.call(word_cloud_grob, lt)
 		})
 		names(gbl) = names(align_to)

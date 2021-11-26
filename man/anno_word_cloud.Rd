@@ -8,9 +8,9 @@ Word cloud annotations
 }
 \usage{
 anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
-    word_cloud_grob_param = list(), fontsize_range = c(4, 16),
+    word_cloud_grob_param = list(), fontsize_range = c(4, 16), value_range = NULL,
     bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
-    count_words_param = list(), ...)
+    add_new_line = FALSE, count_words_param = list(), ...)
 }
 \arguments{
 
@@ -20,8 +20,10 @@ anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
   \item{max_words}{Maximal number of words visualized in the word cloud.}
   \item{word_cloud_grob_param}{A list of graphics parameters passed to \code{\link{word_cloud_grob}}.}
   \item{fontsize_range}{The range of the font size. The value should be a numeric vector with length two. The font size interpolation is linear.}
+  \item{value_range}{The range of values to map to font sizes.}
   \item{bg_gp}{Graphics parameters for controlling the background.}
   \item{side}{Side of the annotation relative to the heatmap.}
+  \item{add_new_line}{Whether to add new line after every word? If \code{TRUE}, each word will be in a separated line.}
   \item{count_words_param}{A list of parameters passed to \code{\link{count_words}}.}
   \item{...}{Other parameters.}
 

@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Simplify Functional Enrichment Results</h1>
                         <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2021-11-22</h4>
+            <h4 class="date">2021-11-26</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/master/vignettes/simplifyEnrichment.Rmd"><code>vignettes/simplifyEnrichment.Rmd</code></a></small>
       <div class="hidden name"><code>simplifyEnrichment.Rmd</code></div>
@@ -115,7 +115,7 @@
 <p>With the similarity matrix <code>mat</code>, users can directly apply <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code> function to perform the clustering as well as visualizing the results.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="../reference/simplifyGO.html">simplifyGO</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.395753 secs.
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.366146 secs.
 ## Perform keywords enrichment for 11 GO lists...</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-6-1.png" width="806.4" style="display: block; margin: auto;"></p>
 <p>On the right side of the heatmap there are the word cloud annotations which summarize the functions with keywords in every GO cluster. Additionally, enrichment is done on keywords compared to GO background vocabulary and the significance corresponds to the font size of the keywords.</p>
@@ -201,30 +201,30 @@
 </ol>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.135666 secs.
-## Cluster 500 terms by 'kmeans'... 19 clusters, used 3.667366 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 22.60092 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.1633129 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.21889 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.200191 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.1410952 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.08234787 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.3581161 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 2.438552 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.00777 secs.
+## Cluster 500 terms by 'kmeans'... 15 clusters, used 3.533886 secs.
+## Cluster 500 terms by 'pam'... 5 clusters, used 22.21925 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.158437 secs.
+## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.123825 secs.
+## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.1832268 secs.
+## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.1389499 secs.
+## Cluster 500 terms by 'louvain'... 6 clusters, used 0.08425498 secs.
+## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.2730038 secs.
+## Cluster 500 terms by 'MCL'... 6 clusters, used 1.850191 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>If <code>plot_type</code> argument is set to <code>heatmap</code>. There are heatmaps for the similarity matrix under different clusterings methods. The last panel is a table with the number of clusters.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.109561 secs.
-## Cluster 500 terms by 'kmeans'... 20 clusters, used 3.620433 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 21.74007 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.1487749 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.164628 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.170625 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.07764316 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.08236694 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.2756431 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 1.967357 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.164889 secs.
+## Cluster 500 terms by 'kmeans'... 17 clusters, used 3.565179 secs.
+## Cluster 500 terms by 'pam'... 5 clusters, used 21.71243 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.144032 secs.
+## Cluster 500 terms by 'apcluster'... 41 clusters, used 0.8258629 secs.
+## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.180125 secs.
+## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.07359314 secs.
+## Cluster 500 terms by 'louvain'... 6 clusters, used 0.101949 secs.
+## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.369005 secs.
+## Cluster 500 terms by 'MCL'... 6 clusters, used 2.051593 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-13-1.png" width="1728" style="display: block; margin: auto;"></p>
 <p>Please note, the clustering methods might have randomness, which means, different runs of <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> may generate different clusterings (slightly different). Thus, if users want to compare the plots between <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat)</a></code> and <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat, plot_type = "heatmap")</a></code>, they should set the same random seed before executing the function.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -324,7 +324,7 @@
 <pre><code>## Use column 'ID' as `go_id_column`.
 ## Use column 'p.adjust' as `padj_column`.
 ## 927/6316 GO IDs left for clustering.
-## Cluster 927 terms by 'binary_cut'... 29 clusters, used 2.174088 secs.
+## Cluster 927 terms by 'binary_cut'... 29 clusters, used 1.811993 secs.
 ## Perform keywords enrichment for 8 GO lists...</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>Next we demonstrate two other data types for <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code>. Both usages are straightforward. The first is a list of numeric vectors:</p>
