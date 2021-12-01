@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -88,7 +88,7 @@
       <h1 data-toc-skip>Simplify Functional Enrichment Results</h1>
                         <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2021-11-26</h4>
+            <h4 class="date">2021-12-01</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/master/vignettes/simplifyEnrichment.Rmd"><code>vignettes/simplifyEnrichment.Rmd</code></a></small>
       <div class="hidden name"><code>simplifyEnrichment.Rmd</code></div>
@@ -115,7 +115,7 @@
 <p>With the similarity matrix <code>mat</code>, users can directly apply <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code> function to perform the clustering as well as visualizing the results.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="../reference/simplifyGO.html">simplifyGO</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.366146 secs.
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.439972 secs.
 ## Perform keywords enrichment for 11 GO lists...</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-6-1.png" width="806.4" style="display: block; margin: auto;"></p>
 <p>On the right side of the heatmap there are the word cloud annotations which summarize the functions with keywords in every GO cluster. Additionally, enrichment is done on keywords compared to GO background vocabulary and the significance corresponds to the font size of the keywords.</p>
@@ -201,30 +201,30 @@
 </ol>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.00777 secs.
-## Cluster 500 terms by 'kmeans'... 15 clusters, used 3.533886 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 22.21925 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.158437 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.123825 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.1832268 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.1389499 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.08425498 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.2730038 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 1.850191 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.135351 secs.
+## Cluster 500 terms by 'kmeans'... 20 clusters, used 4.075123 secs.
+## Cluster 500 terms by 'pam'... 5 clusters, used 22.66828 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.168421 secs.
+## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.241846 secs.
+## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.189863 secs.
+## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.1213241 secs.
+## Cluster 500 terms by 'louvain'... 6 clusters, used 0.07716298 secs.
+## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.3331161 secs.
+## Cluster 500 terms by 'MCL'... 6 clusters, used 2.318379 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>If <code>plot_type</code> argument is set to <code>heatmap</code>. There are heatmaps for the similarity matrix under different clusterings methods. The last panel is a table with the number of clusters.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.164889 secs.
-## Cluster 500 terms by 'kmeans'... 17 clusters, used 3.565179 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 21.71243 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.144032 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 0.8258629 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.180125 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.07359314 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.101949 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.369005 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 2.051593 secs.</code></pre>
+<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.065771 secs.
+## Cluster 500 terms by 'kmeans'... 17 clusters, used 3.31203 secs.
+## Cluster 500 terms by 'pam'... 5 clusters, used 21.97147 secs.
+## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.1476381 secs.
+## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.002367 secs.
+## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.179846 secs.
+## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.07417297 secs.
+## Cluster 500 terms by 'louvain'... 6 clusters, used 0.09866881 secs.
+## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.2999249 secs.
+## Cluster 500 terms by 'MCL'... 6 clusters, used 1.888776 secs.</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-13-1.png" width="1728" style="display: block; margin: auto;"></p>
 <p>Please note, the clustering methods might have randomness, which means, different runs of <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> may generate different clusterings (slightly different). Thus, if users want to compare the plots between <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat)</a></code> and <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat, plot_type = "heatmap")</a></code>, they should set the same random seed before executing the function.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -324,7 +324,7 @@
 <pre><code>## Use column 'ID' as `go_id_column`.
 ## Use column 'p.adjust' as `padj_column`.
 ## 927/6316 GO IDs left for clustering.
-## Cluster 927 terms by 'binary_cut'... 29 clusters, used 1.811993 secs.
+## Cluster 927 terms by 'binary_cut'... 29 clusters, used 2.176637 secs.
 ## Perform keywords enrichment for 8 GO lists...</code></pre>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>Next we demonstrate two other data types for <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code>. Both usages are straightforward. The first is a list of numeric vectors:</p>
@@ -375,7 +375,7 @@
 ## other attached packages:
 ##  [1] hu6800.db_3.13.0         org.Hs.eg.db_3.13.0      AnnotationDbi_1.54.1    
 ##  [4] IRanges_2.26.0           S4Vectors_0.30.0         Biobase_2.52.0          
-##  [7] cola_1.9.4               simplifyEnrichment_1.5.1 BiocGenerics_0.38.0     
+##  [7] cola_1.9.4               simplifyEnrichment_1.5.2 BiocGenerics_0.38.0     
 ## [10] knitr_1.33              
 ## 
 ## loaded via a namespace (and not attached):
@@ -399,8 +399,8 @@
 ##  [52] glue_1.4.2             polyclip_1.10-0        gtable_0.3.0          
 ##  [55] zlibbioc_1.38.0        XVector_0.32.0         GetoptLong_1.0.3      
 ##  [58] kernlab_0.9-29         shape_1.4.6            prabclus_2.3-2        
-##  [61] DEoptimR_1.0-9         apcluster_1.4.8        scales_1.1.1          
-##  [64] DOSE_3.18.1            DBI_1.1.1              Rcpp_1.0.7            
+##  [61] DEoptimR_1.0-9         apcluster_1.4.8        DOSE_3.18.1           
+##  [64] scales_1.1.1           DBI_1.1.1              Rcpp_1.0.7            
 ##  [67] gridtext_0.1.4         viridisLite_0.4.0      xtable_1.8-4          
 ##  [70] clue_0.3-59            tidytree_0.3.4         bit_4.0.4             
 ##  [73] mclust_5.4.7           httr_1.4.2             fgsea_1.18.0          
@@ -431,7 +431,8 @@
 ## [148] rjson_0.2.20           GenomeInfoDbData_1.2.6 diptest_0.76-0        
 ## [151] expm_0.999-6           clusterProfiler_4.0.0  tidyr_1.1.3           
 ## [154] class_7.3-19           rvcheck_0.1.8          rmarkdown_2.9         
-## [157] skmeans_0.2-13         ggforce_0.3.3          NLP_0.2-1</code></pre>
+## [157] skmeans_0.2-13         Cairo_1.5-12.2         ggforce_0.3.3         
+## [160] NLP_0.2-1</code></pre>
 </div>
   </div>
 

@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -179,16 +179,16 @@ clusterings.</p>
 <span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
     package <span class='op'>=</span> <span class='st'>"simplifyEnrichment"</span><span class='op'>)</span><span class='op'>)</span>
 <span class='va'>clt</span> <span class='op'>=</span> <span class='fu'><a href='cmp_make_clusters.html'>cmp_make_clusters</a></span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.49998 secs.
-#&gt; Cluster 500 terms by 'kmeans'... 21 clusters, used 3.501265 secs.
-#&gt; Cluster 500 terms by 'pam'... 5 clusters, used 21.51469 secs.
-#&gt; Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.163491 secs.
-#&gt; Cluster 500 terms by 'apcluster'... 41 clusters, used 1.1725 secs.
-#&gt; Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.1876349 secs.
-#&gt; Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.08288908 secs.
-#&gt; Cluster 500 terms by 'louvain'... 6 clusters, used 0.07305598 secs.
-#&gt; Cluster 500 terms by 'walktrap'... 6 clusters, used 0.678436 secs.
-#&gt; Cluster 500 terms by 'MCL'... 6 clusters, used 1.839584 secs.</div><div class='input'><span class='fu'>cmp_make_plot</span><span class='op'>(</span><span class='va'>mat</span>, <span class='va'>clt</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.459533 secs.
+#&gt; Cluster 500 terms by 'kmeans'... 21 clusters, used 3.215488 secs.
+#&gt; Cluster 500 terms by 'pam'... 5 clusters, used 21.29551 secs.
+#&gt; Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.202924 secs.
+#&gt; Cluster 500 terms by 'apcluster'... 41 clusters, used 1.311954 secs.
+#&gt; Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.180902 secs.
+#&gt; Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.08671308 secs.
+#&gt; Cluster 500 terms by 'louvain'... 6 clusters, used 0.07744408 secs.
+#&gt; Cluster 500 terms by 'walktrap'... 6 clusters, used 0.7161078 secs.
+#&gt; Cluster 500 terms by 'MCL'... 6 clusters, used 1.85496 secs.</div><div class='input'><span class='fu'>cmp_make_plot</span><span class='op'>(</span><span class='va'>mat</span>, <span class='va'>clt</span><span class='op'>)</span>
 </div><div class='img'><img src='cmp_make_plot-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'>cmp_make_plot</span><span class='op'>(</span><span class='va'>mat</span>, <span class='va'>clt</span>, plot_type <span class='op'>=</span> <span class='st'>"heatmap"</span><span class='op'>)</span>
 </div><div class='img'><img src='cmp_make_plot-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
 </div></pre>

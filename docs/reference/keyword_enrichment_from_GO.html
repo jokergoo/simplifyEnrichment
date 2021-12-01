@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Select the cutoff for binary cut — select_cutoff • simplifyEnrichment</title>
+<title>Keyword enrichment for GO terms — keyword_enrichment_from_GO • simplifyEnrichment</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Select the cutoff for binary cut — select_cutoff" />
-<meta property="og:description" content="Select the cutoff for binary cut" />
+<meta property="og:title" content="Keyword enrichment for GO terms — keyword_enrichment_from_GO" />
+<meta property="og:description" content="Keyword enrichment for GO terms" />
 
 
 
@@ -126,92 +126,97 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Select the cutoff for binary cut</h1>
+    <h1>Keyword enrichment for GO terms</h1>
     
-    <div class="hidden name"><code>select_cutoff.Rd</code></div>
+    <div class="hidden name"><code>keyword_enrichment_from_GO.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Select the cutoff for binary cut</p>
+    <p>Keyword enrichment for GO terms</p>
     </div>
 
-    <pre class="usage"><span class='fu'>select_cutoff</span><span class='op'>(</span><span class='va'>mat</span>, cutoff <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/seq.html'>seq</a></span><span class='op'>(</span><span class='fl'>0.6</span>, <span class='fl'>0.98</span>, by <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>keyword_enrichment_from_GO</span><span class='op'>(</span><span class='va'>go_id</span>, min_bg <span class='op'>=</span> <span class='fl'>5</span>, min_term <span class='op'>=</span> <span class='fl'>2</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>mat</th>
-      <td><p>A similarity matrix.</p></td>
+      <th>go_id</th>
+      <td><p>A vector of GO IDs.</p></td>
     </tr>
     <tr>
-      <th>cutoff</th>
-      <td><p>A list of cutoffs to test. Note the range of the cutoff values should be inside [0.5, 1].</p></td>
+      <th>min_bg</th>
+      <td><p>Minimal number of GO terms (in the background, i.e. all GO temrs in the GO database) that contain a specific keyword.</p></td>
     </tr>
     <tr>
-      <th>verbose</th>
-      <td><p>Whether to print messages.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Pass to <code><a href='binary_cut.html'>binary_cut</a></code>.</p></td>
+      <th>min_term</th>
+      <td><p>Minimal number of GO terms (GO terms in <code>go_id</code>) that contain a specific keyword.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Binary cut is applied to each of the cutoff and the clustering results are evaluated by following metrics:</p>
-<ul>
-<li><p>difference score, calculated by <code><a href='difference_score.html'>difference_score</a></code>.</p></li>
-<li><p>number of clusters.</p></li>
-<li><p>block mean, which is the mean similarity in the blocks in the diagonal of the heatmap.</p></li>
-</ul>
+    <p>The enrichment is applied by Fisher's exact test. For a keyword, there is the following 2x2 contigency table:</p>
+<p></p><pre>
+                      | contains the keyword | does not contain the keyword
+    In the GO set     |          s11         |          s12
+    Not in the GO set |          s21         |          s22  </pre>
 
+<p>where s11, s12, s21 and s22 are number of GO terms in each category.</p>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>A data frame with keyword enrichment results.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># \donttest{</span>
-<span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/readRDS.html'>readRDS</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/system.file.html'>system.file</a></span><span class='op'>(</span><span class='st'>"extdata"</span>, <span class='st'>"random_GO_BP_sim_mat.rds"</span>,
-    package <span class='op'>=</span> <span class='st'>"simplifyEnrichment"</span><span class='op'>)</span><span class='op'>)</span>
-<span class='fu'>select_cutoff</span><span class='op'>(</span><span class='va'>mat</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; 1/39, cutoff = 0.6...
-#&gt; 2/39, cutoff = 0.61...
-#&gt; 3/39, cutoff = 0.62...
-#&gt; 4/39, cutoff = 0.63...
-#&gt; 5/39, cutoff = 0.64...
-#&gt; 6/39, cutoff = 0.65...
-#&gt; 7/39, cutoff = 0.66...
-#&gt; 8/39, cutoff = 0.67...
-#&gt; 9/39, cutoff = 0.68...
-#&gt; 10/39, cutoff = 0.69...
-#&gt; 11/39, cutoff = 0.7...
-#&gt; 12/39, cutoff = 0.71...
-#&gt; 13/39, cutoff = 0.72...
-#&gt; 14/39, cutoff = 0.73...
-#&gt; 15/39, cutoff = 0.74...
-#&gt; 16/39, cutoff = 0.75...
-#&gt; 17/39, cutoff = 0.76...
-#&gt; 18/39, cutoff = 0.77...
-#&gt; 19/39, cutoff = 0.78...
-#&gt; 20/39, cutoff = 0.79...
-#&gt; 21/39, cutoff = 0.8...
-#&gt; 22/39, cutoff = 0.81...
-#&gt; 23/39, cutoff = 0.82...
-#&gt; 24/39, cutoff = 0.83...
-#&gt; 25/39, cutoff = 0.84...
-#&gt; 26/39, cutoff = 0.85...
-#&gt; 27/39, cutoff = 0.86...
-#&gt; 28/39, cutoff = 0.87...
-#&gt; 29/39, cutoff = 0.88...
-#&gt; 30/39, cutoff = 0.89...
-#&gt; 31/39, cutoff = 0.9...
-#&gt; 32/39, cutoff = 0.91...
-#&gt; 33/39, cutoff = 0.92...
-#&gt; 34/39, cutoff = 0.93...
-#&gt; 35/39, cutoff = 0.94...
-#&gt; 36/39, cutoff = 0.95...
-#&gt; 37/39, cutoff = 0.96...
-#&gt; 38/39, cutoff = 0.97...
-#&gt; 39/39, cutoff = 0.98...</div><div class='img'><img src='select_cutoff-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># }</span>
+    <pre class="examples"><div class='input'><span class='co'># \dontrun{</span>
+<span class='va'>go_id</span> <span class='op'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span><span class='op'>(</span><span class='fl'>100</span><span class='op'>)</span>
+<span class='fu'>keyword_enrichment_from_GO</span><span class='op'>(</span><span class='va'>go_id</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;            keyword n_term  n_bg            p       padj
+#&gt; 1             cell     19  3738 0.0006806782 0.03063052
+#&gt; 2  polyadenylation      2    18 0.0007611353 0.03348995
+#&gt; 3       regulation     38 10445 0.0009636585 0.04143732
+#&gt; 4       inhibitory      2    46 0.0049404394 0.20749845
+#&gt; 5           spinal      2    50 0.0058130595 0.23833544
+#&gt; 6         response     11  2112 0.0084351171 0.33740469
+#&gt; 7             cord      2    63 0.0090923133 0.35460022
+#&gt; 8         adhesion      3   188 0.0091166862 0.35460022
+#&gt; 9     inflammatory      2    83 0.0153853354 0.56925741
+#&gt; 10            mrna      3   231 0.0158224367 0.56960772
+#&gt; 11        positive     14  3338 0.0184837009 0.64692953
+#&gt; 12        assembly      5   746 0.0277264116 0.94269800
+#&gt; 13        negative     13  3274 0.0338722862 1.00000000
+#&gt; 14        stimulus      3   314 0.0348958358 1.00000000
+#&gt; 15           nerve      2   134 0.0374042684 1.00000000
+#&gt; 16      chemotaxis      2   140 0.0404886087 1.00000000
+#&gt; 17          muscle      4   623 0.0537226238 1.00000000
+#&gt; 18 differentiation      5   933 0.0615164244 1.00000000
+#&gt; 19   proliferation      3   454 0.0847040167 1.00000000
+#&gt; 20         spindle      2   218 0.0879860402 1.00000000
+#&gt; 21          immune      2   238 0.1019652751 1.00000000
+#&gt; 22   specification      2   265 0.1217171778 1.00000000
+#&gt; 23          growth      3   545 0.1272098523 1.00000000
+#&gt; 24        cellular      4   932 0.1620160107 1.00000000
+#&gt; 25   mitochondrial      2   321 0.1651789873 1.00000000
+#&gt; 26         pathway      5  1287 0.1685219263 1.00000000
+#&gt; 27        symbiont      2   331 0.1732104877 1.00000000
+#&gt; 28         histone      2   344 0.1837448982 1.00000000
+#&gt; 29       apoptotic      2   375 0.2092105723 1.00000000
+#&gt; 30            host      3   703 0.2142835748 1.00000000
+#&gt; 31       signaling      5  1429 0.2243614616 1.00000000
+#&gt; 32     development      5  1455 0.2351597839 1.00000000
+#&gt; 33    organization      2   419 0.2459004028 1.00000000
+#&gt; 34   morphogenesis      3   798 0.2715563643 1.00000000
+#&gt; 35    biosynthetic      6  2035 0.3153100415 1.00000000
+#&gt; 36             ion      2   526 0.3353872079 1.00000000
+#&gt; 37          factor      2   554 0.3584269711 1.00000000
+#&gt; 38        involved      5  1850 0.4103143926 1.00000000
+#&gt; 39        membrane      3  1219 0.5249770896 1.00000000
+#&gt; 40         process     12  5825 0.6838981555 1.00000000
+#&gt; 41        receptor      3  1561 0.6920083901 1.00000000
+#&gt; 42       metabolic      3  1787 0.7760015042 1.00000000
+#&gt; 43       catabolic      2  1547 0.8700269103 1.00000000
+#&gt; 44         protein      2  1623 0.8869824271 1.00000000
+#&gt; 45         complex      2  2306 0.9698621763 1.00000000</div><div class='input'><span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

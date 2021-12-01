@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
       </span>
     </div>
 
@@ -207,7 +207,7 @@ GO terms and then runs <code><a href='ht_clusters.html'>ht_clusters</a></code> t
 <span class='va'>go_id</span> <span class='op'>=</span> <span class='fu'><a href='random_GO.html'>random_GO</a></span><span class='op'>(</span><span class='fl'>500</span><span class='op'>)</span>
 <span class='va'>mat</span> <span class='op'>=</span> <span class='fu'><a href='GO_similarity.html'>GO_similarity</a></span><span class='op'>(</span><span class='va'>go_id</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'>You haven't provided value for `ont`, guess it as `BP`.</span></div><div class='input'><span class='va'>df</span> <span class='op'>=</span> <span class='fu'>simplifyGO</span><span class='op'>(</span><span class='va'>mat</span>, word_cloud_grob_param <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span>max_width <span class='op'>=</span> <span class='fl'>80</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 20 clusters, used 1.104134 secs.
+</div><div class='output co'>#&gt; Cluster 500 terms by 'binary_cut'... 20 clusters, used 1.086722 secs.
 #&gt; Perform keywords enrichment for 9 GO lists...</div><div class='img'><img src='simplifyGO-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span>
 </div><div class='output co'>#&gt;           id cluster
 #&gt; 1 GO:0045823       1
