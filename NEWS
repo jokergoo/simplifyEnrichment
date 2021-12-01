@@ -1,3 +1,9 @@
+CHANGES in VERSION 1.5.2
+
+* add `keyword_enrichment_from_GO()`
+
+-------------------------------
+
 CHANGES in VERSION 1.5.1
 
 * word cloud supports perform enrichment on keywords

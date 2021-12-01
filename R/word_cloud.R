@@ -527,7 +527,7 @@ anno_word_cloud_from_GO = function(align_to, go_id, stat = c("pvalue", "count"),
 					v = v[v >= min_stat]
 					data.frame(names(v), v)
 				} else if(stat == "pvalue") {
-					df = keywords_enrichment(x, env$tdm_GO)
+					df = keyword_enrichment(x, env$tdm_GO)
 					df = df[df$p <= min_stat, , drop = FALSE]
 					data.frame(df[, 1], -log10(df$p))
 				}

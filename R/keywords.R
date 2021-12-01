@@ -71,7 +71,7 @@ prepare_keywords_tdm_for_GO = function(use_desc = FALSE, ...) {
 	tdm
 }
 
-keywords_enrichment = function(term_id, tdm, min_bg = 5, min_set = 2) {
+keyword_enrichment = function(term_id, tdm, min_bg = 5, min_term = 2) {
 	tdm2 = tdm[row_sums(tdm) >= min_bg, ]
 
 	l = colnames(tdm2) %in% term_id
@@ -89,7 +89,7 @@ keywords_enrichment = function(term_id, tdm, min_bg = 5, min_set = 2) {
 		}
 		v = as.vector(tdm2[i, ])
 		s11 = sum(v & l)
-		if(s11 < min_set) {
+		if(s11 < min_term) {
 			next
 		}
 		s12 = sum(!v & l)
@@ -107,8 +107,45 @@ keywords_enrichment = function(term_id, tdm, min_bg = 5, min_set = 2) {
 	}
 
 	df = data.frame(keyword = rownames(tdm2), n_term = n_term, n_bg = n_bg, p = p)
-	df = df[df$n_term >= min_set, , drop = FALSE]
+	df = df[df$n_term >= min_term, , drop = FALSE]
 	df$padj = p.adjust(df$p)
 	df[order(df$padj, df$p), , drop = FALSE]
 }
 
+
+# == title
+# Keyword enrichment for GO terms
+#
+# == param
+# -go_id A vector of GO IDs.
+# -min_bg Minimal number of GO terms (in the background, i.e. all GO temrs in the GO database) that contain a specific keyword.
+# -min_term Minimal number of GO terms (GO terms in ``go_id``) that contain a specific keyword.
+#
+# == details
+# The enrichment is applied by Fisher's exact test. For a keyword, there is the following 2x2 contigency table:
+#
+#                       | contains the keyword | does not contain the keyword
+#     In the GO set     |          s11         |          s12
+#     Not in the GO set |          s21         |          s22
+#
+# where s11, s12, s21 and s22 are number of GO terms in each category.
+#
+# == value
+# A data frame with keyword enrichment results.
+#
+# == example
+# \dontrun{
+# go_id = random_GO(100)
+# keyword_enrichment_from_GO(go_id)
+# }
+keyword_enrichment_from_GO = function(go_id, min_bg = 5, min_term = 2) {
+
+	if(is.null(env$tdm_GO)) {
+		# env$tdm_GO = readRDS("~/project/development/simplifyEnrichment/inst/extdata/tdm_GO.rds")
+		env$tdm_GO = readRDS(system.file("extdata", "tdm_GO.rds", package = "simplifyEnrichment"))
+	}
+
+	df = keyword_enrichment(go_id, env$tdm_GO, min_bg, min_term)
+	rownames(df) = NULL
+	df
+}
