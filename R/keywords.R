@@ -3,6 +3,7 @@
 GO_EXCLUDE_WORDS = c("via", "protein", "factor", "side", "type", "specific")
 
 
+# -term a vector of texts
 make_term_document_matrix = function(term,
 	exclude_words = NULL, stop_words = stopwords(),
 	min_word_length = 2, tokenizer = 'words', transform_case = tolower,
