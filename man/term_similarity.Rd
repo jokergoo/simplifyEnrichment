@@ -16,7 +16,7 @@ term_similarity(gl, method = c("kappa", "jaccard", "dice", "overlap"))
 
 }
 \details{
-The definition of the four similarity measurements can be found at \url{https://simplifyenrichment.github.io/supplementary/suppl1_coefficient_definition/suppl1_coefficient_definition.html} .
+The definition of the four similarity measurements can be found at \url{https://jokergoo.github.io/simplifyEnrichment_supplementary/supplS01_coefficient_definition/supplS01_coefficient_definition.html} .
 }
 \value{
 A symmetric matrix.

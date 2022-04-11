@@ -8,7 +8,8 @@ Simplify Gene Ontology (GO) enrichment results
 }
 \usage{
 simplifyGO(mat, method = "binary_cut", control = list(),
-    plot = TRUE, verbose = TRUE, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
+    plot = TRUE, verbose = TRUE,
+    column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
     ht_list = NULL, ...)
 }
 \arguments{

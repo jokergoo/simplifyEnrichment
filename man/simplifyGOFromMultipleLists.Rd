@@ -7,7 +7,8 @@ Perform simplifyGO analysis with multiple lists of GO IDs
 Perform simplifyGO analysis with multiple lists of GO IDs
 }
 \usage{
-simplifyGOFromMultipleLists(lt, go_id_column = NULL, padj_column = NULL, padj_cutoff = 1e-2,
+simplifyGOFromMultipleLists(lt, go_id_column = NULL,
+    padj_column = NULL, padj_cutoff = 1e-2,
     filter = function(x) any(x < padj_cutoff), default = 1,
     ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
     heatmap_param = list(NULL),

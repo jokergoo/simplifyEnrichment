@@ -48,7 +48,8 @@
 # head(df)
 # }
 simplifyGO = function(mat, method = "binary_cut", control = list(), 
-	plot = TRUE, verbose = TRUE, column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
+	plot = TRUE, verbose = TRUE, 
+	column_title = qq("@{nrow(mat)} GO terms clustered by '@{method}'"),
 	ht_list = NULL, ...) {
 
 	if(is.atomic(mat) && !is.matrix(mat)) {
@@ -188,7 +189,8 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # lt3 = lapply(lt, function(x) x$ID[x$p.adjust < 0.001])
 # simplifyGOFromMultipleLists(lt3)
 # }
-simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, padj_column = NULL, padj_cutoff = 1e-2,
+simplifyGOFromMultipleLists = function(lt, go_id_column = NULL, 
+	padj_column = NULL, padj_cutoff = 1e-2,
 	filter = function(x) any(x < padj_cutoff), default = 1, 
 	ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
 	heatmap_param = list(NULL), 
