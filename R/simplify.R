@@ -194,7 +194,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	filter = function(x) any(x < padj_cutoff), default = 1, 
 	ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
 	heatmap_param = list(NULL), 
-	method = "binary_cut", control = list(partial = TRUE), 
+	method = "binary_cut", control = list(), 
 	min_term = NULL, verbose = TRUE, column_title = NULL, ...) {
 
 	n = length(lt)
@@ -210,14 +210,14 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 						stop_wrap("Cannot find the GO ID column in the data frames. Please explicitly set argument `go_id_column`.")
 					}
 					if(verbose) {
-						qqcat("Use row names of the data frame as `go_id_column`.\n")
+						message_wrap("Use row names of the data frame as `go_id_column`.")
 					}
 				} else {
 					stop_wrap("Cannot find the GO ID column in the data frames. Please explicitly set argument `go_id_column`.")
 				}
 			} else {
 				if(verbose) {
-					qqcat("Use column '@{colnames(lt[[1]])[go_id_column]}' as `go_id_column`.\n")
+					message_wrap(qq("Use column '@{colnames(lt[[1]])[go_id_column]}' as `go_id_column`."))
 				}
 			}
 		}
@@ -227,7 +227,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 			if(length(ind)) {
 				padj_column = ind
 				if(verbose) {
-					qqcat("Use column '@{colnames(lt[[1]])[padj_column]}' as `padj_column`.\n")
+					message_wrap(qq("Use column '@{colnames(lt[[1]])[padj_column]}' as `padj_column`."))
 				}
 			} else {
 				stop_wrap("Cannot find the column the contains adjusted p-values in the data frames. Please explicitly set argument `padj_column`.")
@@ -306,7 +306,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	m = m[l, , drop = FALSE]
 	m = t(apply(m, 1, transform))
 
-	if(verbose) qqcat("@{nrow(m)}/@{length(all_go_id)} GO IDs left for clustering.\n")
+	if(verbose) message(qq("@{nrow(m)}/@{length(all_go_id)} GO IDs left for clustering."))
 
 	if(length(unique(m[!is.na(m)])) <= 2) {
 		col = structure(col, names = breaks)
@@ -340,7 +340,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	
 	if(is.null(min_term)) min_term = round(nrow(sim_mat)*0.02)
 	if(is.null(column_title)) column_title = qq("@{length(all_go_id)} GO terms clustered by '@{method}'")
-	
+
 	simplifyGO(sim_mat, ht_list = ht, method = method, 
 		verbose = verbose, min_term = min_term, control= control, column_title = column_title, ...)
 }

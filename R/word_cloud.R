@@ -518,7 +518,7 @@ anno_word_cloud_from_GO = function(align_to, go_id, stat = c("pvalue", "count"),
 			env$tdm_GO = readRDS(system.file("extdata", "tdm_GO.rds", package = "simplifyEnrichment"))
 		}
 
-		if(stat == "pvalue") qqcat("Perform keywords enrichment for @{length(go_id)} GO lists...\n")
+		if(stat == "pvalue") message(qq("Perform keywords enrichment for @{length(go_id)} GO lists..."))
 		term = lapply(go_id, function(x) {
 			if(is_GO_id(x[1])) {
 				

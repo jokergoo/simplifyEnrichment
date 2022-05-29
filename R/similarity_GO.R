@@ -98,7 +98,7 @@ calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 	COMBS = unique(COMBS)
 
 	lt = lapply(seq_len(nrow(COMBS)), function(i) {
-		if(verbose) qqcat("apply block [@{COMBS[i, 1]}, @{COMBS[i, 2]}] @{i}/@{nrow(COMBS)} (@{round(i/nrow(COMBS)*100, 1)}%)\n")
+		if(verbose) message_wrap(qq("apply block [@{COMBS[i, 1]}, @{COMBS[i, 2]}] @{i}/@{nrow(COMBS)} (@{round(i/nrow(COMBS)*100, 1)}%)"))
 		ind1 = SPLIT[[ COMBS[i, 1] ]]
 		ind2 = SPLIT[[ COMBS[i, 2] ]]
 		invisible(termSim(go_id[ind1], go_id[ind2], method = measure, semData = semData))

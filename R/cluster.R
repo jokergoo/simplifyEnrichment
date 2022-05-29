@@ -43,7 +43,7 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		stop_wrap("The matrix should be square.")
 	}
 
-	if(verbose) qqcat("Cluster @{nrow(mat)} terms by '@{method}'...")
+	if(verbose) message(qq("Cluster @{nrow(mat)} terms by '@{method}'..."), appendLF = FALSE)
 	flush.console()
 
 	fun = get_clustering_method(method, control = control)
@@ -56,14 +56,14 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		if(catch_error) {
 			return(oe)
 		} else {
-			cat("\n")
+			message("")
 			stop(oe)
 		}
 	}
 
 	t_diff = t2 - t1
 	t_diff = format(t_diff)
-	if(verbose) qqcat(" @{length(unique(cl))} clusters, used @{t_diff}.\n")
+	if(verbose) message(qq(" @{length(unique(cl))} clusters, used @{t_diff}."))
 
 	if(length(unique(cl)) > 1) {
 		if(method != "binary_cut") {

@@ -508,7 +508,7 @@ plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 		if(identical(hash, dend_env$hash)) {
 			dend = dend_env$dend
 			if(se_opt$verbose) {
-				cat("use the cached dendrogram.\n")
+				message("use the cached dendrogram.")
 			}
 		} else {
 			dend_env$hash = NULL
@@ -519,7 +519,7 @@ plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 	}
 	if(is.null(dend)) {
 		if(se_opt$verbose) {
-			cat("create a new dendrogram.\n")
+			message("create a new dendrogram.")
 		}
 		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
 		dend_env$dend = dend
@@ -643,7 +643,7 @@ select_cutoff = function(mat, cutoff = seq(0.6, 0.98, by = 0.01), verbose = TRUE
 
 	s1 = s2 = s3 = s4 = NULL
 	for(i in seq_along(cutoff)) {
-		if(verbose) qqcat("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}...\n")
+		if(verbose) message(qq("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}..."))
 		cl = binary_cut(mat, cutoff = cutoff[i], ...)
 		s1[i] = difference_score(mat, cl)
 		tb = table(cl)

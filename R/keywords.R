@@ -84,8 +84,8 @@ keyword_enrichment = function(term_id, tdm, min_bg = 5, min_term = 2) {
 	for(i in seq_len(n)) {
 		if(interactive() && se_opt$verbose) {
 			if(i %% 100 == 0 || i == n) {
-				cat(strrep("\r", 100))
-				qqcat("keyword enrichment, @{i}/@{n}...")
+				message(strrep("\r", 100), appendLF = FALSE)
+				message(qq("keyword enrichment, @{i}/@{n}..."), appendLF = FALSE)
 			}
 		}
 		v = as.vector(tdm2[i, ])
@@ -104,7 +104,7 @@ keyword_enrichment = function(term_id, tdm, min_bg = 5, min_term = 2) {
 
 	}
 	if(interactive() && se_opt$verbose) {
-		cat("\n")
+		message("")
 	}
 
 	df = data.frame(keyword = rownames(tdm2), n_term = n_term, n_bg = n_bg, p = p)
