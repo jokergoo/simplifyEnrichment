@@ -12,7 +12,7 @@ simplifyGOFromMultipleLists(lt, go_id_column = NULL,
     filter = function(x) any(x < padj_cutoff), default = 1,
     ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
     heatmap_param = list(NULL),
-    method = "binary_cut", control = list(partial = TRUE),
+    method = "binary_cut", control = list(),
     min_term = NULL, verbose = TRUE, column_title = NULL, ...)
 }
 \arguments{
