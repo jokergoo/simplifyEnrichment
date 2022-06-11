@@ -11,7 +11,7 @@
 
 ### Citation
 
-Zuguang Gu, et al., simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results, 2021 bioRxiv. doi: https://doi.org/10.1101/2020.10.27.312116
+Zuguang Gu, et al., simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results, _Genomics, Proteomics & Bioinformatics 2022_. [https://doi.org/10.1016/j.gpb.2022.04.008](https://doi.org/10.1016/j.gpb.2022.04.008).
 
 ### Install
 
