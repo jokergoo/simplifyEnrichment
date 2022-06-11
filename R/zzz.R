@@ -8,6 +8,11 @@ Github page: https://github.com/jokergoo/simplifyEnrichment
 Documentation: https://jokergoo.github.io/simplifyEnrichment/
 Examples: https://simplifyenrichment.github.io/
 
+If you use it in published research, please cite:
+Gu, Z. simplifyEnrichment: an R/Bioconductor package for Clustering and 
+  Visualizing Functional Enrichment Results, Genomics, Proteomics & 
+  Bioinformatics 2022.
+
 This message can be suppressed by:
   suppressPackageStartupMessages(library(simplifyEnrichment))
 ========================================

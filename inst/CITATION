@@ -4,9 +4,9 @@ citEntry(
    entry = "article",
    title = "simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results",
    author = "Zuguang Gu, Daniel Huebschmann",
-   journal = "bioRxiv",
+   journal = "Genomics, Proteomics & Bioinformatics",
    year = 2021,
-   textVersion = "Gu, Z. (2021) simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results. bioRxiv, https://doi.org/10.1101/2020.10.27.312116."
+   textVersion = "Gu, Z. (2022) simplifyEnrichment: an R/Bioconductor package for Clustering and Visualizing Functional Enrichment Results. Genomics, Proteomics & Bioinformatics, https://doi.org/10.1016/j.gpb.2022.04.008."
 )
 
 citFooter("This free open-source software implements academic
