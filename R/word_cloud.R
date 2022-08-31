@@ -71,7 +71,6 @@ count_words = function(term,
 			)
 		)
 	})
-
 	v = sort(slam::row_sums(tdm), decreasing = TRUE)
 	d = data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
 	d
@@ -355,7 +354,7 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 			if(nrow(df) > max_words) {
 				df = df[order(df[, 2], decreasing = TRUE)[seq_len(max_words)], ]
 			}
-			df
+			df[!df[, 1] %in% exclude_words, , drop = FALSE]
 		})
 	} else {
 		keywords = lapply(term, function(desc) {

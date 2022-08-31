@@ -1,3 +1,12 @@
+CHANGES in VERSION 1.7.2
+
+* `anno_word_cloud()`: fixed a bug where `exclude_words` is not properly 
+  passed to internal functions.
+* `simplifyGOFromMultipleLists()`: fixed a bug where `control` is not 
+  properly passed to internal functions.
+
+-------------------------------
+
 CHANGES in VERSION 1.5.2
 
 * add `keyword_enrichment_from_GO()`

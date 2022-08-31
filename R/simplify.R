@@ -247,7 +247,8 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	} else if(is.character(lt[[1]])) {
 		lt = lapply(lt, function(x) structure(rep(1, length(x)), names = x))
 		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE, ont = ont, db = db, measure = measure,
-			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")), ...))
+			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")),
+			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 	}
 
 	heatmap_param2 = list(transform = NULL, 
@@ -342,7 +343,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	if(is.null(column_title)) column_title = qq("@{length(all_go_id)} GO terms clustered by '@{method}'")
 
 	simplifyGO(sim_mat, ht_list = ht, method = method, 
-		verbose = verbose, min_term = min_term, control= control, column_title = column_title, ...)
+		verbose = verbose, min_term = min_term, control = control, column_title = column_title, ...)
 }
 
 is_p_value = function(x) {

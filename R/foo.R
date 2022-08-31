@@ -9,7 +9,7 @@
 # 	term = term[l]
 
 # 	lt = tapply(term, ontology, function(x) {
-# 		df = count_word(term = x)
+# 		df = count_words(term = x, remove_punctuation = FALSE, remove_numbers = FALSE, transform_case = function(x) x)
 # 		structure(df[, 2], names = df[, 1])
 # 	})
 # }
@@ -32,45 +32,72 @@
 # }
 
 
+# tokenizer = function(n_gram = 1) {
+# 	if(n_gram == 1) {
+# 		function(x) {
+# 			w = x$content
+# 			w = strsplit(w, "[[:punct:]]|[[:space:]]+", perl = TRUE)[[1]]
+# 			w = w[!grepl("^\\d*$", w)]
+# 			w
+# 		}
+# 	} else if(n_gram == 2) {
+# 		function(x) {
+# 			w = x$content
+# 			w = strsplit(w, "[[:punct:]]|[[:space:]]+", perl = TRUE)[[1]]
+# 			w = w[!grepl("^\\d*$", w)]
+# 			n_grams(w, 2)
+# 		}
+# 	} else if(n_gram == 3) {
+# 		function(x) {
+# 			w = x$content
+# 			w = strsplit(w, "[[:punct:]]|[[:space:]]+", perl = TRUE)[[1]]
+# 			w = w[!grepl("^\\d*$", w)]
+# 			n_grams(w, 3)
+# 		}
+# 	}
+# }
+
 # count_word2 = function(term, n_gram = 1) {
 
 # 	n = length(term)
 
-# 	#### analyze text ###########
 # 	docs = VCorpus(VectorSource(term))
-# 	# Convert the text to lower case
-# 	docs = tm_map(docs, content_transformer(tolower))
-# 	# Remove stopwords for the language
-# 	# docs = tm_map(docs, removeWords, stopwords())
-# 	# docs = tm_map(docs, removePunctuation)
-# 	# docs = tm_map(docs, stripWhitespace)
 
-# 	if(n_gram == 1) {
-# 		tokenizer = scan_tokenizer
-# 		docs = tm_map(docs, removeWords, stopwords::stopwords("en", source = "stopwords-iso"))
-# 	} else if(n_gram == 2) {
-# 		tokenizer = function(x) n_grams(scan_tokenizer(x), 2)
-# 	} else if(n_gram == 3) {
-# 		tokenizer = function(x) n_grams(scan_tokenizer(x), 3)
-# 	}
+# 	docs = tm_map(docs, removeWords, stopwords())
 
 # 	# Create term-document matrix
 # 	tdm = TermDocumentMatrix(
 # 		docs,
 # 		control = list(
-# 			tokenize = tokenizer,
-# 			wordLengths = c(2, Inf),
+# 			tokenize = tokenizer(n_gram),
+# 			wordLengths = c(1, Inf),
 # 			tolower = FALSE
 # 		)
 # 	)
 
 # 	v = sort(slam::row_sums(tdm), decreasing = TRUE)
 
-# 	if(n_gram >= 2) {
-# 		v1 = count_word2(term, 1)
-# 		p2 = sapply(strsplit(names(v), " "), function(x) prod((v1[x]+5)/n))
-# 		v = cbind(v = v, p1 = (v+5)/n, p2 = p2)
-# 	}
-# 	v
+# 	data.frame(word = names(v), freq = v, stringsAsFactors = FALSE)
 # }
+
+# n_words = length(unlist(lapply(term, function(x) {
+# 	x = list(content = x)
+# 	setdiff(tokenizer(1)(x), stopwords())
+# })))
+
+# d1 = count_word2(term, 1)
+# d2 = count_word2(term, 2)
+# d3 = count_word2(term, 3)
+
+
+# d2$p_expected = sapply(strsplit(d2$word, " "), function(w) {
+# 	prod(d1[w, "p"])
+# })
+
+
+# d2 = d2[d2$freq >= 5, ]
+# d2$ratio = d2$p/d2$p_expected
+
+
+
 

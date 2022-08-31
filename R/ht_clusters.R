@@ -123,7 +123,7 @@ ht_clusters = function(
 		} else if(!grepl("^GO:[0-9]+$", rownames(mat)[1]) & draw_word_cloud) {
 			draw_word_cloud = FALSE
 		}
-		
+
 		if(draw_word_cloud) {
 			go_id = rownames(mat)
 
