@@ -303,7 +303,7 @@ By default, `simplifyGOFromMultipleLists()` automatically identifies the columns
 send `lt` to `simplifyGOFromMultipleLists()`. We additionally set `padj_cutoff` to 0.001 because under the default cutoff 0.01, there are too many
 GO IDs and to save the running time, we set a more strict cutoff.
 
-```{r, fig.width=10, fig.height = 7, out.width = "100%"}
+```{r, fig.width=10, fig.height = 6, out.width = "100%"}
 simplifyGOFromMultipleLists(lt, padj_cutoff = 0.001)
 ```
 

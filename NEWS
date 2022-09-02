@@ -4,6 +4,8 @@ CHANGES in VERSION 1.7.2
   passed to internal functions.
 * `simplifyGOFromMultipleLists()`: fixed a bug where `control` is not 
   properly passed to internal functions.
+* `simplifyGOFromMultipleLists()`: draw barplots which show numbers of signifiant
+  GO terms in clusters.
 
 -------------------------------
 

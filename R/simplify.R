@@ -125,6 +125,7 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 # -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
 # -measure Semantic measure for the GO similarity, pass to `GOSemSim::termSim`.
 # -heatmap_param Parameters for controlling the heatmap, see Details.
+# -show_barplot Whether draw barplots which shows numbers of significant GO terms in clusters.
 # -method Pass to `simplifyGO`.
 # -control Pass to `simplifyGO`.
 # -min_term Pass to `simplifyGO`.
@@ -193,7 +194,7 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	padj_column = NULL, padj_cutoff = 1e-2,
 	filter = function(x) any(x < padj_cutoff), default = 1, 
 	ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
-	heatmap_param = list(NULL), 
+	heatmap_param = list(NULL), show_barplot = TRUE,
 	method = "binary_cut", control = list(), 
 	min_term = NULL, verbose = TRUE, column_title = NULL, ...) {
 
@@ -241,12 +242,12 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 				structure(x[, padj_column], names = x[, go_id_column])
 			}
 		})
-		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, ont = ont, db = db, measure = measure, heatmap_param = heatmap_param, method = method, 
+		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, ont = ont, db = db, measure = measure, heatmap_param = heatmap_param, show_barplot = show_barplot, method = method, 
 			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 		
 	} else if(is.character(lt[[1]])) {
 		lt = lapply(lt, function(x) structure(rep(1, length(x)), names = x))
-		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE, ont = ont, db = db, measure = measure,
+		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE, ont = ont, db = db, measure = measure, show_barplot = show_barplot,
 			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")),
 			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 	}
@@ -332,17 +333,61 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 	heatmap_legend_param$at = transform(breaks)
 	heatmap_legend_param$labels = if(is.null(labels)) breaks else labels
 	heatmap_legend_param$title = name
-	ht = Heatmap(m[all_go_id, , drop = FALSE], col = col, name = if(name == "") NULL else name,
-		show_row_names = FALSE, cluster_columns = FALSE,
-		border = "black",
-		heatmap_legend_param = heatmap_legend_param,
-		width = unit(0.5, "cm")*n, use_raster = TRUE)
+	mm = m[all_go_id, , drop = FALSE]
+
+	if(show_barplot) {
+		draw_ht = function(align_to) {
+
+			s = sapply(align_to, function(index) max(apply(mm[index, ], 2, function(x) sum(x >= transform(padj_cutoff)))))
+			max = max(s)
+			by = diff(grid.pretty(c(0, max)))[1]
+			Heatmap(mm, col = col, name = if(name == "") NULL else name,
+				show_row_names = FALSE, cluster_columns = FALSE,
+				border = "black",
+				heatmap_legend_param = heatmap_legend_param,
+				width = unit(0.5, "cm")*n, use_raster = TRUE,
+				left_annotation = rowAnnotation(
+					empty = anno_block(width = unit(1.2, "cm"), panel_fun = function(index) grid.text(qq("Number of significant GO terms in each cluster (padj < @{padj_cutoff})"), unit(0, "npc"), 0.5, just = "top", rot = 90, gp = gpar(fontsize = 10))),
+					bar = anno_link(
+						align_to = align_to, side = "left", gap = unit(3, "mm"),
+						link_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), internal_line = FALSE,
+						panel_fun = function(index) {
+							v = apply(mm[index, ], 2, function(x) sum(x >= transform(padj_cutoff)))
+							grid.text(v[2])
+							pushViewport(viewport())
+							grid.rect(gp = gpar(fill = "#DDDDDD", col = "#DDDDDD"))
+							grid.lines(c(1, 0, 0, 1), c(0, 0, 1, 1), gp = gpar(col = "#AAAAAA"), default.units = "npc")
+			    			pushViewport(viewport(xscale = c(0.5, length(v) + 0.5), yscale = c(0, max(v)), height = unit(1, "npc") - unit(2, "mm")))
+							grid.rect(seq_along(v), 0, width = 0.6, height = unit(v, "native"), default.units = "native", just = "bottom", gp = gpar(fill = "#444444", col = "#444444"))
+							if(length(index)/nrow(mm) > 0.05) {
+								grid.yaxis(at = seq(0, max(v), by = by), gp = gpar(col = "#444444", cex = 0.6))
+							}
+							popViewport()
+							popViewport()
+						},
+						size = s/sum(s)*(unit(1, "npc") - unit(3, "mm")*(length(align_to) - 1) - unit(2, "mm")*length(align_to)) + unit(2, "mm")
+					)
+				),
+				post_fun = function(ht) {
+					decorate_annotation("bar", {
+						nc = ncol(mm)
+						grid.text(colnames(mm), (seq_len(nc)-0.5)/nc*(unit(1, "npc") - unit(5, "mm")), y = -ht_opt$COLUMN_ANNO_PADDING, default.units = "npc", just = "right", rot = 90)
+					})
+				})
+		}
+	} else {
+		draw_ht = Heatmap(mm, col = col, name = if(name == "") NULL else name,
+				show_row_names = FALSE, cluster_columns = FALSE,
+				border = "black",
+				heatmap_legend_param = heatmap_legend_param,
+				width = unit(0.5, "cm")*n, use_raster = TRUE)
+	}
 
 	
 	if(is.null(min_term)) min_term = round(nrow(sim_mat)*0.02)
 	if(is.null(column_title)) column_title = qq("@{length(all_go_id)} GO terms clustered by '@{method}'")
 
-	simplifyGO(sim_mat, ht_list = ht, method = method, 
+	simplifyGO(sim_mat, ht_list = draw_ht, method = method, 
 		verbose = verbose, min_term = min_term, control = control, column_title = column_title, ...)
 }
 

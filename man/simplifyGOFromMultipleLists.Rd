@@ -11,7 +11,7 @@ simplifyGOFromMultipleLists(lt, go_id_column = NULL,
     padj_column = NULL, padj_cutoff = 1e-2,
     filter = function(x) any(x < padj_cutoff), default = 1,
     ont = NULL, db = 'org.Hs.eg.db', measure = "Rel",
-    heatmap_param = list(NULL),
+    heatmap_param = list(NULL), show_barplot = TRUE,
     method = "binary_cut", control = list(),
     min_term = NULL, verbose = TRUE, column_title = NULL, ...)
 }
@@ -27,6 +27,7 @@ simplifyGOFromMultipleLists(lt, go_id_column = NULL,
   \item{db}{Annotation database. It should be from \url{https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb}}
   \item{measure}{Semantic measure for the GO similarity, pass to \code{\link[GOSemSim]{termSim}}.}
   \item{heatmap_param}{Parameters for controlling the heatmap, see Details.}
+  \item{show_barplot}{Whether draw barplots which shows numbers of significant GO terms in clusters.}
   \item{method}{Pass to \code{\link{simplifyGO}}.}
   \item{control}{Pass to \code{\link{simplifyGO}}.}
   \item{min_term}{Pass to \code{\link{simplifyGO}}.}

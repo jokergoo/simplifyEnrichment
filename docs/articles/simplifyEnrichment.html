@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">simplifyEnrichment</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.5.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.7.2</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/simplifyEnrichment.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -67,7 +63,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/jokergoo/simplifyEnrichment/">
+  <a href="https://github.com/jokergoo/simplifyEnrichment/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -82,15 +78,15 @@
 
       
 
-      </header><script src="simplifyEnrichment_files/header-attrs-2.9/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Simplify Functional Enrichment Results</h1>
-                        <h4 class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
+                        <h4 data-toc-skip class="author">Zuguang Gu (<a href="mailto:z.gu@dkfz.de" class="email">z.gu@dkfz.de</a>)</h4>
             
-            <h4 class="date">2021-12-01</h4>
+            <h4 data-toc-skip class="date">2022-09-02</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/master/vignettes/simplifyEnrichment.Rmd"><code>vignettes/simplifyEnrichment.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/jokergoo/simplifyEnrichment/blob/HEAD/vignettes/simplifyEnrichment.Rmd" class="external-link"><code>vignettes/simplifyEnrichment.Rmd</code></a></small>
       <div class="hidden name"><code>simplifyEnrichment.Rmd</code></div>
 
     </div>
@@ -98,80 +94,78 @@
     
     
 <p>The <strong>simplifyEnrichment</strong> package clusters functional terms into groups by clustering the similarity matrix of the terms with a new proposed method “binary cut” which recursively applies partition around medoids (PAM) with two groups on the similarity matrix and in each iteration step, a score is assigned to decide whether the group of gene sets that corresponds to the current sub-matrix should be split or not. For more details of the method, please refer to the simplifyEnrichment paper.</p>
-<div id="simplify-go-enrichment-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simplify-go-enrichment-results" class="anchor"></a>Simplify GO enrichment results</h2>
+<div class="section level2">
+<h2 id="simplify-go-enrichment-results">Simplify GO enrichment results<a class="anchor" aria-label="anchor" href="#simplify-go-enrichment-results"></a>
+</h2>
 <p>The major use case for <strong>simplifyEnrichment</strong> is for simplying the GO enrichment results by clustering the corresponding semantic similarity matrix of the significant GO terms. To demonstrate the usage, we first generate a list of random GO IDs from the Biological Process (BP) ontology category:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/simplifyEnrichment">simplifyEnrichment</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">888</span><span class="op">)</span>
-<span class="va">go_id</span> <span class="op">=</span> <span class="fu"><a href="../reference/random_GO.html">random_GO</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></code></pre></div>
-<p><strong>simplifyEnrichment</strong> starts with the GO similarity matrix. Users can use their own similarity matrices or use the <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> function to calculate the semantic similarity matrix. The <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> function is simply a wrapper on <code><a href="https://rdrr.io/pkg/GOSemSim/man/termSim.html">GOSemSim::termSim()</a></code>. The function accepts a vector of GO IDs. Note the GO terms should only belong to one same ontology (<em>i.e.</em>, <code>BP</code>, <code>CC</code> or <code>MF</code>).</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/simplifyEnrichment" class="external-link">simplifyEnrichment</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">888</span><span class="op">)</span></span>
+<span><span class="va">go_id</span> <span class="op">=</span> <span class="fu"><a href="../reference/random_GO.html">random_GO</a></span><span class="op">(</span><span class="fl">500</span><span class="op">)</span></span></code></pre></div>
+<p><strong>simplifyEnrichment</strong> starts with the GO similarity matrix. Users can use their own similarity matrices or use the <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> function to calculate the semantic similarity matrix. The <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> function is simply a wrapper on <code><a href="https://rdrr.io/pkg/GOSemSim/man/termSim.html" class="external-link">GOSemSim::termSim()</a></code>. The function accepts a vector of GO IDs. Note the GO terms should only belong to one same ontology (<em>i.e.</em>, <code>BP</code>, <code>CC</code> or <code>MF</code>).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">mat</span> <span class="op">=</span> <span class="fu"><a href="../reference/GO_similarity.html">GO_similarity</a></span><span class="op">(</span><span class="va">go_id</span><span class="op">)</span></code></pre></div>
-<p>By default, <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> uses <code>Rel</code> method in <code><a href="https://rdrr.io/pkg/GOSemSim/man/termSim.html">GOSemSim::termSim()</a></code>. Other methods to calculate GO similarities can be set by <code>measure</code> argument, <em>e.g.</em>:</p>
+<code class="sourceCode R"><span><span class="va">mat</span> <span class="op">=</span> <span class="fu"><a href="../reference/GO_similarity.html">GO_similarity</a></span><span class="op">(</span><span class="va">go_id</span><span class="op">)</span></span></code></pre></div>
+<p>By default, <code><a href="../reference/GO_similarity.html">GO_similarity()</a></code> uses <code>Rel</code> method in <code><a href="https://rdrr.io/pkg/GOSemSim/man/termSim.html" class="external-link">GOSemSim::termSim()</a></code>. Other methods to calculate GO similarities can be set by <code>measure</code> argument, <em>e.g.</em>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/GO_similarity.html">GO_similarity</a></span><span class="op">(</span><span class="va">go_id</span>, measure <span class="op">=</span> <span class="st">"Wang"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/GO_similarity.html">GO_similarity</a></span><span class="op">(</span><span class="va">go_id</span>, measure <span class="op">=</span> <span class="st">"Wang"</span><span class="op">)</span></span></code></pre></div>
 <p>With the similarity matrix <code>mat</code>, users can directly apply <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code> function to perform the clustering as well as visualizing the results.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="../reference/simplifyGO.html">simplifyGO</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.439972 secs.
-## Perform keywords enrichment for 11 GO lists...</code></pre>
+<code class="sourceCode R"><span><span class="va">df</span> <span class="op">=</span> <span class="fu"><a href="../reference/simplifyGO.html">simplifyGO</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-6-1.png" width="806.4" style="display: block; margin: auto;"></p>
 <p>On the right side of the heatmap there are the word cloud annotations which summarize the functions with keywords in every GO cluster. Additionally, enrichment is done on keywords compared to GO background vocabulary and the significance corresponds to the font size of the keywords.</p>
 <p>Note there is no word cloud for the cluster that is merged from small clusters (size &lt; 5).</p>
 <p>The returned variable <code>df</code> is a data frame with GO IDs and the cluster labels:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></code></pre></div>
-<pre><code>##           id cluster
-## 1 GO:0086066       1
-## 2 GO:0090461       2
-## 3 GO:0032912       3
-## 4 GO:0090220       4
-## 5 GO:0032495       5
-## 6 GO:0070585       4</code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##           id cluster</span></span>
+<span><span class="co">## 1 GO:0086066       1</span></span>
+<span><span class="co">## 2 GO:0090461       2</span></span>
+<span><span class="co">## 3 GO:0032912       3</span></span>
+<span><span class="co">## 4 GO:0090220       4</span></span>
+<span><span class="co">## 5 GO:0032495       5</span></span>
+<span><span class="co">## 6 GO:0070585       4</span></span></code></pre>
 <p>The size of GO clusters can be retrieved by:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code>## 
-##  15  16  17  18  19   8   9  14  10  12  13   6  11   2   7   4   5   1   3 
-##   1   1   1   1   1   2   2   3   5   5   5   8   8  13  36  69  84 120 135</code></pre>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/sort.html" class="external-link">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">##  15  16  17  18  19   8   9  14  10  12  13   6  11   2   7   4   5   1   3 </span></span>
+<span><span class="co">##   1   1   1   1   1   2   2   3   5   5   5   8   8  13  36  69  84 120 135</span></span></code></pre>
 <p>Or split the data frame by the cluster labels:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">df</span><span class="op">$</span><span class="va">cluster</span><span class="op">)</span></span></code></pre></div>
 <p><code>plot</code> argument can be set to <code>FALSE</code> in <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code>, so that no plot is generated and only the data frame is returned.</p>
 <p>If the aim is only to cluster GO terms, <code><a href="../reference/binary_cut.html">binary_cut()</a></code> or <code><a href="../reference/cluster_terms.html">cluster_terms()</a></code> functions can be directly applied:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/binary_cut.html">binary_cut</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>##   [1]  1  2  3  4  5  4  4  4  1  3  3  5  1  5  1  4  1  4  5  4  5  1  4  3  6
-##  [26]  3  7  4  3  1  1  3  8  7  3  3  5  1  4  4  5  2  4  9  5  1  1  7  3  7
-##  [51]  5  3 10  7  1  7  3 10  3  3  7  1  5  5  3  3  1  3  1  3  3  4 11  3  1
-##  [76]  3  4  7  3  3  1  5  4  6  3  3  1  1  4  5  7  7  3  4  5  3  1  1  4  6
-## [101]  4  3  4  4  1  4  3  5  3  7  3  1  3  5  3  1  1  1  9  4  4 12  5  1  1
-## [126]  1  1  5  4  1  4  1  3  5  5  5  1  5  3  5  5  5  1  3  5  5 13  1  2  4
-## [151] 12  3  7  1  3  5  8  1  4  5  1  5  1  1  5  3  3  4  1  1  3  3  3  1  4
-## [176]  4  1  3  4  3  3  5  5  4  4  3  1  3  5  3  5  3  3  3  1  1  1  5  4  3
-## [201]  2  5  4  4  2  3  1  1  3  3  3  2  3  3  3  4  5  3  4  3  4  6  6  4  7
-## [226]  4  5  5  1  1  3  1 14 12  7  7  5  5  3  3  7  3  1  4  1  1  5 14  3  5
-## [251]  5  1 15  1  3 11  4  1  5 13  3  1  7  3  1  5  1  3  5  5  3  6  1  5  3
-## [276] 11  1  2  7  4  5 13  1  1 10  3  5  3  3  3  7  4  5  3  3  4  1  1  4  7
-## [301]  3  2  4  5  3  3  5  3  1  3  2  5  2  3  3  1  1  5  5  4 11  1  1  5  3
-## [326]  3  1  4  5  1  1  1  1  7  3  2  3  2  5  3  5  1 13  3  3  4  7  1  4  6
-## [351]  4  7  1  3  1  4  7  3  5  3  1  2 11  4  3  3  1  1  1  5  1  1  1  1  3
-## [376]  5  4  7  3 10  1  3  1  7  3  1  3 11  3 16  4  6  3  1  7  7 14  1  5  4
-## [401]  5  3  1  3  3  5  3  3  7  4  5  1  7  5  7  3  1 12  3  7 10  1  1  4  3
-## [426]  1  3 13  1  3  3  1  1  5  3  3  1  1  1  1 17  5  1  3  7  3  1  5  1  5
-## [451]  7  3  4  5  4  4  1  1  3  5  7 11  4  4  5  3  4  4  1  1 18  5 12  5  3
-## [476]  3  3  3  5  5  3  3  3  4  1 11  5  1  3  3  1  5  3  1  3 19  7  5  3  1</code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/binary_cut.html">binary_cut</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   [1]  1  2  3  4  5  4  4  4  1  3  3  5  1  5  1  4  1  4  5  4  5  1  4  3  6</span></span>
+<span><span class="co">##  [26]  3  7  4  3  1  1  3  8  7  3  3  5  1  4  4  5  2  4  9  5  1  1  7  3  7</span></span>
+<span><span class="co">##  [51]  5  3 10  7  1  7  3 10  3  3  7  1  5  5  3  3  1  3  1  3  3  4 11  3  1</span></span>
+<span><span class="co">##  [76]  3  4  7  3  3  1  5  4  6  3  3  1  1  4  5  7  7  3  4  5  3  1  1  4  6</span></span>
+<span><span class="co">## [101]  4  3  4  4  1  4  3  5  3  7  3  1  3  5  3  1  1  1  9  4  4 12  5  1  1</span></span>
+<span><span class="co">## [126]  1  1  5  4  1  4  1  3  5  5  5  1  5  3  5  5  5  1  3  5  5 13  1  2  4</span></span>
+<span><span class="co">## [151] 12  3  7  1  3  5  8  1  4  5  1  5  1  1  5  3  3  4  1  1  3  3  3  1  4</span></span>
+<span><span class="co">## [176]  4  1  3  4  3  3  5  5  4  4  3  1  3  5  3  5  3  3  3  1  1  1  5  4  3</span></span>
+<span><span class="co">## [201]  2  5  4  4  2  3  1  1  3  3  3  2  3  3  3  4  5  3  4  3  4  6  6  4  7</span></span>
+<span><span class="co">## [226]  4  5  5  1  1  3  1 14 12  7  7  5  5  3  3  7  3  1  4  1  1  5 14  3  5</span></span>
+<span><span class="co">## [251]  5  1 15  1  3 11  4  1  5 13  3  1  7  3  1  5  1  3  5  5  3  6  1  5  3</span></span>
+<span><span class="co">## [276] 11  1  2  7  4  5 13  1  1 10  3  5  3  3  3  7  4  5  3  3  4  1  1  4  7</span></span>
+<span><span class="co">## [301]  3  2  4  5  3  3  5  3  1  3  2  5  2  3  3  1  1  5  5  4 11  1  1  5  3</span></span>
+<span><span class="co">## [326]  3  1  4  5  1  1  1  1  7  3  2  3  2  5  3  5  1 13  3  3  4  7  1  4  6</span></span>
+<span><span class="co">## [351]  4  7  1  3  1  4  7  3  5  3  1  2 11  4  3  3  1  1  1  5  1  1  1  1  3</span></span>
+<span><span class="co">## [376]  5  4  7  3 10  1  3  1  7  3  1  3 11  3 16  4  6  3  1  7  7 14  1  5  4</span></span>
+<span><span class="co">## [401]  5  3  1  3  3  5  3  3  7  4  5  1  7  5  7  3  1 12  3  7 10  1  1  4  3</span></span>
+<span><span class="co">## [426]  1  3 13  1  3  3  1  1  5  3  3  1  1  1  1 17  5  1  3  7  3  1  5  1  5</span></span>
+<span><span class="co">## [451]  7  3  4  5  4  4  1  1  3  5  7 11  4  4  5  3  4  4  1  1 18  5 12  5  3</span></span>
+<span><span class="co">## [476]  3  3  3  5  5  3  3  3  4  1 11  5  1  3  3  1  5  3  1  3 19  7  5  3  1</span></span></code></pre>
 <p>or</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/cluster_terms.html">cluster_terms</a></span><span class="op">(</span><span class="va">mat</span>, method <span class="op">=</span> <span class="st">"binary_cut"</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/cluster_terms.html">cluster_terms</a></span><span class="op">(</span><span class="va">mat</span>, method <span class="op">=</span> <span class="st">"binary_cut"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/binary_cut.html">binary_cut()</a></code> and <code><a href="../reference/cluster_terms.html">cluster_terms()</a></code> basically generate the same clusterings, but the labels of clusters might differ.</p>
 </div>
-<div id="simplify-general-functional-enrichment-results" class="section level2">
-<h2 class="hasAnchor">
-<a href="#simplify-general-functional-enrichment-results" class="anchor"></a>Simplify general functional enrichment results</h2>
-<p>Semantic measures can be used for the similarity of GO terms. However, there are still a lot of ontologies (e.g. MsigDB gene sets) that are only represented as a list of genes where the similarity between gene sets are mainly measured by gene overlap. <strong>simplifyEnrichment</strong> provides the <code><a href="../reference/term_similarity.html">term_similarity()</a></code> and other related functions (<code><a href="../reference/term_similarity_from_enrichResult.html">term_similarity_from_enrichResult()</a></code>, <code><a href="../reference/term_similarity_from_KEGG.html">term_similarity_from_KEGG()</a></code>, <code><a href="../reference/term_similarity_from_Reactome.html">term_similarity_from_Reactome()</a></code>, <code><a href="../reference/term_similarity_from_MSigDB.html">term_similarity_from_MSigDB()</a></code> and <code><a href="../reference/term_similarity_from_gmt.html">term_similarity_from_gmt()</a></code>) which calculate the similarity of terms by the gene overlapping, with methods of <a href="https://en.wikipedia.org/wiki/Jaccard_index">Jaccard coefficient</a>, <a href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient">Dice coefficient</a>, <a href="https://en.wikipedia.org/wiki/Overlap_coefficient">overlap coefficient</a> and <a href="https://en.wikipedia.org/wiki/Cohen%27s_kappa">kappa coefficient</a>.</p>
+<div class="section level2">
+<h2 id="simplify-general-functional-enrichment-results">Simplify general functional enrichment results<a class="anchor" aria-label="anchor" href="#simplify-general-functional-enrichment-results"></a>
+</h2>
+<p>Semantic measures can be used for the similarity of GO terms. However, there are still a lot of ontologies (e.g. MsigDB gene sets) that are only represented as a list of genes where the similarity between gene sets are mainly measured by gene overlap. <strong>simplifyEnrichment</strong> provides the <code><a href="../reference/term_similarity.html">term_similarity()</a></code> and other related functions (<code><a href="../reference/term_similarity_from_enrichResult.html">term_similarity_from_enrichResult()</a></code>, <code><a href="../reference/term_similarity_from_KEGG.html">term_similarity_from_KEGG()</a></code>, <code><a href="../reference/term_similarity_from_Reactome.html">term_similarity_from_Reactome()</a></code>, <code><a href="../reference/term_similarity_from_MSigDB.html">term_similarity_from_MSigDB()</a></code> and <code><a href="../reference/term_similarity_from_gmt.html">term_similarity_from_gmt()</a></code>) which calculate the similarity of terms by the gene overlapping, with methods of <a href="https://en.wikipedia.org/wiki/Jaccard_index" class="external-link">Jaccard coefficient</a>, <a href="https://en.wikipedia.org/wiki/S%C3%B8rensen%E2%80%93Dice_coefficient" class="external-link">Dice coefficient</a>, <a href="https://en.wikipedia.org/wiki/Overlap_coefficient" class="external-link">overlap coefficient</a> and <a href="https://en.wikipedia.org/wiki/Cohen%27s_kappa" class="external-link">kappa coefficient</a>.</p>
 <p>The similarity can be calculated by providing:</p>
 <ol style="list-style-type: decimal">
 <li>A list of gene sets where each gene set contains a vector of genes.</li>
@@ -181,9 +175,9 @@
 </ol>
 <p>Once you have the similarity matrix, you can send it to <code><a href="../reference/simplifyEnrichment.html">simplifyEnrichment()</a></code> function. But note, as we benchmarked in the manuscript, the clustering on the gene overlap similarity performs much worse than on the semantic similarity.</p>
 </div>
-<div id="comparing-clustering-methods" class="section level2">
-<h2 class="hasAnchor">
-<a href="#comparing-clustering-methods" class="anchor"></a>Comparing clustering methods</h2>
+<div class="section level2">
+<h2 id="comparing-clustering-methods">Comparing clustering methods<a class="anchor" aria-label="anchor" href="#comparing-clustering-methods"></a>
+</h2>
 <p>In the <strong>simplifyEnrichment</strong> package, there are also functions that compare clustering results from different methods. Here we still use previously generated variable <code>mat</code> which is the similarity matrix from the 500 random GO terms. Simply running <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> function performs all supported methods (in <code><a href="../reference/all_clustering_methods.html">all_clustering_methods()</a></code>) excluding <code>mclust</code>, because <code>mclust</code> usually takes very long time to run. The function generates a figure with three panels:</p>
 <ol style="list-style-type: decimal">
 <li>A heatmap of the similarity matrix with different clusterings as row annotations.</li>
@@ -199,75 +193,55 @@
 <li>
 <strong>Block mean</strong>: Mean similarity values of the diagonal blocks in the similarity heatmap. Using the same convention as for the difference score, the block mean is the mean value of <span class="math inline">\(\mathbf{x_1}\)</span>.</li>
 </ol>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.135351 secs.
-## Cluster 500 terms by 'kmeans'... 20 clusters, used 4.075123 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 22.66828 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.168421 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.241846 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.189863 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.1213241 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.07716298 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.3331161 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 2.318379 secs.</code></pre>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-12-1.png" width="960" style="display: block; margin: auto;"></p>
 <p>If <code>plot_type</code> argument is set to <code>heatmap</code>. There are heatmaps for the similarity matrix under different clusterings methods. The last panel is a table with the number of clusters.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Cluster 500 terms by 'binary_cut'... 19 clusters, used 1.065771 secs.
-## Cluster 500 terms by 'kmeans'... 17 clusters, used 3.31203 secs.
-## Cluster 500 terms by 'pam'... 5 clusters, used 21.97147 secs.
-## Cluster 500 terms by 'dynamicTreeCut'... 60 clusters, used 0.1476381 secs.
-## Cluster 500 terms by 'apcluster'... 41 clusters, used 1.002367 secs.
-## Cluster 500 terms by 'hdbscan'... 14 clusters, used 0.179846 secs.
-## Cluster 500 terms by 'fast_greedy'... 6 clusters, used 0.07417297 secs.
-## Cluster 500 terms by 'louvain'... 6 clusters, used 0.09866881 secs.
-## Cluster 500 terms by 'walktrap'... 6 clusters, used 0.2999249 secs.
-## Cluster 500 terms by 'MCL'... 6 clusters, used 1.888776 secs.</code></pre>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-13-1.png" width="1728" style="display: block; margin: auto;"></p>
-<p>Please note, the clustering methods might have randomness, which means, different runs of <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> may generate different clusterings (slightly different). Thus, if users want to compare the plots between <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat)</a></code> and <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods(mat, plot_type = "heatmap")</a></code>, they should set the same random seed before executing the function.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
+<p>Please note, the clustering methods might have randomness, which means, different runs of <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> may generate different clusterings (slightly different). Thus, if users want to compare the plots between <code>compare_clustering_methods(mat)</code> and <code>compare_clustering_methods(mat, plot_type = "heatmap")</code>, they should set the same random seed before executing the function.</p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/compare_clustering_methods.html">compare_clustering_methods</a></span><span class="op">(</span><span class="va">mat</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div>
 <p><code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> is simply a wrapper on <code><a href="../reference/cmp_make_clusters.html">cmp_make_clusters()</a></code> and <code><a href="../reference/cmp_make_plot.html">cmp_make_plot()</a></code> functions where the former function performs clustering with different methods and the latter visualizes the results. To compare different plots, users can also use the following code without specifying the random seed.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">clt</span> <span class="op">=</span> <span class="fu"><a href="../reference/cmp_make_clusters.html">cmp_make_clusters</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="co"># just a list of cluster labels</span>
-<span class="fu"><a href="../reference/cmp_make_plot.html">cmp_make_plot</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">clt</span><span class="op">)</span>
-<span class="fu"><a href="../reference/cmp_make_plot.html">cmp_make_plot</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">clt</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></code></pre></div>
-<div id="register-new-clustering-methods" class="section level3">
-<h3 class="hasAnchor">
-<a href="#register-new-clustering-methods" class="anchor"></a>Register new clustering methods</h3>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">clt</span> <span class="op">=</span> <span class="fu"><a href="../reference/cmp_make_clusters.html">cmp_make_clusters</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span> <span class="co"># just a list of cluster labels</span></span>
+<span><span class="fu"><a href="../reference/cmp_make_plot.html">cmp_make_plot</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">clt</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/cmp_make_plot.html">cmp_make_plot</a></span><span class="op">(</span><span class="va">mat</span>, <span class="va">clt</span>, plot_type <span class="op">=</span> <span class="st">"heatmap"</span><span class="op">)</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="register-new-clustering-methods">Register new clustering methods<a class="anchor" aria-label="anchor" href="#register-new-clustering-methods"></a>
+</h3>
 <p>New clustering methods can be added by <code><a href="../reference/register_clustering_methods.html">register_clustering_methods()</a></code>, removed by <code><a href="../reference/remove_clustering_methods.html">remove_clustering_methods()</a></code> and reset to the default methods by <code><a href="../reference/reset_clustering_methods.html">reset_clustering_methods()</a></code>. All the supported methods can be retrieved by <code><a href="../reference/all_clustering_methods.html">all_clustering_methods()</a></code>. <code><a href="../reference/compare_clustering_methods.html">compare_clustering_methods()</a></code> runs all the clustering methods in <code><a href="../reference/all_clustering_methods.html">all_clustering_methods()</a></code>.</p>
 <p>The new clustering methods should be as user-defined functions and sent to <code><a href="../reference/register_clustering_methods.html">register_clustering_methods()</a></code> as named arguments, e.g.:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/register_clustering_methods.html">register_clustering_methods</a></span><span class="op">(</span>
-    method1 <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">...</span><span class="op">)</span> <span class="va">...</span>,
-    method2 <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">...</span><span class="op">)</span> <span class="va">...</span>,
-    <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/register_clustering_methods.html">register_clustering_methods</a></span><span class="op">(</span></span>
+<span>    method1 <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">...</span><span class="op">)</span> <span class="va">...</span>,</span>
+<span>    method2 <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">mat</span>, <span class="va">...</span><span class="op">)</span> <span class="va">...</span>,</span>
+<span>    <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
 <p>The functions should accept at least one argument which is the input matrix (<code>mat</code> in above example). The second optional argument should always be <code>...</code> so that parameters for the clustering function can be passed by <code>control</code> argument from <code><a href="../reference/cluster_terms.html">cluster_terms()</a></code> or <code><a href="../reference/simplifyGO.html">simplifyGO()</a></code>. If users forget to add <code>...</code>, it is added internally.</p>
 <p>Please note, the user-defined function should automatically identify the optimized number of clusters. The function should return a vector of cluster labels. Internally it is converted to numeric labels.</p>
 </div>
 </div>
-<div id="examples" class="section level2">
-<h2 class="hasAnchor">
-<a href="#examples" class="anchor"></a>Examples</h2>
+<div class="section level2">
+<h2 id="examples">Examples<a class="anchor" aria-label="anchor" href="#examples"></a>
+</h2>
 <p>There are following examples which we did for the benchmarking in the manuscript:</p>
 <ul>
 <li>
-<a href="https://simplifyenrichment.github.io/examples/">Examples of simplifyEnrichment</a>.</li>
+<a href="https://simplifyenrichment.github.io/examples/" class="external-link">Examples of simplifyEnrichment</a>.</li>
 <li>
-<a href="https://simplifyenrichment.github.io/compare_similarity/">Compare different similarity measures for functional terms</a>.</li>
+<a href="https://simplifyenrichment.github.io/compare_similarity/" class="external-link">Compare different similarity measures for functional terms</a>.</li>
 <li>
-<a href="https://simplifyenrichment.github.io/test_partition_methods/">Compare different partitioning methods in binary cut clustering</a>.</li>
+<a href="https://simplifyenrichment.github.io/test_partition_methods/" class="external-link">Compare different partitioning methods in binary cut clustering</a>.</li>
 </ul>
 </div>
-<div id="apply-to-multiple-lists-of-go-ids" class="section level2">
-<h2 class="hasAnchor">
-<a href="#apply-to-multiple-lists-of-go-ids" class="anchor"></a>Apply to multiple lists of GO IDs</h2>
+<div class="section level2">
+<h2 id="apply-to-multiple-lists-of-go-ids">Apply to multiple lists of GO IDs<a class="anchor" aria-label="anchor" href="#apply-to-multiple-lists-of-go-ids"></a>
+</h2>
 <p>It is always very common that users have multiple lists of GO enrichment results (e.g. from multiple groups of genes) and they want to compare the significant terms between different lists, e.g. to see which biological functions are more specific in a certain list. There is a function <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code> in the package which helps this type of analysis.</p>
 <p>The input data for <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code> (with the argument <code>lt</code>) can have three types of formats:</p>
 <ul>
@@ -276,65 +250,60 @@
 <li>A list of character vectors of GO IDs. In this case, each character vector is changed to a numeric vector where all values take 1 and the original GO IDs are used as names of the vector.</li>
 </ul>
 <p>If the GO enrichment results is directly from upstream analysis, e.g. the package <strong>clusterProfiler</strong> or other similar packages, the results are most probably represented as a list of data frames, thus, we first demonstrate the usage on a list of data frames.</p>
-<p>The function <code><a href="https://rdrr.io/pkg/cola/man/functional_enrichment-dispatch.html">functional_enrichment()</a></code> in <strong>cola</strong> package applies functional enrichment on different groups of signature genes from consensus clustering. The function internally uses <strong>clusterProfiler</strong> and returns a list of data frames:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># perform functional enrichment on the signatures genes from cola anlaysis </span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/cola">cola</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">golub_cola</span><span class="op">)</span> 
-<span class="va">res</span> <span class="op">=</span> <span class="va">golub_cola</span><span class="op">[</span><span class="st">"ATC:skmeans"</span><span class="op">]</span>
-
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">hu6800.db</span><span class="op">)</span>
-<span class="va">x</span> <span class="op">=</span> <span class="va">hu6800ENTREZID</span>
-<span class="va">mapped_probes</span> <span class="op">=</span> <span class="fu">mappedkeys</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>
-<span class="va">id_mapping</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">as.list</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">mapped_probes</span><span class="op">]</span><span class="op">)</span><span class="op">)</span>
-
-<span class="va">lt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cola/man/functional_enrichment-dispatch.html">functional_enrichment</a></span><span class="op">(</span><span class="va">res</span>, k <span class="op">=</span> <span class="fl">3</span>, id_mapping <span class="op">=</span> <span class="va">id_mapping</span><span class="op">)</span></code></pre></div>
-<pre><code>## - 2050/4116 significant genes are taken from 3-group comparisons
-## - on k-means group 1/3, 827 genes
-##   - 651/827 (78.7%) genes left after id mapping
-##   - gene set enrichment, GO:BP
-## - on k-means group 2/3, 359 genes
-##   - 317/359 (88.3%) genes left after id mapping
-##   - gene set enrichment, GO:BP
-## - on k-means group 3/3, 864 genes
-##   - 786/864 (91%) genes left after id mapping
-##   - gene set enrichment, GO:BP</code></pre>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">lt</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "BP_km1" "BP_km2" "BP_km3"</code></pre>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">lt</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<pre><code>##                    ID                                  Description GeneRatio
-## GO:0033993 GO:0033993                            response to lipid    88/625
-## GO:0014070 GO:0014070          response to organic cyclic compound    83/625
-## GO:0051050 GO:0051050             positive regulation of transport    81/625
-## GO:0003013 GO:0003013                   circulatory system process    64/625
-## GO:0071417 GO:0071417 cellular response to organonitrogen compound    64/625
-## GO:1901699 GO:1901699       cellular response to nitrogen compound    67/625
-##              BgRatio       pvalue     p.adjust       qvalue
-## GO:0033993 865/18862 2.571021e-21 1.360070e-17 9.466771e-18
-## GO:0014070 907/18862 2.672616e-17 7.069068e-14 4.920426e-14
-## GO:0051050 883/18862 5.885628e-17 1.037832e-13 7.223834e-14
-## GO:0003013 610/18862 2.542875e-16 3.362953e-13 2.340784e-13
-## GO:0071417 643/18862 3.241418e-15 3.429420e-12 2.387049e-12
-## GO:1901699 698/18862 4.153501e-15 3.662003e-12 2.548938e-12</code></pre>
+<p>The function <code><a href="https://rdrr.io/pkg/cola/man/functional_enrichment-dispatch.html" class="external-link">functional_enrichment()</a></code> in <strong>cola</strong> package applies functional enrichment on different groups of signature genes from consensus clustering. The function internally uses <strong>clusterProfiler</strong> and returns a list of data frames:</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># perform functional enrichment on the signatures genes from cola anlaysis </span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/jokergoo/cola" class="external-link">cola</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">golub_cola</span><span class="op">)</span> </span>
+<span><span class="va">res</span> <span class="op">=</span> <span class="va">golub_cola</span><span class="op">[</span><span class="st">"ATC:skmeans"</span><span class="op">]</span></span>
+<span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">hu6800.db</span><span class="op">)</span></span>
+<span><span class="va">x</span> <span class="op">=</span> <span class="va">hu6800ENTREZID</span></span>
+<span><span class="va">mapped_probes</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/AnnotationDbi/man/Bimap-keys.html" class="external-link">mappedkeys</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">id_mapping</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">mapped_probes</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lt</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/cola/man/functional_enrichment-dispatch.html" class="external-link">functional_enrichment</a></span><span class="op">(</span><span class="va">res</span>, k <span class="op">=</span> <span class="fl">3</span>, id_mapping <span class="op">=</span> <span class="va">id_mapping</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## - 2050/4116 significant genes are taken from 3-group comparisons</span></span>
+<span><span class="co">## - on k-means group 1/3, 827 genes</span></span>
+<span><span class="co">##   - 651/827 (78.7%) genes left after id mapping</span></span>
+<span><span class="co">##   - gene set enrichment, GO:BP</span></span>
+<span><span class="co">## - on k-means group 2/3, 359 genes</span></span>
+<span><span class="co">##   - 317/359 (88.3%) genes left after id mapping</span></span>
+<span><span class="co">##   - gene set enrichment, GO:BP</span></span>
+<span><span class="co">## - on k-means group 3/3, 864 genes</span></span>
+<span><span class="co">##   - 786/864 (91%) genes left after id mapping</span></span>
+<span><span class="co">##   - gene set enrichment, GO:BP</span></span></code></pre>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">lt</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "BP_km1" "BP_km2" "BP_km3"</span></span></code></pre>
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">lt</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">7</span><span class="op">]</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##                    ID                            Description GeneRatio</span></span>
+<span><span class="co">## GO:0033993 GO:0033993                      response to lipid    88/627</span></span>
+<span><span class="co">## GO:0003013 GO:0003013             circulatory system process    67/627</span></span>
+<span><span class="co">## GO:0014070 GO:0014070    response to organic cyclic compound    85/627</span></span>
+<span><span class="co">## GO:0051050 GO:0051050       positive regulation of transport    83/627</span></span>
+<span><span class="co">## GO:0008015 GO:0008015                      blood circulation    58/627</span></span>
+<span><span class="co">## GO:1901699 GO:1901699 cellular response to nitrogen compound    69/627</span></span>
+<span><span class="co">##              BgRatio       pvalue     p.adjust       qvalue</span></span>
+<span><span class="co">## GO:0033993 886/18800 1.941766e-20 1.016709e-16 7.051676e-17</span></span>
+<span><span class="co">## GO:0003013 596/18800 1.835489e-18 3.899342e-15 2.704502e-15</span></span>
+<span><span class="co">## GO:0014070 900/18800 2.234153e-18 3.899342e-15 2.704502e-15</span></span>
+<span><span class="co">## GO:0051050 892/18800 1.447614e-17 1.894927e-14 1.314282e-14</span></span>
+<span><span class="co">## GO:0008015 511/18800 2.719921e-16 2.848301e-13 1.975521e-13</span></span>
+<span><span class="co">## GO:1901699 695/18800 3.870416e-16 3.350950e-13 2.324148e-13</span></span></code></pre>
 <p>By default, <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code> automatically identifies the columns that contain GO IDs and adjusted p-values, so here we directly send <code>lt</code> to <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code>. We additionally set <code>padj_cutoff</code> to 0.001 because under the default cutoff 0.01, there are too many GO IDs and to save the running time, we set a more strict cutoff.</p>
-<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt</span>, padj_cutoff <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></code></pre></div>
-<pre><code>## Use column 'ID' as `go_id_column`.
-## Use column 'p.adjust' as `padj_column`.
-## 927/6316 GO IDs left for clustering.
-## Cluster 927 terms by 'binary_cut'... 29 clusters, used 2.176637 secs.
-## Perform keywords enrichment for 8 GO lists...</code></pre>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt</span>, padj_cutoff <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span></code></pre></div>
 <p><img src="simplifyEnrichment_files/figure-html/unnamed-chunk-18-1.png" width="100%" style="display: block; margin: auto;"></p>
 <p>Next we demonstrate two other data types for <code><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists()</a></code>. Both usages are straightforward. The first is a list of numeric vectors:</p>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lt2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">lt</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">p.adjust</span>, names <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt2</span>, padj_cutoff <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lt2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">lt</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html" class="external-link">structure</a></span><span class="op">(</span><span class="va">x</span><span class="op">$</span><span class="va">p.adjust</span>, names <span class="op">=</span> <span class="va">x</span><span class="op">$</span><span class="va">ID</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt2</span>, padj_cutoff <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span></code></pre></div>
 <p>And the second is a list of character vectors of GO IDs:</p>
-<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">lt3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">lt</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">ID</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">p.adjust</span> <span class="op">&lt;</span> <span class="fl">0.001</span><span class="op">]</span><span class="op">)</span>
-<span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt3</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">lt3</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/BiocGenerics/man/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">lt</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="va">x</span><span class="op">$</span><span class="va">ID</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">p.adjust</span> <span class="op">&lt;</span> <span class="fl">0.001</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/simplifyGOFromMultipleLists.html">simplifyGOFromMultipleLists</a></span><span class="op">(</span><span class="va">lt3</span><span class="op">)</span></span></code></pre></div>
 <p>The process of this analysis is as follows. Let’s assume there are <span class="math inline">\(n\)</span> GO lists, we first construct a global matrix where columns correspond to the <span class="math inline">\(n\)</span> GO lists and rows correspond to the “union” of all GO IDs in the <span class="math inline">\(n\)</span> lists. The value for the i<sup>th</sup> GO ID and in the j<sup>th</sup> list are taken from the corresponding numeric vector in <code>lt</code>. If the j<sup>th</sup> vector in <code>lt</code> does not contain the i<sup>th</sup> GO ID, the value defined by <code>default</code> argument is taken there (e.g. in most cases the numeric values are adjusted p-values, thus <code>default</code> is set to 1). Let’s call this matrix as <span class="math inline">\(M_0\)</span>.</p>
 <p>Next step is to filter <span class="math inline">\(M_0\)</span> so that we only take a subset of GO IDs of interest. We define a proper function via argument <code>filter</code> to remove GO IDs that are not important for the analysis. Function for <code>filter</code> is applied to every row in <span class="math inline">\(M_0\)</span> and <code>filter</code> function needs to return a logical value to decide whether to keep or remove the current GO ID. For example, if the values in <code>lt</code> are adjusted p-values, the <code>filter</code> function can be set as <code>function(x) any(x &lt; padj_cutoff)</code> so that the GO ID is kept as long as it is signfiicant in at least one list. After the filtering, let’s call the filtered matrix <span class="math inline">\(M_1\)</span>.</p>
 <p>GO IDs in <span class="math inline">\(M_1\)</span> (row names of <span class="math inline">\(M_1\)</span>) are used for clustering. A heatmap of <span class="math inline">\(M_1\)</span> is attached to the left of the GO similarity heatmap so that the group-specific (or list-specific) patterns can be easily observed and to corresponded to GO functions.</p>
@@ -352,87 +321,88 @@
 <code>name</code>: Legend title.</li>
 </ul>
 </div>
-<div id="session-info" class="section level2">
-<h2 class="hasAnchor">
-<a href="#session-info" class="anchor"></a>Session Info</h2>
-<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## R version 4.1.2 (2021-11-01)
-## Platform: x86_64-apple-darwin17.0 (64-bit)
-## Running under: macOS Big Sur 10.16
-## 
-## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRblas.0.dylib
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.1/Resources/lib/libRlapack.dylib
-## 
-## locale:
-## [1] C/UTF-8/C/C/C/C
-## 
-## attached base packages:
-##  [1] stats4    grid      parallel  stats     graphics  grDevices utils    
-##  [8] datasets  methods   base     
-## 
-## other attached packages:
-##  [1] hu6800.db_3.13.0         org.Hs.eg.db_3.13.0      AnnotationDbi_1.54.1    
-##  [4] IRanges_2.26.0           S4Vectors_0.30.0         Biobase_2.52.0          
-##  [7] cola_1.9.4               simplifyEnrichment_1.5.2 BiocGenerics_0.38.0     
-## [10] knitr_1.33              
-## 
-## loaded via a namespace (and not attached):
-##   [1] shadowtext_0.0.8       circlize_0.4.14        fastmatch_1.1-0       
-##   [4] systemfonts_1.0.2      plyr_1.8.6             igraph_1.2.6          
-##   [7] lazyeval_0.2.2         proxyC_0.2.0           splines_4.1.2         
-##  [10] BiocParallel_1.26.0    MCL_1.0                GenomeInfoDb_1.28.0   
-##  [13] ggplot2_3.3.5          digest_0.6.27          foreach_1.5.1         
-##  [16] htmltools_0.5.2        GOSemSim_2.18.0        viridis_0.6.1         
-##  [19] magick_2.7.2           GO.db_3.13.0           fansi_0.5.0           
-##  [22] magrittr_2.0.1         memoise_2.0.0          tm_0.7-8              
-##  [25] cluster_2.1.2          doParallel_1.0.16      graphlayouts_0.7.1    
-##  [28] ComplexHeatmap_2.11.1  Biostrings_2.60.1      annotate_1.70.0       
-##  [31] RcppParallel_5.1.4     matrixStats_0.59.0     pkgdown_1.6.1         
-##  [34] enrichplot_1.12.1      colorspace_2.0-2       ggrepel_0.9.1         
-##  [37] blob_1.2.1             textshaping_0.3.5      xfun_0.24             
-##  [40] dplyr_1.0.7            crayon_1.4.1           RCurl_1.98-1.3        
-##  [43] microbenchmark_1.4-7   jsonlite_1.7.2         scatterpie_0.1.6      
-##  [46] genefilter_1.74.0      impute_1.66.0          ape_5.5               
-##  [49] brew_1.0-6             survival_3.2-13        iterators_1.0.13      
-##  [52] glue_1.4.2             polyclip_1.10-0        gtable_0.3.0          
-##  [55] zlibbioc_1.38.0        XVector_0.32.0         GetoptLong_1.0.3      
-##  [58] kernlab_0.9-29         shape_1.4.6            prabclus_2.3-2        
-##  [61] DEoptimR_1.0-9         apcluster_1.4.8        DOSE_3.18.1           
-##  [64] scales_1.1.1           DBI_1.1.1              Rcpp_1.0.7            
-##  [67] gridtext_0.1.4         viridisLite_0.4.0      xtable_1.8-4          
-##  [70] clue_0.3-59            tidytree_0.3.4         bit_4.0.4             
-##  [73] mclust_5.4.7           httr_1.4.2             fgsea_1.18.0          
-##  [76] RColorBrewer_1.1-2     fpc_2.2-9              modeltools_0.2-23     
-##  [79] ellipsis_0.3.2         pkgconfig_2.0.3        XML_3.99-0.6          
-##  [82] flexmix_2.3-17         farver_2.1.0           nnet_7.3-16           
-##  [85] sass_0.4.0             utf8_1.2.1             dynamicTreeCut_1.63-1 
-##  [88] reshape2_1.4.4         tidyselect_1.1.1       labeling_0.4.2        
-##  [91] rlang_0.4.11           munsell_0.5.0          tools_4.1.2           
-##  [94] cachem_1.0.5           downloader_0.4         dbscan_1.1-8          
-##  [97] generics_0.1.0         RSQLite_2.2.7          evaluate_0.14         
-## [100] stringr_1.4.0          fastmap_1.1.0          yaml_2.2.1            
-## [103] ragg_1.1.3             ggtree_3.0.2           bit64_4.0.5           
-## [106] fs_1.5.0               tidygraph_1.2.0        robustbase_0.93-8     
-## [109] purrr_0.3.4            ggraph_2.0.5           KEGGREST_1.32.0       
-## [112] nlme_3.1-153           slam_0.1-48            aplot_0.0.6           
-## [115] DO.db_2.9              xml2_1.3.2             compiler_4.1.2        
-## [118] png_0.1-7              treeio_1.16.1          tweenr_1.0.2          
-## [121] tibble_3.1.2           bslib_0.3.0            stringi_1.6.2         
-## [124] highr_0.9              desc_1.3.0             lattice_0.20-45       
-## [127] Matrix_1.3-4           markdown_1.1           vctrs_0.3.8           
-## [130] pillar_1.6.1           lifecycle_1.0.0        BiocManager_1.30.16   
-## [133] jquerylib_0.1.4        eulerr_6.1.0           GlobalOptions_0.1.2   
-## [136] data.table_1.14.0      cowplot_1.1.1          bitops_1.0-7          
-## [139] irlba_2.3.3            patchwork_1.1.1        qvalue_2.24.0         
-## [142] R6_2.5.0               gridExtra_2.3          codetools_0.2-18      
-## [145] MASS_7.3-54            assertthat_0.2.1       rprojroot_2.0.2       
-## [148] rjson_0.2.20           GenomeInfoDbData_1.2.6 diptest_0.76-0        
-## [151] expm_0.999-6           clusterProfiler_4.0.0  tidyr_1.1.3           
-## [154] class_7.3-19           rvcheck_0.1.8          rmarkdown_2.9         
-## [157] skmeans_0.2-13         Cairo_1.5-12.2         ggforce_0.3.3         
-## [160] NLP_0.2-1</code></pre>
+<div class="section level2">
+<h2 id="session-info">Session Info<a class="anchor" aria-label="anchor" href="#session-info"></a>
+</h2>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## R version 4.2.0 (2022-04-22)</span></span>
+<span><span class="co">## Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
+<span><span class="co">## Running under: macOS Big Sur/Monterey 10.16</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Matrix products: default</span></span>
+<span><span class="co">## BLAS:   /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRblas.0.dylib</span></span>
+<span><span class="co">## LAPACK: /Library/Frameworks/R.framework/Versions/4.2/Resources/lib/libRlapack.dylib</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## locale:</span></span>
+<span><span class="co">## [1] C/UTF-8/C/C/C/C</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## attached base packages:</span></span>
+<span><span class="co">## [1] stats4    grid      stats     graphics  grDevices utils     datasets </span></span>
+<span><span class="co">## [8] methods   base     </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## other attached packages:</span></span>
+<span><span class="co">##  [1] hu6800.db_3.13.0         org.Hs.eg.db_3.15.0      AnnotationDbi_1.58.0    </span></span>
+<span><span class="co">##  [4] IRanges_2.30.0           S4Vectors_0.34.0         Biobase_2.56.0          </span></span>
+<span><span class="co">##  [7] cola_2.3.1               simplifyEnrichment_1.7.2 BiocGenerics_0.42.0     </span></span>
+<span><span class="co">## [10] knitr_1.39              </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## loaded via a namespace (and not attached):</span></span>
+<span><span class="co">##   [1] utf8_1.2.2             tidyselect_1.1.2       RSQLite_2.2.15        </span></span>
+<span><span class="co">##   [4] BiocParallel_1.30.3    scatterpie_0.1.7       munsell_0.5.0         </span></span>
+<span><span class="co">##   [7] codetools_0.2-18       ragg_1.2.2             colorspace_2.0-3      </span></span>
+<span><span class="co">##  [10] GOSemSim_2.22.0        NLP_0.2-1              highr_0.9             </span></span>
+<span><span class="co">##  [13] robustbase_0.95-0      DOSE_3.22.0            labeling_0.4.2        </span></span>
+<span><span class="co">##  [16] slam_0.1-50            GenomeInfoDbData_1.2.8 polyclip_1.10-0       </span></span>
+<span><span class="co">##  [19] bit64_4.0.5            farver_2.1.1           rprojroot_2.0.3       </span></span>
+<span><span class="co">##  [22] downloader_0.4         vctrs_0.4.1            treeio_1.20.1         </span></span>
+<span><span class="co">##  [25] generics_0.1.3         xfun_0.31              diptest_0.76-0        </span></span>
+<span><span class="co">##  [28] R6_2.5.1               markdown_1.1           doParallel_1.0.17     </span></span>
+<span><span class="co">##  [31] GenomeInfoDb_1.32.2    clue_0.3-61            graphlayouts_0.8.0    </span></span>
+<span><span class="co">##  [34] flexmix_2.3-18         bitops_1.0-7           cachem_1.0.6          </span></span>
+<span><span class="co">##  [37] fgsea_1.22.0           gridGraphics_0.5-1     assertthat_0.2.1      </span></span>
+<span><span class="co">##  [40] scales_1.2.0           ggraph_2.0.5           nnet_7.3-17           </span></span>
+<span><span class="co">##  [43] enrichplot_1.16.1      gtable_0.3.0           Cairo_1.6-0           </span></span>
+<span><span class="co">##  [46] tidygraph_1.2.1        rlang_1.0.4            genefilter_1.78.0     </span></span>
+<span><span class="co">##  [49] systemfonts_1.0.4      eulerr_6.1.1           GlobalOptions_0.1.2   </span></span>
+<span><span class="co">##  [52] splines_4.2.0          lazyeval_0.2.2         impute_1.70.0         </span></span>
+<span><span class="co">##  [55] brew_1.0-7             yaml_2.3.5             reshape2_1.4.4        </span></span>
+<span><span class="co">##  [58] qvalue_2.28.0          gridtext_0.1.4         clusterProfiler_4.4.4 </span></span>
+<span><span class="co">##  [61] tools_4.2.0            ggplotify_0.1.0        ggplot2_3.3.6         </span></span>
+<span><span class="co">##  [64] jquerylib_0.1.4        RColorBrewer_1.1-3     dynamicTreeCut_1.63-1 </span></span>
+<span><span class="co">##  [67] skmeans_0.2-14         Rcpp_1.0.9             plyr_1.8.7            </span></span>
+<span><span class="co">##  [70] zlibbioc_1.42.0        purrr_0.3.4            RCurl_1.98-1.8        </span></span>
+<span><span class="co">##  [73] dbscan_1.1-10          GetoptLong_1.1.0       viridis_0.6.2         </span></span>
+<span><span class="co">##  [76] cowplot_1.1.1          ggrepel_0.9.1          cluster_2.1.3         </span></span>
+<span><span class="co">##  [79] fs_1.5.2               apcluster_1.4.10       magrittr_2.0.3        </span></span>
+<span><span class="co">##  [82] data.table_1.14.2      magick_2.7.3           DO.db_2.9             </span></span>
+<span><span class="co">##  [85] circlize_0.4.16        matrixStats_0.62.0     patchwork_1.1.1       </span></span>
+<span><span class="co">##  [88] evaluate_0.15          xtable_1.8-4           XML_3.99-0.10         </span></span>
+<span><span class="co">##  [91] mclust_5.4.10          gridExtra_2.3          shape_1.4.6           </span></span>
+<span><span class="co">##  [94] compiler_4.2.0         tibble_3.1.8           shadowtext_0.1.2      </span></span>
+<span><span class="co">##  [97] crayon_1.5.1           htmltools_0.5.3        proxyC_0.2.4          </span></span>
+<span><span class="co">## [100] ggfun_0.0.6            tidyr_1.2.0            aplot_0.1.6           </span></span>
+<span><span class="co">## [103] expm_0.999-6           RcppParallel_5.1.5     MCL_1.0               </span></span>
+<span><span class="co">## [106] DBI_1.1.3              tweenr_1.0.2           ComplexHeatmap_2.13.1 </span></span>
+<span><span class="co">## [109] MASS_7.3-58            fpc_2.2-9              Matrix_1.4-1          </span></span>
+<span><span class="co">## [112] cli_3.3.0              parallel_4.2.0         igraph_1.3.4          </span></span>
+<span><span class="co">## [115] pkgconfig_2.0.3        pkgdown_2.0.6          microbenchmark_1.4.9  </span></span>
+<span><span class="co">## [118] xml2_1.3.3             foreach_1.5.2          ggtree_3.4.1          </span></span>
+<span><span class="co">## [121] annotate_1.74.0        bslib_0.4.0            XVector_0.36.0        </span></span>
+<span><span class="co">## [124] yulab.utils_0.0.5      stringr_1.4.0          digest_0.6.29         </span></span>
+<span><span class="co">## [127] Biostrings_2.64.0      tm_0.7-8               rmarkdown_2.14        </span></span>
+<span><span class="co">## [130] fastmatch_1.1-3        tidytree_0.3.9         kernlab_0.9-31        </span></span>
+<span><span class="co">## [133] modeltools_0.2-23      rjson_0.2.21           lifecycle_1.0.1       </span></span>
+<span><span class="co">## [136] nlme_3.1-158           jsonlite_1.8.0         desc_1.4.1            </span></span>
+<span><span class="co">## [139] viridisLite_0.4.0      fansi_1.0.3            pillar_1.8.0          </span></span>
+<span><span class="co">## [142] lattice_0.20-45        KEGGREST_1.36.3        fastmap_1.1.0         </span></span>
+<span><span class="co">## [145] httr_1.4.3             DEoptimR_1.0-11        survival_3.3-1        </span></span>
+<span><span class="co">## [148] GO.db_3.15.0           glue_1.6.2             png_0.1-7             </span></span>
+<span><span class="co">## [151] prabclus_2.3-2         iterators_1.0.14       bit_4.0.4             </span></span>
+<span><span class="co">## [154] ggforce_0.3.3          class_7.3-20           stringi_1.7.8         </span></span>
+<span><span class="co">## [157] sass_0.4.2             blob_1.2.3             textshaping_0.3.6     </span></span>
+<span><span class="co">## [160] memoise_2.0.1          dplyr_1.0.9            irlba_2.3.5           </span></span>
+<span><span class="co">## [163] ape_5.6-2</span></span></code></pre>
 </div>
   </div>
 
@@ -447,11 +417,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Zuguang Gu.</p>
+  <p></p>
+<p>Developed by Zuguang Gu.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer>
@@ -459,6 +431,8 @@
 
   
 
+
+  
 
   </body>
 </html>

@@ -166,6 +166,9 @@ ht_clusters = function(
 
 	gap = unit(2, "pt")
 	if(!is.null(ht_list)) {
+		if(is.function(ht_list)) {
+			ht_list = ht_list(align_to)
+		}
 		n = length(ht_list)
 		ht = ht_list + ht
 		gap = unit.c(unit(rep(2, n), "mm"), gap)
