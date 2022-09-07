@@ -113,10 +113,10 @@ it is possible to get information of its child nodes and parent nodes.</p>
 <span class="r-in"><span><span class="va">dend</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/dendrogram.html" class="external-link">as.dendrogram</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/hclust.html" class="external-link">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">mat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="co"># number of members on every node</span></span></span>
 <span class="r-in"><span><span class="fu">dend_node_apply</span><span class="op">(</span><span class="va">dend</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">d</span>, <span class="st">"members"</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10  1  9  3  1  2  1  1  6  2  1  1  4  1  3  1  2  1  1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 10  6  4  1  3  1  2  1  1  2  1  1  4  1  3  1  2  1  1</span>
 <span class="r-in"><span><span class="co"># the depth on every node</span></span></span>
 <span class="r-in"><span><span class="fu">dend_node_apply</span><span class="op">(</span><span class="va">dend</span>, <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">index</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">index</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 1 1 2 3 3 4 4 2 3 4 4 3 4 4 5 5 6 6</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  [1] 0 1 2 3 3 4 4 5 5 2 3 3 1 2 2 3 3 4 4</span>
 </code></pre></div>
     </div>
   </div>
