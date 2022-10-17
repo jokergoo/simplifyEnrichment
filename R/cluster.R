@@ -46,6 +46,7 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 	if(verbose) message(qq("Cluster @{nrow(mat)} terms by '@{method}'..."), appendLF = FALSE)
 	flush.console()
 
+	if(method == "binary_cut") control$return_dend = FALSE
 	fun = get_clustering_method(method, control = control)
 	
 	t1 = Sys.time()
@@ -61,16 +62,13 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 		}
 	}
 
-	t_diff = t2 - t1
-	t_diff = format(t_diff)
+	t_diff = format(t2 - t1)
 	if(verbose) message(qq(" @{length(unique(cl))} clusters, used @{t_diff}."))
 
 	if(length(unique(cl)) > 1) {
 		if(method != "binary_cut") {
 			#reorder the class labels
-			class_mean = tapply(1:nrow(mat), cl, function(ind) {
-				colMeans(mat[ind, , drop = FALSE])
-			})
+			class_mean = tapply(1:nrow(mat), cl, function(ind) colMeans(mat[ind, , drop = FALSE]))
 			class_mean = do.call(rbind, class_mean)
 			ns = nrow(class_mean)
 
@@ -83,7 +81,6 @@ cluster_terms = function(mat, method = "binary_cut", control = list(), catch_err
 	}
 
 	attr(cl, "running_time") = t_diff
-
 	return(cl)
 }
 

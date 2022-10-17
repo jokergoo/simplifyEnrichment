@@ -27,8 +27,7 @@ area_above_ecdf = function(x) {
 # two scores attached to each ndoe
 # - score: the original score
 # - score2: the score which have checked the children nodes' scores
-cluster_mat = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam, cutoff = 0.85) {
-
+cluster_mat = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam, cutoff = 0.85, return_dend = FALSE) {
 	dend = NULL
 
 	dend_ind_list = list(NULL)
@@ -110,7 +109,12 @@ cluster_mat = function(mat, value_fun = area_above_ecdf, partition_fun = partiti
 	dend_env$dend = dend
 	dend_env$hash = hash
 
-	return(dend)
+	cl = cut_dend(dend, cutoff)
+	cl = as.numeric(as.vector(unname(cl)))
+	
+	if(return_dend)
+	  return(list(cl = cl, dend = dend))
+	return(cl)
 }
 
 cluster_mat2 = function(mat, value_fun = median, partition_fun = partition_by_pam, cutoff = 0.85, return_dend = FALSE) {
@@ -236,9 +240,11 @@ cluster_mat2 = function(mat, value_fun = median, partition_fun = partition_by_pa
 	for(i in seq_along(lt)) {
 		cl[lt[[i]]] = i
 	}
-
-	return(cl)
 	
+	cl = as.numeric(as.vector(unname(cl)))
+	if(return_dend)
+	  return(list(cl = cl, dend = dend))
+	return(cl)
 }
 
 ## bottom-up
@@ -480,7 +486,7 @@ dend_env = new.env()
 # -depth Depth of the recursive binary cut process.
 # -dend_width Width of the dendrogram on the plot.
 # -show_heatmap_legend Whether to show the heatmap legend.
-# -... Other arguments.
+# -... Other arguments. 
 #
 # == details
 # After the functions which perform clustering are executed, such as `simplifyGO` or
@@ -521,7 +527,8 @@ plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 		if(se_opt$verbose) {
 			message("create a new dendrogram.")
 		}
-		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
+		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, 
+		                   cutoff = cutoff, return_dend = TRUE)$dend
 		dend_env$dend = dend
 		dend_env$hash = hash
 	}
@@ -579,25 +586,27 @@ plot_binary_cut = function(mat, value_fun = area_above_ecdf, cutoff = 0.85,
 #      The clustering with the highest difference score is finally selected as the final clustering.
 # -partial Whether to generate the complete clustering or the clustering stops when sub-matrices
 #     cannot be split anymore.
+# -return_dend Whether to return the generated dendogram together with the cluster labels or not. 
 #
 # == value
-# A vector of cluster labels (in numeric). 
+# If ``return_dend`` is set to ``FALSE`` return a vector of cluster labels (in numeric). Otherwise 
+# returns a named list with a vector of cluster labels (in numeric) and the generated dendrogram
 #
 # == example
 # mat = readRDS(system.file("extdata", "random_GO_BP_sim_mat.rds",
 #     package = "simplifyEnrichment"))
 # binary_cut(mat)
 binary_cut = function(mat, value_fun = area_above_ecdf, partition_fun = partition_by_pam,
-	cutoff = 0.85, try_all_partition_fun = FALSE, partial = FALSE) {
+	cutoff = 0.85, try_all_partition_fun = FALSE, partial = FALSE, return_dend = FALSE) {
 
 	if(try_all_partition_fun) {
-		clt = list(
-			by_pam = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_pam,
-				cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial),
-			by_kmeanspp = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_kmeanspp,
-				cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial),
-			by_hclust = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_hclust,
-				cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial)
+	  clt = list(
+	    by_pam = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_pam,
+	                        cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial),
+	    by_kmeanspp = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_kmeanspp,
+	                             cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial),
+	    by_hclust = binary_cut(mat, value_fun = value_fun, partition_fun = partition_by_hclust,
+	                           cutoff = cutoff, try_all_partition_fun = FALSE, partial = partial)
 		)
 		i = which.max(sapply(clt, function(cl) difference_score(mat, cl)))
 
@@ -606,13 +615,12 @@ binary_cut = function(mat, value_fun = area_above_ecdf, partition_fun = partitio
 		return(clt[[i]])
 	}
 
-	if(partial) {
-		cl = cluster_mat2(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
-	} else {
-		dend = cluster_mat(mat, value_fun = value_fun, partition_fun = partition_fun, cutoff = cutoff)
-		cl = cut_dend(dend, cutoff)
-	}
-	return(as.numeric(as.vector(unname(cl))))
+  cluster_method <- ifelse(partial, cluster_mat2, cluster_mat)
+  clustering <- do.call(cluster_method, 
+                        list(mat = mat,value_fun = value_fun, 
+                             partition_fun = partition_fun, cutoff = cutoff,
+                             return_dend = return_dend))
+  return(clustering)
 }
 
 # == title
@@ -622,7 +630,7 @@ binary_cut = function(mat, value_fun = area_above_ecdf, partition_fun = partitio
 # -mat A similarity matrix.
 # -cutoff A list of cutoffs to test. Note the range of the cutoff values should be inside [0.5, 1].
 # -verbose Whether to print messages.
-# -... Pass to `binary_cut`.
+# -... Pass to `binary_cut`. Of node, ``return_dend`` is set to ``FALSE`` and cannot be passed
 #
 # == details
 # Binary cut is applied to each of the cutoff and the clustering results are evaluated by following metrics:
@@ -644,7 +652,7 @@ select_cutoff = function(mat, cutoff = seq(0.6, 0.98, by = 0.01), verbose = TRUE
 	s1 = s2 = s3 = s4 = NULL
 	for(i in seq_along(cutoff)) {
 		if(verbose) message(qq("@{i}/@{length(cutoff)}, cutoff = @{cutoff[i]}..."))
-		cl = binary_cut(mat, cutoff = cutoff[i], ...)
+		cl = binary_cut(mat, cutoff = cutoff[i], return_dend = FALSE, ...)
 		s1[i] = difference_score(mat, cl)
 		tb = table(cl)
 		s2[i] = length(tb)
