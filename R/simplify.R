@@ -242,12 +242,14 @@ simplifyGOFromMultipleLists = function(lt, go_id_column = NULL,
 				structure(x[, padj_column], names = x[, go_id_column])
 			}
 		})
-		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, ont = ont, db = db, measure = measure, heatmap_param = heatmap_param, show_barplot = show_barplot, method = method, 
+		return(simplifyGOFromMultipleLists(lt, padj_cutoff = padj_cutoff, filter = filter, default = default, ont = ont, db = db, measure = measure, heatmap_param = heatmap_param, 
+			show_barplot = show_barplot, method = method, 
 			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 		
 	} else if(is.character(lt[[1]])) {
 		lt = lapply(lt, function(x) structure(rep(1, length(x)), names = x))
 		return(simplifyGOFromMultipleLists(lt, default = 0, filter = function(x) TRUE, ont = ont, db = db, measure = measure, show_barplot = show_barplot,
+			method = method,
 			heatmap_param = list(transform = function(x) x, breaks = c(0, 1), col = c("transparent", "red"), name = "", labels = c("not available", "available")),
 			control = control, min_term = min_term, verbose = verbose, column_title = column_title, ...))
 	}

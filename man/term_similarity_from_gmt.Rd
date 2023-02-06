@@ -13,7 +13,7 @@ term_similarity_from_gmt(term_id, gmt, extract_term_id = NULL, ...)
 
   \item{term_id}{A vector of terms.}
   \item{gmt}{The path of the gmt file.}
-  \item{extract_term_id}{If the term ID in contained in the first column only as a substring, setting a function to extract this substring.}
+  \item{extract_term_id}{If the term ID in the first column only as a substring, setting a function to extract this substring.}
   \item{...}{Pass to \code{\link{term_similarity}}.}
 
 }

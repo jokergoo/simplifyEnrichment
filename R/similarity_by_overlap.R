@@ -209,7 +209,7 @@ term_similarity_from_MSigDB = function(term_id, category = NULL, subcategory = N
 # == param
 # -term_id A vector of terms.
 # -gmt The path of the gmt file.
-# -extract_term_id If the term ID in contained in the first column only as a substring,
+# -extract_term_id If the term ID in the first column only as a substring,
 #      setting a function to extract this substring.
 # -... Pass to `term_similarity`.
 #
@@ -217,7 +217,8 @@ term_similarity_from_MSigDB = function(term_id, category = NULL, subcategory = N
 # A symmetric matrix.
 term_similarity_from_gmt = function(term_id, gmt, extract_term_id = NULL, ...) {
 	ln = readLines(gmt)
-
+	ln = strsplit(ln, "\t")
+	
 	term_id = sapply(ln, function(x) x[1])
 	if(!is.null(extract_term_id)) {
 		term_id = extract_term_id(term_id)

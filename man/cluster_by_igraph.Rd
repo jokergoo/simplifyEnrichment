@@ -8,10 +8,10 @@ Cluster similarity matrix by graph community detection methods
 }
 \usage{
 cluster_by_igraph(mat,
-    method = c("cluster_fast_greedy",
-    "cluster_leading_eigen",
-    "cluster_louvain",
-    "cluster_walktrap"),
+    method = c("fast_greedy",
+    "leading_eigen",
+    "louvain",
+    "walktrap"),
     ...)
 }
 \arguments{
@@ -28,10 +28,10 @@ Thus, clustering the similarity matrix can be treated as detecting clusters/modu
 Four methods implemented in igraph package can be used here:
 
 \describe{
-  \item{\code{cluster_fast_greedy}}{uses \code{\link[igraph]{cluster_fast_greedy}}.}
-  \item{\code{cluster_leading_eigen}}{uses \code{\link[igraph]{cluster_leading_eigen}}.}
-  \item{\code{cluster_louvain}}{uses \code{\link[igraph]{cluster_louvain}}.}
-  \item{\code{cluster_walktrap}}{uses \code{\link[igraph]{cluster_walktrap}}.}
+  \item{\code{fast_greedy}}{uses \code{\link[igraph]{cluster_fast_greedy}}.}
+  \item{\code{leading_eigen}}{uses \code{\link[igraph]{cluster_leading_eigen}}.}
+  \item{\code{louvain}}{uses \code{\link[igraph]{cluster_louvain}}.}
+  \item{\code{walktrap}}{uses \code{\link[igraph]{cluster_walktrap}}.}
 }
 }
 \value{

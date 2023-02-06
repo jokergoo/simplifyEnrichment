@@ -212,25 +212,26 @@ cluster_by_dynamicTreeCut = function(mat, minClusterSize = 5, ...) {
 #
 # Four methods implemented in igraph package can be used here:
 #
-# -``cluster_fast_greedy`` uses `igraph::cluster_fast_greedy`.
-# -``cluster_leading_eigen`` uses `igraph::cluster_leading_eigen`.
-# -``cluster_louvain`` uses `igraph::cluster_louvain`.
-# -``cluster_walktrap`` uses `igraph::cluster_walktrap`.
+# -``fast_greedy`` uses `igraph::cluster_fast_greedy`.
+# -``leading_eigen`` uses `igraph::cluster_leading_eigen`.
+# -``louvain`` uses `igraph::cluster_louvain`.
+# -``walktrap`` uses `igraph::cluster_walktrap`.
 #
 # == value
 # A vector of cluster labels (in numeric).
 #
 cluster_by_igraph = function(mat, 
-    method = c("cluster_fast_greedy",
-               "cluster_leading_eigen",
-               "cluster_louvain",
-               "cluster_walktrap"),
+    method = c("fast_greedy",
+               "leading_eigen",
+               "louvain",
+               "walktrap"),
     ...) {
 
 	check_pkg("igraph", bioc = FALSE)
 
 	if(is.character(method)) {
 		method = match.arg(method)[1]
+		method = paste0("cluster_", method)
 		method = getFromNamespace(method, ns = "igraph")
 	}
 	g = igraph::graph_from_adjacency_matrix(mat, mode = "upper", weighted = TRUE)

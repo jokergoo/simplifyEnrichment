@@ -333,7 +333,6 @@ assign_score2 = function(d, cutoff) {
 		score = s,
 		class = "dendrogram"
 	)
-	
 	return(list(attr = attr, ind1 = which(l1), ind2 = which(l2)))
 
 }

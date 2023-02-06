@@ -125,9 +125,9 @@ register_clustering_methods(
 	mclust = function(mat, ...) cluster_by_mclust(mat, ...),
 	apcluster = function(mat, ...) cluster_by_apcluster(mat, ...),
 	hdbscan = function(mat, ...) cluster_by_hdbscan(mat, ...),
-	fast_greedy = function(mat, ...) cluster_by_igraph(mat, method = "cluster_fast_greedy", ...),
-	louvain = function(mat, ...) cluster_by_igraph(mat, method = "cluster_louvain", ...),
-	walktrap = function(mat, ...) cluster_by_igraph(mat, method = "cluster_walktrap", ...),
+	fast_greedy = function(mat, ...) cluster_by_igraph(mat, method = "fast_greedy", ...),
+	louvain = function(mat, ...) cluster_by_igraph(mat, method = "louvain", ...),
+	walktrap = function(mat, ...) cluster_by_igraph(mat, method = "walktrap", ...),
 	MCL = function(mat, ...) cluster_by_MCL(mat, ...)
 )
 

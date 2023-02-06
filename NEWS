@@ -1,3 +1,9 @@
+CHANGES in VERSION 1.9.1
+
+* `term_similarity_from_gmt()`: previously forgot to split rows.
+
+-----------------------------
+
 CHANGES in VERSION 1.7.2
 
 * `anno_word_cloud()`: fixed a bug where `exclude_words` is not properly 
