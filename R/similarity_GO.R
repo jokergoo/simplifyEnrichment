@@ -144,7 +144,7 @@ calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 guess_ont = function(go_id, db = 'org.Hs.eg.db') {
 
 	if(is.character(db)) {
-		db = get(db, asNamespace(db)
+		db = get(db, asNamespace(db))
 	}
 	test_go_id = sample(go_id, min(c(length(go_id), 10)))
 	suppressMessages(df <- select(db, keys = test_go_id, columns = "ONTOLOGY", keytype = "GO"))
