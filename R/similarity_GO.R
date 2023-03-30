@@ -9,7 +9,8 @@ env$semData_hash = ""
 # -go_id A vector of GO IDs.
 # -ont GO ontology. Value should be one of "BP", "CC" or "MF". If it is not specified,
 #      the function automatically identifies it by random sampling 10 IDs from ``go_id`` (see `guess_ont`).
-# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
+# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb. The value
+#    can also directly be a ``OrgDb`` object.
 # -measure Semantic measure for the GO similarity, pass to `GOSemSim::termSim`.
 # -remove_orphan_terms Whether to remove terms that have zero similarity to all other terms?
 #
@@ -124,7 +125,8 @@ calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 #
 # == param
 # -go_id A vector of GO IDs.
-# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb
+# -db Annotation database. It should be from https://bioconductor.org/packages/3.10/BiocViews.html#___OrgDb. The value
+#    can also directly be a ``OrgDb`` object.
 #
 # == details
 # 10 GO IDs are randomly sampled and checked.
@@ -140,8 +142,12 @@ calc_similarity = function(go_id, measure, semData, verbose = TRUE) {
 # guess_ont(go_id)
 # }
 guess_ont = function(go_id, db = 'org.Hs.eg.db') {
+
+	if(is.character(db)) {
+		db = get(db, asNamespace(db)
+	}
 	test_go_id = sample(go_id, min(c(length(go_id), 10)))
-	suppressMessages(df <- select(get(db, asNamespace(db)), keys = test_go_id, columns = "ONTOLOGY", keytype = "GO"))
+	suppressMessages(df <- select(db, keys = test_go_id, columns = "ONTOLOGY", keytype = "GO"))
 	guess_ont = unique(df$ONTOLOGY)
 	guess_ont = guess_ont[!is.na(guess_ont)]
 	if(length(guess_ont) != 1) {
