@@ -91,11 +91,10 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 # -... Arguments passed to `ht_clusters`.
 #
 # == details
-# The usage is the same as `simplifyGO`, except you need to manually provide the term names by ``term`` argument
-# if you want to draw the word clouds.
+# The usage is the same as `simplifyGO`.
 #
 simplifyEnrichment = function(mat, method = "binary_cut", control = list(), 
-	plot = TRUE, term = NULL, verbose = TRUE, 
+	plot = TRUE, verbose = TRUE, 
 	column_title = qq("@{nrow(mat)} terms clustered by '@{method}'"),
 	ht_list = NULL, ...) {
 	
@@ -105,9 +104,9 @@ simplifyEnrichment = function(mat, method = "binary_cut", control = list(),
 		term_id = paste0("row_", 1:nrow(mat))
 	}
 	
-	if(plot) ht_clusters(mat, cl, term = term, column_title = column_title, ht_list = ht_list, ...)
+	if(plot) ht_clusters(mat, cl, column_title = column_title, ht_list = ht_list, ...)
 
-	return(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE))
+	return(invisible(data.frame(id = term_id, cluster = cl, stringsAsFactors = FALSE)))
 }
 
 # == title

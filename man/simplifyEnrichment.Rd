@@ -8,7 +8,7 @@ Simplify functional enrichment results
 }
 \usage{
 simplifyEnrichment(mat, method = "binary_cut", control = list(),
-    plot = TRUE, term = NULL, verbose = TRUE,
+    plot = TRUE, verbose = TRUE,
     column_title = qq("@{nrow(mat)} terms clustered by '@{method}'"),
     ht_list = NULL, ...)
 }
@@ -26,8 +26,7 @@ simplifyEnrichment(mat, method = "binary_cut", control = list(),
 
 }
 \details{
-The usage is the same as \code{\link{simplifyGO}}, except you need to manually provide the term names by \code{term} argument
-if you want to draw the word clouds.
+The usage is the same as \code{\link{simplifyGO}}.
 }
 \examples{
 # There is no example

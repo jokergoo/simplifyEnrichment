@@ -4,14 +4,19 @@
 # == param
 # -gl A list of genes that are in the terms.
 # -method The similarity measurement.
+# -all The universe set.
 #
 # == details
 # The definition of the four similarity measurements can be found at https://jokergoo.github.io/simplifyEnrichment_supplementary/supplS01_coefficient_definition/supplS01_coefficient_definition.html .
 #
 # == value
 # A symmetric matrix.
-term_similarity = function(gl, method = c("kappa", "jaccard", "dice", "overlap")) {
-	all = unique(unlist(gl))
+term_similarity = function(gl, method = c("kappa", "jaccard", "dice", "overlap"), all = NULL) {
+	if(is.null(all)) {
+		all = unique(unlist(gl))
+	} else {
+		gl = lapply(gl, intersect, all)
+	}
 	gl = lapply(gl, function(x) as.numeric(factor(x, levels = all)))
 	n = length(gl)
 
@@ -47,14 +52,14 @@ kappa = function(x, y) {
 }
 
 # by rows
-kappa_dist = function(m) {
+kappa_dist = function(m, remove_negative = TRUE) {
 	tab = ncol(m)
 	oab = proxyC::simil(m, method = "simple matching")
 	m1 = rowSums(m)
 	m2 = abs(rowSums(m - 1))
 	aab = (outer(m1, m1) + outer(m2, m2))/tab/tab
 	k = (oab - aab)/(1 - aab)
-	k[k < 0] = 0
+	if(remove_negative) k[k < 0] = 0
 	return(k)
 }
 
