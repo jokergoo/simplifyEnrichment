@@ -5,7 +5,7 @@ get_gene_desc_from_GO = function(go_id, ont = "BP") {
 	desc = character(n)
 	names(desc) = go_id
 
-	GO_DATA = clusterProfiler:::get_GO_data("org.Hs.eg.db", ont, "ENTREZID")
+	GO_DATA = getFromNamespace("get_GO_data", ns = "clusterProfiler")("org.Hs.eg.db", ont, "ENTREZID")
 	gl = GO_DATA$PATHID2EXTID[which(names(GO_DATA$PATHID2EXTID) %in% go_id)]
 
 	# tb = readRDS(system.file("extdata", "refseq_gene_desc_human.rds", package = "simplifyEnrichment"))

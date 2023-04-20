@@ -84,7 +84,6 @@ simplifyGO = function(mat, method = "binary_cut", control = list(),
 # -method Method for clustering the matrix. See `cluster_terms`.
 # -control A list of parameters for controlling the clustering method, passed to `cluster_terms`.
 # -plot Whether to make the heatmap.
-# -term The full name or the description of the corresponding terms. 
 # -column_title Column title for the heatmap.
 # -verbose Whether to print messages.
 # -ht_list A list of additional heatmaps added to the left of the similarity heatmap.
