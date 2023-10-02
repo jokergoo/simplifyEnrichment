@@ -10,7 +10,7 @@ Word cloud annotations
 anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
     word_cloud_grob_param = list(), fontsize_range = c(4, 16), value_range = NULL,
     bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
-    add_new_line = FALSE, count_words_param = list(), ...)
+    add_new_line = FALSE, count_words_param = list(), ..., return_gbl = FALSE)
 }
 \arguments{
 
@@ -26,6 +26,7 @@ anno_word_cloud(align_to, term, exclude_words = NULL, max_words = 10,
   \item{add_new_line}{Whether to add new line after every word? If \code{TRUE}, each word will be in a separated line.}
   \item{count_words_param}{A list of parameters passed to \code{\link{count_words}}.}
   \item{...}{Other parameters.}
+  \item{return_gbl}{Internally used.}
 
 }
 \details{

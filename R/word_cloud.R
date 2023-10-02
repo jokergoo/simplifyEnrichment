@@ -267,6 +267,7 @@ heightDetails.word_cloud = function(x) {
 # -add_new_line Whether to add new line after every word? If ``TRUE``, each word will be in a separated line.
 # -count_words_param A list of parameters passed to `count_words`.
 # -... Other parameters.
+# -return_gbl Internally used.
 #
 # == details
 # The word cloud annotation is constructed by `ComplexHeatmap::anno_link`.
@@ -295,7 +296,7 @@ heightDetails.word_cloud = function(x) {
 anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 	word_cloud_grob_param = list(), fontsize_range = c(4, 16), value_range = NULL,
 	bg_gp = gpar(fill = "#DDDDDD", col = "#AAAAAA"), side = c("right", "left"),
-	add_new_line = FALSE, count_words_param = list(), ...) {
+	add_new_line = FALSE, count_words_param = list(), ..., return_gbl = FALSE) {
 
 	if(is.atomic(align_to) && is.list(term)) {
 		align_to = split(seq_along(align_to), align_to)
@@ -427,6 +428,10 @@ anno_word_cloud = function(align_to, term, exclude_words = NULL, max_words = 10,
 	ComplexHeatmap:::dev.off2()
 	if(inherits(oe, "try-error")) {
 		stop(oe)
+	}
+
+	if(return_gbl) {
+		return(gbl)
 	}
 
 	if(is.null(bg_gp$fill)) bg_gp$fill = "#DDDDDD"
