@@ -14,8 +14,6 @@
 # -legend_title Title for the legend.
 # -min_term Minimal number of functional terms in a cluster. All the clusters
 #     with size less than ``min_term`` are all merged into one separated cluster in the heatmap.
-# -order_by_size Whether to reorder clusters by their sizes. The cluster
-#      that is merged from small clusters (size < ``min_term``) is always put to the bottom of the heatmap.
 # -stat Type of value for mapping to the font size of keywords in the word clouds. There are two options:
 #       "count": simply number of keywords; "pvalue": enrichment on keywords is performed (by fisher's exact test) and -log10(pvalue) is used to map to font sizes.
 # -min_stat Minimal value for ``stat`` for selecting keywords.

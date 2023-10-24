@@ -33,7 +33,6 @@ summarizeGO(go_id, value = NULL, aggregate = mean,
   \item{title}{Title for the whole plot.}
   \item{legend_title}{Title for the legend.}
   \item{min_term}{Minimal number of functional terms in a cluster. All the clusters with size less than \code{min_term} are all merged into one separated cluster in the heatmap.}
-  \item{order_by_size}{Whether to reorder clusters by their sizes. The cluster that is merged from small clusters (size < \code{min_term}) is always put to the bottom of the heatmap.}
   \item{stat}{Type of value for mapping to the font size of keywords in the word clouds. There are two options: "count": simply number of keywords; "pvalue": enrichment on keywords is performed (by fisher's exact test) and -log10(pvalue) is used to map to font sizes.}
   \item{min_stat}{Minimal value for \code{stat} for selecting keywords.}
   \item{exclude_words}{Words that are excluded in the word cloud.}
@@ -52,4 +51,5 @@ There are several other ways to specify GO IDs and the associated values.
 \examples{
 # There is no example
 NULL
+
 }
